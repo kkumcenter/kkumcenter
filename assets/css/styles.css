@@ -358,6 +358,11 @@ h3 {
   background: rgba(255, 255, 255, 0.12);
 }
 
+.about-slide .button.primary {
+  color: var(--forest);
+  background: #fff;
+}
+
 .button.secondary.light {
   color: var(--forest);
   background: #fff;

@@ -27,23 +27,45 @@
     </header>
 
     <main id="main">
-      <section class="hero hero-home" aria-labelledby="home-title">
-        <img src="assets/images/hero-center.png" alt="푸른 들과 산을 배경으로 한 현대적인 농촌 커뮤니티 센터">
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-          <p class="eyebrow">Gunbuk, Growing Together</p>
-          <h1 id="home-title">군북의 내일을 함께 키웁니다</h1>
-          <p class="hero-copy">군북의 사람, 공간, 계절의 농산물과 마을 이야기가 자연스럽게 이어지는 생활문화 거점입니다.</p>
-          <div class="hero-actions">
-            <a class="button primary" href="programs.html">배움터 보기</a>
-            <a class="button secondary" href="spaces.html">공간 둘러보기</a>
+      <section class="about-carousel home-carousel" aria-labelledby="home-title">
+        <article class="about-slide is-active" data-about-slide>
+          <img src="assets/images/hero-center.png" alt="들판과 산을 배경으로 한 군북면 꿈키움센터">
+          <div class="about-slide-content">
+            <p class="eyebrow">Gunbuk, Growing Together</p>
+            <h1 id="home-title">군북의 내일을 함께 키웁니다</h1>
+            <p>군북의 사람, 공간, 계절의 농산물과 마을 이야기가 자연스럽게 이어지는 생활문화 거점입니다.</p>
+            <div class="hero-actions">
+              <a class="button primary" href="programs.html">배움터 보기</a>
+              <a class="button secondary" href="spaces.html">공간 둘러보기</a>
+            </div>
           </div>
-        </div>
-        <div class="hero-panel" aria-label="센터 핵심 역할">
-          <strong>군북을 잇는 3가지 흐름</strong>
-          <span>배움이 모임으로</span>
-          <span>소식이 기록으로</span>
-          <span>농산물이 식탁으로</span>
+        </article>
+        <article class="about-slide" data-about-slide>
+          <img src="assets/images/program-workshop.png" alt="주민들이 함께 배우는 프로그램 현장">
+          <div class="about-slide-content">
+            <span class="about-slide-index">01</span>
+            <h2>군북의 시간이 모여,<br>내일의 꿈이 자랍니다.</h2>
+          </div>
+        </article>
+        <article class="about-slide" data-about-slide>
+          <img src="assets/images/community-news.png" alt="마을 소식을 나누는 주민 커뮤니티 장면">
+          <div class="about-slide-content">
+            <span class="about-slide-index">02</span>
+            <h2>우리의 손과 마음으로,<br>마을의 결을 이어갑니다.</h2>
+          </div>
+        </article>
+        <article class="about-slide" data-about-slide>
+          <img src="assets/images/local-produce.png" alt="군북과 금산의 계절 농산물">
+          <div class="about-slide-content">
+            <span class="about-slide-index">03</span>
+            <h2>계절이 식탁에 닿고,<br>이야기가 공동체가 됩니다.</h2>
+          </div>
+        </article>
+        <div class="about-slide-controls" aria-label="소개 슬라이드 선택">
+          <button class="is-active" type="button" aria-label="메인 소개 보기" data-about-dot>About</button>
+          <button type="button" aria-label="첫 번째 문구 보기" data-about-dot>01</button>
+          <button type="button" aria-label="두 번째 문구 보기" data-about-dot>02</button>
+          <button type="button" aria-label="세 번째 문구 보기" data-about-dot>03</button>
         </div>
       </section>
 
