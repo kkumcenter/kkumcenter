@@ -709,9 +709,29 @@ h3 {
   grid-template-columns: repeat(4, 1fr);
 }
 
+.statement-grid {
+  grid-template-columns: repeat(3, 1fr);
+}
+
 .values-grid article {
   min-height: 250px;
   padding: 26px;
+}
+
+.statement-grid article {
+  position: relative;
+  min-height: 230px;
+  padding: 34px 30px 36px;
+}
+
+.statement-grid article::after {
+  content: "";
+  position: absolute;
+  left: 30px;
+  right: 30px;
+  bottom: 28px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--clay) 0 44px, rgba(32, 55, 45, 0.12) 44px 100%);
 }
 
 .values-grid span {
@@ -722,6 +742,14 @@ h3 {
 .values-grid h3 {
   margin-top: 18px;
   font-size: 23px;
+}
+
+.statement-grid h3 {
+  margin-top: 18px;
+  color: var(--ink);
+  font-size: 28px;
+  line-height: 1.55;
+  letter-spacing: 0;
 }
 
 .values-grid p {
