@@ -14,8 +14,11 @@ GitHub 저장소: https://github.com/kkumcenter/kkumcenter
 ## 페이지 구성
 
 - `index.html`: 메인
-- `about.html`: 센터소개, 연혁, 이용안내, 오시는길
+- `about.html`: 꿈키움센터 소개
+- `history.html`: 연혁
 - `spaces.html`: 공간소개
+- `guide.html`: 이용안내
+- `location.html`: 오시는길
 - `news.html`: 공지사항, 센터소식, 마을이야기
 - `programs.html`: 진행중 프로그램, 프로그램 신청 안내
 - `local-food.html`: 지역 농산물, 계절 농산물, 외부 쇼핑몰 연결
@@ -28,6 +31,9 @@ GitHub 저장소: https://github.com/kkumcenter/kkumcenter
 .
 ├── index.html
 ├── about.html
+├── history.html
+├── guide.html
+├── location.html
 ├── programs.html
 ├── spaces.html
 ├── news.html

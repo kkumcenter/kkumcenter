@@ -666,6 +666,151 @@ h3 {
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.28);
 }
 
+.about-carousel {
+  position: relative;
+  min-height: 690px;
+  overflow: hidden;
+  color: #fff;
+  background: var(--forest);
+}
+
+.about-slide {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  align-items: end;
+  opacity: 0;
+  transform: translateX(4%);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+  pointer-events: none;
+}
+
+.about-slide.is-active {
+  z-index: 1;
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+.about-slide img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.about-slide::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background: linear-gradient(90deg, rgba(18, 59, 43, 0.86), rgba(18, 59, 43, 0.44) 48%, rgba(18, 59, 43, 0.08));
+}
+
+.about-slide-content {
+  position: relative;
+  z-index: 2;
+  width: min(1180px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 150px 0 120px;
+}
+
+.about-slide-content h1,
+.about-slide-content h2 {
+  max-width: 860px;
+  margin: 0;
+  font-size: 58px;
+  line-height: 1.17;
+  font-weight: 900;
+  letter-spacing: 0;
+}
+
+.about-slide-content p:not(.eyebrow) {
+  max-width: 620px;
+  margin: 22px 0 0;
+  color: rgba(255, 255, 255, 0.86);
+  font-size: 20px;
+}
+
+.about-slide-index {
+  display: block;
+  margin-bottom: 22px;
+  color: var(--sun);
+  font-size: 24px;
+  font-weight: 900;
+}
+
+.about-slide-controls {
+  position: absolute;
+  z-index: 3;
+  left: max(24px, calc((100% - 1180px) / 2));
+  bottom: 52px;
+  display: flex;
+  gap: 10px;
+}
+
+.about-slide-controls button {
+  width: 48px;
+  height: 5px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.38);
+  cursor: pointer;
+}
+
+.about-slide-controls button.is-active {
+  background: var(--sun);
+}
+
+.purpose-layout,
+.location-layout {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 64px;
+  align-items: center;
+}
+
+.purpose-image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.purpose-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 28px;
+}
+
+.purpose-list span {
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 12px;
+  border-radius: 999px;
+  color: var(--forest);
+  background: rgba(79, 138, 91, 0.14);
+  font-weight: 900;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+}
+
+.map-frame {
+  width: 100%;
+  min-height: 420px;
+  border: 0;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
 .sub-hero {
   position: relative;
   min-height: 430px;
@@ -858,6 +1003,16 @@ h3 {
 }
 
 .space-grid {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.floor-section {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px;
+}
+
+.floor-section-three {
   grid-template-columns: repeat(3, 1fr);
 }
 
@@ -1150,8 +1305,11 @@ h3 {
   .quick-links,
   .feature-grid,
   .values-grid,
+  .info-grid,
   .program-grid,
   .space-grid,
+  .floor-section,
+  .floor-section-three,
   .story-card-grid,
   .product-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -1160,6 +1318,8 @@ h3 {
   .split-layout,
   .news-rail,
   .produce-layout,
+  .purpose-layout,
+  .location-layout,
   .timeline,
   .reservation-mock,
   .news-layout {
@@ -1202,17 +1362,33 @@ h3 {
     min-height: 680px;
   }
 
+  .about-carousel {
+    min-height: 620px;
+  }
+
   .hero-content {
     padding: 120px 0 176px;
   }
 
+  .about-slide-content {
+    padding: 116px 0 120px;
+  }
+
+  .about-slide-controls {
+    left: 24px;
+    bottom: 36px;
+  }
+
   .hero h1,
-  .sub-hero h1 {
+  .sub-hero h1,
+  .about-slide-content h1,
+  .about-slide-content h2 {
     font-size: 36px;
   }
 
   .hero-copy,
   .sub-hero p:not(.eyebrow),
+  .about-slide-content p:not(.eyebrow),
   .intro-text p,
   .body-copy p,
   .section-heading p {
@@ -1264,8 +1440,11 @@ h3 {
 
   .feature-grid,
   .values-grid,
+  .info-grid,
   .program-grid,
   .space-grid,
+  .floor-section,
+  .floor-section-three,
   .story-card-grid,
   .product-grid,
   .process-list,
