@@ -138,7 +138,7 @@ a {
 .primary-nav {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
   margin-left: auto;
 }
 
@@ -147,14 +147,14 @@ a {
 }
 
 .nav-link {
-  min-height: 40px;
+  min-height: 42px;
   display: inline-flex;
   align-items: center;
-  padding: 0 14px;
+  padding: 0 15px;
   border-radius: 999px;
   color: #34423b;
-  font-size: 15px;
-  font-weight: 700;
+  font-size: 17px;
+  font-weight: 800;
 }
 
 .nav-link:hover,
