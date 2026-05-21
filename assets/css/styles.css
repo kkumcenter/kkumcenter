@@ -1284,6 +1284,20 @@ h3 {
   font-size: 19px;
 }
 
+.center-photo-hero {
+  min-height: clamp(280px, 30vw, 420px);
+  align-items: stretch;
+  background: #eef4f6;
+}
+
+.center-photo-hero::after {
+  display: none;
+}
+
+.center-photo-hero img {
+  object-position: left 31%;
+}
+
 .values-grid,
 .program-grid,
 .space-grid,
