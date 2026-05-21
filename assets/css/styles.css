@@ -2613,8 +2613,7 @@ h3 {
   font-weight: 900;
 }
 
-.vision-value-grid article:nth-child(even) > span,
-.vision-value-grid article:nth-child(even) .vision-icon {
+.vision-value-grid article:nth-child(even) > span {
   color: #f2a32c;
 }
 
@@ -2634,24 +2633,20 @@ h3 {
 
 .vision-icon {
   position: relative;
-  width: 78px;
-  height: 78px;
+  width: 86px;
+  height: 86px;
   display: grid;
   place-items: center;
   margin-top: 16px;
-  border-radius: 50%;
-  color: var(--pine);
-  background: rgba(79, 138, 91, 0.12);
+  color: inherit;
+  background: transparent;
 }
 
-.vision-icon svg {
-  width: 54px;
-  height: 54px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+.vision-icon img {
+  width: 86px;
+  height: 86px;
+  display: block;
+  object-fit: contain;
 }
 
 .vision-org-lead {
