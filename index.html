@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>군북면 꿈키움센터</title>
     <meta name="description" content="온세대가 지속가능한 꿈을 키우는 거점, 군북면 꿈키움센터 홈페이지 목업">
-    <link rel="stylesheet" href="assets/css/styles.css?v=2e5b5c5">
+    <link rel="stylesheet" href="assets/css/styles.css?v=20260521-2">
   </head>
   <body>
     <a class="skip-link" href="#main">본문 바로가기</a>
@@ -17,10 +17,10 @@
         </a>
         <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav"><span></span><span></span><span></span><span class="sr-only">메뉴 열기</span></button>
         <nav class="primary-nav" id="primary-nav" aria-label="주요 메뉴">
-          <div class="nav-group"><a class="nav-link" href="about.html">센터소개</a><div class="nav-dropdown"><a href="about.html">인사말</a><a href="vision.html">설립목적 / 비전</a><a href="history.html">연혁</a><a href="spaces.html">시설소개</a><a href="location.html">오시는길</a></div></div>
+          <div class="nav-group"><a class="nav-link" href="about.html">센터소개</a><div class="nav-dropdown"><a href="about.html">인사말</a><a href="vision.html">비전</a><a href="history.html">연혁</a><a href="spaces.html">시설소개</a><a href="location.html">오시는길</a></div></div>
           <div class="nav-group"><a class="nav-link" href="guide.html">공간시설</a><div class="nav-dropdown"><a href="guide.html">이용안내</a><a href="guide.html#rental">대관신청</a></div></div>
           <div class="nav-group"><a class="nav-link" href="programs.html">프로그램</a><div class="nav-dropdown"><a href="programs.html#current">모집안내</a><a href="programs.html#apply">교육신청</a></div></div>
-          <div class="nav-group"><a class="nav-link" href="news.html">소식마당</a><div class="nav-dropdown"><a href="news.html#notice">공지사항</a><a href="news.html#gallery">꿈센터 갤러리</a><a href="news.html#village-story">마을 이야기</a><a href="news.html#contact">문의 / 제안</a></div></div>
+          <div class="nav-group"><a class="nav-link" href="news.html">소식마당</a><div class="nav-dropdown"><a href="news.html">공지사항</a><a href="gallery.html">꿈센터 갤러리</a><a href="village-story.html">마을 이야기</a><a href="contact.html">문의 / 제안</a></div></div>
           <div class="nav-group"><a class="nav-link nav-external" href="https://dafarm.co.kr/" target="_blank" rel="noreferrer">금산다팜 몰</a></div>
         </nav>
       </div>
@@ -53,13 +53,19 @@
         <button class="about-arrow about-arrow-next" type="button" aria-label="다음 메인 슬라이드" data-about-next>›</button>
       </section>
 
-      <section class="service-banner compact-services" aria-label="자주 찾는 서비스">
-        <a href="news.html#notice"><span class="service-icon"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M14 8h20l6 6v26H14z"></path><path d="M33 8v8h7"></path><path d="M20 23h14M20 30h14"></path></svg></span><strong>공지사항</strong></a>
+      <section class="favorite-menu-section" aria-labelledby="favorite-title">
+        <div class="container open-forum-heading favorite-heading">
+          <p>주민이 자주 찾는 메뉴를 한곳에 모았습니다.</p>
+          <h2 id="favorite-title">즐겨찾는 메뉴</h2>
+        </div>
+        <div class="service-banner compact-services" aria-label="자주 찾는 서비스">
+        <a href="news.html"><span class="service-icon"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M14 8h20l6 6v26H14z"></path><path d="M33 8v8h7"></path><path d="M20 23h14M20 30h14"></path></svg></span><strong>공지사항</strong></a>
         <a href="guide.html"><span class="service-icon"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="15"></circle><path d="M24 15v10l7 4"></path></svg></span><strong>이용안내</strong></a>
         <a href="programs.html#apply"><span class="service-icon"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M12 14h24v24H12z"></path><path d="M12 21h24M18 10v8M30 10v8"></path><path d="m19 30 4 4 8-9"></path></svg></span><strong>교육신청</strong></a>
         <a href="location.html"><span class="service-icon"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 42s13-11 13-23a13 13 0 0 0-26 0c0 12 13 23 13 23z"></path><circle cx="24" cy="19" r="4"></circle></svg></span><strong>오시는길</strong></a>
         <a href="guide.html#rental"><span class="service-icon"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M14 18h20v20H14z"></path><path d="M18 18v-5h12v5"></path><path d="M20 27h8"></path><path d="M32 28h4v10h-4z"></path></svg></span><strong>대관신청</strong></a>
         <a href="https://dafarm.co.kr/" target="_blank" rel="noreferrer"><span class="service-icon"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M13 21h22l-3 17H16z"></path><path d="M18 21 24 11l6 10"></path><path d="M19 28h10"></path></svg></span><strong>금산다팜 몰</strong></a>
+        </div>
       </section>
 
       <section class="section open-forum">
@@ -69,25 +75,21 @@
         </div>
         <div class="container forum-layout">
           <div class="board-panel">
-            <div class="board-topline">
-              <span></span>
-              <a href="news.html" aria-label="소식마당 더보기">+</a>
-            </div>
             <div class="board-tabs board-tabs-clean" aria-label="게시판 분류">
-              <a class="is-active" href="news.html#notice">공지사항</a>
-              <a href="news.html#village-story">마을 이야기</a>
+              <a class="is-active" href="news.html">공지사항</a>
+              <a href="village-story.html">마을 이야기</a>
             </div>
             <div class="board-list plain-board-list">
-              <a href="news.html#notice"><span>베이킹 교육과정 참여자 모집 안내</span><time>2026/06/20</time></a>
-              <a href="news.html#notice"><span>꿈키움센터 시범운영 프로그램 안내</span><time>2026/05/19</time></a>
+              <a href="news.html"><span>베이킹 교육과정 참여자 모집 안내</span><time>2026/06/20</time></a>
+              <a href="news.html"><span>꿈키움센터 시범운영 프로그램 안내</span><time>2026/05/19</time></a>
               <a href="guide.html#rental"><span>공간 이용 사전 문의 및 대관신청 안내</span><time>2026/05/16</time></a>
-              <a href="news.html#village-story"><span>군북 꿈키움 기자단 마을소식 모집</span><time>2026/05/15</time></a>
-              <a href="news.html#village-story"><span>배후마을 생활문화 기록 참여자 모집</span><time>2026/05/14</time></a>
+              <a href="village-story.html"><span>군북 꿈키움 기자단 마을소식 모집</span><time>2026/05/15</time></a>
+              <a href="village-story.html"><span>배후마을 생활문화 기록 참여자 모집</span><time>2026/05/14</time></a>
             </div>
           </div>
           <div class="event-panel" data-carousel>
             <div class="board-head">
-              <div><p class="eyebrow">Programs & Events</p><h3>프로그램 · 행사소식</h3></div>
+              <div><h3>프로그램 · 행사소식</h3></div>
               <div class="carousel-nav" aria-label="프로그램 소식 이동">
                 <button type="button" aria-label="이전 소식" data-carousel-prev>‹</button>
                 <button type="button" aria-label="다음 소식" data-carousel-next>›</button>
@@ -140,12 +142,8 @@
         <div>
           <strong>군북면 꿈키움센터</strong>
           <p>온세대가 지속가능한 꿈을 키우는 거점, 군북면. 돌봄과 배움, 공동체 활동과 로컬 연결을 함께 만들어갑니다.</p>
-          <p class="footer-contact">주소: 충청남도 금산군 군북면 두두리 371, 373-3 일원 · 연락처: 운영자료 확정 후 입력</p>
-        </div>
-        <div>
-          <span>운영정보</span>
-          <p>운영시간: 평일 09:00 - 18:00</p>
-          <p>교육, 대관, 방문 문의는 운영자료 확정 후 안내 예정입니다.</p>
+          <p class="footer-contact">주소: 충청남도 금산군 군북면 두두리 371, 373-3 일원</p>
+          <p class="footer-contact">연락처: 운영자료 확정 후 입력</p>
         </div>
       </div>
       <div class="container footer-meta">COPYRIGHT © GUNBUK KKUM CENTER. ALL RIGHTS RESERVED.</div>

@@ -17,7 +17,7 @@ GitHub Pages: https://kkumcenter.github.io/kkumcenter/
 
 - 센터소개
   - 인사말
-  - 설립목적 / 비전
+  - 비전
   - 연혁
   - 시설소개
   - 오시는길
@@ -40,12 +40,16 @@ GitHub Pages: https://kkumcenter.github.io/kkumcenter/
 - `index.html`: 메인 화면
 - `sitemap.html`: 새 메뉴 구조 사이트맵
 - `about.html`: 센터소개
+- `vision.html`: 비전
 - `history.html`: 연혁
 - `spaces.html`: 시설소개
 - `guide.html`: 이용안내 / 대관신청 안내
 - `location.html`: 오시는길
 - `programs.html`: 모집안내 / 교육신청
-- `news.html`: 공지사항 / 갤러리 / 마을 이야기 / 문의 제안
+- `news.html`: 공지사항
+- `gallery.html`: 꿈센터 갤러리
+- `village-story.html`: 마을 이야기
+- `contact.html`: 문의 / 제안
 - `assets/css/styles.css`: 전체 스타일
 - `assets/js/main.js`: 모바일 메뉴, 슬라이드, 간단한 캐러셀 동작
 - `assets/images/`: 로고와 목업 이미지
