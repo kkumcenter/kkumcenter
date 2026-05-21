@@ -1700,7 +1700,7 @@ h3 {
 }
 
 .subnav a {
-  min-width: 148px;
+  min-width: 184px;
   min-height: 58px;
   display: inline-flex;
   align-items: center;
@@ -1914,6 +1914,42 @@ h3 {
   font-size: 17px;
 }
 
+.history-kicker {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px 12px;
+  margin-top: 26px;
+  padding: 22px;
+  border-radius: var(--radius);
+  background: rgba(79, 138, 91, 0.1);
+}
+
+.history-kicker strong {
+  color: var(--forest);
+  font-size: 22px;
+}
+
+.history-kicker span {
+  align-self: center;
+  color: var(--muted-ink);
+  font-weight: 800;
+}
+
+.refined-history .history-list section {
+  position: relative;
+}
+
+.refined-history .history-list section::before {
+  content: "";
+  position: absolute;
+  left: 96px;
+  top: 38px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--clay);
+}
+
 .facility-facts,
 .info-table,
 .reserve-card dl,
@@ -2002,6 +2038,46 @@ h3 {
 
 .facility-list p {
   color: var(--muted-ink);
+}
+
+.floor-table-wrap {
+  overflow-x: auto;
+  border-top: 2px solid var(--forest);
+}
+
+.floor-table {
+  width: 100%;
+  min-width: 680px;
+  border-collapse: collapse;
+  background: #fff;
+}
+
+.floor-table caption {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.floor-table th,
+.floor-table td {
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+}
+
+.floor-table th {
+  color: var(--forest);
+  background: rgba(79, 138, 91, 0.08);
+  font-weight: 900;
+}
+
+.floor-table td:first-child {
+  color: var(--clay);
+  font-weight: 900;
+  white-space: nowrap;
 }
 
 .transport-grid {
@@ -2314,6 +2390,91 @@ h3 {
   background: #fff;
 }
 
+.core-value-band {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border-top: 2px solid var(--forest);
+  border-bottom: 1px solid var(--line);
+}
+
+.core-value-band div {
+  min-height: 180px;
+  padding: 28px;
+  border-right: 1px solid var(--line);
+  background: #fff;
+}
+
+.core-value-band div:last-child {
+  border-right: 0;
+}
+
+.core-value-band span {
+  display: block;
+  color: var(--clay);
+  font-weight: 900;
+}
+
+.core-value-band strong {
+  display: block;
+  margin-top: 18px;
+  font-size: 21px;
+  line-height: 1.45;
+}
+
+.large-map-layout {
+  grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.65fr);
+  align-items: stretch;
+}
+
+.large-map-layout .map-frame {
+  min-height: 560px;
+}
+
+.transport-list {
+  display: grid;
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.transport-list article {
+  display: grid;
+  grid-template-columns: 88px 1fr;
+  gap: 26px;
+  align-items: start;
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+}
+
+.route-icon {
+  width: 72px;
+  height: 72px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #fff;
+  background: var(--forest);
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  box-shadow: 0 14px 34px rgba(18, 59, 43, 0.18);
+}
+
+.route-icon.car {
+  background: var(--leaf);
+}
+
+.transport-list h3 {
+  margin: 14px 0 0;
+  font-size: 24px;
+}
+
+.transport-list p {
+  color: var(--muted-ink);
+}
+
 @media (max-width: 1100px) {
   .header-inner {
     min-height: 70px;
@@ -2426,7 +2587,8 @@ h3 {
   .strategy-grid,
   .reservation-card-grid,
   .transport-grid,
-  .gallery-grid-list {
+  .gallery-grid-list,
+  .core-value-band {
     grid-template-columns: repeat(2, 1fr);
   }
 
@@ -2635,7 +2797,9 @@ h3 {
   .strategy-grid,
   .reservation-card-grid,
   .transport-grid,
+  .transport-list,
   .gallery-grid-list,
+  .core-value-band,
   .info-grid,
   .program-grid,
   .space-grid,
@@ -2688,6 +2852,10 @@ h3 {
     gap: 8px;
   }
 
+  .refined-history .history-list section::before {
+    display: none;
+  }
+
   .facility-list article,
   .program-list-card,
   .program-list-card dl {
@@ -2717,6 +2885,10 @@ h3 {
 
   .contact-panel .button.primary {
     justify-self: start;
+  }
+
+  .transport-list article {
+    grid-template-columns: 1fr;
   }
 
   .story-item {

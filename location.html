@@ -14,7 +14,7 @@
         <a class="brand" href="index.html" aria-label="군북면 꿈키움센터 홈"><img class="brand-symbol" src="assets/images/kkoom-logo-symbol.png" alt="" aria-hidden="true"><span><strong>군북면 꿈키움센터</strong><small>온세대가 지속가능한 꿈을 키우는 거점</small></span></a>
         <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav"><span></span><span></span><span></span><span class="sr-only">메뉴 열기</span></button>
         <nav class="primary-nav" id="primary-nav" aria-label="주요 메뉴">
-          <div class="nav-group"><a class="nav-link active" href="about.html">센터소개</a><div class="nav-dropdown"><a href="about.html#greeting">인사말</a><a href="about.html#vision">설립목적 / 비전</a><a href="history.html">연혁</a><a href="spaces.html">시설소개</a><a href="location.html">오시는길</a></div></div>
+          <div class="nav-group"><a class="nav-link active" href="about.html">센터소개</a><div class="nav-dropdown"><a href="about.html">인사말</a><a href="vision.html">설립목적 / 비전</a><a href="history.html">연혁</a><a href="spaces.html">시설소개</a><a href="location.html">오시는길</a></div></div>
           <div class="nav-group"><a class="nav-link" href="guide.html">공간시설</a><div class="nav-dropdown"><a href="guide.html">이용안내</a><a href="guide.html#rental">대관신청</a></div></div>
           <div class="nav-group"><a class="nav-link" href="programs.html">프로그램</a><div class="nav-dropdown"><a href="programs.html#current">모집안내</a><a href="programs.html#apply">교육신청</a></div></div>
           <div class="nav-group"><a class="nav-link" href="news.html">소식마당</a><div class="nav-dropdown"><a href="news.html#notice">공지사항</a><a href="news.html#gallery">꿈센터 갤러리</a><a href="news.html#village-story">마을 이야기</a><a href="news.html#contact">문의 / 제안</a></div></div>
@@ -27,15 +27,15 @@
       <section class="sub-hero"><img src="assets/images/hero-center.png" alt="군북면 자연 풍경과 꿈키움센터 이미지"><div class="sub-hero-content"><p class="eyebrow">Location</p><h1>군북면의 생활권을 잇는 중심으로 오시는 길</h1><p>수성문화재단 오시는 길 페이지처럼 주소, 연락처, 교통 안내를 분리해 읽기 쉽게 구성했습니다.</p></div></section>
 
       <nav class="subnav" aria-label="센터소개 하위 메뉴">
-        <a href="about.html#greeting">인사말</a>
-        <a href="about.html#vision">설립목적 / 비전</a>
+        <a href="about.html">인사말</a>
+        <a href="vision.html">설립목적 / 비전</a>
         <a href="history.html">연혁</a>
         <a href="spaces.html">시설소개</a>
         <a class="is-active" href="location.html">오시는길</a>
       </nav>
 
-      <section class="section">
-        <div class="container location-layout">
+      <section class="section location-section">
+        <div class="container location-layout large-map-layout">
           <iframe class="map-frame" title="군북면 꿈키움센터 지도" src="https://www.google.com/maps?q=%EC%B6%A9%EC%B2%AD%EB%82%A8%EB%8F%84%20%EA%B8%88%EC%82%B0%EA%B5%B0%20%EA%B5%B0%EB%B6%81%EB%A9%B4%20%EB%91%90%EB%91%90%EB%A6%AC%20371&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
           <div class="location-info">
             <p class="eyebrow">Map & Contact</p>
@@ -51,21 +51,27 @@
       </section>
 
       <section class="section muted">
-        <div class="container transport-grid">
+        <div class="container section-heading compact">
+          <p class="eyebrow">Transportation</p>
+          <h2>교통안내</h2>
+          <p>철도 안내는 제외하고, 버스와 자가용 기준으로 방문 정보를 정리했습니다.</p>
+        </div>
+        <div class="container transport-list">
           <article>
-            <span class="badge">대중교통 이용 시</span>
-            <h3>군북면 중심부 하차 후 도보 이동</h3>
-            <p>정확한 버스 노선과 정류장명은 운영자료 확정 후 입력합니다. 현재는 군북면 행정·생활권 중심부를 기준으로 안내합니다.</p>
+            <div class="route-icon bus">BUS</div>
+            <div>
+              <span class="badge">버스 이용 시</span>
+              <h3>금산 시내버스 군북면 방면 이용</h3>
+              <p>금산읍에서 군북면 방면 버스를 이용해 군북면 중심부 정류장에서 하차 후 도보로 이동합니다. 정확한 노선명과 배차 간격은 운영자료 확정 후 입력합니다.</p>
+            </div>
           </article>
           <article>
-            <span class="badge">자가용 이용 시</span>
-            <h3>금산군 군북면 두두리 일원</h3>
-            <p>방문 전 주차 가능 여부와 행사 일정에 따른 혼잡 여부를 확인하는 흐름으로 안내합니다.</p>
-          </article>
-          <article>
-            <span class="badge">방문 전 확인</span>
-            <h3>프로그램 운영시간 확인</h3>
-            <p>교육, 대관, 마을행사 일정에 따라 일부 공간 이용이 제한될 수 있습니다.</p>
+            <div class="route-icon car">CAR</div>
+            <div>
+              <span class="badge">자가용 이용 시</span>
+              <h3>충청남도 금산군 군북면 두두리 371, 373-3 일원</h3>
+              <p>내비게이션에 군북면 두두리 371 일원을 입력해 이동합니다. 행사와 교육 일정에 따라 주차 공간이 혼잡할 수 있으므로 방문 전 문의를 권장합니다.</p>
+            </div>
           </article>
         </div>
       </section>
