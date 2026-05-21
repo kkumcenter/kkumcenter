@@ -18,8 +18,10 @@ if (navToggle && primaryNav) {
 
 const aboutSlides = Array.from(document.querySelectorAll("[data-about-slide]"));
 const aboutDots = Array.from(document.querySelectorAll("[data-about-dot]"));
+const aboutPrev = document.querySelector("[data-about-prev]");
+const aboutNext = document.querySelector("[data-about-next]");
 
-if (aboutSlides.length > 1 && aboutDots.length === aboutSlides.length) {
+if (aboutSlides.length > 1) {
   let activeSlide = 0;
   let slideTimer;
 
@@ -28,9 +30,11 @@ if (aboutSlides.length > 1 && aboutDots.length === aboutSlides.length) {
     aboutSlides.forEach((slide, slideIndex) => {
       slide.classList.toggle("is-active", slideIndex === activeSlide);
     });
-    aboutDots.forEach((dot, dotIndex) => {
-      dot.classList.toggle("is-active", dotIndex === activeSlide);
-    });
+    if (aboutDots.length === aboutSlides.length) {
+      aboutDots.forEach((dot, dotIndex) => {
+        dot.classList.toggle("is-active", dotIndex === activeSlide);
+      });
+    }
   };
 
   const startSlides = () => {
@@ -38,11 +42,23 @@ if (aboutSlides.length > 1 && aboutDots.length === aboutSlides.length) {
     slideTimer = window.setInterval(() => showSlide(activeSlide + 1), 5200);
   };
 
-  aboutDots.forEach((dot, dotIndex) => {
-    dot.addEventListener("click", () => {
-      showSlide(dotIndex);
-      startSlides();
+  if (aboutDots.length === aboutSlides.length) {
+    aboutDots.forEach((dot, dotIndex) => {
+      dot.addEventListener("click", () => {
+        showSlide(dotIndex);
+        startSlides();
+      });
     });
+  }
+
+  aboutPrev?.addEventListener("click", () => {
+    showSlide(activeSlide - 1);
+    startSlides();
+  });
+
+  aboutNext?.addEventListener("click", () => {
+    showSlide(activeSlide + 1);
+    startSlides();
   });
 
   startSlides();

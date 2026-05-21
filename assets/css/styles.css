@@ -516,7 +516,7 @@ h3 {
 }
 
 .compact-services {
-  grid-template-columns: repeat(5, minmax(116px, 1fr));
+  grid-template-columns: repeat(6, minmax(112px, 1fr));
 }
 
 .section {
@@ -759,6 +759,30 @@ h3 {
   line-height: 1;
 }
 
+.board-topline {
+  min-height: 42px;
+  display: grid;
+  grid-template-columns: 1fr 42px;
+  gap: 18px;
+  align-items: center;
+}
+
+.board-topline span {
+  height: 1px;
+  background: rgba(28, 37, 33, 0.28);
+}
+
+.board-topline a {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  color: var(--forest);
+  font-size: 32px;
+  line-height: 1;
+  font-weight: 700;
+}
+
 .board-tabs {
   display: flex;
   gap: 28px;
@@ -786,6 +810,10 @@ h3 {
   bottom: -1px;
   height: 4px;
   background: var(--forest);
+}
+
+.board-tabs-clean {
+  margin-top: 10px;
 }
 
 .board-feature {
@@ -834,12 +862,30 @@ h3 {
   margin-top: 20px;
 }
 
+.plain-board-list {
+  gap: 0;
+  margin-top: 0;
+  border-top: 2px solid var(--forest);
+}
+
 .board-list a {
   display: grid;
   grid-template-columns: 1fr auto;
   gap: 18px;
   color: #1e2b27;
   font-weight: 800;
+}
+
+.plain-board-list a {
+  min-height: 58px;
+  align-items: center;
+  border-bottom: 1px solid rgba(28, 37, 33, 0.13);
+}
+
+.plain-board-list span {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .board-list time {
@@ -898,6 +944,8 @@ h3 {
 
 .event-panel .board-head {
   align-items: flex-start;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(28, 37, 33, 0.22);
 }
 
 .event-panel .eyebrow {
@@ -1034,7 +1082,7 @@ h3 {
 }
 
 .gallery-track {
-  grid-auto-columns: minmax(260px, calc((100% - 66px) / 4));
+  grid-auto-columns: calc((100% - 22px) / 2);
   gap: 22px;
   padding: 4px 0 6px;
 }
@@ -1206,6 +1254,39 @@ h3 {
   border-color: var(--sun);
 }
 
+.about-arrow {
+  position: absolute;
+  z-index: 4;
+  top: 50%;
+  width: 54px;
+  height: 54px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  border-radius: 50%;
+  color: #fff;
+  background: rgba(18, 59, 43, 0.34);
+  box-shadow: 0 14px 32px rgba(12, 32, 24, 0.2);
+  cursor: pointer;
+  font-size: 40px;
+  line-height: 1;
+  transform: translateY(-50%);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.about-arrow:hover {
+  background: rgba(18, 59, 43, 0.62);
+  transform: translateY(-50%) scale(1.04);
+}
+
+.about-arrow-prev {
+  left: max(22px, calc((100% - 1180px) / 2 - 72px));
+}
+
+.about-arrow-next {
+  right: max(22px, calc((100% - 1180px) / 2 - 72px));
+}
+
 .purpose-layout,
 .location-layout {
   display: grid;
@@ -1295,7 +1376,10 @@ h3 {
 }
 
 .center-photo-hero img {
-  object-position: left 31%;
+  object-position: left 43%;
+  filter: saturate(0.84) contrast(0.92) brightness(1.04);
+  opacity: 0.82;
+  transform: scale(1.01);
 }
 
 .values-grid,
@@ -1665,6 +1749,10 @@ h3 {
   gap: 48px;
 }
 
+.footer-grid.footer-simple {
+  grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
+}
+
 .footer-grid strong {
   color: #fff;
   font-size: 20px;
@@ -1688,6 +1776,11 @@ h3 {
 
 .footer-grid a {
   padding: 4px 0;
+}
+
+.footer-contact {
+  color: rgba(255, 255, 255, 0.72);
+  font-weight: 800;
 }
 
 .footer-meta {
@@ -2014,6 +2107,19 @@ h3 {
 .floor-title h2 {
   margin: 12px 0 0;
   font-size: 42px;
+}
+
+.floor-title span {
+  display: block;
+  margin-top: 22px;
+  color: var(--forest);
+  font-size: 58px;
+  line-height: 1.05;
+  font-weight: 900;
+}
+
+.floor-title-sub {
+  padding-top: 8px;
 }
 
 .floor-title p {
@@ -2480,6 +2586,10 @@ h3 {
   background: var(--leaf);
 }
 
+.route-icon.parking {
+  background: var(--clay);
+}
+
 .transport-list h3 {
   margin: 14px 0 0;
   font-size: 24px;
@@ -2626,7 +2736,7 @@ h3 {
   }
 
   .service-banner {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
@@ -2668,9 +2778,18 @@ h3 {
     padding: 116px 0 120px;
   }
 
-  .about-slide-controls {
-    left: 24px;
-    bottom: 36px;
+  .about-arrow {
+    width: 44px;
+    height: 44px;
+    font-size: 34px;
+  }
+
+  .about-arrow-prev {
+    left: 14px;
+  }
+
+  .about-arrow-next {
+    right: 14px;
   }
 
   .hero h1,
@@ -2730,7 +2849,8 @@ h3 {
   }
 
   .service-banner a {
-    min-height: 98px;
+    min-height: 96px;
+    gap: 10px;
   }
 
   .service-icon {
@@ -2767,7 +2887,7 @@ h3 {
   }
 
   .gallery-track {
-    grid-auto-columns: minmax(236px, 82%);
+    grid-auto-columns: minmax(236px, 86%);
   }
 
   .open-forum-heading h2 {
