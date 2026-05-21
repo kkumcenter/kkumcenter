@@ -741,6 +741,16 @@ h3 {
   letter-spacing: 0;
 }
 
+.home-section-heading h2 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 54px;
+  font-weight: 500;
+}
+
+.home-section-heading p {
+  min-height: 27px;
+}
+
 .open-forum-heading h2::before,
 .open-forum-heading h2::after {
   content: "";
@@ -2009,6 +2019,182 @@ h3 {
 
 .vision-map-simple {
   margin-top: 34px;
+}
+
+.vision-org {
+  display: grid;
+  gap: 28px;
+}
+
+.vision-org-lead {
+  text-align: center;
+}
+
+.vision-org-lead p,
+.core-org-title p {
+  margin: 0 0 10px;
+  color: var(--clay);
+  font-size: 16px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.vision-org-lead h2 {
+  margin: 0;
+  color: #121d19;
+  font-size: clamp(34px, 4vw, 58px);
+  line-height: 1.18;
+}
+
+.vision-org-center {
+  position: relative;
+  width: min(900px, 100%);
+  margin: 10px auto 0;
+  padding: 40px 56px;
+  border-radius: 999px;
+  color: #fff;
+  background: var(--forest);
+  text-align: center;
+  box-shadow: 0 22px 56px rgba(13, 36, 26, 0.24);
+}
+
+.vision-org-center::after {
+  position: absolute;
+  left: 50%;
+  bottom: -32px;
+  width: 1px;
+  height: 32px;
+  content: "";
+  background: rgba(18, 59, 43, 0.35);
+}
+
+.vision-org-center span {
+  color: var(--sun);
+  font-weight: 900;
+}
+
+.vision-org-center strong {
+  display: block;
+  margin-top: 12px;
+  font-size: clamp(24px, 3vw, 36px);
+  line-height: 1.35;
+}
+
+.vision-org-center p {
+  margin: 14px 0 0;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 17px;
+}
+
+.vision-org-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-top: 32px;
+  padding-top: 32px;
+}
+
+.vision-org-row::before {
+  position: absolute;
+  left: 12.5%;
+  right: 12.5%;
+  top: 0;
+  height: 1px;
+  content: "";
+  background: rgba(18, 59, 43, 0.35);
+}
+
+.vision-org-row article {
+  position: relative;
+  min-height: 210px;
+  padding: 30px 24px;
+  border: 1px solid var(--line);
+  border-top: 4px solid var(--forest);
+  background: #fff;
+  text-align: center;
+}
+
+.vision-org-row article::before {
+  position: absolute;
+  left: 50%;
+  top: -32px;
+  width: 1px;
+  height: 32px;
+  content: "";
+  background: rgba(18, 59, 43, 0.35);
+}
+
+.vision-org-row span {
+  color: var(--clay);
+  font-weight: 900;
+}
+
+.vision-org-row strong {
+  display: block;
+  margin-top: 12px;
+  font-size: 25px;
+}
+
+.vision-org-row p {
+  margin: 14px 0 0;
+  color: var(--muted-ink);
+  line-height: 1.7;
+}
+
+.core-org {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  gap: 36px;
+  align-items: stretch;
+}
+
+.core-org-title {
+  display: grid;
+  align-content: center;
+  padding: 36px 30px;
+  color: #fff;
+  background: var(--forest);
+}
+
+.core-org-title p {
+  color: var(--sun);
+}
+
+.core-org-title h2 {
+  margin: 0;
+  color: #fff;
+  font-size: 42px;
+}
+
+.core-org-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 2px solid var(--forest);
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+}
+
+.core-org-grid article {
+  min-height: 180px;
+  padding: 30px 26px;
+  border-right: 1px solid var(--line);
+}
+
+.core-org-grid article:last-child {
+  border-right: 0;
+}
+
+.core-org-grid span {
+  color: var(--clay);
+  font-weight: 900;
+}
+
+.core-org-grid strong {
+  display: block;
+  margin-top: 18px;
+  font-size: 21px;
+  line-height: 1.45;
 }
 
 .vision-visual {
@@ -3283,11 +3469,17 @@ h3 {
 
   .strategy-grid,
   .vision-flow,
+  .vision-org-row,
   .reservation-card-grid,
   .transport-grid,
   .gallery-grid-list,
-  .core-value-band {
+  .core-value-band,
+  .core-org-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .core-org {
+    grid-template-columns: 1fr;
   }
 
   .location-contact-cards {
@@ -3522,6 +3714,7 @@ h3 {
   .feature-grid,
   .values-grid,
   .vision-flow,
+  .vision-org-row,
   .strategy-grid,
   .reservation-card-grid,
   .transport-grid,
@@ -3529,6 +3722,7 @@ h3 {
   .location-contact-cards,
   .gallery-grid-list,
   .core-value-band,
+  .core-org-grid,
   .info-grid,
   .program-grid,
   .space-grid,
@@ -3616,6 +3810,35 @@ h3 {
 
   .vision-statement-block {
     padding: 42px 28px;
+  }
+
+  .vision-org-center {
+    border-radius: var(--radius);
+    padding: 34px 26px;
+  }
+
+  .vision-org-center::after,
+  .vision-org-row::before,
+  .vision-org-row article::before {
+    display: none;
+  }
+
+  .vision-org-row {
+    margin-top: 10px;
+    padding-top: 0;
+  }
+
+  .core-org-title {
+    padding: 30px 26px;
+  }
+
+  .core-org-grid article {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .core-org-grid article:last-child {
+    border-bottom: 0;
   }
 
   .timeline li {
