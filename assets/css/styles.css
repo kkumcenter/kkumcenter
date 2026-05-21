@@ -1905,6 +1905,20 @@ h3 {
   letter-spacing: 0.08em;
 }
 
+.greeting-title > .eyebrow,
+.history-layout .section-heading.compact .eyebrow,
+.facility-overview .eyebrow,
+.location-heading-row .eyebrow,
+.vision-label {
+  margin: 0 0 14px;
+  color: var(--pine);
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
 .greeting-copy {
   padding-top: 10px;
 }
@@ -2289,13 +2303,13 @@ h3 {
   z-index: 2;
 }
 
-.vision-label,
-.vision-description strong {
+.vision-label {
   display: block;
   margin: 0 0 14px;
   color: var(--pine);
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 900;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 
@@ -2313,7 +2327,7 @@ h3 {
 
 .vision-description {
   max-width: 620px;
-  margin-top: 34px;
+  margin-top: 30px;
 }
 
 .vision-description p {
@@ -2555,13 +2569,13 @@ h3 {
 
 .vision-board {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 28px;
-  margin-top: 42px;
+  grid-template-columns: 1fr;
+  gap: 30px;
+  margin-top: 46px;
 }
 
 .vision-board-block {
-  padding: 34px 34px 32px;
+  padding: 42px 46px 40px;
   border: 1px solid rgba(18, 59, 43, 0.08);
   border-radius: 24px;
   background: linear-gradient(145deg, rgba(255, 253, 247, 0.96), rgba(245, 234, 216, 0.62));
@@ -2576,16 +2590,16 @@ h3 {
 .vision-value-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
-  margin-top: 26px;
+  gap: 18px;
+  margin-top: 30px;
 }
 
 .vision-value-grid article {
-  min-height: 220px;
+  min-height: 250px;
   display: grid;
   justify-items: center;
   align-content: start;
-  padding: 24px 16px 22px;
+  padding: 30px 22px 28px;
   border: 1px solid rgba(18, 59, 43, 0.08);
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.86);
@@ -2620,8 +2634,8 @@ h3 {
 
 .vision-icon {
   position: relative;
-  width: 70px;
-  height: 70px;
+  width: 78px;
+  height: 78px;
   display: grid;
   place-items: center;
   margin-top: 16px;
@@ -2630,211 +2644,14 @@ h3 {
   background: rgba(79, 138, 91, 0.12);
 }
 
-.vision-icon i,
-.vision-icon::before,
-.vision-icon::after {
-  position: absolute;
-  content: "";
-  display: block;
-}
-
-.home-icon i {
-  width: 38px;
-  height: 32px;
-  border: 4px solid currentColor;
-  border-top: 0;
-  bottom: 18px;
-}
-
-.home-icon::before {
-  width: 38px;
-  height: 38px;
-  border-left: 4px solid currentColor;
-  border-top: 4px solid currentColor;
-  transform: rotate(45deg);
-  top: 16px;
-}
-
-.home-icon::after,
-.care-icon::before {
-  width: 18px;
-  height: 18px;
-  border-radius: 50% 50% 50% 0;
-  background: currentColor;
-  transform: rotate(-45deg);
-}
-
-.home-icon::after {
-  left: 26px;
-  top: 32px;
-}
-
-.people-icon::before,
-.people-icon::after,
-.people-icon i {
-  width: 13px;
-  height: 13px;
-  border: 3px solid currentColor;
-  border-radius: 50%;
-}
-
-.people-icon::before {
-  left: 15px;
-  top: 20px;
-}
-
-.people-icon i {
-  left: 29px;
-  top: 15px;
-}
-
-.people-icon::after {
-  right: 15px;
-  top: 20px;
-}
-
-.door-icon i {
-  width: 30px;
-  height: 44px;
-  border: 4px solid currentColor;
-  border-left-width: 8px;
-  right: 18px;
-  top: 14px;
-}
-
-.door-icon::before,
-.door-icon::after {
-  left: 17px;
-  width: 18px;
-  height: 4px;
-  border-radius: 999px;
-  background: currentColor;
-}
-
-.door-icon::before {
-  top: 24px;
-}
-
-.door-icon::after {
-  top: 39px;
-}
-
-.globe-icon i {
-  width: 48px;
-  height: 48px;
-  border: 4px solid currentColor;
-  border-radius: 50%;
-}
-
-.globe-icon::before {
-  width: 4px;
-  height: 44px;
-  background: currentColor;
-}
-
-.globe-icon::after {
-  width: 44px;
-  height: 4px;
-  background: currentColor;
-}
-
-.link-icon i {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: currentColor;
-  box-shadow: 0 -24px 0 currentColor, 21px -12px 0 currentColor, 21px 12px 0 currentColor, 0 24px 0 currentColor, -21px 12px 0 currentColor, -21px -12px 0 currentColor;
-}
-
-.link-icon::before,
-.link-icon::after {
-  width: 44px;
-  height: 4px;
-  border-radius: 999px;
-  background: currentColor;
-}
-
-.link-icon::before {
-  transform: rotate(30deg);
-}
-
-.link-icon::after {
-  transform: rotate(-30deg);
-}
-
-.sprout-icon i {
-  width: 4px;
-  height: 42px;
-  border-radius: 999px;
-  background: currentColor;
-  bottom: 15px;
-}
-
-.sprout-icon::before,
-.sprout-icon::after {
-  width: 28px;
-  height: 18px;
-  border: 4px solid currentColor;
-  border-right: 0;
-  border-bottom: 0;
-  border-radius: 28px 0 0 0;
-  top: 24px;
-}
-
-.sprout-icon::before {
-  left: 15px;
-  transform: rotate(-24deg);
-}
-
-.sprout-icon::after {
-  right: 15px;
-  transform: scaleX(-1) rotate(-24deg);
-}
-
-.care-icon i {
-  width: 46px;
-  height: 34px;
-  border-left: 4px solid currentColor;
-  border-right: 4px solid currentColor;
-  border-bottom: 4px solid currentColor;
-  border-radius: 0 0 24px 24px;
-  bottom: 15px;
-}
-
-.care-icon::before {
-  left: 26px;
-  top: 20px;
-}
-
-.cycle-icon i {
-  width: 48px;
-  height: 48px;
-  border: 4px solid currentColor;
-  border-left-color: transparent;
-  border-radius: 50%;
-}
-
-.cycle-icon::before,
-.cycle-icon::after {
-  width: 0;
-  height: 0;
-  border-style: solid;
-}
-
-.cycle-icon::before {
-  right: 11px;
-  top: 10px;
-  border-width: 0 7px 12px 7px;
-  border-color: transparent transparent currentColor transparent;
-  transform: rotate(42deg);
-}
-
-.cycle-icon::after {
-  left: 11px;
-  bottom: 10px;
-  border-width: 12px 7px 0 7px;
-  border-color: currentColor transparent transparent transparent;
-  transform: rotate(42deg);
+.vision-icon svg {
+  width: 54px;
+  height: 54px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .vision-org-lead {
@@ -4781,6 +4598,7 @@ h3 {
 
   .vision-value-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
   }
 
   .vision-value-grid article {
