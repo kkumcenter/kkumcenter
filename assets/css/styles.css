@@ -1685,6 +1685,635 @@ h3 {
   font-weight: 700;
 }
 
+.subnav {
+  position: sticky;
+  top: 79px;
+  z-index: 40;
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  padding: 0 24px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(255, 253, 247, 0.96);
+  backdrop-filter: blur(16px);
+  overflow-x: auto;
+}
+
+.subnav a {
+  min-width: 148px;
+  min-height: 58px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 18px;
+  border-left: 1px solid var(--line);
+  color: #405047;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.subnav a:last-child {
+  border-right: 1px solid var(--line);
+}
+
+.subnav a:hover,
+.subnav a.is-active {
+  color: #fff;
+  background: var(--forest);
+}
+
+.greeting-layout {
+  display: grid;
+  grid-template-columns: 0.86fr 1.14fr;
+  gap: 70px;
+  align-items: start;
+}
+
+.greeting-title {
+  position: sticky;
+  top: 168px;
+}
+
+.greeting-title h2 {
+  margin: 0;
+  font-size: 44px;
+  line-height: 1.26;
+  word-break: keep-all;
+}
+
+.greeting-title > p:last-child {
+  margin-top: 26px;
+  color: var(--clay);
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+}
+
+.greeting-copy {
+  padding-top: 10px;
+}
+
+.greeting-copy p {
+  margin: 0;
+  color: #36433e;
+  font-size: 19px;
+  line-height: 1.9;
+  word-break: keep-all;
+}
+
+.greeting-copy p + p {
+  margin-top: 24px;
+}
+
+.greeting-copy .signature {
+  color: var(--forest);
+  font-weight: 900;
+  text-align: right;
+}
+
+.vision-panel,
+.facility-overview,
+.program-search,
+.contact-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.8fr);
+  gap: 46px;
+  align-items: center;
+}
+
+.vision-panel h2,
+.facility-overview h2,
+.program-search h2,
+.contact-panel h2 {
+  margin: 0;
+  font-size: 42px;
+  line-height: 1.25;
+}
+
+.vision-panel p,
+.facility-overview p,
+.program-search p,
+.contact-panel p {
+  color: var(--muted-ink);
+  font-size: 18px;
+}
+
+.vision-statement {
+  min-height: 230px;
+  display: grid;
+  align-content: center;
+  padding: 34px;
+  border-radius: var(--radius);
+  color: #fff;
+  background: var(--forest);
+  box-shadow: var(--shadow);
+}
+
+.vision-statement span {
+  color: var(--sun);
+  font-weight: 900;
+}
+
+.vision-statement strong {
+  margin-top: 16px;
+  font-size: 28px;
+  line-height: 1.42;
+}
+
+.strategy-grid,
+.reservation-card-grid,
+.transport-grid,
+.gallery-grid-list {
+  display: grid;
+  gap: 22px;
+}
+
+.strategy-grid {
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 26px;
+}
+
+.strategy-grid article,
+.transport-grid article,
+.reserve-card {
+  min-height: 250px;
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+}
+
+.strategy-grid span,
+.floor-title span,
+.reserve-card > span {
+  color: var(--clay);
+  font-weight: 900;
+}
+
+.strategy-grid h3,
+.transport-grid h3,
+.reserve-card h3 {
+  margin: 18px 0 0;
+  font-size: 25px;
+  line-height: 1.32;
+}
+
+.strategy-grid p,
+.transport-grid p {
+  color: var(--muted-ink);
+}
+
+.history-layout {
+  display: grid;
+  grid-template-columns: 0.78fr 1.22fr;
+  gap: 64px;
+  align-items: start;
+}
+
+.history-list {
+  border-top: 2px solid var(--forest);
+}
+
+.history-list section {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 34px;
+  padding: 30px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.history-list h3 {
+  margin: 0;
+  color: var(--forest);
+  font-size: 34px;
+  line-height: 1;
+}
+
+.history-list ul {
+  display: grid;
+  gap: 15px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.history-list li {
+  display: grid;
+  grid-template-columns: 78px 1fr;
+  gap: 20px;
+  align-items: baseline;
+}
+
+.history-list time {
+  color: var(--clay);
+  font-weight: 900;
+}
+
+.history-list span {
+  color: #334039;
+  font-size: 17px;
+}
+
+.facility-facts,
+.info-table,
+.reserve-card dl,
+.detail-table {
+  margin: 0;
+}
+
+.facility-facts,
+.info-table {
+  border-top: 2px solid var(--forest);
+}
+
+.facility-facts div,
+.info-table div {
+  display: grid;
+  grid-template-columns: 118px 1fr;
+  gap: 18px;
+  padding: 17px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.facility-facts dt,
+.info-table dt,
+.reserve-card dt {
+  color: var(--forest);
+  font-weight: 900;
+}
+
+.facility-facts dd,
+.info-table dd,
+.reserve-card dd {
+  margin: 0;
+  color: #37443e;
+}
+
+.floor-guide {
+  display: grid;
+  grid-template-columns: 0.72fr 1.28fr;
+  gap: 50px;
+  align-items: start;
+}
+
+.floor-title {
+  position: sticky;
+  top: 168px;
+}
+
+.floor-title h2 {
+  margin: 12px 0 0;
+  font-size: 42px;
+}
+
+.floor-title p {
+  color: var(--muted-ink);
+  font-size: 18px;
+}
+
+.facility-list {
+  display: grid;
+  gap: 18px;
+}
+
+.facility-list article {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 26px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+}
+
+.facility-list .space-visual {
+  min-height: 210px;
+  height: 100%;
+}
+
+.facility-list article > div:last-child {
+  padding: 28px 28px 28px 0;
+}
+
+.facility-list h3 {
+  margin: 16px 0 0;
+  font-size: 25px;
+}
+
+.facility-list p {
+  color: var(--muted-ink);
+}
+
+.transport-grid {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.reservation-card-grid {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.reserve-card dl {
+  display: grid;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.reserve-card dl div {
+  display: grid;
+  grid-template-columns: 74px 1fr;
+  gap: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.rental-layout {
+  display: grid;
+  grid-template-columns: 0.78fr 1.22fr;
+  gap: 54px;
+  align-items: start;
+}
+
+.detail-table,
+.board-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+}
+
+.detail-table caption,
+.board-table caption {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.detail-table th,
+.detail-table td {
+  padding: 19px 22px;
+  border-top: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+
+.detail-table th {
+  width: 150px;
+  color: var(--forest);
+  background: rgba(79, 138, 91, 0.08);
+}
+
+.use-flow {
+  margin-top: 30px;
+}
+
+.program-search {
+  align-items: end;
+}
+
+.search-panel,
+.notice-search {
+  display: flex;
+  gap: 8px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+}
+
+.search-panel label {
+  display: grid;
+  gap: 8px;
+  color: var(--muted-ink);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.search-panel select,
+.notice-search select,
+.notice-search input {
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+  font: inherit;
+}
+
+.search-panel button,
+.notice-search button {
+  min-height: 44px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: var(--radius);
+  color: #fff;
+  background: var(--forest);
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.program-toolbar,
+.notice-tools {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: center;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 2px solid var(--forest);
+}
+
+.program-toolbar span,
+.board-count {
+  color: var(--muted-ink);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.program-list {
+  display: grid;
+  gap: 18px;
+  margin-top: 18px;
+}
+
+.program-list-card {
+  display: grid;
+  grid-template-columns: 220px 1fr 112px;
+  gap: 26px;
+  align-items: center;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+}
+
+.program-list-card img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--radius);
+}
+
+.program-list-card h3 {
+  margin: 10px 0 0;
+  font-size: 25px;
+}
+
+.program-list-card p {
+  color: var(--muted-ink);
+}
+
+.program-list-card dl {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 18px 0 0;
+}
+
+.program-list-card dt {
+  color: var(--muted-ink);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.program-list-card dd {
+  margin: 4px 0 0;
+  font-weight: 900;
+}
+
+.program-list-card > a {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius);
+  color: #fff;
+  background: var(--forest);
+  font-weight: 900;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 10px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.status.open {
+  color: #5f3f00;
+  background: rgba(214, 164, 67, 0.26);
+}
+
+.status.ongoing {
+  color: var(--forest);
+  background: rgba(79, 138, 91, 0.16);
+}
+
+.status.closed {
+  color: #65736d;
+  background: #eef1ef;
+}
+
+.notice-tools {
+  margin-top: 18px;
+}
+
+.notice-search input {
+  min-width: 230px;
+}
+
+.board-table-wrap {
+  overflow-x: auto;
+}
+
+.board-table {
+  min-width: 780px;
+  border-top: 2px solid var(--forest);
+}
+
+.board-table th,
+.board-table td {
+  padding: 17px 14px;
+  border-bottom: 1px solid var(--line);
+  text-align: center;
+  vertical-align: middle;
+}
+
+.board-table th {
+  color: var(--forest);
+  background: rgba(79, 138, 91, 0.08);
+  font-weight: 900;
+}
+
+.board-table td:nth-child(2) {
+  text-align: left;
+  font-weight: 800;
+}
+
+.board-table td:nth-child(3) {
+  color: var(--clay);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.gallery-grid-list {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.gallery-grid-list article {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+}
+
+.gallery-grid-list img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.gallery-grid-list div {
+  padding: 18px;
+}
+
+.gallery-grid-list h3 {
+  margin: 0;
+  font-size: 19px;
+}
+
+.gallery-grid-list time {
+  display: block;
+  margin-top: 8px;
+  color: var(--muted-ink);
+  font-weight: 800;
+}
+
+.contact-panel {
+  padding: 38px;
+  border-radius: var(--radius);
+  color: #fff;
+  background: var(--forest);
+}
+
+.contact-panel p {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.contact-panel .eyebrow {
+  color: var(--sun);
+}
+
+.contact-panel .button.primary {
+  justify-self: end;
+  color: var(--forest);
+  background: #fff;
+}
+
 @media (max-width: 1100px) {
   .header-inner {
     min-height: 70px;
@@ -1774,11 +2403,41 @@ h3 {
   .produce-layout,
   .purpose-layout,
   .location-layout,
+  .greeting-layout,
+  .vision-panel,
+  .facility-overview,
+  .floor-guide,
+  .history-layout,
+  .rental-layout,
+  .program-search,
+  .contact-panel,
   .timeline,
   .reservation-mock,
   .news-layout {
     grid-template-columns: 1fr;
     gap: 40px;
+  }
+
+  .greeting-title,
+  .floor-title {
+    position: static;
+  }
+
+  .strategy-grid,
+  .reservation-card-grid,
+  .transport-grid,
+  .gallery-grid-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .program-list-card {
+    grid-template-columns: 180px 1fr;
+  }
+
+  .program-list-card > a {
+    grid-column: 2;
+    justify-self: start;
+    padding: 0 18px;
   }
 
   .process-list,
@@ -1973,6 +2632,10 @@ h3 {
 
   .feature-grid,
   .values-grid,
+  .strategy-grid,
+  .reservation-card-grid,
+  .transport-grid,
+  .gallery-grid-list,
   .info-grid,
   .program-grid,
   .space-grid,
@@ -1988,6 +2651,72 @@ h3 {
   .timeline li {
     grid-template-columns: 1fr;
     gap: 8px;
+  }
+
+  .subnav {
+    top: 70px;
+    justify-content: flex-start;
+    padding: 0 16px;
+  }
+
+  .subnav a {
+    min-width: auto;
+    min-height: 50px;
+    padding: 0 14px;
+    font-size: 14px;
+  }
+
+  .greeting-title h2,
+  .vision-panel h2,
+  .facility-overview h2,
+  .program-search h2,
+  .contact-panel h2,
+  .floor-title h2 {
+    font-size: 30px;
+  }
+
+  .greeting-copy p {
+    font-size: 16px;
+  }
+
+  .history-list section,
+  .history-list li,
+  .facility-facts div,
+  .info-table div,
+  .reserve-card dl div {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .facility-list article,
+  .program-list-card,
+  .program-list-card dl {
+    grid-template-columns: 1fr;
+  }
+
+  .facility-list article > div:last-child {
+    padding: 22px;
+  }
+
+  .program-list-card > a {
+    grid-column: auto;
+  }
+
+  .search-panel,
+  .notice-search,
+  .program-toolbar,
+  .notice-tools,
+  .contact-panel {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .notice-search input {
+    min-width: 0;
+  }
+
+  .contact-panel .button.primary {
+    justify-self: start;
   }
 
   .story-item {
