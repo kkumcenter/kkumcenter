@@ -239,6 +239,27 @@ a {
   background: rgba(31, 90, 67, 0.08);
 }
 
+.nav-menu-link {
+  gap: 8px;
+}
+
+.menu-line-icon {
+  width: 18px;
+  height: 14px;
+  display: inline-flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.menu-line-icon span {
+  width: 100%;
+  height: 2px;
+  display: block;
+  border-radius: 999px;
+  background: currentColor;
+}
+
 .header-cta {
   min-height: 42px;
   display: inline-flex;
