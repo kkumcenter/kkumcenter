@@ -1448,7 +1448,7 @@ h3 {
 }
 
 .dafarm-home .produce-layout {
-  grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0;
   overflow: hidden;
   border-radius: 18px;
@@ -1549,6 +1549,101 @@ h3 {
 }
 
 .produce-section .button.primary {
+  color: var(--forest);
+  background: #fff;
+}
+
+.dafarm-shop-button {
+  min-height: 64px;
+  gap: 14px;
+  padding: 0 32px 0 22px;
+  font-size: 18px;
+  letter-spacing: 0;
+  box-shadow: 0 18px 40px rgba(4, 28, 18, 0.24);
+}
+
+.dafarm-cart-icon {
+  width: 38px;
+  height: 38px;
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  color: var(--forest);
+  background: #f4ead6;
+}
+
+.dafarm-cart-icon svg {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.dafarm-home .produce-image-frame.dafarm-product-slider {
+  position: relative;
+  display: block;
+  overflow: hidden;
+}
+
+.dafarm-product-track {
+  width: 100%;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(100%, 100%);
+  gap: 22px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.dafarm-product-track::-webkit-scrollbar {
+  display: none;
+}
+
+.dafarm-product-card {
+  min-width: 0;
+  display: grid;
+  align-content: center;
+  gap: 14px;
+  scroll-snap-align: start;
+}
+
+.dafarm-product-card img {
+  width: 100%;
+  height: min(340px, 27vw);
+  display: block;
+  object-fit: contain;
+  border-radius: 16px;
+  background: #fff8ea;
+  box-shadow: 0 18px 46px rgba(0, 0, 0, 0.16);
+}
+
+.dafarm-product-card strong {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 17px;
+  font-weight: 900;
+  text-align: center;
+}
+
+.dafarm-product-nav {
+  position: absolute;
+  right: 32px;
+  bottom: 28px;
+  z-index: 2;
+}
+
+.dafarm-product-nav button {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(10px);
+}
+
+.dafarm-product-nav button:hover {
   color: var(--forest);
   background: #fff;
 }
@@ -4936,6 +5031,17 @@ h3 {
     border-radius: 14px;
   }
 
+  .dafarm-product-card img {
+    height: auto;
+    max-height: 320px;
+    aspect-ratio: 16 / 10;
+  }
+
+  .dafarm-product-nav {
+    right: 32px;
+    bottom: 30px;
+  }
+
   .vision-board {
     grid-template-columns: 1fr;
   }
@@ -5055,6 +5161,33 @@ h3 {
   .dafarm-home .produce-image {
     aspect-ratio: 4 / 3;
     max-height: none;
+  }
+
+  .dafarm-shop-button {
+    width: 100%;
+    min-height: 60px;
+    justify-content: center;
+    padding: 0 22px;
+  }
+
+  .dafarm-cart-icon {
+    width: 34px;
+    height: 34px;
+  }
+
+  .dafarm-cart-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .dafarm-product-card img {
+    max-height: 280px;
+    aspect-ratio: 4 / 3;
+  }
+
+  .dafarm-product-nav {
+    right: 24px;
+    bottom: 24px;
   }
 
   .about-arrow {

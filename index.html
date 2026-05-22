@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>군북면 꿈키움센터</title>
     <meta name="description" content="온세대가 지속가능한 꿈을 키우는 거점, 군북면 꿈키움센터 홈페이지 목업">
-    <link rel="stylesheet" href="assets/css/styles.css?v=20260523-5">
+    <link rel="stylesheet" href="assets/css/styles.css?v=20260523-7">
   </head>
   <body>
     <a class="skip-link" href="#main">본문 바로가기</a>
@@ -134,10 +134,36 @@
           <div class="produce-copy">
             <h2>군북의 계절을 식탁으로</h2>
             <p>금산의 특별한 먹거리와 지역 농산물을 금산다팜몰에서 만나보세요.</p>
-            <a class="button primary" href="https://dafarm.co.kr/" target="_blank" rel="noreferrer">금산다팜몰 바로가기</a>
+            <a class="button primary dafarm-shop-button" href="https://dafarm.co.kr/" target="_blank" rel="noreferrer">
+              <span class="dafarm-cart-icon" aria-hidden="true">
+                <svg viewBox="0 0 32 32" focusable="false">
+                  <path d="M8 9h3.2l2.3 10.2h9.7l2.4-7.1H12.1"></path>
+                  <path d="M14.4 23.8a1.7 1.7 0 1 0 0 .1M22.6 23.8a1.7 1.7 0 1 0 0 .1"></path>
+                  <path d="M18.5 8.2c0-2 1.5-3.4 3.3-3.4 1.7 0 3 1.2 3 2.9 0 3.2-4.1 4.9-6.3 6.6-2.2-1.7-6.3-3.4-6.3-6.6 0-1.7 1.3-2.9 3-2.9 1.8 0 3.3 1.4 3.3 3.4Z"></path>
+                </svg>
+              </span>
+              <span>금산다팜몰 바로가기</span>
+            </a>
           </div>
-          <div class="produce-image-frame">
-            <img class="produce-image" src="assets/images/local-produce.png" alt="인삼, 홍삼, 표고, 벌꿀, 장아찌가 놓인 로컬 농산물 구성">
+          <div class="produce-image-frame dafarm-product-slider" data-carousel>
+            <div class="dafarm-product-track" data-carousel-track>
+              <article class="dafarm-product-card">
+                <img src="assets/images/local-produce.png" alt="인삼, 홍삼, 표고, 벌꿀, 장아찌가 놓인 로컬 농산물 구성">
+                <strong>금산 로컬 농산물</strong>
+              </article>
+              <article class="dafarm-product-card">
+                <img src="assets/images/dafarm-apple-juice.jpg" alt="금산다팜 사과 착즙주스 상품 이미지">
+                <strong>사과 착즙주스</strong>
+              </article>
+              <article class="dafarm-product-card">
+                <img src="assets/images/dafarm-doraji-pear-juice.jpg" alt="금산다팜 도라지배즙 상품 이미지">
+                <strong>도라지배즙</strong>
+              </article>
+            </div>
+            <div class="carousel-nav dafarm-product-nav" aria-label="금산다팜 상품 이미지 이동">
+              <button type="button" aria-label="이전 상품 이미지" data-carousel-prev>‹</button>
+              <button type="button" aria-label="다음 상품 이미지" data-carousel-next>›</button>
+            </div>
           </div>
         </div>
       </section>
