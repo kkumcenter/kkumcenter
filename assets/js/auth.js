@@ -36,7 +36,7 @@
   const setMode = (nextMode) => {
     mode = nextMode;
     const isSignup = mode === "signup";
-    title.textContent = isSignup ? "회원가입" : "아이디로 로그인";
+    title.textContent = isSignup ? "회원가입" : "로그인";
     submitButton.textContent = isSignup ? "회원가입하기" : "로그인";
     passwordInput.setAttribute("autocomplete", isSignup ? "new-password" : "current-password");
     loginModeButton.hidden = !isSignup;
@@ -133,7 +133,7 @@
   });
 
   if (!hasConfig) {
-    setStatus("Supabase 프로젝트 정보를 입력하면 이메일 로그인과 구글·카카오 간편 로그인이 작동합니다.", "warning");
+    setStatus("아이디/비밀번호 찾기", "info");
   } else {
     renderUser();
   }
