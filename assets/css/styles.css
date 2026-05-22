@@ -3659,6 +3659,13 @@ h3 {
   line-height: 1.2;
 }
 
+.auth-helper {
+  margin: 12px 0 0;
+  color: var(--muted-ink);
+  font-size: 15px;
+  font-weight: 800;
+}
+
 .login-form {
   display: grid;
   gap: 18px;
@@ -3695,6 +3702,83 @@ h3 {
   color: #fff;
   background: var(--forest);
   font-size: 17px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.login-form button:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
+
+.auth-mode-switch {
+  margin-top: 14px;
+  border: 0;
+  color: var(--forest);
+  background: transparent;
+  font: inherit;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.auth-status {
+  min-height: 48px;
+  margin-top: 18px;
+  padding: 13px 15px;
+  border: 1px solid rgba(28, 37, 33, 0.12);
+  border-radius: var(--radius);
+  color: #425149;
+  background: rgba(255, 255, 255, 0.74);
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.55;
+}
+
+.auth-status[data-status="success"] {
+  color: #124432;
+  border-color: rgba(31, 90, 67, 0.22);
+  background: rgba(31, 90, 67, 0.08);
+}
+
+.auth-status[data-status="warning"] {
+  color: #76500b;
+  border-color: rgba(214, 164, 67, 0.28);
+  background: rgba(214, 164, 67, 0.12);
+}
+
+.auth-status[data-status="error"] {
+  color: #8a260f;
+  border-color: rgba(184, 95, 61, 0.28);
+  background: rgba(184, 95, 61, 0.1);
+}
+
+.auth-user-panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 14px;
+  padding: 14px;
+  border-radius: var(--radius);
+  background: rgba(31, 90, 67, 0.08);
+}
+
+.auth-user-panel[hidden] {
+  display: none;
+}
+
+.auth-user-panel strong {
+  color: var(--forest);
+  font-size: 15px;
+}
+
+.auth-user-panel button {
+  min-height: 40px;
+  border: 1px solid rgba(31, 90, 67, 0.24);
+  border-radius: 999px;
+  padding: 0 14px;
+  color: var(--forest);
+  background: #fff;
   font-weight: 900;
   cursor: pointer;
 }
@@ -3812,11 +3896,14 @@ h3 {
   justify-content: center;
   flex: 0 0 auto;
   padding: 0 28px;
+  border: 0;
   border-radius: 999px;
   color: var(--forest);
   background: #fff;
+  font: inherit;
   font-weight: 900;
   box-shadow: 0 12px 30px rgba(13, 36, 26, 0.18);
+  cursor: pointer;
 }
 
 .core-value-band {
