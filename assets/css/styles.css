@@ -30,6 +30,7 @@ body {
   background: var(--paper);
   line-height: 1.6;
   letter-spacing: 0;
+  overflow-x: hidden;
 }
 
 body.nav-open {
@@ -87,6 +88,10 @@ a {
   margin: 0 auto;
 }
 
+.home-page .container {
+  width: min(1480px, calc(100% - 48px));
+}
+
 .site-header {
   position: sticky;
   top: 0;
@@ -103,6 +108,10 @@ a {
   display: flex;
   align-items: center;
   gap: 24px;
+}
+
+.home-page .header-inner {
+  width: min(1480px, calc(100% - 48px));
 }
 
 .brand {
@@ -652,6 +661,10 @@ h3 {
   border-radius: 0;
   background: transparent;
   box-shadow: none;
+}
+
+.home-page .service-banner {
+  width: min(1480px, calc(100% - 48px));
 }
 
 .service-banner a {
@@ -1657,7 +1670,7 @@ h3 {
 }
 
 .home-carousel {
-  width: min(100% - 72px, 1280px);
+  width: min(100% - 48px, 1480px);
   height: clamp(360px, 43vw, 552px);
   min-height: 0;
   margin: 28px auto 0;
@@ -1707,6 +1720,10 @@ h3 {
   width: min(1180px, calc(100% - 48px));
   margin: 0 auto;
   padding: 150px 0 120px;
+}
+
+.home-page .about-slide-content {
+  width: min(1320px, calc(100% - 80px));
 }
 
 .home-carousel .about-slide-content {
@@ -5120,6 +5137,20 @@ h3 {
   .quick-links,
   .service-banner {
     width: min(100% - 32px, 1180px);
+  }
+
+  .home-page .container,
+  .home-page .header-inner,
+  .home-page .service-banner {
+    width: min(100% - 32px, 1480px);
+  }
+
+  .home-page .home-carousel {
+    width: min(100% - 32px, 1480px);
+  }
+
+  .home-page .about-slide-content {
+    width: min(100% - 48px, 1320px);
   }
 
   .brand {
