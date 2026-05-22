@@ -666,7 +666,7 @@ h3 {
   z-index: 4;
   display: grid;
   grid-template-columns: repeat(8, minmax(92px, 1fr));
-  gap: 32px;
+  gap: 18px;
   padding: 0;
   border: 0;
   border-radius: 0;
@@ -679,12 +679,12 @@ h3 {
 }
 
 .service-banner a {
-  min-height: 184px;
+  min-height: 132px;
   display: grid;
   justify-items: center;
   align-content: center;
-  gap: 18px;
-  padding: 22px 10px;
+  gap: 10px;
+  padding: 8px 8px;
   border-radius: 18px;
   color: #24332e;
   font-weight: 700;
@@ -696,12 +696,12 @@ h3 {
   color: var(--forest);
   background: rgba(79, 138, 91, 0.055);
   box-shadow: 0 18px 44px rgba(31, 90, 67, 0.08);
-  transform: translateY(-8px);
+  transform: translateY(-5px);
 }
 
 .service-icon {
-  width: 128px;
-  height: 128px;
+  width: 92px;
+  height: 92px;
   display: grid;
   place-items: center;
   border: 1px solid rgba(28, 37, 33, 0.08);
@@ -728,7 +728,7 @@ h3 {
   color: #fff;
   background: linear-gradient(135deg, var(--forest), var(--leaf));
   box-shadow: 0 22px 42px rgba(18, 59, 43, 0.24);
-  transform: scale(1.06);
+  transform: scale(1.04);
 }
 
 .service-banner a:hover .service-icon svg {
@@ -736,7 +736,7 @@ h3 {
 }
 
 .service-banner strong {
-  font-size: 19px;
+  font-size: 18px;
   font-weight: 600;
   line-height: 1.35;
   transition: color 0.24s ease;
@@ -771,13 +771,13 @@ h3 {
 }
 
 .favorite-menu-section {
-  padding: 86px 0 90px;
+  padding: 44px 0 50px;
   background: var(--paper);
 }
 
 .favorite-heading,
 .favorite-menu-heading {
-  margin-bottom: 36px;
+  margin-bottom: 22px;
 }
 
 .quick-heading h2 {
@@ -1564,14 +1564,15 @@ h3 {
   min-height: 420px;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   justify-content: center;
   padding: clamp(44px, 4vw, 62px);
-  border: 1px solid rgba(31, 90, 67, 0.14);
+  border: 0;
   border-radius: 22px;
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(248, 242, 228, 0.9)),
     linear-gradient(180deg, rgba(79, 138, 91, 0.08), rgba(214, 164, 67, 0.1));
-  box-shadow: 0 22px 60px rgba(20, 43, 33, 0.1);
+  box-shadow: none;
 }
 
 .produce-copy p {
@@ -1635,10 +1636,10 @@ h3 {
   align-items: center;
   justify-content: center;
   padding: clamp(22px, 2.6vw, 36px);
-  border: 1px solid rgba(214, 164, 67, 0.24);
+  border: 0;
   border-radius: 22px;
   background: linear-gradient(135deg, #fffaf0 0%, #fffdf7 52%, #edf5ec 100%);
-  box-shadow: 0 22px 60px rgba(20, 43, 33, 0.1);
+  box-shadow: none;
 }
 
 .dafarm-home .produce-image {
@@ -1667,9 +1668,10 @@ h3 {
 }
 
 .dafarm-shop-button {
-  min-height: 64px;
-  gap: 12px;
-  padding: 0 32px 0 28px;
+  width: min(310px, 100%);
+  min-height: 82px;
+  gap: 14px;
+  padding: 0 26px;
   font-size: 18px;
   font-weight: 600;
   letter-spacing: 0;
@@ -1687,13 +1689,29 @@ h3 {
 }
 
 .dafarm-cart-icon svg {
-  width: 26px;
-  height: 26px;
+  width: 28px;
+  height: 28px;
   fill: none;
   stroke: currentColor;
   stroke-width: 1.9;
   stroke-linecap: round;
   stroke-linejoin: round;
+}
+
+.dafarm-button-text {
+  display: grid;
+  gap: 2px;
+  line-height: 1.2;
+  text-align: left;
+}
+
+.dafarm-button-text span:first-child {
+  font-weight: 700;
+}
+
+.dafarm-button-text span:last-child {
+  font-size: 15px;
+  opacity: 0.86;
 }
 
 .dafarm-home .produce-image-frame.dafarm-product-slider {
@@ -5343,20 +5361,20 @@ h3 {
   }
 
   .dafarm-shop-button {
-    width: 100%;
-    min-height: 60px;
+    width: min(310px, 100%);
+    min-height: 76px;
     justify-content: center;
     padding: 0 22px;
   }
 
   .dafarm-cart-icon {
-    width: 34px;
-    height: 34px;
+    width: 30px;
+    height: 30px;
   }
 
   .dafarm-cart-icon svg {
-    width: 22px;
-    height: 22px;
+    width: 26px;
+    height: 26px;
   }
 
   .dafarm-product-card img {
@@ -5440,14 +5458,14 @@ h3 {
   }
 
   .service-banner a {
-    min-height: 148px;
-    gap: 13px;
-    padding: 14px 4px;
+    min-height: 116px;
+    gap: 9px;
+    padding: 8px 4px;
   }
 
   .service-icon {
-    width: 84px;
-    height: 84px;
+    width: 70px;
+    height: 70px;
   }
 
   .service-icon svg {
