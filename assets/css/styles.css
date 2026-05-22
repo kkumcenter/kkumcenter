@@ -677,12 +677,13 @@ h3 {
 }
 
 .favorite-menu-section {
-  padding: 62px 0 90px;
+  padding: 86px 0 90px;
   background: var(--paper);
 }
 
-.favorite-heading {
-  margin-bottom: 28px;
+.favorite-heading,
+.favorite-menu-heading {
+  margin-bottom: 36px;
 }
 
 .quick-heading h2 {
@@ -1415,12 +1416,12 @@ h3 {
 }
 
 .dafarm-home .produce-layout {
-  grid-template-columns: 1fr;
-  gap: 34px;
+  grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr);
+  gap: 58px;
 }
 
 .dafarm-home .produce-copy {
-  max-width: 100%;
+  max-width: 640px;
 }
 
 .produce-copy p {
@@ -1440,7 +1441,7 @@ h3 {
 }
 
 .dafarm-home .produce-copy p:not(.eyebrow) {
-  max-width: 760px;
+  max-width: 620px;
   margin-bottom: 28px;
 }
 
@@ -1471,7 +1472,7 @@ h3 {
 }
 
 .dafarm-home .produce-image {
-  aspect-ratio: 16 / 5;
+  aspect-ratio: 16 / 8;
   max-height: 420px;
 }
 
@@ -4697,6 +4698,7 @@ h3 {
   .split-layout,
   .news-rail,
   .forum-layout,
+  .dafarm-home .produce-layout,
   .produce-layout,
   .purpose-layout,
   .location-layout,
@@ -4718,6 +4720,10 @@ h3 {
 
   .dafarm-home .produce-copy h2 {
     white-space: normal;
+  }
+
+  .dafarm-home .produce-copy {
+    max-width: 100%;
   }
 
   .dafarm-home .produce-image {
