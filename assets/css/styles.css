@@ -1448,21 +1448,21 @@ h3 {
 }
 
 .center-photo-hero {
-  min-height: clamp(260px, 22vw, 360px);
+  min-height: clamp(300px, 28vw, 480px);
   align-items: stretch;
-  background: #1f2623;
+  background: #e8f3e1;
 }
 
 .center-photo-hero::after {
   display: block;
-  background: rgba(8, 16, 13, 0.2);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(11, 30, 20, 0.08));
 }
 
 .center-photo-hero img {
-  object-position: left 43%;
-  filter: grayscale(0.12) blur(2.4px) saturate(0.72) contrast(0.94) brightness(0.9);
-  opacity: 0.9;
-  transform: scale(1.05);
+  object-position: center 48%;
+  filter: saturate(1.02) contrast(0.98) brightness(1.01);
+  opacity: 1;
+  transform: none;
 }
 
 .values-grid,
