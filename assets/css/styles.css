@@ -3761,6 +3761,23 @@ h3 {
   color: var(--ink);
 }
 
+.contact-form-row {
+  display: grid;
+  border-bottom: 1px solid var(--line);
+}
+
+.contact-form-row-split {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.contact-form-row label {
+  border-bottom: 0;
+}
+
+.contact-form-row label + label {
+  border-left: 1px solid var(--line);
+}
+
 .contact-board-form label > span {
   display: flex;
   align-items: center;
@@ -5538,6 +5555,15 @@ h3 {
 
   .contact-board-form label {
     grid-template-columns: 1fr;
+  }
+
+  .contact-form-row-split {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-form-row label + label {
+    border-top: 1px solid var(--line);
+    border-left: 0;
   }
 
   .contact-board-form label > span {
