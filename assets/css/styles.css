@@ -1562,7 +1562,11 @@ h3 {
 }
 
 .home-carousel {
-  min-height: 552px;
+  width: min(100% - 72px, 1280px);
+  height: clamp(360px, 43vw, 552px);
+  min-height: 0;
+  margin: 28px auto 0;
+  background: #f4ead6;
 }
 
 .about-slide {
