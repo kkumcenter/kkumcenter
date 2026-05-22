@@ -1703,8 +1703,8 @@ h3 {
   object-fit: cover;
 }
 
-.about-slide img.home-drone-hero-image {
-  object-position: center 54%;
+.home-carousel .home-slide-image {
+  object-position: center center;
 }
 
 .about-slide::after {
@@ -1727,7 +1727,11 @@ h3 {
 }
 
 .home-carousel .about-slide-content {
-  padding: 116px 0 92px;
+  display: flex;
+  min-height: 100%;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: clamp(150px, 16vw, 230px) 0 0;
 }
 
 .about-slide-content h1,
@@ -1740,11 +1744,26 @@ h3 {
   letter-spacing: 0;
 }
 
+.home-carousel .about-slide-content h1,
+.home-carousel .about-slide-content h2 {
+  width: min(820px, 100%);
+  min-height: clamp(98px, 9.5vw, 136px);
+  font-size: clamp(42px, 4.1vw, 58px);
+  text-shadow: 0 4px 22px rgba(8, 24, 17, 0.34);
+}
+
 .about-slide-content p:not(.eyebrow) {
   max-width: 620px;
   margin: 22px 0 0;
   color: rgba(255, 255, 255, 0.86);
   font-size: 20px;
+}
+
+.home-carousel .about-slide-content p:not(.eyebrow) {
+  width: min(620px, 100%);
+  font-size: clamp(18px, 1.45vw, 20px);
+  line-height: 1.7;
+  text-shadow: 0 3px 16px rgba(8, 24, 17, 0.3);
 }
 
 .about-slide-index {
@@ -5186,7 +5205,7 @@ h3 {
   }
 
   .home-carousel .about-slide-content {
-    padding: 96px 0 76px;
+    padding: 168px 0 0;
   }
 
   .dafarm-home .produce-image {
