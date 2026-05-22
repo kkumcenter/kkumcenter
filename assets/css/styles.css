@@ -3732,6 +3732,60 @@ h3 {
   cursor: pointer;
 }
 
+.contact-tools {
+  justify-content: flex-start;
+}
+
+.contact-board-wrap {
+  margin-top: 22px;
+}
+
+.contact-board-form {
+  gap: 0;
+  padding: 0;
+  border: 0;
+  border-top: 2px solid var(--forest);
+  border-radius: 0;
+  background: transparent;
+}
+
+.contact-board-form label {
+  grid-template-columns: 150px minmax(0, 1fr);
+  gap: 0;
+  align-items: stretch;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+}
+
+.contact-board-form label > span {
+  display: flex;
+  align-items: center;
+  padding: 18px 20px;
+  color: var(--forest);
+  background: rgba(79, 138, 91, 0.08);
+  font-weight: 900;
+}
+
+.contact-board-form input,
+.contact-board-form textarea {
+  border: 0;
+  border-radius: 0;
+  padding: 18px 20px;
+  background: #fffef9;
+}
+
+.contact-board-form input:focus,
+.contact-board-form textarea:focus {
+  outline: 2px solid rgba(18, 59, 43, 0.18);
+  outline-offset: -2px;
+}
+
+.contact-board-form button {
+  justify-self: end;
+  min-width: 150px;
+  margin-top: 24px;
+}
+
 .login-page {
   background: linear-gradient(180deg, #fffdf7 0%, #f7f3ea 100%);
 }
@@ -5476,6 +5530,24 @@ h3 {
 
   .contact-panel .button.primary {
     justify-self: start;
+  }
+
+  .contact-board-form label {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-board-form label > span {
+    padding: 14px 16px 8px;
+    background: transparent;
+  }
+
+  .contact-board-form input,
+  .contact-board-form textarea {
+    padding: 12px 16px 16px;
+  }
+
+  .contact-board-form button {
+    width: 100%;
   }
 
   .transport-list article {
