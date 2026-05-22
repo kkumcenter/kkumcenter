@@ -1421,7 +1421,7 @@ h3 {
 }
 
 .dafarm-home .produce-layout {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
   gap: 0;
   overflow: hidden;
   border-radius: 18px;
@@ -1439,7 +1439,7 @@ h3 {
 
 .dafarm-home .produce-copy {
   max-width: none;
-  padding: clamp(44px, 4.2vw, 64px);
+  padding: clamp(44px, 4vw, 62px);
 }
 
 .produce-copy p {
@@ -1454,9 +1454,10 @@ h3 {
 .dafarm-home .produce-copy h2 {
   max-width: none;
   color: #fff;
-  font-size: clamp(34px, 3.4vw, 52px);
+  font-size: clamp(32px, 3vw, 46px);
   line-height: 1.18;
   word-break: keep-all;
+  white-space: nowrap;
 }
 
 .dafarm-home .produce-copy p:not(.eyebrow) {
@@ -1501,7 +1502,7 @@ h3 {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(24px, 3.2vw, 46px);
+  padding: clamp(22px, 2.6vw, 36px);
   background: var(--forest);
 }
 
@@ -1509,10 +1510,10 @@ h3 {
   width: min(100%, 720px);
   height: auto;
   max-height: 360px;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 3 / 2;
   object-fit: contain;
   border-radius: 16px;
-  background: #fff7e8;
+  background: transparent;
   box-shadow: none;
 }
 
