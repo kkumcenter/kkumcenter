@@ -1849,7 +1849,7 @@ h3 {
   min-height: 100%;
   flex-direction: column;
   justify-content: flex-start;
-  padding: clamp(150px, 16vw, 230px) 0 0;
+  padding: clamp(242px, 21vw, 322px) 0 0;
 }
 
 .about-slide-content h1,
@@ -5352,7 +5352,7 @@ h3 {
   }
 
   .home-carousel .about-slide-content {
-    padding: 168px 0 0;
+    padding: 278px 0 0;
   }
 
   .dafarm-home .produce-image {
@@ -5388,6 +5388,7 @@ h3 {
   }
 
   .about-arrow {
+    top: 40%;
     width: 44px;
     height: 44px;
     font-size: 34px;
