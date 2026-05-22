@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;500;600;700&display=swap");
+
 :root {
   --forest: #123b2b;
   --pine: #1f5a43;
@@ -12,6 +14,8 @@
   --line: rgba(28, 37, 33, 0.14);
   --shadow: 0 22px 60px rgba(13, 36, 26, 0.16);
   --radius: 8px;
+  --font-body: "Noto Sans KR", "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  --font-display: "Gowun Batang", "Noto Serif KR", "Apple SD Gothic Neo", serif;
   color-scheme: light;
 }
 
@@ -25,7 +29,8 @@ html {
 
 body {
   margin: 0;
-  font-family: "Pretendard", "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  font-family: var(--font-body);
+  font-weight: 400;
   color: var(--ink);
   background: var(--paper);
   line-height: 1.6;
@@ -45,6 +50,10 @@ img {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+strong {
+  font-weight: 700;
 }
 
 button,
@@ -138,14 +147,14 @@ a {
 .brand strong {
   color: var(--forest);
   font-size: 22px;
-  font-weight: 900;
+  font-weight: 700;
   line-height: 1;
 }
 
 .brand small {
   color: #46544e;
   font-size: 13px;
-  font-weight: 900;
+  font-weight: 700;
   letter-spacing: 0;
 }
 
@@ -174,7 +183,7 @@ a {
   border-radius: 999px;
   color: #34423b;
   font-size: 17px;
-  font-weight: 800;
+  font-weight: 600;
 }
 
 .nav-link:hover,
@@ -272,7 +281,7 @@ a {
   border-radius: 0;
   color: #34423b;
   font-size: 14px;
-  font-weight: 800;
+  font-weight: 600;
   text-align: left;
 }
 
@@ -378,7 +387,7 @@ a {
   gap: 10px;
   color: #9aa19c;
   font-size: 16px;
-  font-weight: 800;
+  font-weight: 600;
 }
 
 .breadcrumb-home {
@@ -415,7 +424,7 @@ a {
   border-radius: 999px;
   color: #fff;
   background: var(--forest);
-  font-weight: 800;
+  font-weight: 600;
   white-space: nowrap;
 }
 
@@ -476,7 +485,7 @@ a {
   margin: 0 0 14px;
   color: var(--clay);
   font-size: 13px;
-  font-weight: 900;
+  font-weight: 700;
   text-transform: uppercase;
 }
 
@@ -496,14 +505,16 @@ p {
 h1,
 h2,
 h3 {
+  font-family: var(--font-body);
   margin: 0;
   line-height: 1.18;
+  font-weight: 700;
 }
 
 .hero h1 {
   max-width: 760px;
   font-size: 62px;
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .hero-copy {
@@ -529,7 +540,7 @@ h3 {
   padding: 0 22px;
   border-radius: 999px;
   border: 1px solid transparent;
-  font-weight: 900;
+  font-weight: 700;
   line-height: 1.2;
 }
 
@@ -569,7 +580,7 @@ h3 {
 .text-link::after,
 .product-card a::after {
   content: "→";
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .hero-panel {
@@ -602,7 +613,7 @@ h3 {
   align-items: center;
   padding: 10px 18px 16px;
   font-size: 14px;
-  font-weight: 800;
+  font-weight: 600;
 }
 
 .quick-links {
@@ -633,7 +644,7 @@ h3 {
 
 .quick-links span {
   color: var(--clay);
-  font-weight: 900;
+  font-weight: 700;
   font-size: 13px;
 }
 
@@ -676,7 +687,7 @@ h3 {
   padding: 18px 8px;
   border-radius: var(--radius);
   color: #24332e;
-  font-weight: 900;
+  font-weight: 700;
   text-align: center;
   transition: transform 0.18s ease, color 0.18s ease;
 }
@@ -709,6 +720,7 @@ h3 {
 
 .service-banner strong {
   font-size: 18px;
+  font-weight: 600;
   line-height: 1.35;
 }
 
@@ -731,7 +743,7 @@ h3 {
   color: #111d19;
   font-size: 40px;
   line-height: 1.2;
-  font-weight: 900;
+  font-weight: 700;
   text-align: center;
 }
 
@@ -782,7 +794,7 @@ h3 {
   gap: 8px;
   margin-top: 20px;
   color: var(--forest);
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .section-heading {
@@ -797,6 +809,33 @@ h3 {
   font-size: 36px;
 }
 
+.hero h1,
+.about-slide-content h1,
+.about-slide-content h2,
+.sub-hero h1,
+.split-layout h2,
+.section-heading h2,
+.greeting-title h2,
+.vision-hero-copy h2,
+.vision-statement-block h2,
+.vision-direction-heading h2,
+.vision-org-lead h2,
+.location-heading-row h2,
+.dafarm-home .produce-copy h2 {
+  font-family: var(--font-display);
+}
+
+.intro-text p,
+.body-copy p,
+.section-heading p,
+.greeting-copy p,
+.vision-hero-copy p,
+.notice-board p,
+.contact-panel p {
+  font-weight: 400;
+  line-height: 1.8;
+}
+
 .sitemap-overview {
   background: linear-gradient(180deg, #fffdf7 0%, #f7f1e6 100%);
 }
@@ -806,7 +845,7 @@ h3 {
   color: #101b17;
   font-size: 52px;
   line-height: 1.1;
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .sitemap-grid {
@@ -834,7 +873,7 @@ h3 {
   color: #fff;
   background: var(--forest);
   font-size: 13px;
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .sitemap-card h2 {
@@ -852,7 +891,7 @@ h3 {
   border-top: 1px solid rgba(28, 37, 33, 0.1);
   color: #27342f;
   font-size: 16px;
-  font-weight: 800;
+  font-weight: 600;
 }
 
 .sitemap-card a:hover {
@@ -951,7 +990,7 @@ h3 {
   color: var(--forest);
   background: rgba(79, 138, 91, 0.14);
   font-size: 13px;
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .feature-card h3,
@@ -999,7 +1038,7 @@ h3 {
 .story-item time {
   grid-row: span 2;
   color: var(--clay);
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .story-item strong {
@@ -1023,7 +1062,7 @@ h3 {
   margin: 0 0 8px;
   color: var(--leaf);
   font-size: 18px;
-  font-weight: 800;
+  font-weight: 600;
 }
 
 .open-forum-heading h2 {
@@ -1032,17 +1071,17 @@ h3 {
   align-items: center;
   gap: 34px;
   margin: 0;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 54px;
+  font-family: var(--font-display);
+  font-size: 52px;
   line-height: 1.1;
-  font-weight: 500;
+  font-weight: 700;
   letter-spacing: 0;
 }
 
 .home-section-heading h2 {
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 54px;
-  font-weight: 500;
+  font-family: var(--font-display);
+  font-size: 52px;
+  font-weight: 700;
 }
 
 .home-section-heading p {
@@ -1134,7 +1173,7 @@ h3 {
   padding: 0;
   color: #1d2b26;
   font-size: 21px;
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .board-tabs a.is-active {
@@ -1172,7 +1211,7 @@ h3 {
   align-content: center;
   color: var(--pine);
   background: rgba(216, 231, 238, 0.58);
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .board-feature time strong {
@@ -1212,7 +1251,7 @@ h3 {
   grid-template-columns: 1fr auto;
   gap: 18px;
   color: #1e2b27;
-  font-weight: 800;
+  font-weight: 600;
 }
 
 .plain-board-list a {
@@ -1249,7 +1288,7 @@ h3 {
   justify-items: center;
   gap: 12px;
   color: #111d19;
-  font-weight: 900;
+  font-weight: 700;
   text-align: center;
 }
 
@@ -1291,7 +1330,7 @@ h3 {
 .event-panel .board-head h3 {
   color: #1d2b26;
   font-size: 21px;
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .carousel-nav {
@@ -1362,7 +1401,7 @@ h3 {
   margin-top: 18px;
   color: var(--clay);
   font-size: 13px;
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .event-card h4 {
@@ -1522,7 +1561,7 @@ h3 {
   border: 1px solid rgba(255, 255, 255, 0.24);
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.08);
-  font-weight: 800;
+  font-weight: 600;
 }
 
 .produce-image {
@@ -1568,30 +1607,30 @@ h3 {
 
 .dafarm-shop-button {
   min-height: 64px;
-  gap: 14px;
-  padding: 0 32px 0 22px;
+  gap: 12px;
+  padding: 0 32px 0 28px;
   font-size: 18px;
+  font-weight: 600;
   letter-spacing: 0;
   box-shadow: 0 18px 40px rgba(4, 28, 18, 0.24);
 }
 
 .dafarm-cart-icon {
-  width: 38px;
-  height: 38px;
+  width: 28px;
+  height: 28px;
   display: inline-grid;
   place-items: center;
   flex: 0 0 auto;
-  border-radius: 50%;
-  color: var(--forest);
-  background: #f4ead6;
+  color: currentColor;
+  background: transparent;
 }
 
 .dafarm-cart-icon svg {
-  width: 24px;
-  height: 24px;
+  width: 26px;
+  height: 26px;
   fill: none;
   stroke: currentColor;
-  stroke-width: 2;
+  stroke-width: 1.9;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
@@ -1638,7 +1677,7 @@ h3 {
 .dafarm-product-card strong {
   color: rgba(255, 255, 255, 0.9);
   font-size: 17px;
-  font-weight: 900;
+  font-weight: 700;
   text-align: center;
 }
 
@@ -1740,7 +1779,7 @@ h3 {
   margin: 0;
   font-size: 58px;
   line-height: 1.17;
-  font-weight: 900;
+  font-weight: 700;
   letter-spacing: 0;
 }
 
@@ -1771,7 +1810,7 @@ h3 {
   margin-bottom: 22px;
   color: var(--sun);
   font-size: 24px;
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .about-slide-controls {
@@ -1792,7 +1831,7 @@ h3 {
   color: rgba(255, 255, 255, 0.72);
   background: rgba(255, 255, 255, 0.1);
   cursor: pointer;
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .about-slide-controls button.is-active {
@@ -1865,7 +1904,7 @@ h3 {
   border-radius: 999px;
   color: var(--forest);
   background: rgba(79, 138, 91, 0.14);
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .info-grid {
@@ -1907,7 +1946,7 @@ h3 {
   margin: 0;
   font-size: clamp(38px, 3.35vw, 54px);
   line-height: 1.24;
-  font-weight: 900;
+  font-weight: 700;
   letter-spacing: 0;
   text-shadow: 0 5px 24px rgba(10, 28, 20, 0.34);
 }
@@ -1986,7 +2025,7 @@ h3 {
 
 .values-grid span {
   color: var(--clay);
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .values-grid h3 {
@@ -2029,7 +2068,7 @@ h3 {
 
 .timeline time {
   color: var(--clay);
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .timeline strong {
@@ -2070,7 +2109,7 @@ h3 {
 
 .program-card dd {
   margin: 0;
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .process-list,
@@ -2091,7 +2130,7 @@ h3 {
 .process-list span,
 .reservation-steps span {
   color: var(--clay);
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .process-list strong,
@@ -2146,7 +2185,7 @@ h3 {
   border-radius: 999px;
   color: var(--forest);
   background: rgba(216, 231, 238, 0.78);
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .space-visual {
@@ -2231,7 +2270,7 @@ h3 {
   display: block;
   color: #f3c868;
   font-size: 13px;
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .notice-board strong {
@@ -2251,7 +2290,7 @@ h3 {
 .story-card-grid span,
 .product-card span {
   color: var(--clay);
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .produce-hero::after {
@@ -2275,7 +2314,7 @@ h3 {
   gap: 8px;
   margin-top: 22px;
   color: var(--forest);
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .dafarm-band {
@@ -2335,7 +2374,7 @@ h3 {
 .footer-grid span {
   margin-bottom: 10px;
   color: #f3c868;
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .footer-grid a {
@@ -2344,7 +2383,7 @@ h3 {
 
 .footer-contact {
   color: rgba(255, 255, 255, 0.72);
-  font-weight: 800;
+  font-weight: 600;
 }
 
 .footer-meta {
@@ -2382,7 +2421,7 @@ h3 {
   padding: 0 24px;
   color: #6a756f;
   font-size: 17px;
-  font-weight: 900;
+  font-weight: 700;
   white-space: nowrap;
 }
 
@@ -2434,7 +2473,7 @@ h3 {
   margin-top: 26px;
   color: var(--clay);
   font-size: 13px;
-  font-weight: 900;
+  font-weight: 700;
   letter-spacing: 0.08em;
 }
 
@@ -2446,7 +2485,7 @@ h3 {
   margin: 0 0 14px;
   color: var(--pine);
   font-size: 14px;
-  font-weight: 900;
+  font-weight: 700;
   letter-spacing: 0.05em;
   line-height: 1.2;
   text-transform: uppercase;
@@ -2470,7 +2509,7 @@ h3 {
 
 .greeting-copy .signature {
   color: var(--forest);
-  font-weight: 900;
+  font-weight: 700;
   text-align: right;
 }
 
@@ -2514,7 +2553,7 @@ h3 {
 
 .vision-statement span {
   color: var(--sun);
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .vision-statement strong {
@@ -2601,7 +2640,7 @@ h3 {
   margin: 0 0 14px;
   color: var(--clay);
   font-size: 13px;
-  font-weight: 900;
+  font-weight: 700;
   text-transform: uppercase;
 }
 
@@ -2648,7 +2687,7 @@ h3 {
 .vision-center-card span {
   color: var(--clay);
   font-size: 18px;
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .vision-center-card strong {
@@ -2705,7 +2744,7 @@ h3 {
 .vision-branch-row span {
   color: var(--accent);
   font-size: 20px;
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .vision-branch-row strong {
@@ -2741,7 +2780,7 @@ h3 {
   color: #111d19;
   background: #fff;
   font-size: 24px;
-  font-weight: 900;
+  font-weight: 700;
   box-shadow: 0 14px 34px rgba(20, 37, 30, 0.08);
 }
 
@@ -2798,7 +2837,7 @@ h3 {
 .core-branch-grid span {
   color: var(--clay);
   font-size: 18px;
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .core-branch-grid strong {
@@ -2842,7 +2881,7 @@ h3 {
   margin: 0 0 14px;
   color: var(--pine);
   font-size: 14px;
-  font-weight: 900;
+  font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
@@ -2941,7 +2980,7 @@ h3 {
 .vision-value-grid article > span {
   color: var(--pine);
   font-size: 15px;
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .vision-value-grid article:nth-child(even) > span {
@@ -3000,7 +3039,7 @@ h3 {
   margin: 0 0 10px;
   color: var(--clay);
   font-size: 16px;
-  font-weight: 900;
+  font-weight: 700;
   text-transform: uppercase;
 }
 
@@ -3035,7 +3074,7 @@ h3 {
 
 .vision-org-center span {
   color: var(--sun);
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .vision-org-center strong {
@@ -3092,7 +3131,7 @@ h3 {
 
 .vision-org-row span {
   color: var(--clay);
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .vision-org-row strong {
@@ -3152,7 +3191,7 @@ h3 {
 
 .core-org-grid span {
   color: var(--clay);
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .core-org-grid strong {
@@ -3192,7 +3231,7 @@ h3 {
 
 .vision-node span {
   color: var(--sun);
-  font-weight: 900;
+  font-weight: 700;
   text-transform: uppercase;
 }
 
@@ -3220,7 +3259,7 @@ h3 {
 
 .vision-flow span {
   color: var(--clay);
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .vision-flow strong {
@@ -3261,7 +3300,7 @@ h3 {
 .floor-title span,
 .reserve-card > span {
   color: var(--clay);
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .strategy-grid h3,
@@ -3320,7 +3359,7 @@ h3 {
 
 .history-list time {
   color: var(--clay);
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .history-list span {
@@ -3346,7 +3385,7 @@ h3 {
 .history-kicker span {
   align-self: center;
   color: var(--muted-ink);
-  font-weight: 800;
+  font-weight: 600;
 }
 
 .refined-history .history-list section {
@@ -3389,7 +3428,7 @@ h3 {
 .info-table dt,
 .reserve-card dt {
   color: var(--forest);
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .facility-facts dd,
@@ -3415,7 +3454,7 @@ h3 {
   color: #111d19;
   font-size: 42px;
   line-height: 1.2;
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .floor-follow {
@@ -3438,7 +3477,7 @@ h3 {
   color: var(--forest);
   font-size: 58px;
   line-height: 1.05;
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .floor-title-sub {
@@ -3514,12 +3553,12 @@ h3 {
 .floor-table th {
   color: var(--forest);
   background: rgba(79, 138, 91, 0.08);
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .floor-table td:first-child {
   color: var(--clay);
-  font-weight: 900;
+  font-weight: 700;
   white-space: nowrap;
 }
 
@@ -3606,7 +3645,7 @@ h3 {
   gap: 8px;
   color: var(--muted-ink);
   font-size: 13px;
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .search-panel select,
@@ -3628,7 +3667,7 @@ h3 {
   border-radius: var(--radius);
   color: #fff;
   background: var(--forest);
-  font-weight: 900;
+  font-weight: 700;
   cursor: pointer;
 }
 
@@ -3647,7 +3686,7 @@ h3 {
 .board-count {
   color: var(--muted-ink);
   font-size: 14px;
-  font-weight: 800;
+  font-weight: 600;
 }
 
 .program-list {
@@ -3693,12 +3732,12 @@ h3 {
 .program-list-card dt {
   color: var(--muted-ink);
   font-size: 13px;
-  font-weight: 800;
+  font-weight: 600;
 }
 
 .program-list-card dd {
   margin: 4px 0 0;
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .program-list-card > a {
@@ -3709,7 +3748,7 @@ h3 {
   border-radius: var(--radius);
   color: #fff;
   background: var(--forest);
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .status {
@@ -3719,7 +3758,7 @@ h3 {
   padding: 0 10px;
   border-radius: 999px;
   font-size: 13px;
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .status.open {
@@ -3765,18 +3804,18 @@ h3 {
 .board-table th {
   color: var(--forest);
   background: rgba(79, 138, 91, 0.08);
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .board-table td:nth-child(2) {
   text-align: left;
-  font-weight: 800;
+  font-weight: 600;
 }
 
 .board-table td:nth-child(3) {
   color: var(--clay);
   font-size: 13px;
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .board-table-no-file td:nth-child(3) {
@@ -3815,7 +3854,7 @@ h3 {
   display: block;
   margin-top: 8px;
   color: var(--muted-ink);
-  font-weight: 800;
+  font-weight: 600;
 }
 
 .contact-panel {
@@ -3852,7 +3891,7 @@ h3 {
   display: grid;
   gap: 8px;
   color: #1d2b26;
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .contact-form input,
@@ -3879,7 +3918,7 @@ h3 {
   border-radius: 999px;
   color: #fff;
   background: var(--forest);
-  font-weight: 900;
+  font-weight: 700;
   cursor: pointer;
 }
 
@@ -3931,7 +3970,7 @@ h3 {
   padding: 18px 20px;
   color: var(--forest);
   background: rgba(79, 138, 91, 0.08);
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .contact-board-form input,
@@ -3982,7 +4021,7 @@ h3 {
   margin: 0;
   color: #4d5b54;
   font-size: clamp(30px, 3.8vw, 54px);
-  font-weight: 900;
+  font-weight: 700;
   line-height: 1.35;
 }
 
@@ -4015,7 +4054,7 @@ h3 {
   margin: 12px 0 0;
   color: var(--muted-ink);
   font-size: 15px;
-  font-weight: 800;
+  font-weight: 600;
 }
 
 .login-form {
@@ -4028,7 +4067,7 @@ h3 {
   display: grid;
   gap: 8px;
   color: #1d2b26;
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .login-form input {
@@ -4054,7 +4093,7 @@ h3 {
   color: #fff;
   background: var(--forest);
   font-size: 17px;
-  font-weight: 900;
+  font-weight: 700;
   cursor: pointer;
 }
 
@@ -4069,7 +4108,7 @@ h3 {
   color: var(--forest);
   background: transparent;
   font: inherit;
-  font-weight: 900;
+  font-weight: 700;
   cursor: pointer;
 }
 
@@ -4082,7 +4121,7 @@ h3 {
   color: #425149;
   background: rgba(255, 255, 255, 0.74);
   font-size: 14px;
-  font-weight: 800;
+  font-weight: 600;
   line-height: 1.55;
 }
 
@@ -4154,7 +4193,7 @@ h3 {
   padding: 0 14px;
   color: var(--forest);
   background: #fff;
-  font-weight: 900;
+  font-weight: 700;
   cursor: pointer;
 }
 
@@ -4181,7 +4220,7 @@ h3 {
   border-radius: 999px;
   background: #fff;
   color: #1f2b27;
-  font-weight: 900;
+  font-weight: 700;
   transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 
@@ -4203,7 +4242,7 @@ h3 {
   place-items: center;
   border-radius: 50%;
   background: #fff;
-  font-weight: 900;
+  font-weight: 700;
   line-height: 1;
 }
 
@@ -4261,7 +4300,7 @@ h3 {
 .signup-banner p:not(.eyebrow) {
   margin: 0;
   color: rgba(255, 255, 255, 0.78);
-  font-weight: 800;
+  font-weight: 600;
 }
 
 .signup-link {
@@ -4276,7 +4315,7 @@ h3 {
   color: var(--forest);
   background: #fff;
   font: inherit;
-  font-weight: 900;
+  font-weight: 700;
   box-shadow: 0 12px 30px rgba(13, 36, 26, 0.18);
   cursor: pointer;
 }
@@ -4303,7 +4342,7 @@ h3 {
 .core-value-band span {
   display: block;
   color: var(--clay);
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .core-value-band strong {
@@ -4334,7 +4373,7 @@ h3 {
   font-size: clamp(34px, 4vw, 52px);
   line-height: 1.12;
   letter-spacing: 0;
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .location-heading-row .eyebrow {
@@ -4419,7 +4458,7 @@ h3 {
   top: 50%;
   color: #8a7448;
   font-size: 14px;
-  font-weight: 900;
+  font-weight: 700;
   white-space: nowrap;
   transform: translate(-50%, -50%);
 }
@@ -4454,7 +4493,7 @@ h3 {
   place-items: center;
   color: #4e6d5a;
   font-size: 14px;
-  font-weight: 900;
+  font-weight: 700;
   text-align: center;
 }
 
@@ -4548,7 +4587,7 @@ h3 {
   color: #111b17;
   background: #fff;
   font-size: 17px;
-  font-weight: 900;
+  font-weight: 700;
   text-align: center;
   transform: rotate(45deg);
   box-shadow: 0 12px 26px rgba(28, 37, 33, 0.18);
@@ -4590,7 +4629,7 @@ h3 {
   color: #141a17;
   background: #fff;
   font-size: 16px;
-  font-weight: 900;
+  font-weight: 700;
   transform: translate(-50%, -100%);
   box-shadow: 0 8px 22px rgba(19, 29, 25, 0.18);
   pointer-events: none;
@@ -4712,7 +4751,7 @@ h3 {
   border-radius: 6px;
   color: #141a17;
   background: #fff;
-  font-weight: 900;
+  font-weight: 700;
   transform: rotate(45deg);
   text-align: center;
   box-shadow: 0 8px 22px rgba(19, 29, 25, 0.18);
@@ -4762,7 +4801,7 @@ h3 {
   color: #8b0000;
   font-size: 26px;
   line-height: 1;
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .location-info-lines strong::after {
@@ -4824,7 +4863,7 @@ h3 {
   color: #8b0000;
   font-size: 26px;
   line-height: 1;
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .location-contact-cards strong::after {
@@ -4862,7 +4901,7 @@ h3 {
   color: #111b17;
   background: #fff;
   font-size: 22px;
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .map-buttons a.is-primary {
@@ -4942,7 +4981,7 @@ h3 {
 
 .route-lines strong {
   color: var(--forest);
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .route-lines span {
