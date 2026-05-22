@@ -1,4 +1,50 @@
-@import url("https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;500;600;700&display=swap");
+@font-face {
+  font-family: "Wanted Sans";
+  src: url("../fonts/WantedSans-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Wanted Sans";
+  src: url("../fonts/WantedSans-Bold.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "KERIS Baeum";
+  src: url("../fonts/KERISBaeum-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "KERIS Baeum";
+  src: url("../fonts/KERISBaeum-Bold.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Hakgyoansim Allimjang";
+  src: url("../fonts/Hakgyoansim-Allimjang-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Hakgyoansim Allimjang";
+  src: url("../fonts/Hakgyoansim-Allimjang-Bold.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
 
 :root {
   --forest: #123b2b;
@@ -14,8 +60,10 @@
   --line: rgba(28, 37, 33, 0.14);
   --shadow: 0 22px 60px rgba(13, 36, 26, 0.16);
   --radius: 8px;
-  --font-body: "Noto Sans KR", "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
-  --font-display: "Gowun Batang", "Noto Serif KR", "Apple SD Gothic Neo", serif;
+  --font-body: "Wanted Sans", system-ui, sans-serif;
+  --font-title: "KERIS Baeum", "Wanted Sans", system-ui, sans-serif;
+  --font-slogan: "Hakgyoansim Allimjang", "Wanted Sans", system-ui, sans-serif;
+  --font-display: var(--font-title);
   color-scheme: light;
 }
 
@@ -509,6 +557,13 @@ h3 {
   margin: 0;
   line-height: 1.18;
   font-weight: 700;
+}
+
+h1,
+h2,
+.section-title,
+.page-title {
+  font-family: var(--font-title);
 }
 
 .hero h1 {
@@ -1880,6 +1935,8 @@ h3 {
 .home-carousel .about-slide-content p:not(.eyebrow) {
   width: min(620px, 100%);
   margin-top: 12px;
+  font-family: var(--font-slogan);
+  font-weight: 400;
   font-size: clamp(18px, 1.45vw, 20px);
   line-height: 1.7;
   text-shadow: 0 3px 16px rgba(8, 24, 17, 0.3);
