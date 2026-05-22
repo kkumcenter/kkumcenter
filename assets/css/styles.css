@@ -1408,6 +1408,11 @@ h3 {
   color: #fff;
 }
 
+.dafarm-home {
+  background: linear-gradient(180deg, #fffdf6 0%, #f8f2e4 100%);
+  color: #14251f;
+}
+
 .produce-layout {
   display: grid;
   grid-template-columns: 0.88fr 1.12fr;
@@ -1417,11 +1422,24 @@ h3 {
 
 .dafarm-home .produce-layout {
   grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr);
-  gap: 58px;
+  gap: 0;
+  overflow: hidden;
+  border-radius: 18px;
+  background: var(--forest);
+  box-shadow: 0 24px 70px rgba(20, 43, 33, 0.18);
+}
+
+.dafarm-home-heading {
+  margin-bottom: 46px;
+}
+
+.dafarm-home-heading p {
+  color: var(--pine);
 }
 
 .dafarm-home .produce-copy {
   max-width: 640px;
+  padding: clamp(44px, 5vw, 74px);
 }
 
 .produce-copy p {
@@ -1435,14 +1453,17 @@ h3 {
 
 .dafarm-home .produce-copy h2 {
   max-width: none;
-  font-size: clamp(36px, 4.2vw, 56px);
+  color: #fff;
+  font-size: clamp(38px, 4.6vw, 64px);
   line-height: 1.18;
   white-space: nowrap;
 }
 
 .dafarm-home .produce-copy p:not(.eyebrow) {
   max-width: 620px;
+  color: rgba(255, 255, 255, 0.82);
   margin-bottom: 28px;
+  line-height: 1.8;
 }
 
 .pill-row {
@@ -1472,8 +1493,17 @@ h3 {
 }
 
 .dafarm-home .produce-image {
-  aspect-ratio: 16 / 8;
-  max-height: 420px;
+  height: 100%;
+  min-height: 360px;
+  aspect-ratio: 3 / 2;
+  object-fit: contain;
+  border-radius: 18px 0 0 18px;
+  background: #fff7e8;
+  box-shadow: none;
+}
+
+.dafarm-home .eyebrow {
+  color: rgba(183, 215, 151, 0.82);
 }
 
 .produce-section .button.primary {
@@ -4727,7 +4757,9 @@ h3 {
   }
 
   .dafarm-home .produce-image {
-    aspect-ratio: 16 / 7;
+    min-height: 0;
+    aspect-ratio: 3 / 2;
+    border-radius: 0 0 18px 18px;
   }
 
   .vision-board {
