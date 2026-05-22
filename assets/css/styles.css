@@ -109,7 +109,7 @@ a {
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  min-width: 245px;
+  min-width: 232px;
 }
 
 .brand-symbol {
@@ -139,11 +139,16 @@ a {
   display: flex;
   align-items: center;
   gap: 5px;
-  margin-left: auto;
+  flex: 1 1 auto;
+  margin-left: 8px;
 }
 
 .nav-group {
   position: relative;
+}
+
+.nav-group.utility-start {
+  margin-left: auto;
 }
 
 .nav-link {
@@ -219,6 +224,18 @@ a {
   color: var(--forest);
   border: 1px solid rgba(31, 90, 67, 0.2);
   background: rgba(31, 90, 67, 0.06);
+}
+
+.nav-link.nav-login {
+  color: #5a665f;
+  background: transparent;
+}
+
+.nav-link.nav-login:hover,
+.nav-group:focus-within .nav-link.nav-login,
+.nav-group:hover .nav-link.nav-login {
+  color: var(--forest);
+  background: rgba(31, 90, 67, 0.08);
 }
 
 .header-cta {
@@ -4265,6 +4282,10 @@ h3 {
 
   .nav-group {
     width: 100%;
+  }
+
+  .nav-group.utility-start {
+    margin-left: 0;
   }
 
   .nav-link {
