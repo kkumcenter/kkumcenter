@@ -1231,6 +1231,10 @@ h3 {
   object-fit: cover;
 }
 
+.about-slide img.home-drone-hero-image {
+  object-position: center 54%;
+}
+
 .about-slide::after {
   position: absolute;
   inset: 0;
