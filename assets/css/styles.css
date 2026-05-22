@@ -1157,6 +1157,15 @@ h3 {
   align-items: center;
 }
 
+.dafarm-home .produce-layout {
+  grid-template-columns: 1fr;
+  gap: 34px;
+}
+
+.dafarm-home .produce-copy {
+  max-width: 100%;
+}
+
 .produce-copy p {
   color: rgba(255, 255, 255, 0.78);
   font-size: 18px;
@@ -1164,6 +1173,18 @@ h3 {
 
 .produce-copy h2 {
   font-size: 42px;
+}
+
+.dafarm-home .produce-copy h2 {
+  max-width: none;
+  font-size: clamp(36px, 4.2vw, 56px);
+  line-height: 1.18;
+  white-space: nowrap;
+}
+
+.dafarm-home .produce-copy p:not(.eyebrow) {
+  max-width: 760px;
+  margin-bottom: 28px;
 }
 
 .pill-row {
@@ -1192,6 +1213,11 @@ h3 {
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.28);
 }
 
+.dafarm-home .produce-image {
+  aspect-ratio: 16 / 5;
+  max-height: 420px;
+}
+
 .produce-section .button.primary {
   color: var(--forest);
   background: #fff;
@@ -1203,6 +1229,10 @@ h3 {
   overflow: hidden;
   color: #fff;
   background: var(--forest);
+}
+
+.home-carousel {
+  min-height: 552px;
 }
 
 .about-slide {
@@ -1248,6 +1278,10 @@ h3 {
   width: min(1180px, calc(100% - 48px));
   margin: 0 auto;
   padding: 150px 0 120px;
+}
+
+.home-carousel .about-slide-content {
+  padding: 116px 0 92px;
 }
 
 .about-slide-content h1,
@@ -4304,6 +4338,14 @@ h3 {
     gap: 40px;
   }
 
+  .dafarm-home .produce-copy h2 {
+    white-space: normal;
+  }
+
+  .dafarm-home .produce-image {
+    aspect-ratio: 16 / 7;
+  }
+
   .vision-hero-layout,
   .vision-board {
     grid-template-columns: 1fr;
@@ -4409,12 +4451,25 @@ h3 {
     min-height: 620px;
   }
 
+  .home-carousel {
+    min-height: 496px;
+  }
+
   .hero-content {
     padding: 120px 0 176px;
   }
 
   .about-slide-content {
     padding: 116px 0 120px;
+  }
+
+  .home-carousel .about-slide-content {
+    padding: 96px 0 76px;
+  }
+
+  .dafarm-home .produce-image {
+    aspect-ratio: 4 / 3;
+    max-height: none;
   }
 
   .about-arrow {
