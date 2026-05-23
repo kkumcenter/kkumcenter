@@ -847,13 +847,13 @@ h2,
 }
 
 .favorite-menu-section {
-  padding: 34px 0 38px;
+  padding: 24px 0 28px;
   background: var(--paper);
 }
 
 .favorite-heading,
 .favorite-menu-heading {
-  margin-bottom: 22px;
+  margin-bottom: 16px;
 }
 
 .shortcut-dafarm-layout {
@@ -869,13 +869,13 @@ h2,
 }
 
 .shortcut-panel {
-  height: 300px;
+  height: 240px;
   display: grid;
   align-items: center;
 }
 
 .shortcut-heading {
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 
 .service-banner.shortcut-service-grid,
@@ -887,26 +887,43 @@ h2,
 
 .compact-services.shortcut-service-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px 18px;
+  gap: 10px 14px;
   align-content: space-evenly;
 }
 
 .shortcut-service-grid a {
-  min-height: 116px;
+  min-height: 102px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.62);
+}
+
+.shortcut-service-grid .service-icon {
+  width: 76px;
+  height: 56px;
+  border-radius: 18px;
+}
+
+.shortcut-service-grid .service-icon svg {
+  width: 42px;
+  height: 42px;
+}
+
+.shortcut-service-grid strong {
+  font-size: 16px;
 }
 
 .shortcut-dafarm-panel {
   position: relative;
-  height: 300px;
+  height: 240px;
   overflow: hidden;
-  border-radius: 28px;
+  border-radius: 24px;
   background: var(--forest);
   box-shadow: 0 24px 70px rgba(38, 63, 48, 0.15);
 }
 
 .shortcut-dafarm-overlay {
   position: absolute;
-  inset: auto auto 26px 32px;
+  inset: auto auto 22px 28px;
   z-index: 3;
   width: min(450px, calc(100% - 68px));
   color: #fff;
@@ -916,7 +933,7 @@ h2,
   margin: 0;
   color: #fff;
   font-family: var(--font-title);
-  font-size: clamp(30px, 2.7vw, 42px);
+  font-size: clamp(26px, 2.35vw, 36px);
   line-height: 1.18;
   letter-spacing: 0;
   word-break: keep-all;
@@ -925,19 +942,24 @@ h2,
 
 .shortcut-dafarm-overlay p {
   max-width: 460px;
-  margin: 10px 0 18px;
+  margin: 8px 0 14px;
   color: rgba(255, 255, 255, 0.88);
-  font-size: 18px;
-  line-height: 1.75;
+  font-size: 15px;
+  line-height: 1.58;
   word-break: keep-all;
   text-shadow: 0 8px 22px rgba(0, 0, 0, 0.28);
 }
 
 .shortcut-shop-button {
-  width: min(300px, 100%);
+  width: min(240px, 100%);
 }
 
 .shortcut-dafarm-overlay .shortcut-shop-button {
+  width: min(240px, 100%);
+  min-height: 62px;
+  gap: 10px;
+  padding: 0 20px;
+  font-size: 16px;
   color: var(--forest);
   background: rgba(255, 255, 255, 0.94);
   box-shadow: 0 18px 42px rgba(0, 0, 0, 0.22);
@@ -972,18 +994,18 @@ h2,
 }
 
 .shortcut-dafarm-slider .dafarm-product-track {
-  height: 300px;
+  height: 240px;
   overflow-y: hidden;
 }
 
 .shortcut-dafarm-slider .dafarm-product-card {
-  height: 300px;
+  height: 240px;
   align-content: stretch;
   gap: 0;
 }
 
 .shortcut-dafarm-slider .dafarm-product-card img {
-  height: 300px;
+  height: 240px;
   min-height: 0;
   object-fit: cover;
   border-radius: 0;
@@ -996,8 +1018,8 @@ h2,
 }
 
 .shortcut-dafarm-slider .dafarm-product-nav {
-  right: 28px;
-  bottom: 28px;
+  right: 22px;
+  bottom: 22px;
   z-index: 4;
 }
 
@@ -5434,13 +5456,13 @@ h2,
   }
 
   .shortcut-dafarm-panel {
-    height: 300px;
+    height: 240px;
   }
 
   .shortcut-dafarm-slider .dafarm-product-track,
   .shortcut-dafarm-slider .dafarm-product-card,
   .shortcut-dafarm-slider .dafarm-product-card img {
-    height: 300px;
+    height: 240px;
   }
 
   .dafarm-home .produce-copy h2 {
@@ -5626,7 +5648,7 @@ h2,
   }
 
   .favorite-menu-section {
-    padding: 38px 0 46px;
+    padding: 28px 0 34px;
   }
 
   .shortcut-dafarm-layout {
@@ -5638,7 +5660,7 @@ h2,
   }
 
   .shortcut-dafarm-panel {
-    height: 280px;
+    height: 240px;
     border-radius: 22px;
   }
 
@@ -5648,15 +5670,15 @@ h2,
   }
 
   .shortcut-dafarm-overlay h3 {
-    font-size: 30px;
+    font-size: 26px;
   }
 
   .shortcut-dafarm-overlay p {
-    font-size: 16px;
+    font-size: 15px;
   }
 
   .shortcut-shop-button {
-    width: min(260px, 100%);
+    width: min(240px, 100%);
   }
 
   .shortcut-dafarm-slider {
@@ -5666,7 +5688,7 @@ h2,
   .shortcut-dafarm-slider .dafarm-product-track,
   .shortcut-dafarm-slider .dafarm-product-card,
   .shortcut-dafarm-slider .dafarm-product-card img {
-    height: 280px;
+    height: 240px;
   }
 
   .dafarm-shop-button {
@@ -5771,6 +5793,21 @@ h2,
     min-height: 116px;
     gap: 9px;
     padding: 8px 4px;
+  }
+
+  .shortcut-service-grid a {
+    min-height: 96px;
+  }
+
+  .shortcut-service-grid .service-icon {
+    width: 66px;
+    height: 50px;
+    border-radius: 16px;
+  }
+
+  .shortcut-service-grid .service-icon svg {
+    width: 36px;
+    height: 36px;
   }
 
   .service-icon {
