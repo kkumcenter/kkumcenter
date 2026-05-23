@@ -884,6 +884,10 @@ h2,
   height: 240px;
   display: grid;
   align-items: center;
+  padding: 14px 18px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, #f6efe1 0%, #fbf6ea 100%);
+  box-shadow: 0 24px 60px rgba(38, 63, 48, 0.08);
 }
 
 .shortcut-heading {
@@ -904,20 +908,43 @@ h2,
 }
 
 .shortcut-service-grid a {
-  min-height: 102px;
+  min-height: 92px;
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.62);
+  background: transparent;
+  box-shadow: none;
+}
+
+.shortcut-service-grid a:hover {
+  background: rgba(255, 255, 255, 0.48);
+  box-shadow: 0 14px 34px rgba(31, 90, 67, 0.08);
 }
 
 .shortcut-service-grid .service-icon {
   width: 76px;
   height: 56px;
-  border-radius: 18px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
 .shortcut-service-grid .service-icon svg {
   width: 42px;
   height: 42px;
+}
+
+.shortcut-service-grid a:hover .service-icon,
+.shortcut-service-grid .service-dafarm:hover .service-icon {
+  color: var(--forest);
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  transform: translateY(-2px) scale(1.04);
+}
+
+.shortcut-service-grid .service-dafarm .service-icon,
+.shortcut-service-grid .service-dafarm:hover .service-icon {
+  color: #b85f3d;
 }
 
 .shortcut-service-grid strong {
