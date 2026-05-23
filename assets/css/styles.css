@@ -4795,16 +4795,16 @@ h2,
 }
 
 .location-map-panel {
-  width: min(100% - 48px, 1740px);
-  max-width: none;
+  width: min(1180px, calc(100% - 48px));
+  max-width: 1180px;
   margin-top: 0;
 }
 
 .naver-map-card {
   margin: 0;
   overflow: hidden;
-  min-height: 520px;
-  aspect-ratio: 1740 / 560;
+  min-height: 0;
+  aspect-ratio: 1180 / 420;
   border: 1px solid #cfd7d0;
   border-radius: 0;
   background: #eef2eb;
@@ -5193,11 +5193,11 @@ h2,
 }
 
 .location-info-lines {
-  width: min(100% - 48px, 1740px);
-  max-width: none;
+  width: min(1180px, calc(100% - 48px));
+  max-width: 1180px;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(320px, 0.62fr);
-  gap: 20px 74px;
+  gap: 20px 46px;
   align-items: center;
   margin-top: 34px;
 }
