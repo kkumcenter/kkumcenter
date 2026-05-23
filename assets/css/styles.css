@@ -826,13 +826,105 @@ h2,
 }
 
 .favorite-menu-section {
-  padding: 44px 0 50px;
+  padding: 54px 0 62px;
   background: var(--paper);
 }
 
 .favorite-heading,
 .favorite-menu-heading {
   margin-bottom: 22px;
+}
+
+.shortcut-dafarm-layout {
+  display: grid;
+  grid-template-columns: minmax(390px, 0.82fr) minmax(520px, 1fr);
+  gap: clamp(42px, 5vw, 78px);
+  align-items: stretch;
+}
+
+.shortcut-panel,
+.shortcut-dafarm-panel {
+  min-width: 0;
+}
+
+.shortcut-heading {
+  margin-bottom: 24px;
+}
+
+.service-banner.shortcut-service-grid,
+.home-page .service-banner.shortcut-service-grid {
+  width: 100%;
+  margin: 0;
+}
+
+.compact-services.shortcut-service-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px 20px;
+}
+
+.shortcut-service-grid a {
+  min-height: 138px;
+}
+
+.shortcut-dafarm-panel {
+  display: grid;
+  grid-template-rows: auto minmax(260px, 1fr);
+  gap: 22px;
+  padding: clamp(30px, 3.2vw, 48px);
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at 78% 14%, rgba(214, 164, 67, 0.22), transparent 30%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(248, 242, 228, 0.92) 54%, rgba(238, 247, 236, 0.9));
+  box-shadow: 0 24px 70px rgba(38, 63, 48, 0.12);
+}
+
+.shortcut-dafarm-copy h3 {
+  margin: 0;
+  color: var(--forest);
+  font-family: var(--font-title);
+  font-size: clamp(32px, 3vw, 46px);
+  line-height: 1.18;
+  letter-spacing: 0;
+  word-break: keep-all;
+}
+
+.shortcut-dafarm-copy p {
+  max-width: 620px;
+  margin: 12px 0 22px;
+  color: #4d5b54;
+  font-size: 18px;
+  line-height: 1.75;
+  word-break: keep-all;
+}
+
+.shortcut-shop-button {
+  width: min(300px, 100%);
+}
+
+.shortcut-dafarm-slider {
+  position: relative;
+  min-height: 260px;
+  display: block;
+  overflow: hidden;
+  padding: 16px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.shortcut-dafarm-slider .dafarm-product-card {
+  align-content: stretch;
+}
+
+.shortcut-dafarm-slider .dafarm-product-card img {
+  height: min(300px, 24vw);
+  min-height: 230px;
+  border-radius: 18px;
+  box-shadow: 0 16px 44px rgba(31, 90, 67, 0.12);
+}
+
+.shortcut-dafarm-slider .dafarm-product-nav {
+  right: 26px;
+  bottom: 24px;
 }
 
 .quick-heading h2 {
@@ -2103,7 +2195,7 @@ h2,
 }
 
 .center-photo-hero {
-  min-height: clamp(300px, 28vw, 480px);
+  min-height: 430px;
   align-items: end;
   background: #e8f3e1;
 }
@@ -5215,6 +5307,7 @@ h2,
   .split-layout,
   .news-rail,
   .forum-layout,
+  .shortcut-dafarm-layout,
   .dafarm-home .produce-layout,
   .produce-layout,
   .purpose-layout,
@@ -5233,6 +5326,19 @@ h2,
   .news-layout {
     grid-template-columns: 1fr;
     gap: 40px;
+  }
+
+  .shortcut-dafarm-panel {
+    grid-template-columns: minmax(280px, 0.72fr) minmax(340px, 1fr);
+    grid-template-rows: auto;
+    align-items: center;
+    gap: 28px;
+  }
+
+  .shortcut-dafarm-slider .dafarm-product-card img {
+    height: auto;
+    max-height: 320px;
+    aspect-ratio: 16 / 10;
   }
 
   .dafarm-home .produce-copy h2 {
@@ -5415,6 +5521,38 @@ h2,
   .dafarm-home .produce-image {
     aspect-ratio: 4 / 3;
     max-height: none;
+  }
+
+  .favorite-menu-section {
+    padding: 38px 0 46px;
+  }
+
+  .shortcut-dafarm-layout {
+    gap: 30px;
+  }
+
+  .shortcut-dafarm-panel {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 24px;
+    border-radius: 22px;
+  }
+
+  .shortcut-dafarm-copy h3 {
+    font-size: 30px;
+  }
+
+  .shortcut-dafarm-copy p {
+    font-size: 16px;
+  }
+
+  .shortcut-shop-button {
+    width: min(260px, 100%);
+  }
+
+  .shortcut-dafarm-slider {
+    min-height: auto;
+    padding: 12px;
   }
 
   .dafarm-shop-button {
