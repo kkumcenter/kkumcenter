@@ -2098,7 +2098,12 @@ h2,
 }
 
 .gallery-section {
+  padding: 76px 0;
   background: #f5f6f4;
+}
+
+.gallery-section .open-forum-heading {
+  margin-bottom: 28px;
 }
 
 .gallery-heading {
@@ -2150,14 +2155,14 @@ h2,
 
 .gallery-card img {
   width: 100%;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 16 / 9.5;
   object-fit: cover;
 }
 
 .gallery-card strong {
   display: block;
-  min-height: 62px;
-  padding: 18px 18px 20px;
+  min-height: 54px;
+  padding: 14px 18px 16px;
   font-size: 18px;
   line-height: 1.35;
 }
