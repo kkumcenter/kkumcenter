@@ -3131,6 +3131,10 @@ h2,
   background: var(--forest);
 }
 
+.subnav + .section {
+  padding-top: 56px;
+}
+
 .greeting-layout {
   display: grid;
   grid-template-columns: 0.86fr 1.14fr;
@@ -3158,6 +3162,7 @@ h2,
   letter-spacing: 0.08em;
 }
 
+.subnav + .section .eyebrow,
 .greeting-title > .eyebrow,
 .history-layout .section-heading.compact .eyebrow,
 .facility-overview .eyebrow,
@@ -3165,9 +3170,10 @@ h2,
 .vision-label {
   margin: 0 0 14px;
   color: var(--pine);
-  font-size: 14px;
+  font-family: var(--font-body);
+  font-size: 15px;
   font-weight: 700;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
   line-height: 1.2;
   text-transform: uppercase;
 }
@@ -6666,6 +6672,10 @@ h2,
     min-height: 50px;
     padding: 0 14px;
     font-size: 14px;
+  }
+
+  .subnav + .section {
+    padding-top: 40px;
   }
 
   .greeting-title h2,
