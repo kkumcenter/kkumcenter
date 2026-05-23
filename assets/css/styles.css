@@ -354,38 +354,38 @@ a {
 }
 
 .nav-link.nav-external {
-  gap: 8px;
-  color: #3a503f;
-  border: 1px solid rgba(214, 164, 67, 0.34);
-  background: linear-gradient(135deg, rgba(255, 250, 236, 0.96), rgba(246, 239, 222, 0.78));
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.72), 0 10px 26px rgba(54, 77, 58, 0.08);
+  padding: 0 14px;
+  border: 0;
+  color: #111;
+  background: transparent;
+  box-shadow: none;
 }
 
 .nav-link.nav-external::after {
-  width: 7px;
-  height: 7px;
-  border-top: 1.6px solid currentColor;
-  border-right: 1.6px solid currentColor;
-  content: "";
-  opacity: 0.72;
-  transform: rotate(45deg);
-  transition: transform 0.18s ease, opacity 0.18s ease;
+  display: none;
+}
+
+.nav-dafarm-logo {
+  display: block;
+  width: 106px;
+  height: auto;
+  object-fit: contain;
+  filter: contrast(1.08);
+  transition: opacity 0.18s ease, transform 0.18s ease;
 }
 
 .nav-link.nav-external:hover,
 .nav-group:hover .nav-link.nav-external,
 .nav-group:focus-within .nav-link.nav-external {
-  color: var(--forest);
-  border-color: rgba(31, 90, 67, 0.24);
-  background: linear-gradient(135deg, rgba(255, 253, 247, 1), rgba(244, 234, 214, 0.9));
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.86), 0 14px 30px rgba(31, 90, 67, 0.12);
+  background: transparent;
+  box-shadow: none;
 }
 
-.nav-link.nav-external:hover::after,
-.nav-group:hover .nav-link.nav-external::after,
-.nav-group:focus-within .nav-link.nav-external::after {
-  opacity: 1;
-  transform: translateX(2px) rotate(45deg);
+.nav-link.nav-external:hover .nav-dafarm-logo,
+.nav-group:hover .nav-link.nav-external .nav-dafarm-logo,
+.nav-group:focus-within .nav-link.nav-external .nav-dafarm-logo {
+  opacity: 0.78;
+  transform: translateY(-1px);
 }
 
 .nav-link.nav-login,
