@@ -3217,7 +3217,8 @@ h2,
   background: var(--forest);
 }
 
-.subnav + .section {
+.subnav + .section,
+.subnav + .vision-landing {
   padding-top: 56px;
 }
 
@@ -3309,6 +3310,17 @@ h2,
   margin: 0;
   font-size: 42px;
   line-height: 1.25;
+}
+
+.subnav + .section .section-heading h2,
+.subnav + .section .greeting-title h2,
+.subnav + .section .facility-overview h2,
+.subnav + .section .program-search h2,
+.subnav + .section .contact-panel h2,
+.subnav + .section .location-heading-row h2,
+.subnav + .vision-landing .vision-hero-copy h2 {
+  font-size: 44px;
+  line-height: 1.26;
 }
 
 .vision-panel p,
@@ -4480,7 +4492,7 @@ h2,
 }
 
 .program-search {
-  align-items: end;
+  align-items: start;
   grid-template-columns: minmax(220px, 0.55fr) minmax(0, 1.45fr);
 }
 
@@ -6815,7 +6827,8 @@ h2,
     font-size: 15px;
   }
 
-  .subnav + .section {
+  .subnav + .section,
+  .subnav + .vision-landing {
     padding-top: 40px;
   }
 
@@ -6826,6 +6839,17 @@ h2,
   .contact-panel h2,
   .floor-title h2 {
     font-size: 30px;
+  }
+
+  .subnav + .section .section-heading h2,
+  .subnav + .section .greeting-title h2,
+  .subnav + .section .facility-overview h2,
+  .subnav + .section .program-search h2,
+  .subnav + .section .contact-panel h2,
+  .subnav + .section .location-heading-row h2,
+  .subnav + .vision-landing .vision-hero-copy h2 {
+    font-size: 30px;
+    line-height: 1.34;
   }
 
   .greeting-copy p {
