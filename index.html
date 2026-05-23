@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>군북면 꿈키움센터</title>
     <meta name="description" content="온세대가 지속가능한 꿈을 키우는 거점, 군북면 꿈키움센터 홈페이지 목업">
-    <link rel="stylesheet" href="assets/css/styles.css?v=20260523-40">
+    <link rel="stylesheet" href="assets/css/styles.css?v=20260523-41">
   </head>
   <body class="home-page">
     <a class="skip-link" href="#main">본문 바로가기</a>
@@ -123,16 +123,23 @@
         </div>
         <div class="container forum-layout">
           <div class="board-panel">
-            <div class="board-tabs board-tabs-clean" aria-label="게시판 분류">
-              <a class="is-active" href="news.html">공지사항</a>
-              <a href="village-story.html">마을 이야기</a>
+            <div class="board-tabs board-tabs-clean" role="tablist" aria-label="게시판 분류" data-home-board-tabs>
+              <button class="is-active" type="button" role="tab" data-home-board-tab="notice" aria-controls="home-board-notice" aria-selected="true">공지사항</button>
+              <button type="button" role="tab" data-home-board-tab="village" aria-controls="home-board-village" aria-selected="false">마을 이야기</button>
             </div>
-            <div class="board-list plain-board-list">
+            <div class="board-list plain-board-list" id="home-board-notice" role="tabpanel" data-home-board-panel="notice">
               <a href="news.html"><span>베이킹 교육과정 참여자 모집 안내</span><time>2026/06/20</time></a>
               <a href="news.html"><span>꿈키움센터 시범운영 프로그램 안내</span><time>2026/05/19</time></a>
               <a href="guide.html#rental"><span>공간 이용 사전 문의 및 대관신청 안내</span><time>2026/05/16</time></a>
+              <a href="news.html"><span>꿈키움센터 운영 안내 및 이용 협조 요청</span><time>2026/05/15</time></a>
+              <a href="news.html"><span>로컬장터 계절 농산물 소개 업데이트</span><time>2026/05/14</time></a>
+            </div>
+            <div class="board-list plain-board-list is-hidden" id="home-board-village" role="tabpanel" data-home-board-panel="village" hidden>
               <a href="village-story.html"><span>군북 꿈키움 기자단 마을소식 모집</span><time>2026/05/15</time></a>
               <a href="village-story.html"><span>배후마을 생활문화 기록 참여자 모집</span><time>2026/05/14</time></a>
+              <a href="village-story.html"><span>마을 어르신과 함께 나누는 계절 이야기</span><time>2026/05/12</time></a>
+              <a href="village-story.html"><span>군북의 산책길과 이웃 가게를 소개합니다</span><time>2026/05/10</time></a>
+              <a href="village-story.html"><span>주민이 기록하는 우리 동네 작은 변화</span><time>2026/05/08</time></a>
             </div>
           </div>
           <div class="event-panel" data-carousel>
@@ -183,6 +190,6 @@
       </div>
       <div class="container footer-meta">COPYRIGHT © GUNBUK KKUM CENTER. ALL RIGHTS RESERVED.</div>
     </footer>
-    <script src="assets/js/main.js?v=20260523-37"></script>
+    <script src="assets/js/main.js?v=20260523-38"></script>
   </body>
 </html>

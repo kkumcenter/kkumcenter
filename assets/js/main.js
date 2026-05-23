@@ -125,6 +125,29 @@ document.addEventListener("keydown", (event) => {
   if (event.key === "Escape") closeBreadcrumbMenus();
 });
 
+document.querySelectorAll("[data-home-board-tabs]").forEach((tabList) => {
+  const tabs = Array.from(tabList.querySelectorAll("[data-home-board-tab]"));
+  const panels = Array.from(tabList.closest(".board-panel")?.querySelectorAll("[data-home-board-panel]") || []);
+
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      const target = tab.getAttribute("data-home-board-tab");
+
+      tabs.forEach((item) => {
+        const isActive = item === tab;
+        item.classList.toggle("is-active", isActive);
+        item.setAttribute("aria-selected", String(isActive));
+      });
+
+      panels.forEach((panel) => {
+        const isActive = panel.getAttribute("data-home-board-panel") === target;
+        panel.classList.toggle("is-hidden", !isActive);
+        panel.hidden = !isActive;
+      });
+    });
+  });
+});
+
 const aboutSlides = Array.from(document.querySelectorAll("[data-about-slide]"));
 const aboutDots = Array.from(document.querySelectorAll("[data-about-dot]"));
 const aboutPrev = document.querySelector("[data-about-prev]");

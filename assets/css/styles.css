@@ -1723,29 +1723,66 @@ h2,
   border-bottom: 1px solid rgba(28, 37, 33, 0.28);
 }
 
-.board-tabs a {
+.board-tabs a,
+.board-tabs button {
   position: relative;
   display: inline-flex;
   align-items: center;
   min-height: 56px;
   padding: 0;
+  border: 0;
+  background: transparent;
   color: #1d2b26;
+  font: inherit;
   font-size: 21px;
   font-weight: 700;
+  cursor: pointer;
 }
 
-.board-tabs a.is-active {
-  color: var(--forest);
-}
-
-.board-tabs a.is-active::after {
+.board-tabs a::after,
+.board-tabs button::after {
   content: "";
   position: absolute;
   left: 0;
   right: 0;
   bottom: -1px;
   height: 4px;
+  background: transparent;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  transform: scaleX(0.72);
+}
+
+.board-tabs a:hover,
+.board-tabs a:focus-visible,
+.board-tabs button:hover,
+.board-tabs button:focus-visible {
+  color: #a96e16;
+}
+
+.board-tabs a:hover::after,
+.board-tabs a:focus-visible::after,
+.board-tabs button:hover::after,
+.board-tabs button:focus-visible::after {
+  background: #e3a83d;
+  transform: scaleX(1);
+}
+
+.board-tabs a.is-active,
+.board-tabs button.is-active {
+  color: var(--forest);
+}
+
+.board-tabs a.is-active::after,
+.board-tabs button.is-active::after {
   background: var(--forest);
+  transform: scaleX(1);
+}
+
+.board-tabs a.is-active:hover::after,
+.board-tabs a.is-active:focus-visible::after,
+.board-tabs button.is-active:hover::after,
+.board-tabs button.is-active:focus-visible::after {
+  background: #e3a83d;
 }
 
 .board-tabs-clean {
