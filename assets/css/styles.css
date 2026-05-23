@@ -64,6 +64,7 @@
   --font-title: "KERIS Baeum", "Wanted Sans", system-ui, sans-serif;
   --font-slogan: "Hakgyoansim Allimjang", "Wanted Sans", system-ui, sans-serif;
   --font-display: var(--font-title);
+  --font-home-section-title: "Gowun Batang", "Noto Serif KR", "Apple SD Gothic Neo", serif;
   color-scheme: light;
 }
 
@@ -1271,6 +1272,10 @@ h2,
   font-family: var(--font-display);
   font-size: 52px;
   font-weight: 700;
+}
+
+.home-page .home-section-heading h2 {
+  font-family: var(--font-home-section-title);
 }
 
 .home-section-heading p {
