@@ -1091,6 +1091,7 @@ h2,
   position: relative;
   isolation: isolate;
   min-height: 92px;
+  gap: 3px;
   border-radius: 20px;
   background: transparent;
   box-shadow: none;
@@ -1125,7 +1126,7 @@ h2,
 
 .shortcut-service-grid .service-icon {
   width: 76px;
-  height: 56px;
+  height: 46px;
   border: 0;
   border-radius: 0;
   background: transparent;
@@ -6427,11 +6428,12 @@ h2,
 
   .shortcut-service-grid a {
     min-height: 96px;
+    gap: 3px;
   }
 
   .shortcut-service-grid .service-icon {
     width: 66px;
-    height: 50px;
+    height: 42px;
     border-radius: 16px;
   }
 
