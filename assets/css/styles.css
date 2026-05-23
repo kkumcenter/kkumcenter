@@ -3211,6 +3211,8 @@ h2,
 }
 
 .facility-overview {
+  grid-template-columns: 0.78fr 1.22fr;
+  gap: 64px;
   align-items: start;
 }
 
