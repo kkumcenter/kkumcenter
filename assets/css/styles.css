@@ -4386,11 +4386,13 @@ h2,
 
 .program-search {
   align-items: end;
+  grid-template-columns: minmax(220px, 0.55fr) minmax(0, 1.45fr);
 }
 
 .search-panel,
 .notice-search {
   display: flex;
+  align-items: end;
   gap: 8px;
   padding: 18px;
   border: 1px solid var(--line);
@@ -4401,12 +4403,19 @@ h2,
 .search-panel label {
   display: grid;
   gap: 8px;
+  min-width: 128px;
   color: var(--muted-ink);
   font-size: 13px;
   font-weight: 700;
 }
 
+.search-panel .keyword-field {
+  flex: 1 1 260px;
+  min-width: 220px;
+}
+
 .search-panel select,
+.search-panel input,
 .notice-search select,
 .notice-search input {
   min-height: 44px;
