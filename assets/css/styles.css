@@ -4555,6 +4555,7 @@ h2,
 
 .notice-tools {
   margin-top: 18px;
+  margin-bottom: 24px;
 }
 
 .notice-search input {
@@ -4563,6 +4564,10 @@ h2,
 
 .board-table-wrap {
   overflow-x: auto;
+}
+
+.notice-tools + .board-table-wrap {
+  margin-top: 0;
 }
 
 .board-table {
