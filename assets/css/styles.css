@@ -2181,6 +2181,31 @@ h2,
   text-shadow: 0 4px 22px rgba(8, 24, 17, 0.34);
 }
 
+.home-carousel .about-slide-content .home-title-stack {
+  display: grid;
+  gap: 10px;
+  line-height: 1.05;
+}
+
+.home-title-area {
+  display: block;
+  color: rgba(255, 255, 255, 0.82);
+  font-family: var(--font-body);
+  font-size: clamp(24px, 2vw, 34px);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.home-title-name {
+  display: block;
+  color: #fffdf7;
+  font-family: var(--font-title);
+  font-size: clamp(58px, 6vw, 92px);
+  font-weight: 700;
+  letter-spacing: 0;
+  text-shadow: 0 8px 30px rgba(8, 24, 17, 0.42);
+}
+
 .about-slide-content p:not(.eyebrow) {
   max-width: 620px;
   margin: 22px 0 0;
