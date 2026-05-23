@@ -886,8 +886,8 @@ h2,
   align-items: center;
   padding: 14px 18px;
   border-radius: 24px;
-  background: linear-gradient(135deg, #f6efe1 0%, #fbf6ea 100%);
-  box-shadow: 0 24px 60px rgba(38, 63, 48, 0.08);
+  background: transparent;
+  box-shadow: none;
 }
 
 .shortcut-heading {
