@@ -5265,6 +5265,29 @@ h2,
   object-fit: cover;
 }
 
+.official-map-card {
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid #cfd7d0;
+  border-radius: 0;
+  background: #eef2eb;
+  box-shadow: 0 18px 40px rgba(24, 38, 31, 0.08);
+}
+
+.real-map-frame.official-map-frame {
+  min-height: 420px;
+  border: 0;
+}
+
+.real-map-frame.official-map-frame iframe {
+  height: 420px;
+  filter: saturate(0.96) contrast(0.98);
+}
+
+.official-map-frame .map-pin-label {
+  top: 49%;
+}
+
 .kakao-map-frame {
   position: relative;
   min-height: 560px;
@@ -6506,6 +6529,14 @@ h2,
   }
 
   .naver-map-card img {
+    height: 380px;
+  }
+
+  .real-map-frame.official-map-frame {
+    min-height: 380px;
+  }
+
+  .real-map-frame.official-map-frame iframe {
     height: 380px;
   }
 
