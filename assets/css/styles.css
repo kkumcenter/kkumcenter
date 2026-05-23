@@ -430,12 +430,12 @@ a {
 }
 
 .breadcrumb-inner {
-  min-height: 48px;
+  min-height: 54px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   color: #9aa19c;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
 }
 
@@ -444,11 +444,12 @@ a {
   align-items: center;
   gap: 6px;
   color: #8a928d;
+  transition: color 0.2s ease, background 0.2s ease;
 }
 
 .breadcrumb-home svg {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   fill: none;
   stroke: currentColor;
   stroke-width: 2;
@@ -460,8 +461,27 @@ a {
   color: #c3cac5;
 }
 
+.breadcrumb-link,
 .breadcrumb-current {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 2px 4px;
+  border-radius: 6px;
   color: #657169;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+.breadcrumb-current {
+  color: #34463c;
+  font-weight: 700;
+}
+
+.breadcrumb-home:hover,
+.breadcrumb-link:hover,
+.breadcrumb-current:hover {
+  color: var(--forest);
+  background: rgba(79, 138, 91, 0.08);
 }
 
 .header-cta {
