@@ -4332,6 +4332,13 @@ h2,
   line-height: 1.2;
 }
 
+.space-application-card p {
+  margin: 12px 0 20px;
+  color: var(--muted-ink);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
 .space-application-card a {
   align-self: flex-end;
   margin-top: auto;
