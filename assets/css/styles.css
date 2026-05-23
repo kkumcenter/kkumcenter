@@ -455,12 +455,12 @@ a {
 }
 
 .breadcrumb-inner {
-  min-height: 54px;
+  min-height: 62px;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   color: #9aa19c;
-  font-size: 18px;
+  font-size: 19px;
   font-weight: 600;
 }
 
@@ -468,16 +468,16 @@ a {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  min-height: 34px;
-  padding: 0 10px;
+  min-height: 40px;
+  padding: 0 13px;
   border-radius: 999px;
   color: #8a928d;
   transition: color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .breadcrumb-home svg {
-  width: 20px;
-  height: 20px;
+  width: 21px;
+  height: 21px;
   fill: none;
   stroke: currentColor;
   stroke-width: 2;
@@ -493,8 +493,8 @@ a {
 .breadcrumb-current {
   display: inline-flex;
   align-items: center;
-  min-height: 32px;
-  padding: 0 11px;
+  min-height: 38px;
+  padding: 0 14px;
   border-radius: 999px;
   color: #657169;
   transition: color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
@@ -519,6 +519,160 @@ a {
 .breadcrumb-current:focus-visible {
   outline: 3px solid rgba(79, 138, 91, 0.24);
   outline-offset: 2px;
+}
+
+.breadcrumb-menu {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.breadcrumb-trigger {
+  position: relative;
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+  line-height: 1;
+  background: transparent;
+  appearance: none;
+}
+
+.breadcrumb-trigger.breadcrumb-link,
+.breadcrumb-trigger.breadcrumb-current {
+  padding-right: 34px;
+}
+
+.breadcrumb-trigger::after {
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  width: 7px;
+  height: 7px;
+  border-right: 1.8px solid currentColor;
+  border-bottom: 1.8px solid currentColor;
+  content: "";
+  opacity: 0.72;
+  transform: translateY(-62%) rotate(45deg);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.breadcrumb-trigger:hover,
+.breadcrumb-menu.is-open .breadcrumb-trigger {
+  color: var(--forest);
+  background: rgba(31, 90, 67, 0.1);
+  box-shadow: 0 10px 22px rgba(18, 59, 43, 0.12);
+  transform: translateY(-1px);
+}
+
+.breadcrumb-menu.is-open .breadcrumb-trigger::after {
+  opacity: 1;
+  transform: translateY(-34%) rotate(225deg);
+}
+
+.breadcrumb-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  z-index: 90;
+  min-width: 190px;
+  display: grid;
+  gap: 0;
+  padding: 8px;
+  border: 1px solid rgba(28, 37, 33, 0.1);
+  border-radius: var(--radius);
+  background: #fff;
+  box-shadow: 0 20px 42px rgba(28, 37, 33, 0.13);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(8px);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.breadcrumb-dropdown::before {
+  position: absolute;
+  top: -12px;
+  left: 0;
+  right: 0;
+  height: 12px;
+  content: "";
+}
+
+.breadcrumb-menu.is-open .breadcrumb-dropdown {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.breadcrumb-dropdown a {
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 13px;
+  color: #405146;
+  font-size: 16px;
+  font-weight: 600;
+  white-space: nowrap;
+  border-radius: 0;
+}
+
+.breadcrumb-dropdown a:first-child {
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+.breadcrumb-dropdown a:last-child {
+  border-radius: 0 0 var(--radius) var(--radius);
+}
+
+.breadcrumb-dropdown a + a {
+  border-top: 1px solid rgba(28, 37, 33, 0.08);
+}
+
+.breadcrumb-dropdown a:hover,
+.breadcrumb-dropdown a:focus-visible,
+.breadcrumb-dropdown a.is-active {
+  color: var(--forest);
+  background: rgba(31, 90, 67, 0.1);
+}
+
+@media (max-width: 700px) {
+  .breadcrumb-inner {
+    min-height: 58px;
+    gap: 8px;
+    overflow-x: auto;
+    font-size: 15px;
+    white-space: nowrap;
+  }
+
+  .breadcrumb-home {
+    min-height: 36px;
+    padding: 0 10px;
+  }
+
+  .breadcrumb-link,
+  .breadcrumb-current {
+    min-height: 36px;
+    padding: 0 10px;
+  }
+
+  .breadcrumb-trigger.breadcrumb-link,
+  .breadcrumb-trigger.breadcrumb-current {
+    padding-right: 29px;
+  }
+
+  .breadcrumb-trigger::after {
+    right: 11px;
+  }
+
+  .breadcrumb-dropdown {
+    min-width: 160px;
+    max-width: min(78vw, 240px);
+  }
+
+  .breadcrumb-dropdown a {
+    min-height: 38px;
+    font-size: 14px;
+  }
 }
 
 .header-cta {
