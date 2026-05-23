@@ -354,11 +354,12 @@ a {
 }
 
 .nav-link.nav-external {
-  padding: 0 14px;
+  padding: 0 16px;
   border: 0;
   color: #111;
-  background: transparent;
+  background: linear-gradient(135deg, rgba(232, 240, 224, 0.96), rgba(249, 243, 228, 0.96));
   box-shadow: none;
+  transition: background 0.18s ease, transform 0.18s ease;
 }
 
 .nav-link.nav-external::after {
@@ -377,7 +378,7 @@ a {
 .nav-link.nav-external:hover,
 .nav-group:hover .nav-link.nav-external,
 .nav-group:focus-within .nav-link.nav-external {
-  background: transparent;
+  background: linear-gradient(135deg, rgba(219, 234, 209, 1), rgba(245, 235, 211, 1));
   box-shadow: none;
 }
 
