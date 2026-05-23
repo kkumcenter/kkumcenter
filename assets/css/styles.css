@@ -1835,6 +1835,11 @@ h2,
   margin-top: 20px;
 }
 
+.board-list.is-hidden,
+[data-home-board-panel][hidden] {
+  display: none;
+}
+
 .plain-board-list {
   gap: 0;
   margin-top: 0;
