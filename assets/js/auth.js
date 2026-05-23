@@ -12,6 +12,7 @@
   const loginModeButton = document.querySelector('[data-auth-mode="login"]');
   const signupModeButton = document.querySelector('[data-auth-mode="signup"]');
   const providerButtons = Array.from(document.querySelectorAll("[data-auth-provider]"));
+  const placeholderLinks = Array.from(document.querySelectorAll("[data-auth-placeholder]"));
 
   if (!form || !title || !submitButton || !emailInput || !passwordInput || !statusBox) {
     return;
@@ -23,6 +24,13 @@
   let mode = "login";
 
   const setStatus = (message, type = "info") => {
+    if (!message) {
+      statusBox.textContent = "";
+      statusBox.removeAttribute("data-status");
+      statusBox.hidden = true;
+      return;
+    }
+    statusBox.hidden = false;
     statusBox.textContent = message;
     statusBox.dataset.status = type;
   };
@@ -40,7 +48,7 @@
     submitButton.textContent = isSignup ? "회원가입하기" : "로그인";
     passwordInput.setAttribute("autocomplete", isSignup ? "new-password" : "current-password");
     loginModeButton.hidden = !isSignup;
-    setStatus(isSignup ? "이메일과 비밀번호를 입력하고 회원가입하기를 눌러주세요." : "이메일과 비밀번호로 로그인할 수 있습니다.", "info");
+    setStatus(isSignup ? "이메일 형식의 아이디와 비밀번호를 입력하고 회원가입하기를 눌러주세요." : "");
     form.scrollIntoView({ behavior: "smooth", block: "center" });
   };
 
@@ -57,6 +65,13 @@
 
   signupModeButton?.addEventListener("click", () => setMode("signup"));
   loginModeButton?.addEventListener("click", () => setMode("login"));
+
+  placeholderLinks.forEach((link) => {
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      setStatus("해당 기능은 추후 연결 예정입니다.", "info");
+    });
+  });
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -133,7 +148,7 @@
   });
 
   if (!hasConfig) {
-    setStatus("아이디/비밀번호 찾기", "info");
+    setStatus("");
   } else {
     renderUser();
   }
