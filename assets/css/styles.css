@@ -4861,13 +4861,13 @@ h2,
 }
 
 .login-page {
-  background: #fff;
+  background: linear-gradient(180deg, #fffdf7 0%, #f7f1e6 100%);
 }
 
 .login-hero {
   padding: 86px 0 28px;
   border-bottom: 0;
-  background: #fff;
+  background: transparent;
 }
 
 .login-hero-inner {
@@ -4892,7 +4892,7 @@ h2,
 
 .login-section {
   padding: 20px 0 96px;
-  background: #fff;
+  background: transparent;
 }
 
 .login-layout {
