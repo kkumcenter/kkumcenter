@@ -161,7 +161,7 @@ a {
 
 .header-inner {
   width: min(1480px, calc(100% - 48px));
-  min-height: 78px;
+  min-height: 82px;
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -196,14 +196,14 @@ a {
 
 .brand strong {
   color: var(--forest);
-  font-size: 24px;
+  font-size: 26px;
   font-weight: 700;
   line-height: 1.08;
 }
 
 .brand small {
   color: #46544e;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
   line-height: 1;
   letter-spacing: 0;
@@ -227,13 +227,13 @@ a {
 
 .nav-link {
   position: relative;
-  min-height: 42px;
+  min-height: 44px;
   display: inline-flex;
   align-items: center;
   padding: 0 16px;
   border-radius: 999px;
   color: #34423b;
-  font-size: 18px;
+  font-size: 19px;
   font-weight: 600;
 }
 
@@ -331,7 +331,7 @@ a {
   padding: 0 12px;
   border-radius: 0;
   color: #34423b;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
   text-align: left;
 }
@@ -5719,7 +5719,7 @@ h2,
   .nav-dropdown a {
     min-height: 34px;
     color: var(--muted-ink);
-    font-size: 13px;
+    font-size: 14px;
   }
 
   .header-cta {
@@ -5928,7 +5928,7 @@ h2,
   }
 
   .brand strong {
-    font-size: 16px;
+    font-size: 18px;
   }
 
   .hero {
