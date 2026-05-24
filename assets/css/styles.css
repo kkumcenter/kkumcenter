@@ -1125,8 +1125,8 @@ h2,
 }
 
 .shortcut-service-grid .service-icon {
-  width: 76px;
-  height: 46px;
+  width: 82px;
+  height: 56px;
   border: 0;
   border-radius: 0;
   background: transparent;
@@ -1134,9 +1134,9 @@ h2,
 }
 
 .shortcut-service-grid .service-icon svg {
-  width: 42px;
-  height: 42px;
-  transition: transform 0.24s ease, filter 0.24s ease;
+  width: 53px;
+  height: 53px;
+  transition: filter 0.24s ease;
 }
 
 .shortcut-service-grid a:hover .service-icon,
@@ -1145,12 +1145,12 @@ h2,
   background: transparent;
   border-color: transparent;
   box-shadow: none;
-  transform: translateY(-4px) scale(1.14);
+  transform: none;
 }
 
 .shortcut-service-grid a:hover .service-icon svg {
   filter: drop-shadow(0 8px 12px rgba(18, 59, 43, 0.22));
-  transform: scale(1.1);
+  transform: none;
 }
 
 .shortcut-service-grid .service-dafarm .service-icon {
