@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>강의실 | 공간예약 | 군북면 꿈키움센터</title>
     <meta name="description" content="군북면 꿈키움센터 2층 강의실 상세 안내입니다.">
-    <link rel="stylesheet" href="assets/css/styles.css?v=20260524-24">
+    <link rel="stylesheet" href="assets/css/styles.css?v=20260524-25">
   </head>
   <body>
     <a class="skip-link" href="#main">본문 바로가기</a>
@@ -45,18 +45,30 @@
         <form class="container space-reservation-form" aria-label="강의실 공간 예약 신청 목업">
           <h3>공간 예약 신청</h3>
           <div class="space-reservation-fields">
-            <label>신청자명<input type="text" placeholder="이름을 입력하세요"></label>
-            <label>연락처<input type="tel" placeholder="010-0000-0000"></label>
-            <label>예약 시작일<input type="date"></label>
-            <label>예약 종료일<input type="date"></label>
-            <label>목적<input type="text" placeholder="이용 목적을 입력하세요"></label>
-            <label class="full">기타<textarea rows="4" placeholder="필요한 준비물이나 요청사항을 적어주세요"></textarea></label>
-            <button type="button">예약하기</button>
+            <div class="reservation-column reservation-basic-fields">
+              <label>신청자명<input type="text" placeholder="이름을 입력하세요"></label>
+              <label>연락처<input type="tel" placeholder="010-0000-0000"></label>
+              <label>예약 시작일<input type="date"></label>
+              <label>예약 종료일<input type="date"></label>
+            </div>
+            <label class="reservation-purpose">목적<textarea rows="8" placeholder="이용 목적을 입력하세요"></textarea></label>
+            <label class="reservation-extra">기타<textarea rows="8" placeholder="필요한 준비물이나 요청사항을 적어주세요"></textarea></label>
+            <div class="reservation-action"><button type="button">예약하기</button></div>
           </div>
         </form>
         <div class="container space-detail-guide">
-          <section><p class="eyebrow">Use Guide</p><h3>이용안내</h3><ul><li>운영시간은 평일 09:00 - 18:00 기준이며, 주말과 야간 이용은 별도 협의가 필요합니다.</li><li>군북면 주민과 공동체 활동을 우선으로 하며, 교육·회의·마을활동 목적에 맞춰 이용합니다.</li><li>공간별 수용인원과 구비시설은 운영 기준에 따라 조정될 수 있습니다.</li></ul></section>
-          <section><p class="eyebrow">Rental Request</p><h3>대관신청 안내</h3><ol class="space-guide-steps"><li><strong>공간 확인</strong><span>이용 목적과 인원에 맞는 공간을 확인합니다.</span></li><li><strong>일정 문의</strong><span>프로그램 일정과 겹치지 않는 날짜를 확인합니다.</span></li><li><strong>신청서 접수</strong><span>신청자명, 연락처, 목적과 요청사항을 남깁니다.</span></li><li><strong>담당자 승인</strong><span>운영 기준 검토 후 이용 가능 여부를 안내합니다.</span></li></ol></section>
+          <section>
+            <p class="eyebrow">Use Guide</p>
+            <h3>이용안내</h3>
+            <ul>
+              <li>운영시간은 평일 09:00 - 18:00 기준이며, 주말과 야간 이용은 별도 협의가 필요합니다.</li>
+              <li>군북면 주민과 공동체 활동을 우선으로 하며, 교육·회의·마을활동 목적에 맞춰 이용합니다.</li>
+              <li>공간별 수용인원과 구비시설은 운영 기준에 따라 조정될 수 있습니다.</li>
+              <li>이용 후 사용한 비품과 공간은 다음 이용자를 위해 깨끗하게 정리해 주세요.</li>
+              <li>시설물과 장비는 함께 사용하는 공간의 자산이므로 훼손되지 않도록 조심히 사용해 주세요.</li>
+              <li>파손이나 이상이 확인될 경우 운영자에게 알려주시면 안전한 이용 환경을 유지하는 데 도움이 됩니다.</li>
+            </ul>
+          </section>
         </div>
       </section>
     </main>

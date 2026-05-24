@@ -4675,9 +4675,14 @@ h2,
 
 .space-reservation-fields {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
-  gap: 18px;
-  align-items: end;
+  grid-template-columns: minmax(210px, 0.92fr) minmax(0, 1.08fr) minmax(0, 1.08fr) minmax(128px, 0.44fr);
+  gap: 20px;
+  align-items: stretch;
+}
+
+.reservation-column {
+  display: grid;
+  gap: 14px;
 }
 
 .space-reservation-fields label {
@@ -4709,13 +4714,25 @@ h2,
   resize: vertical;
 }
 
-.space-reservation-fields .full {
-  grid-column: 1 / 5;
+.reservation-purpose,
+.reservation-extra {
+  grid-template-rows: auto 1fr;
 }
 
-.space-reservation-fields button {
-  min-width: 132px;
-  min-height: 118px;
+.reservation-purpose textarea,
+.reservation-extra textarea {
+  min-height: 0;
+  height: 100%;
+}
+
+.reservation-action {
+  display: flex;
+}
+
+.reservation-action button {
+  width: 100%;
+  min-width: 0;
+  min-height: 100%;
   border: 0;
   border-radius: 16px;
   color: #123b2b;
@@ -4728,8 +4745,7 @@ h2,
 
 .space-detail-guide {
   display: grid;
-  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
-  gap: 28px;
+  grid-template-columns: 1fr;
   margin-top: 32px;
 }
 
@@ -4760,31 +4776,6 @@ h2,
   padding-left: 20px;
   color: var(--muted-ink);
   line-height: 1.72;
-}
-
-.space-guide-steps {
-  display: grid;
-  gap: 12px;
-  margin: 22px 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.space-guide-steps li {
-  display: grid;
-  grid-template-columns: 112px 1fr;
-  gap: 16px;
-  padding: 16px 0;
-  border-top: 1px solid rgba(31, 90, 67, 0.12);
-}
-
-.space-guide-steps strong {
-  color: var(--forest);
-}
-
-.space-guide-steps span {
-  color: var(--muted-ink);
-  line-height: 1.65;
 }
 
 .reservation-table-wrap,
@@ -7495,12 +7486,11 @@ h2,
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .space-reservation-fields .full {
+  .reservation-action {
     grid-column: 1 / -1;
   }
 
-  .space-reservation-fields button {
-    grid-column: 1 / -1;
+  .reservation-action button {
     min-height: 58px;
   }
 }
@@ -7517,7 +7507,6 @@ h2,
   .vision-split-content .vision-value-grid,
   .space-reservation-fields,
   .space-detail-guide,
-  .space-guide-steps li,
   .program-check-list article {
     grid-template-columns: 1fr;
   }
