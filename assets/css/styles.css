@@ -4663,14 +4663,16 @@ h2,
 
 .space-reservation-fields {
   display: grid;
-  grid-template-columns: minmax(210px, 0.92fr) minmax(0, 1.08fr) minmax(0, 1.08fr) minmax(128px, 0.44fr);
-  gap: 20px;
-  align-items: stretch;
+  grid-template-columns: 1fr;
+  gap: 18px;
+  align-items: start;
 }
 
-.reservation-column {
+.reservation-basic-fields {
   display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 14px;
+  grid-column: 1 / -1;
 }
 
 .space-reservation-fields label {
@@ -4707,6 +4709,12 @@ h2,
   grid-template-rows: auto 1fr;
 }
 
+.reservation-purpose,
+.reservation-extra,
+.reservation-action {
+  grid-column: 1 / -1;
+}
+
 .reservation-purpose textarea,
 .reservation-extra textarea {
   min-height: 0;
@@ -4715,20 +4723,27 @@ h2,
 
 .reservation-action {
   display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 .reservation-action button {
-  width: 100%;
-  min-width: 0;
-  min-height: 100%;
+  min-width: 172px;
+  min-height: 58px;
+  padding: 0 28px;
   border: 0;
-  border-radius: 16px;
+  border-radius: 999px;
   color: #123b2b;
   background: #fab848;
   font: inherit;
   font-weight: 900;
   cursor: pointer;
   box-shadow: 0 12px 24px rgba(206, 137, 24, 0.2);
+}
+
+.reservation-action button:hover,
+.reservation-action button:focus-visible {
+  background: #f3cb6f;
 }
 
 .space-detail-guide {
@@ -7475,6 +7490,10 @@ h2,
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .reservation-basic-fields {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .reservation-action {
     grid-column: 1 / -1;
   }
@@ -7491,6 +7510,7 @@ h2,
 
   .vision-split-content .vision-value-grid,
   .space-reservation-fields,
+  .reservation-basic-fields,
   .space-detail-guide,
   .program-check-list article {
     grid-template-columns: 1fr;
