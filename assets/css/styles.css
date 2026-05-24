@@ -357,8 +357,8 @@ a {
   padding: 0 16px;
   border: 0;
   color: #111;
-  background: linear-gradient(135deg, rgba(232, 240, 224, 0.96), rgba(249, 243, 228, 0.96));
-  box-shadow: none;
+  background: linear-gradient(135deg, #f2cf78 0%, #e6b452 52%, #d79a32 100%);
+  box-shadow: 0 10px 22px rgba(167, 101, 26, 0.16);
   transition: background 0.18s ease, transform 0.18s ease;
 }
 
@@ -371,15 +371,15 @@ a {
   width: 106px;
   height: auto;
   object-fit: contain;
-  filter: contrast(1.08);
+  filter: contrast(1.2) brightness(0.86);
   transition: opacity 0.18s ease, transform 0.18s ease;
 }
 
 .nav-link.nav-external:hover,
 .nav-group:hover .nav-link.nav-external,
 .nav-group:focus-within .nav-link.nav-external {
-  background: linear-gradient(135deg, rgba(219, 234, 209, 1), rgba(245, 235, 211, 1));
-  box-shadow: none;
+  background: linear-gradient(135deg, #f5d98b 0%, #e8bb5e 46%, #c98125 100%);
+  box-shadow: 0 14px 28px rgba(167, 101, 26, 0.22);
 }
 
 .nav-link.nav-external:hover .nav-dafarm-logo,
