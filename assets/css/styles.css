@@ -1372,6 +1372,7 @@ h2,
 .split-layout h2,
 .section-heading h2,
 .greeting-title h2,
+.vision-split-lead h2,
 .vision-hero-copy h2,
 .vision-statement-block h2,
 .vision-direction-heading h2,
@@ -3708,27 +3709,26 @@ h2,
 
 .vision-split-layout {
   display: grid;
-  grid-template-columns: minmax(320px, 0.78fr) minmax(0, 1.42fr);
-  gap: 64px;
+  grid-template-columns: 0.86fr 1.14fr;
+  gap: 70px;
   align-items: start;
 }
 
 .vision-split-lead {
   position: sticky;
-  top: 112px;
-  padding: 48px 0 0;
+  top: 168px;
+  padding: 0;
 }
 
 .vision-split-lead .eyebrow {
-  color: var(--clay);
+  color: var(--pine);
 }
 
 .vision-split-lead h2 {
   margin: 0;
   color: var(--ink);
-  font-family: var(--font-title);
-  font-size: clamp(42px, 4.2vw, 66px);
-  line-height: 1.18;
+  font-size: 44px;
+  line-height: 1.26;
   font-weight: 500;
   word-break: keep-all;
 }
@@ -3739,18 +3739,6 @@ h2,
   color: #4d5b55;
   font-size: 20px;
   line-height: 1.85;
-  word-break: keep-all;
-}
-
-.vision-split-lead strong {
-  display: block;
-  max-width: 420px;
-  margin-top: 34px;
-  padding-top: 24px;
-  border-top: 1px solid rgba(31, 90, 67, 0.18);
-  color: var(--forest);
-  font-size: 19px;
-  line-height: 1.65;
   word-break: keep-all;
 }
 
@@ -7267,6 +7255,7 @@ h2,
   }
 
   .greeting-title h2,
+  .vision-split-lead h2,
   .vision-panel h2,
   .facility-overview h2,
   .program-search h2,
@@ -7277,6 +7266,7 @@ h2,
 
   .subnav + .section .section-heading h2,
   .subnav + .section .greeting-title h2,
+  .subnav + .section .vision-split-lead h2,
   .subnav + .section .facility-overview h2,
   .subnav + .section .program-search h2,
   .subnav + .section .contact-panel h2,
@@ -7473,8 +7463,7 @@ h2,
     padding-top: 0;
   }
 
-  .vision-split-lead p,
-  .vision-split-lead strong {
+  .vision-split-lead p {
     max-width: 680px;
   }
 
@@ -7498,10 +7487,6 @@ h2,
 @media (max-width: 720px) {
   .vision-split-layout {
     gap: 32px;
-  }
-
-  .vision-split-lead h2 {
-    font-size: 36px;
   }
 
   .vision-split-content .vision-value-grid,
