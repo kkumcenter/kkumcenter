@@ -4644,7 +4644,8 @@ h2,
   transform: translateY(-2px);
 }
 
-.space-reservation-form {
+.space-reservation-form,
+.contact-board-form {
   margin-top: 58px;
   padding: 36px 38px;
   border-radius: 22px;
@@ -4675,7 +4676,8 @@ h2,
   grid-column: 1 / -1;
 }
 
-.space-reservation-fields label {
+.space-reservation-fields label,
+.contact-board-form label {
   display: grid;
   gap: 8px;
   color: var(--forest);
@@ -4684,7 +4686,9 @@ h2,
 }
 
 .space-reservation-fields input,
-.space-reservation-fields textarea {
+.space-reservation-fields textarea,
+.contact-board-form input,
+.contact-board-form textarea {
   width: 100%;
   border: 1px solid rgba(31, 90, 67, 0.16);
   border-radius: 10px;
@@ -4693,15 +4697,26 @@ h2,
   font: inherit;
 }
 
-.space-reservation-fields input {
+.space-reservation-fields input,
+.contact-board-form input {
   min-height: 50px;
   padding: 0 14px;
 }
 
-.space-reservation-fields textarea {
+.space-reservation-fields textarea,
+.contact-board-form textarea {
   min-height: 118px;
   padding: 14px;
   resize: vertical;
+}
+
+.space-reservation-fields input:focus,
+.space-reservation-fields textarea:focus,
+.contact-board-form input:focus,
+.contact-board-form textarea:focus {
+  outline: 2px solid rgba(31, 90, 67, 0.16);
+  outline-offset: 2px;
+  border-color: rgba(31, 90, 67, 0.42);
 }
 
 .reservation-purpose,
@@ -4727,22 +4742,26 @@ h2,
   align-items: center;
 }
 
-.reservation-action button {
+.reservation-action button,
+.contact-board-form button {
   min-width: 172px;
   min-height: 58px;
   padding: 0 28px;
   border: 0;
   border-radius: 999px;
-  color: #123b2b;
-  background: #fab848;
+  color: #fff;
+  background: var(--forest);
   font: inherit;
   font-weight: 900;
   cursor: pointer;
-  box-shadow: 0 12px 24px rgba(206, 137, 24, 0.2);
+  box-shadow: 0 12px 24px rgba(18, 59, 43, 0.16);
 }
 
 .reservation-action button:hover,
-.reservation-action button:focus-visible {
+.reservation-action button:focus-visible,
+.contact-board-form button:hover,
+.contact-board-form button:focus-visible {
+  color: #123b2b;
   background: #f3cb6f;
 }
 
@@ -5229,25 +5248,25 @@ h2,
 }
 
 .contact-board-form {
-  gap: 0;
-  padding: 0;
+  gap: 18px;
+  padding: 36px 38px;
   border: 0;
-  border-top: 2px solid var(--forest);
-  border-radius: 0;
-  background: transparent;
+  border-radius: 22px;
+  margin-top: 0;
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: 0 18px 44px rgba(23, 42, 31, 0.07);
 }
 
 .contact-board-form label {
-  grid-template-columns: 150px minmax(0, 1fr);
-  gap: 0;
-  align-items: stretch;
-  border-bottom: 1px solid var(--line);
-  color: var(--ink);
+  grid-template-columns: 1fr;
+  align-items: start;
+  border-bottom: 0;
 }
 
 .contact-form-row {
   display: grid;
-  border-bottom: 1px solid var(--line);
+  gap: 14px;
+  border-bottom: 0;
 }
 
 .contact-form-row-split {
@@ -5259,36 +5278,33 @@ h2,
 }
 
 .contact-form-row label + label {
-  border-left: 1px solid var(--line);
+  border-left: 0;
 }
 
 .contact-board-form label > span {
-  display: flex;
-  align-items: center;
-  padding: 18px 20px;
+  display: block;
+  padding: 0;
   color: var(--forest);
-  background: rgba(79, 138, 91, 0.08);
-  font-weight: 700;
+  background: transparent;
+  font-size: 15px;
+  font-weight: 800;
 }
 
-.contact-board-form input,
+.contact-board-form input {
+  min-height: 50px;
+  padding: 0 14px;
+}
+
 .contact-board-form textarea {
-  border: 0;
-  border-radius: 0;
-  padding: 18px 20px;
-  background: #fffef9;
-}
-
-.contact-board-form input:focus,
-.contact-board-form textarea:focus {
-  outline: 2px solid rgba(18, 59, 43, 0.18);
-  outline-offset: -2px;
+  min-height: 118px;
+  padding: 14px;
 }
 
 .contact-board-form button {
   justify-self: end;
-  min-width: 150px;
-  margin-top: 24px;
+  min-width: 172px;
+  min-height: 58px;
+  margin-top: 4px;
 }
 
 .login-page {
@@ -7357,18 +7373,22 @@ h2,
   }
 
   .contact-form-row label + label {
-    border-top: 1px solid var(--line);
+    border-top: 0;
     border-left: 0;
   }
 
   .contact-board-form label > span {
-    padding: 14px 16px 8px;
+    padding: 0;
     background: transparent;
   }
 
-  .contact-board-form input,
+  .contact-board-form input {
+    min-height: 50px;
+    padding: 0 14px;
+  }
+
   .contact-board-form textarea {
-    padding: 12px 16px 16px;
+    padding: 14px;
   }
 
   .contact-board-form button {
