@@ -357,8 +357,8 @@ a {
   padding: 0 16px;
   border: 0;
   color: #111;
-  background: #fab848;
-  box-shadow: 0 10px 22px rgba(206, 137, 24, 0.18);
+  background: #F8D889;
+  box-shadow: 0 8px 18px rgba(183, 128, 34, 0.12);
   transition: background 0.18s ease, transform 0.18s ease;
 }
 
@@ -378,8 +378,8 @@ a {
 .nav-link.nav-external:hover,
 .nav-group:hover .nav-link.nav-external,
 .nav-group:focus-within .nav-link.nav-external {
-  background: #f6a935;
-  box-shadow: 0 14px 28px rgba(206, 137, 24, 0.24);
+  background: #F3CB6F;
+  box-shadow: 0 10px 22px rgba(183, 128, 34, 0.16);
 }
 
 .nav-link.nav-external:hover .nav-dafarm-logo,
