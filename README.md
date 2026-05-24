@@ -1,14 +1,14 @@
 # 군북면 꿈키움센터 홈페이지 목업
 
 군북면 꿈키움센터의 정적 HTML 홈페이지 목업입니다.
-시행계획서의 비전인 **“온세대가 지속가능한 꿈을 키우는 거점, 군북면”**을 중심으로 센터소개, 공간시설, 프로그램, 소식마당, 금산다팜 몰 연결 구조를 잡았습니다.
+시행계획서의 비전인 **“온세대가 지속가능한 꿈을 키우는 거점, 군북면”**을 중심으로 센터소개, 공간예약, 프로그램, 소식마당, 금산다팜 몰 연결 구조를 잡았습니다.
 
 GitHub 저장소: https://github.com/kkumcenter/kkumcenter
 GitHub Pages: https://kkumcenter.github.io/kkumcenter/
 
 ## 현재 방향
 
-- 실제 게시판, 교육신청, 대관신청, 문의 접수 기능은 아직 연결하지 않은 디자인 목업 단계입니다.
+- 실제 게시판, 교육신청, 공간예약, 문의 접수 기능은 아직 연결하지 않은 디자인 목업 단계입니다.
 - 금산다팜 몰 메뉴는 내부 상세페이지를 만들지 않고 `https://dafarm.co.kr/`로 바로 연결합니다.
 - 메인 화면은 기관형 헤더, 3장 슬라이드, 자주찾는 서비스, 게시판/프로그램 소식, 꿈센터 갤러리, 금산다팜 몰 배너, 푸터 순서로 구성했습니다.
 - 주소와 연락처는 운영자료 확정 후 교체할 수 있도록 임시 정보와 안내 문구를 사용합니다.
@@ -21,12 +21,13 @@ GitHub Pages: https://kkumcenter.github.io/kkumcenter/
   - 연혁
   - 시설소개
   - 오시는길
-- 공간시설
-  - 이용안내
-  - 대관신청
+- 공간예약
+  - 신청하기
+  - 예약내역
 - 프로그램
   - 모집안내
   - 교육신청
+  - 신청확인
 - 소식마당
   - 공지사항
   - 꿈센터 갤러리
@@ -43,9 +44,12 @@ GitHub Pages: https://kkumcenter.github.io/kkumcenter/
 - `vision.html`: 비전
 - `history.html`: 연혁
 - `spaces.html`: 시설소개
-- `guide.html`: 이용안내 / 대관신청 안내
+- `space-apply.html`: 공간예약 신청하기
+- `space-reservations.html`: 예약내역
+- `space-*.html`: 공간별 상세 및 예약 신청 목업
 - `location.html`: 오시는길
 - `programs.html`: 모집안내 / 교육신청
+- `program-check.html`: 프로그램 신청확인
 - `news.html`: 공지사항
 - `gallery.html`: 꿈센터 갤러리
 - `village-story.html`: 마을 이야기
@@ -63,5 +67,5 @@ GitHub Pages: https://kkumcenter.github.io/kkumcenter/
 
 - 새로 확보한 실제 사진을 `assets/images`에 정리하고 메인 슬라이드와 갤러리 이미지 교체
 - 센터소개 문구를 최종 운영 문구로 다듬기
-- 교육신청, 대관신청, 문의 / 제안을 실제 접수 방식으로 연결할지 결정
+- 교육신청, 공간예약, 문의 / 제안을 실제 접수 방식으로 연결할지 결정
 - 운영 주소, 전화번호, 담당 부서, 이용 규정 확정 후 푸터와 안내 페이지 업데이트

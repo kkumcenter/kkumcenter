@@ -357,8 +357,8 @@ a {
   padding: 0 16px;
   border: 0;
   color: #111;
-  background: linear-gradient(135deg, #f2cf78 0%, #e6b452 52%, #d79a32 100%);
-  box-shadow: 0 10px 22px rgba(167, 101, 26, 0.16);
+  background: #fab848;
+  box-shadow: 0 10px 22px rgba(206, 137, 24, 0.18);
   transition: background 0.18s ease, transform 0.18s ease;
 }
 
@@ -378,8 +378,8 @@ a {
 .nav-link.nav-external:hover,
 .nav-group:hover .nav-link.nav-external,
 .nav-group:focus-within .nav-link.nav-external {
-  background: linear-gradient(135deg, #f5d98b 0%, #e8bb5e 46%, #c98125 100%);
-  box-shadow: 0 14px 28px rgba(167, 101, 26, 0.22);
+  background: #f6a935;
+  box-shadow: 0 14px 28px rgba(206, 137, 24, 0.24);
 }
 
 .nav-link.nav-external:hover .nav-dafarm-logo,
@@ -3702,6 +3702,77 @@ h2,
   line-height: 1.8;
 }
 
+.vision-split-section {
+  background: var(--paper);
+}
+
+.vision-split-layout {
+  display: grid;
+  grid-template-columns: minmax(320px, 0.78fr) minmax(0, 1.42fr);
+  gap: 64px;
+  align-items: start;
+}
+
+.vision-split-lead {
+  position: sticky;
+  top: 112px;
+  padding: 48px 0 0;
+}
+
+.vision-split-lead .eyebrow {
+  color: var(--clay);
+}
+
+.vision-split-lead h2 {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-title);
+  font-size: clamp(42px, 4.2vw, 66px);
+  line-height: 1.18;
+  font-weight: 500;
+  word-break: keep-all;
+}
+
+.vision-split-lead p {
+  max-width: 430px;
+  margin: 28px 0 0;
+  color: #4d5b55;
+  font-size: 20px;
+  line-height: 1.85;
+  word-break: keep-all;
+}
+
+.vision-split-lead strong {
+  display: block;
+  max-width: 420px;
+  margin-top: 34px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(31, 90, 67, 0.18);
+  color: var(--forest);
+  font-size: 19px;
+  line-height: 1.65;
+  word-break: keep-all;
+}
+
+.vision-split-content {
+  display: grid;
+  gap: 28px;
+}
+
+.vision-split-content .vision-board-block {
+  background: rgba(255, 255, 255, 0.86);
+}
+
+.vision-split-content .vision-value-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.vision-split-content .vision-value-grid article {
+  min-height: 236px;
+  padding: 28px 18px 24px;
+}
+
 .vision-intro-section {
   padding-bottom: 64px;
   background: var(--paper);
@@ -4475,7 +4546,7 @@ h2,
   border-radius: 999px;
   color: var(--forest);
   background: linear-gradient(135deg, #f7ead0, #e6f0dc);
-  box-shadow: inset 0 0 0 1px rgba(31, 90, 67, 0.14), 0 10px 22px rgba(18, 59, 43, 0.08);
+  box-shadow: 0 10px 22px rgba(18, 59, 43, 0.08);
   font-size: 18px;
   font-weight: 700;
   text-decoration: none;
@@ -4486,7 +4557,7 @@ h2,
 .space-application-card a:focus-visible {
   color: #123b2b;
   background: linear-gradient(135deg, #f3dcae, #d8ead0);
-  box-shadow: inset 0 0 0 1px rgba(31, 90, 67, 0.24), 0 14px 28px rgba(18, 59, 43, 0.14);
+  box-shadow: 0 14px 28px rgba(18, 59, 43, 0.14);
   transform: translateY(-2px);
 }
 
@@ -4583,6 +4654,224 @@ h2,
 .space-detail-actions a:focus-visible {
   background: #e6efd8;
   transform: translateY(-2px);
+}
+
+.space-reservation-form {
+  margin-top: 58px;
+  padding: 36px 38px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: 0 18px 44px rgba(23, 42, 31, 0.07);
+}
+
+.space-reservation-form h3 {
+  margin: 0 0 24px;
+  color: var(--ink);
+  font-family: var(--font-title);
+  font-size: 34px;
+  line-height: 1.2;
+  font-weight: 500;
+}
+
+.space-reservation-fields {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
+  gap: 18px;
+  align-items: end;
+}
+
+.space-reservation-fields label {
+  display: grid;
+  gap: 8px;
+  color: var(--forest);
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.space-reservation-fields input,
+.space-reservation-fields textarea {
+  width: 100%;
+  border: 1px solid rgba(31, 90, 67, 0.16);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+}
+
+.space-reservation-fields input {
+  min-height: 50px;
+  padding: 0 14px;
+}
+
+.space-reservation-fields textarea {
+  min-height: 118px;
+  padding: 14px;
+  resize: vertical;
+}
+
+.space-reservation-fields .full {
+  grid-column: 1 / 5;
+}
+
+.space-reservation-fields button {
+  min-width: 132px;
+  min-height: 118px;
+  border: 0;
+  border-radius: 16px;
+  color: #123b2b;
+  background: #fab848;
+  font: inherit;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 12px 24px rgba(206, 137, 24, 0.2);
+}
+
+.space-detail-guide {
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+  gap: 28px;
+  margin-top: 32px;
+}
+
+.space-detail-guide section {
+  padding: 34px 36px;
+  border-radius: 22px;
+  background: rgba(247, 242, 231, 0.72);
+}
+
+.space-detail-guide .eyebrow {
+  margin: 0 0 10px;
+  color: var(--clay);
+}
+
+.space-detail-guide h3 {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-title);
+  font-size: 30px;
+  line-height: 1.25;
+  font-weight: 500;
+}
+
+.space-detail-guide ul {
+  display: grid;
+  gap: 12px;
+  margin: 22px 0 0;
+  padding-left: 20px;
+  color: var(--muted-ink);
+  line-height: 1.72;
+}
+
+.space-guide-steps {
+  display: grid;
+  gap: 12px;
+  margin: 22px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.space-guide-steps li {
+  display: grid;
+  grid-template-columns: 112px 1fr;
+  gap: 16px;
+  padding: 16px 0;
+  border-top: 1px solid rgba(31, 90, 67, 0.12);
+}
+
+.space-guide-steps strong {
+  color: var(--forest);
+}
+
+.space-guide-steps span {
+  color: var(--muted-ink);
+  line-height: 1.65;
+}
+
+.reservation-table-wrap,
+.program-check-layout {
+  margin-top: 28px;
+}
+
+.reservation-table-wrap {
+  overflow-x: auto;
+}
+
+.reservation-history-table td a {
+  color: var(--forest);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.program-check-layout {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.78fr) minmax(0, 1.22fr);
+  gap: 34px;
+  align-items: start;
+}
+
+.program-check-form {
+  display: grid;
+  gap: 16px;
+  padding: 30px;
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 0 16px 36px rgba(23, 42, 31, 0.07);
+}
+
+.program-check-form label {
+  display: grid;
+  gap: 8px;
+  color: var(--forest);
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.program-check-form input {
+  min-height: 52px;
+  border: 1px solid rgba(31, 90, 67, 0.16);
+  border-radius: 10px;
+  padding: 0 14px;
+  color: var(--ink);
+  font: inherit;
+}
+
+.program-check-form button {
+  min-height: 54px;
+  border: 0;
+  border-radius: 999px;
+  color: #123b2b;
+  background: #fab848;
+  font: inherit;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.program-check-list {
+  display: grid;
+  gap: 16px;
+}
+
+.program-check-list article {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px 18px;
+  align-items: center;
+  padding: 24px 26px;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 14px 32px rgba(23, 42, 31, 0.06);
+}
+
+.program-check-list strong {
+  color: var(--ink);
+  font-size: 21px;
+}
+
+.program-check-list p {
+  grid-column: 2;
+  margin: 0;
+  color: var(--muted-ink);
+  line-height: 1.65;
 }
 
 .rental-layout {
@@ -7178,5 +7467,73 @@ h2,
 
   .signup-link {
     width: 100%;
+  }
+}
+
+@media (max-width: 1100px) {
+  .vision-split-layout,
+  .space-detail-guide,
+  .program-check-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .vision-split-lead {
+    position: static;
+    padding-top: 0;
+  }
+
+  .vision-split-lead p,
+  .vision-split-lead strong {
+    max-width: 680px;
+  }
+
+  .vision-split-content .vision-value-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .space-reservation-fields {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .space-reservation-fields .full {
+    grid-column: 1 / -1;
+  }
+
+  .space-reservation-fields button {
+    grid-column: 1 / -1;
+    min-height: 58px;
+  }
+}
+
+@media (max-width: 720px) {
+  .vision-split-layout {
+    gap: 32px;
+  }
+
+  .vision-split-lead h2 {
+    font-size: 36px;
+  }
+
+  .vision-split-content .vision-value-grid,
+  .space-reservation-fields,
+  .space-detail-guide,
+  .space-guide-steps li,
+  .program-check-list article {
+    grid-template-columns: 1fr;
+  }
+
+  .vision-split-content .vision-value-grid article {
+    min-height: 0;
+  }
+
+  .space-reservation-form,
+  .space-detail-guide section,
+  .program-check-form,
+  .program-check-list article {
+    padding: 24px 20px;
+  }
+
+  .program-check-list p {
+    grid-column: 1;
   }
 }
