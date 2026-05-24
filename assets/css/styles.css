@@ -1867,6 +1867,7 @@ h2,
 }
 
 .board-tabs-clean {
+  gap: 46px;
   margin-top: 0;
 }
 
