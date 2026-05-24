@@ -4472,9 +4472,9 @@ h2,
   margin-top: auto;
   padding: 0 18px;
   border-radius: 999px;
-  color: #fff;
-  background: linear-gradient(135deg, var(--forest), var(--leaf));
-  box-shadow: 0 12px 24px rgba(18, 59, 43, 0.16);
+  color: var(--forest);
+  background: linear-gradient(135deg, #f7ead0, #e6f0dc);
+  box-shadow: inset 0 0 0 1px rgba(31, 90, 67, 0.14), 0 10px 22px rgba(18, 59, 43, 0.08);
   font-size: 18px;
   font-weight: 700;
   text-decoration: none;
@@ -4483,8 +4483,9 @@ h2,
 
 .space-application-card a:hover,
 .space-application-card a:focus-visible {
-  background: linear-gradient(135deg, #164936, #3f7f54);
-  box-shadow: 0 16px 30px rgba(18, 59, 43, 0.24);
+  color: #123b2b;
+  background: linear-gradient(135deg, #f3dcae, #d8ead0);
+  box-shadow: inset 0 0 0 1px rgba(31, 90, 67, 0.24), 0 14px 28px rgba(18, 59, 43, 0.14);
   transform: translateY(-2px);
 }
 
