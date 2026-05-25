@@ -22,10 +22,9 @@ GitHub Pages: https://kkumcenter.github.io/kkumcenter/
   - 시설소개
   - 오시는길
 - 공간예약
-  - 신청하기
+  - 예약하기
   - 예약내역
 - 프로그램
-  - 모집안내
   - 교육신청
   - 신청확인
 - 소식마당
@@ -44,11 +43,11 @@ GitHub Pages: https://kkumcenter.github.io/kkumcenter/
 - `vision.html`: 비전
 - `history.html`: 연혁
 - `spaces.html`: 시설소개
-- `space-apply.html`: 공간예약 신청하기
+- `space-apply.html`: 공간예약 예약하기
 - `space-reservations.html`: 예약내역
 - `space-*.html`: 공간별 상세 및 예약 신청 목업
 - `location.html`: 오시는길
-- `programs.html`: 모집안내 / 교육신청
+- `programs.html`: 교육신청
 - `program-check.html`: 프로그램 신청확인
 - `news.html`: 공지사항
 - `gallery.html`: 꿈센터 갤러리

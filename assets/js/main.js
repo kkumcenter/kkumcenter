@@ -26,8 +26,7 @@ const allMenuItems = [
     label: "프로그램",
     href: "programs.html",
     links: [
-      ["모집안내", "programs.html#current"],
-      ["교육신청", "programs.html#apply"],
+      ["교육신청", "programs.html"],
       ["신청확인", "program-check.html"],
     ],
   },
