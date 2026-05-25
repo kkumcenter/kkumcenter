@@ -489,7 +489,7 @@ button.nav-link.nav-menu-link {
 .all-menu-panel {
   position: fixed;
   top: 82px;
-  right: 0;
+  right: max(24px, calc((100vw - 1480px) / 2));
   z-index: 60;
   width: min(660px, calc(100vw - 36px));
   height: calc(100vh - 82px);
