@@ -353,6 +353,10 @@ a {
   background: rgba(31, 90, 67, 0.1);
 }
 
+.nav-dropdown-mobile-only {
+  display: none;
+}
+
 .nav-link.nav-external {
   padding: 0 16px;
   border: 0;
@@ -6436,6 +6440,9 @@ h2,
     display: none;
     flex-direction: column;
     align-items: stretch;
+    gap: 0;
+    max-height: calc(100vh - 98px);
+    overflow-y: auto;
     padding: 14px;
     border: 1px solid var(--line);
     border-radius: var(--radius);
@@ -6451,6 +6458,15 @@ h2,
     width: 100%;
   }
 
+  .nav-group:not(.nav-utility) {
+    display: grid;
+    grid-template-columns: 106px minmax(0, 1fr);
+    column-gap: 16px;
+    align-items: start;
+    padding: 12px 2px;
+    border-bottom: 1px solid rgba(28, 37, 33, 0.1);
+  }
+
   .nav-group.utility-start {
     margin-left: 0;
   }
@@ -6460,17 +6476,59 @@ h2,
     border-radius: var(--radius);
   }
 
+  .nav-group:not(.nav-utility) > .nav-link,
+  .nav-group:not(.nav-utility) > .nav-link.nav-external {
+    min-height: auto;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 8px 0;
+    border-radius: 0;
+    color: #213a30;
+    font-size: 16px;
+    font-weight: 700;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .nav-group:not(.nav-utility) > .nav-link:not(.nav-external)::after {
+    display: none;
+  }
+
+  .nav-link.nav-external .nav-dafarm-logo {
+    display: none;
+  }
+
+  .nav-link.nav-external::before {
+    content: "금산다팜몰";
+  }
+
+  .nav-group:not(.nav-utility):hover > .nav-link:not(.nav-external),
+  .nav-group:not(.nav-utility):focus-within > .nav-link:not(.nav-external),
+  .nav-group:not(.nav-utility) > .nav-link.active:not(.nav-external),
+  .nav-group:not(.nav-utility):hover > .nav-link.nav-external,
+  .nav-group:not(.nav-utility):focus-within > .nav-link.nav-external {
+    color: var(--forest);
+    background: transparent;
+    box-shadow: none;
+  }
+
   .nav-dropdown {
     position: static;
     width: 100%;
-    margin: 4px 0 8px;
-    padding: 4px 0 4px 14px;
+    margin: 0;
+    padding: 0;
     border: 0;
     box-shadow: none;
     background: transparent;
+    display: grid;
+    gap: 0;
     opacity: 1;
     pointer-events: auto;
     transform: none;
+  }
+
+  .nav-dropdown-mobile-only {
+    display: grid;
   }
 
   .nav-dropdown::before {
@@ -6478,9 +6536,48 @@ h2,
   }
 
   .nav-dropdown a {
-    min-height: 34px;
+    min-height: 38px;
+    justify-content: flex-start;
+    padding: 0 0 0 14px;
+    border-left: 1px solid rgba(31, 90, 67, 0.14);
+    border-radius: 0;
     color: var(--muted-ink);
-    font-size: 14px;
+    font-size: 15px;
+    font-weight: 600;
+    text-align: left;
+  }
+
+  .nav-dropdown a:first-child,
+  .nav-dropdown a:last-child {
+    border-radius: 0;
+  }
+
+  .nav-dropdown a + a {
+    border-top: 1px solid rgba(28, 37, 33, 0.08);
+  }
+
+  .nav-dropdown a:hover {
+    color: var(--forest);
+    background: rgba(31, 90, 67, 0.07);
+  }
+
+  .nav-group.nav-utility:not(.utility-start) {
+    display: none;
+  }
+
+  .nav-group.nav-utility.utility-start {
+    display: block;
+    margin-top: 10px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(28, 37, 33, 0.12);
+  }
+
+  .nav-group.utility-start .nav-link.nav-login {
+    min-height: 46px;
+    justify-content: center;
+    border-radius: 999px;
+    color: var(--forest);
+    background: rgba(31, 90, 67, 0.08);
   }
 
   .header-cta {
