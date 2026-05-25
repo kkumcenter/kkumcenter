@@ -56,10 +56,6 @@ const createAllMenuPanel = () => {
   panel.hidden = true;
   panel.innerHTML = `
     <div class="all-menu-inner" aria-label="전체메뉴">
-      <div class="all-menu-head">
-        <strong>전체메뉴</strong>
-        <span>꿈키움센터의 주요 메뉴를 한눈에 확인합니다.</span>
-      </div>
       <div class="all-menu-list">
         ${allMenuItems
           .map(
