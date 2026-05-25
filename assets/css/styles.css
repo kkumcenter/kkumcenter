@@ -491,7 +491,7 @@ button.nav-link.nav-menu-link {
   top: 82px;
   right: 0;
   z-index: 60;
-  width: min(420px, calc(100vw - 36px));
+  width: min(660px, calc(100vw - 36px));
   height: calc(100vh - 82px);
   padding: 18px 22px 24px;
   border-left: 1px solid rgba(31, 90, 67, 0.12);
@@ -528,16 +528,21 @@ button.nav-link.nav-menu-link {
 
 .all-menu-list {
   display: grid;
-  gap: 2px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 28px;
 }
 
 .all-menu-row {
   display: block;
-  padding: 17px 0;
+  padding: 18px 0;
   border-bottom: 1px solid rgba(28, 37, 33, 0.08);
 }
 
 .all-menu-row:last-child {
+  border-bottom: 0;
+}
+
+.all-menu-row:nth-last-child(2):nth-child(odd) {
   border-bottom: 0;
 }
 
@@ -556,8 +561,8 @@ button.nav-link.nav-menu-link {
 
 .all-menu-links {
   display: grid;
-  gap: 5px;
-  margin-top: 9px;
+  gap: 4px;
+  margin-top: 10px;
 }
 
 .all-menu-links a {
