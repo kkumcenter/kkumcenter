@@ -528,13 +528,15 @@ button.nav-link.nav-menu-link {
 
 .all-menu-list {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0 28px;
+  gap: 0;
 }
 
 .all-menu-row {
-  display: block;
-  padding: 18px 0;
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  align-items: start;
+  gap: 22px;
+  padding: 16px 0;
   border-bottom: 1px solid rgba(28, 37, 33, 0.08);
 }
 
@@ -542,14 +544,10 @@ button.nav-link.nav-menu-link {
   border-bottom: 0;
 }
 
-.all-menu-row:nth-last-child(2):nth-child(odd) {
-  border-bottom: 0;
-}
-
 .all-menu-title {
   display: inline-flex;
   align-items: center;
-  min-height: 34px;
+  min-height: 38px;
   color: var(--forest);
   font-size: 19px;
   font-weight: 700;
@@ -561,8 +559,7 @@ button.nav-link.nav-menu-link {
 
 .all-menu-links {
   display: grid;
-  gap: 4px;
-  margin-top: 10px;
+  gap: 0;
 }
 
 .all-menu-links a {
@@ -570,7 +567,7 @@ button.nav-link.nav-menu-link {
   display: inline-flex;
   align-items: center;
   padding: 0 12px;
-  border-radius: 10px;
+  border-radius: 0;
   color: #46544e;
   font-size: 15px;
   font-weight: 600;
@@ -578,7 +575,39 @@ button.nav-link.nav-menu-link {
   transition: color 0.18s ease, background 0.18s ease, transform 0.18s ease;
 }
 
+.all-menu-links a + a {
+  border-top: 1px solid rgba(28, 37, 33, 0.08);
+}
+
 .all-menu-links a:hover {
+  color: #fff;
+  border-radius: 10px;
+  background: var(--forest);
+  transform: translateY(-1px);
+}
+
+.all-menu-login {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(31, 90, 67, 0.14);
+}
+
+.all-menu-login-link {
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  border-radius: 999px;
+  color: var(--forest);
+  font-size: 16px;
+  font-weight: 700;
+  background: rgba(31, 90, 67, 0.08);
+  transition: color 0.18s ease, background 0.18s ease, transform 0.18s ease;
+}
+
+.all-menu-login-link:hover {
   color: #fff;
   background: var(--forest);
   transform: translateY(-1px);

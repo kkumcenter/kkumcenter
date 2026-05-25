@@ -75,6 +75,17 @@ const createAllMenuPanel = () => {
           )
           .join("")}
       </div>
+      <div class="all-menu-login">
+        <a class="all-menu-login-link" href="login.html">
+          <span class="login-person-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false">
+              <path d="M20 21a8 8 0 0 0-16 0"></path>
+              <circle cx="12" cy="8" r="4"></circle>
+            </svg>
+          </span>
+          <span>로그인</span>
+        </a>
+      </div>
     </div>
   `;
   return panel;
