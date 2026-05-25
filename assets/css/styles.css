@@ -4664,6 +4664,7 @@ h2,
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 30px;
+  margin-top: 28px;
 }
 
 .space-application-card {
@@ -4699,6 +4700,7 @@ h2,
   flex-direction: column;
   padding: 24px 26px 26px;
   border-top: 0;
+  background: #F8D889;
 }
 
 .space-floor {
@@ -4733,7 +4735,7 @@ h2,
   padding: 0 18px;
   border-radius: 999px;
   color: var(--forest);
-  background: linear-gradient(135deg, #f7ead0, #e6f0dc);
+  background: #F8D889;
   box-shadow: 0 10px 22px rgba(18, 59, 43, 0.08);
   font-size: 18px;
   font-weight: 700;
@@ -4744,7 +4746,7 @@ h2,
 .space-application-card a:hover,
 .space-application-card a:focus-visible {
   color: #123b2b;
-  background: linear-gradient(135deg, #f3dcae, #d8ead0);
+  background: #F3CB6F;
   box-shadow: 0 14px 28px rgba(18, 59, 43, 0.14);
   transform: translateY(-2px);
 }

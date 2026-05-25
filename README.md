@@ -1,7 +1,7 @@
 # 군북면 꿈키움센터 홈페이지 목업
 
 군북면 꿈키움센터의 정적 HTML 홈페이지 목업입니다.
-시행계획서의 비전인 **“온세대가 지속가능한 꿈을 키우는 거점, 군북면”**을 중심으로 센터소개, 공간예약, 프로그램, 소식마당, 금산다팜 몰 연결 구조를 잡았습니다.
+시행계획서의 비전인 **“온세대가 지속가능한 꿈을 키우는 거점, 군북면”**을 중심으로 센터소개, 공간시설, 프로그램, 소식마당, 금산다팜 몰 연결 구조를 잡았습니다.
 
 GitHub 저장소: https://github.com/kkumcenter/kkumcenter
 GitHub Pages: https://kkumcenter.github.io/kkumcenter/
@@ -21,9 +21,9 @@ GitHub Pages: https://kkumcenter.github.io/kkumcenter/
   - 연혁
   - 시설소개
   - 오시는길
-- 공간예약
-  - 예약하기
-  - 예약내역
+- 공간시설
+  - 공간예약
+  - 예약확인
 - 프로그램
   - 교육신청
   - 신청확인
@@ -43,8 +43,8 @@ GitHub Pages: https://kkumcenter.github.io/kkumcenter/
 - `vision.html`: 비전
 - `history.html`: 연혁
 - `spaces.html`: 시설소개
-- `space-apply.html`: 공간예약 예약하기
-- `space-reservations.html`: 예약내역
+- `space-apply.html`: 공간시설 공간예약
+- `space-reservations.html`: 예약확인
 - `space-*.html`: 공간별 상세 및 예약 신청 목업
 - `location.html`: 오시는길
 - `programs.html`: 교육신청

@@ -15,11 +15,11 @@ const allMenuItems = [
     ],
   },
   {
-    label: "공간예약",
+    label: "공간시설",
     href: "space-apply.html",
     links: [
-      ["예약하기", "space-apply.html"],
-      ["예약내역", "space-reservations.html"],
+      ["공간예약", "space-apply.html"],
+      ["예약확인", "space-reservations.html"],
     ],
   },
   {
