@@ -3316,6 +3316,7 @@ h2,
 
 .subnav + .section .section-heading h2,
 .subnav + .section .greeting-title h2,
+.subnav + .section .vision-split-lead h2,
 .subnav + .section .facility-overview h2,
 .subnav + .section .program-search h2,
 .subnav + .section .contact-panel h2,
@@ -3709,8 +3710,8 @@ h2,
 
 .vision-split-layout {
   display: grid;
-  grid-template-columns: 0.86fr 1.14fr;
-  gap: 70px;
+  grid-template-columns: 0.78fr 1.22fr;
+  gap: 56px;
   align-items: start;
 }
 
@@ -3729,7 +3730,7 @@ h2,
   color: var(--ink);
   font-size: 44px;
   line-height: 1.26;
-  font-weight: 500;
+  font-weight: 700;
   word-break: keep-all;
 }
 
@@ -3756,9 +3757,17 @@ h2,
   gap: 14px;
 }
 
+.vision-split-content .vision-board-block:first-child .vision-value-grid {
+  gap: 10px;
+}
+
 .vision-split-content .vision-value-grid article {
   min-height: 236px;
   padding: 28px 18px 24px;
+}
+
+.vision-split-content .vision-board-block:nth-child(2) .vision-value-grid strong {
+  font-size: 20px;
 }
 
 .vision-intro-section {
