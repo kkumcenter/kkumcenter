@@ -101,17 +101,26 @@ const setupAllMenu = () => {
   }
 
   const allMenuToggle = menuGroup.querySelector("[data-all-menu-toggle]");
+  let allMenuCloseTimer;
 
   const closeAllMenu = () => {
-    allMenuPanel.hidden = true;
+    window.clearTimeout(allMenuCloseTimer);
     allMenuToggle.setAttribute("aria-expanded", "false");
     document.body.classList.remove("all-menu-open");
+    allMenuCloseTimer = window.setTimeout(() => {
+      if (allMenuToggle.getAttribute("aria-expanded") === "false") {
+        allMenuPanel.hidden = true;
+      }
+    }, 280);
   };
 
   const openAllMenu = () => {
+    window.clearTimeout(allMenuCloseTimer);
     allMenuPanel.hidden = false;
     allMenuToggle.setAttribute("aria-expanded", "true");
-    document.body.classList.add("all-menu-open");
+    window.requestAnimationFrame(() => {
+      document.body.classList.add("all-menu-open");
+    });
     navToggle?.setAttribute("aria-expanded", "false");
     document.body.classList.remove("nav-open");
   };
@@ -124,6 +133,11 @@ const setupAllMenu = () => {
       openAllMenu();
     }
   });
+
+  allMenuToggle.addEventListener("mouseenter", openAllMenu);
+  allMenuToggle.addEventListener("focus", openAllMenu);
+  allMenuPanel.addEventListener("mouseenter", openAllMenu);
+  siteHeader.addEventListener("mouseleave", closeAllMenu);
 
   allMenuPanel.addEventListener("click", (event) => {
     if (event.target instanceof HTMLAnchorElement) {

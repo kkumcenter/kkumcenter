@@ -487,41 +487,53 @@ button.nav-link.nav-menu-link {
 }
 
 .all-menu-panel {
-  position: absolute;
-  top: 100%;
-  left: 0;
+  position: fixed;
+  top: 82px;
   right: 0;
-  z-index: 45;
-  padding: 20px 24px 26px;
-  border-top: 1px solid rgba(28, 37, 33, 0.08);
+  z-index: 60;
+  width: min(420px, calc(100vw - 36px));
+  height: calc(100vh - 82px);
+  padding: 18px 22px 24px;
+  border-left: 1px solid rgba(31, 90, 67, 0.12);
   background: rgba(255, 253, 247, 0.98);
-  box-shadow: 0 24px 48px rgba(13, 36, 26, 0.14);
+  box-shadow: -26px 28px 60px rgba(13, 36, 26, 0.16);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(104%);
+  transition: opacity 0.24s ease, transform 0.28s ease;
 }
 
 .all-menu-panel[hidden] {
-  display: none;
+  display: block;
+  visibility: hidden;
+}
+
+.all-menu-open .all-menu-panel {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0);
+  visibility: visible;
 }
 
 .all-menu-inner {
-  width: min(1180px, 100%);
+  width: 100%;
+  height: 100%;
   margin: 0 auto;
-  padding: 18px 28px;
-  border: 1px solid rgba(31, 90, 67, 0.12);
-  border-radius: 18px;
+  overflow-y: auto;
+  padding: 22px 24px;
+  border: 1px solid rgba(31, 90, 67, 0.1);
+  border-radius: 20px 0 0 20px;
   background: #fff;
 }
 
 .all-menu-list {
   display: grid;
-  gap: 0;
+  gap: 2px;
 }
 
 .all-menu-row {
-  display: grid;
-  grid-template-columns: 160px minmax(0, 1fr);
-  align-items: center;
-  gap: 22px;
-  padding: 13px 0;
+  display: block;
+  padding: 17px 0;
   border-bottom: 1px solid rgba(28, 37, 33, 0.08);
 }
 
@@ -530,8 +542,11 @@ button.nav-link.nav-menu-link {
 }
 
 .all-menu-title {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
   color: var(--forest);
-  font-size: 18px;
+  font-size: 19px;
   font-weight: 700;
 }
 
@@ -540,21 +555,21 @@ button.nav-link.nav-menu-link {
 }
 
 .all-menu-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 10px;
+  display: grid;
+  gap: 5px;
+  margin-top: 9px;
 }
 
 .all-menu-links a {
-  min-height: 34px;
+  min-height: 38px;
   display: inline-flex;
   align-items: center;
-  padding: 0 13px;
-  border-radius: 999px;
+  padding: 0 12px;
+  border-radius: 10px;
   color: #46544e;
   font-size: 15px;
   font-weight: 600;
-  background: rgba(31, 90, 67, 0.06);
+  background: transparent;
   transition: color 0.18s ease, background 0.18s ease, transform 0.18s ease;
 }
 
@@ -6700,6 +6715,12 @@ h2,
   }
 
   .nav-group.nav-utility:not(.utility-start) {
+    display: none;
+  }
+
+  .all-menu-panel,
+  .all-menu-panel[hidden],
+  .all-menu-open .all-menu-panel {
     display: none;
   }
 
