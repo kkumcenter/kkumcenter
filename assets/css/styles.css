@@ -5790,7 +5790,7 @@ h2,
 .login-welcome {
   max-width: 760px;
   margin: 0 auto;
-  color: #111d19;
+  color: #123b2b;
   font-family: var(--font-display);
   font-size: clamp(26px, 2.6vw, 38px);
   font-weight: 700;
