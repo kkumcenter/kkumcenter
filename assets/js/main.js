@@ -189,35 +189,87 @@ document.querySelectorAll("[data-home-board-tabs]").forEach((tabList) => {
   const tabs = Array.from(tabList.querySelectorAll("[data-home-board-tab]"));
   const boardPanel = tabList.closest(".board-panel");
   const panels = Array.from(boardPanel?.querySelectorAll("[data-home-board-panel]") || []);
-  const moreLink = boardPanel?.querySelector("[data-home-board-more]");
-  const moreLinks = {
-    notice: { href: "news.html", label: "공지사항 더보기" },
-    village: { href: "village-story.html", label: "마을 이야기 더보기" },
+  const prevButton = boardPanel?.querySelector("[data-home-board-prev]");
+  const nextButton = boardPanel?.querySelector("[data-home-board-next]");
+  const pageSize = 5;
+  let activeTab =
+    tabs.find((tab) => tab.classList.contains("is-active"))?.getAttribute("data-home-board-tab") ||
+    tabs[0]?.getAttribute("data-home-board-tab");
+  const pageState = panels.reduce((state, panel) => {
+    state[panel.getAttribute("data-home-board-panel")] = 0;
+    return state;
+  }, {});
+
+  const getActivePanel = () =>
+    panels.find((panel) => panel.getAttribute("data-home-board-panel") === activeTab);
+
+  const updateBoardItems = () => {
+    const activePanel = getActivePanel();
+    if (!activePanel) return;
+
+    const items = Array.from(activePanel.querySelectorAll("[data-home-board-item]"));
+    const maxPage = Math.max(0, Math.ceil(items.length / pageSize) - 1);
+    const currentPage = Math.min(pageState[activeTab] || 0, maxPage);
+    pageState[activeTab] = currentPage;
+
+    items.forEach((item, index) => {
+      const isVisible = index >= currentPage * pageSize && index < (currentPage + 1) * pageSize;
+      item.hidden = !isVisible;
+    });
+
+    if (prevButton) {
+      const isDisabled = currentPage >= maxPage;
+      prevButton.disabled = isDisabled;
+      prevButton.setAttribute("aria-disabled", String(isDisabled));
+    }
+
+    if (nextButton) {
+      const isDisabled = currentPage <= 0;
+      nextButton.disabled = isDisabled;
+      nextButton.setAttribute("aria-disabled", String(isDisabled));
+    }
+  };
+
+  const activateTab = (target) => {
+    activeTab = target;
+    pageState[target] = 0;
+
+    tabs.forEach((item) => {
+      const isActive = item.getAttribute("data-home-board-tab") === target;
+      item.classList.toggle("is-active", isActive);
+      item.setAttribute("aria-selected", String(isActive));
+    });
+
+    panels.forEach((panel) => {
+      const isActive = panel.getAttribute("data-home-board-panel") === target;
+      panel.classList.toggle("is-hidden", !isActive);
+      panel.hidden = !isActive;
+    });
+
+    updateBoardItems();
   };
 
   tabs.forEach((tab) => {
     tab.addEventListener("click", () => {
       const target = tab.getAttribute("data-home-board-tab");
-
-      tabs.forEach((item) => {
-        const isActive = item === tab;
-        item.classList.toggle("is-active", isActive);
-        item.setAttribute("aria-selected", String(isActive));
-      });
-
-      panels.forEach((panel) => {
-        const isActive = panel.getAttribute("data-home-board-panel") === target;
-        panel.classList.toggle("is-hidden", !isActive);
-        panel.hidden = !isActive;
-      });
-
-      const nextLink = moreLinks[target];
-      if (moreLink && nextLink) {
-        moreLink.setAttribute("href", nextLink.href);
-        moreLink.setAttribute("aria-label", nextLink.label);
-      }
+      activateTab(target);
     });
   });
+
+  prevButton?.addEventListener("click", () => {
+    const activePanel = getActivePanel();
+    const items = Array.from(activePanel?.querySelectorAll("[data-home-board-item]") || []);
+    const maxPage = Math.max(0, Math.ceil(items.length / pageSize) - 1);
+    pageState[activeTab] = Math.min(maxPage, (pageState[activeTab] || 0) + 1);
+    updateBoardItems();
+  });
+
+  nextButton?.addEventListener("click", () => {
+    pageState[activeTab] = Math.max(0, (pageState[activeTab] || 0) - 1);
+    updateBoardItems();
+  });
+
+  updateBoardItems();
 });
 
 document.querySelectorAll("[data-board-pagination]").forEach((pagination) => {
