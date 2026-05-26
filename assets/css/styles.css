@@ -1379,6 +1379,9 @@ h2,
 }
 
 .shortcut-dafarm-overlay .shortcut-shop-button {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   width: min(230px, 100%);
   min-height: 74px;
   gap: 10px;
@@ -1387,6 +1390,29 @@ h2,
   color: var(--forest);
   background: rgba(255, 255, 255, 0.94);
   box-shadow: 0 18px 42px rgba(0, 0, 0, 0.22);
+  transition: transform 0.24s ease, color 0.24s ease, box-shadow 0.24s ease, background 0.24s ease;
+}
+
+.shortcut-dafarm-overlay .shortcut-shop-button::before {
+  position: absolute;
+  inset: 5px;
+  z-index: 0;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(31, 90, 67, 0.94), rgba(93, 139, 84, 0.9));
+  content: "";
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 0.24s ease, transform 0.24s ease;
+}
+
+.shortcut-dafarm-overlay .shortcut-shop-button > * {
+  position: relative;
+  z-index: 1;
+}
+
+.shortcut-dafarm-overlay .shortcut-shop-button::after {
+  position: relative;
+  z-index: 1;
 }
 
 .shortcut-dafarm-overlay .shortcut-shop-button .dafarm-cart-icon {
@@ -1401,8 +1427,15 @@ h2,
 }
 
 .shortcut-dafarm-overlay .shortcut-shop-button:hover {
-  color: var(--forest);
-  background: #F3CB6F;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 18px 42px rgba(31, 90, 67, 0.24);
+  transform: translateY(-6px);
+}
+
+.shortcut-dafarm-overlay .shortcut-shop-button:hover::before {
+  opacity: 1;
+  transform: scale(1);
 }
 
 .shortcut-dafarm-slider {
@@ -2168,16 +2201,31 @@ h2,
 }
 
 .event-panel .board-head {
+  position: relative;
   min-height: 56px;
   align-items: center;
   padding-bottom: 0;
-  border-bottom: 1px solid rgba(28, 37, 33, 0.22);
+  border-bottom: 1px solid rgba(28, 37, 33, 0.28);
 }
 
 .event-panel .board-head h3 {
+  position: relative;
+  min-height: 56px;
+  display: inline-flex;
+  align-items: center;
   color: #1d2b26;
   font-size: 21px;
   font-weight: 700;
+}
+
+.event-panel .board-head h3::after {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 4px;
+  background: var(--forest);
+  content: "";
 }
 
 .carousel-nav {
@@ -2232,7 +2280,7 @@ h2,
 
 .event-card img {
   width: 100%;
-  aspect-ratio: 16 / 8.4;
+  height: 155px;
   object-fit: contain;
   background: #f5f1e7;
 }
@@ -2246,23 +2294,28 @@ h2,
 
 .event-card span {
   display: inline-flex;
-  margin-top: 18px;
+  margin-top: 14px;
   color: var(--clay);
   font-size: 13px;
   font-weight: 700;
 }
 
 .event-card h4 {
-  margin-top: 8px;
+  margin-top: 7px;
   margin-bottom: 0;
-  font-size: 22px;
+  font-size: 21px;
   line-height: 1.25;
 }
 
 .event-card p {
-  margin-top: 10px;
-  margin-bottom: 16px;
+  margin-top: 8px;
+  margin-bottom: 14px;
   color: var(--muted-ink);
+  line-height: 1.5;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
 
 .gallery-section {
@@ -2297,13 +2350,14 @@ h2,
 }
 
 .gallery-page-heading h2::after {
-  width: 56px;
-  height: 3px;
-  display: block;
-  margin-top: 18px;
-  border-radius: 999px;
-  background: var(--forest);
-  content: "";
+  display: none;
+  content: none;
+}
+
+.gallery-page-heading + .gallery-grid-list {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 2px solid var(--forest);
 }
 
 .gallery-shell {
@@ -3885,8 +3939,8 @@ h2,
 
 .vision-split-layout {
   display: grid;
-  grid-template-columns: minmax(300px, 0.58fr) minmax(0, 1.42fr);
-  gap: 42px;
+  grid-template-columns: minmax(360px, 0.74fr) minmax(0, 1.26fr);
+  gap: 30px;
   align-items: start;
 }
 
@@ -3924,12 +3978,14 @@ h2,
 }
 
 .vision-split-content .vision-board-block {
+  padding-left: 22px;
+  padding-right: 22px;
   background: rgba(255, 255, 255, 0.86);
 }
 
 .vision-split-content .vision-value-grid {
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 14px;
+  gap: 10px;
 }
 
 .vision-split-content .vision-board-block:first-child .vision-value-grid {
@@ -3938,7 +3994,7 @@ h2,
 
 .vision-split-content .vision-value-grid article {
   min-height: 236px;
-  padding: 28px 18px 24px;
+  padding: 28px 14px 24px;
 }
 
 .vision-split-content .vision-board-block:nth-child(2) .vision-value-grid strong {
@@ -4700,7 +4756,7 @@ h2,
   flex-direction: column;
   padding: 24px 26px 26px;
   border-top: 0;
-  background: #F8D889;
+  background: linear-gradient(135deg, #f7ead0, #e6f0dc);
 }
 
 .space-floor {

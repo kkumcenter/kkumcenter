@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>예약확인 | 군북면 꿈키움센터</title>
     <meta name="description" content="군북면 꿈키움센터 공간시설 예약확인 목업 페이지입니다.">
-    <link rel="stylesheet" href="assets/css/styles.css?v=20260526-1">
+    <link rel="stylesheet" href="assets/css/styles.css?v=20260526-2">
   </head>
   <body>
     <a class="skip-link" href="#main">본문 바로가기</a>
@@ -35,26 +35,18 @@
           <p class="eyebrow">Reservation Check</p>
           <h2>예약확인</h2>
         </div>
-        <div class="container reservation-table-wrap">
-          <table class="board-table reservation-history-table">
-            <caption>공간예약 확인</caption>
-            <thead>
-              <tr>
-                <th scope="col">예약번호</th>
-                <th scope="col">공간명</th>
-                <th scope="col">예약일</th>
-                <th scope="col">신청자</th>
-                <th scope="col">상태</th>
-                <th scope="col">상세</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td>R-2026-014</td><td>공유주방</td><td>2026.06.20</td><td>김○○</td><td><span class="status ongoing">승인대기</span></td><td><a href="space-kitchen.html">보기</a></td></tr>
-              <tr><td>R-2026-013</td><td>강의실</td><td>2026.06.18</td><td>박○○</td><td><span class="status open">승인완료</span></td><td><a href="space-classroom.html">보기</a></td></tr>
-              <tr><td>R-2026-012</td><td>소회의실</td><td>2026.06.14</td><td>이○○</td><td><span class="status closed">이용완료</span></td><td><a href="space-small-meeting.html">보기</a></td></tr>
-              <tr><td>R-2026-011</td><td>청소년활동실</td><td>2026.06.09</td><td>최○○</td><td><span class="status open">승인완료</span></td><td><a href="space-youth-room.html">보기</a></td></tr>
-            </tbody>
-          </table>
+        <div class="container program-check-layout">
+          <form class="program-check-form" aria-label="공간 예약확인 검색 목업">
+            <label>신청자명<input type="text" placeholder="이름을 입력하세요"></label>
+            <label>연락처<input type="tel" placeholder="010-0000-0000"></label>
+            <button type="button">조회하기</button>
+          </form>
+          <div class="program-check-list" aria-label="공간 예약 목록">
+            <article><span class="status ongoing">승인대기</span><strong>공유주방</strong><p>R-2026-014 · 2026.06.20 · 김○○</p></article>
+            <article><span class="status open">승인완료</span><strong>강의실</strong><p>R-2026-013 · 2026.06.18 · 박○○</p></article>
+            <article><span class="status closed">이용완료</span><strong>소회의실</strong><p>R-2026-012 · 2026.06.14 · 이○○</p></article>
+            <article><span class="status open">승인완료</span><strong>청소년활동실</strong><p>R-2026-011 · 2026.06.09 · 최○○</p></article>
+          </div>
         </div>
       </section>
     </main>
