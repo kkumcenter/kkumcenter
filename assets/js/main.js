@@ -187,7 +187,13 @@ if (navToggle && primaryNav) {
 
 document.querySelectorAll("[data-home-board-tabs]").forEach((tabList) => {
   const tabs = Array.from(tabList.querySelectorAll("[data-home-board-tab]"));
-  const panels = Array.from(tabList.closest(".board-panel")?.querySelectorAll("[data-home-board-panel]") || []);
+  const boardPanel = tabList.closest(".board-panel");
+  const panels = Array.from(boardPanel?.querySelectorAll("[data-home-board-panel]") || []);
+  const moreLink = boardPanel?.querySelector("[data-home-board-more]");
+  const moreLinks = {
+    notice: { href: "news.html", label: "공지사항 더보기" },
+    village: { href: "village-story.html", label: "마을 이야기 더보기" },
+  };
 
   tabs.forEach((tab) => {
     tab.addEventListener("click", () => {
@@ -204,6 +210,12 @@ document.querySelectorAll("[data-home-board-tabs]").forEach((tabList) => {
         panel.classList.toggle("is-hidden", !isActive);
         panel.hidden = !isActive;
       });
+
+      const nextLink = moreLinks[target];
+      if (moreLink && nextLink) {
+        moreLink.setAttribute("href", nextLink.href);
+        moreLink.setAttribute("aria-label", nextLink.label);
+      }
     });
   });
 });
