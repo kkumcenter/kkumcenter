@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>공유주방 | 공간시설 | 군북면 꿈키움센터</title>
     <meta name="description" content="군북면 꿈키움센터 1층 공유주방 상세 안내입니다.">
-    <link rel="stylesheet" href="assets/css/styles.css?v=20260526-15">
+    <link rel="stylesheet" href="assets/css/styles.css?v=20260526-16">
   </head>
   <body>
     <a class="skip-link" href="#main">본문 바로가기</a>
@@ -44,18 +44,18 @@
             </dl>
           </div>
         </div>
-        <form class="container space-reservation-form" aria-label="공유주방 공간 예약 신청 목업">
+        <form class="container space-reservation-form" aria-label="공유주방 공간 예약 신청 목업" data-space-reservation-form data-space-name="공유주방" data-space-floor="1층">
           <h3>공간 예약 신청</h3>
           <div class="space-reservation-fields">
             <div class="reservation-basic-fields">
-              <label>신청자명<input type="text" placeholder="이름을 입력하세요"></label>
-              <label>연락처<input type="tel" placeholder="010-0000-0000"></label>
-              <label>예약 시작일<input type="date"></label>
-              <label>예약 종료일<input type="date"></label>
+              <label>신청자명<input name="applicant" type="text" placeholder="이름을 입력하세요" required></label>
+              <label>연락처<input name="phone" type="tel" placeholder="010-0000-0000" required></label>
+              <label>예약 시작일<input name="startDate" type="date" required></label>
+              <label>예약 종료일<input name="endDate" type="date" required></label>
             </div>
-            <label class="reservation-purpose">이용목적<textarea rows="5" placeholder="이용 목적을 입력하세요"></textarea></label>
-            <label class="reservation-extra">기타<textarea rows="5" placeholder="필요한 준비물이나 요청사항을 적어주세요"></textarea></label>
-            <div class="reservation-action"><button type="button">예약하기</button></div>
+            <label class="reservation-purpose">이용목적<textarea name="purpose" rows="5" placeholder="이용 목적을 입력하세요"></textarea></label>
+            <label class="reservation-extra">기타<textarea name="memo" rows="5" placeholder="필요한 준비물이나 요청사항을 적어주세요"></textarea></label>
+            <p class="form-status" data-form-status aria-live="polite"></p><div class="reservation-action"><button type="submit">예약하기</button></div>
           </div>
         </form>
         <div class="container space-detail-guide">
@@ -77,5 +77,6 @@
 
     <footer class="site-footer"><div class="container footer-grid footer-simple"><div><strong>군북면 꿈키움센터</strong><p class="footer-contact">주소: 충청남도 금산군 군북면 두두리 371, 373-3 일원</p><p class="footer-contact">연락처: 운영자료 확정 후 입력</p></div></div><div class="container footer-meta">COPYRIGHT © GUNBUK KKUM CENTER. ALL RIGHTS RESERVED.</div></footer>
     <script src="assets/js/main.js?v=20260526-5"></script>
+    <script src="assets/js/app-data.js?v=20260526-1"></script>
   </body>
 </html>

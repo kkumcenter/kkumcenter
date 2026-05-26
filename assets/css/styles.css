@@ -5057,6 +5057,7 @@ h2,
 
 .space-reservation-fields input,
 .space-reservation-fields textarea,
+.space-reservation-fields select,
 .contact-board-form input,
 .contact-board-form textarea {
   width: 100%;
@@ -5068,6 +5069,7 @@ h2,
 }
 
 .space-reservation-fields input,
+.space-reservation-fields select,
 .contact-board-form input {
   min-height: 50px;
   padding: 0 14px;
@@ -5082,6 +5084,7 @@ h2,
 
 .space-reservation-fields input:focus,
 .space-reservation-fields textarea:focus,
+.space-reservation-fields select:focus,
 .contact-board-form input:focus,
 .contact-board-form textarea:focus {
   outline: 2px solid rgba(31, 90, 67, 0.16);
@@ -5110,6 +5113,19 @@ h2,
   display: flex;
   justify-content: flex-end;
   align-items: center;
+}
+
+.form-status {
+  grid-column: 1 / -1;
+  min-height: 22px;
+  margin: -2px 0 0;
+  color: var(--forest);
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.form-status.is-error {
+  color: #a6452c;
 }
 
 .reservation-action button,
@@ -5255,6 +5271,111 @@ h2,
   margin: 0;
   color: var(--muted-ink);
   line-height: 1.65;
+}
+
+.admin-dashboard {
+  display: grid;
+  gap: 28px;
+  margin-top: 28px;
+}
+
+.admin-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.admin-summary article {
+  padding: 28px 30px;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 14px 32px rgba(23, 42, 31, 0.06);
+}
+
+.admin-summary span {
+  display: block;
+  color: var(--muted-ink);
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.admin-summary strong {
+  display: block;
+  margin-top: 8px;
+  color: var(--forest);
+  font-family: var(--font-title);
+  font-size: 42px;
+  line-height: 1;
+  font-weight: 500;
+}
+
+.admin-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.admin-panel {
+  padding: 30px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 18px 44px rgba(23, 42, 31, 0.07);
+}
+
+.admin-panel-heading {
+  margin-bottom: 20px;
+}
+
+.admin-panel-heading .eyebrow {
+  margin: 0 0 6px;
+}
+
+.admin-panel-heading h3 {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-title);
+  font-size: 30px;
+  font-weight: 500;
+}
+
+.admin-list {
+  display: grid;
+  gap: 14px;
+}
+
+.admin-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 150px;
+  gap: 16px;
+  align-items: center;
+  padding: 18px;
+  border-radius: 16px;
+  background: #fff;
+}
+
+.admin-item strong {
+  display: block;
+  margin-top: 10px;
+  color: var(--ink);
+  font-size: 19px;
+}
+
+.admin-item p {
+  margin: 4px 0 0;
+  color: var(--muted-ink);
+  font-size: 14px;
+}
+
+.admin-item select {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid rgba(31, 90, 67, 0.16);
+  border-radius: 999px;
+  padding: 0 14px;
+  color: var(--forest);
+  background: #f7f2e7;
+  font: inherit;
+  font-weight: 800;
 }
 
 .rental-layout {
@@ -8138,7 +8259,9 @@ h2,
 @media (max-width: 1100px) {
   .vision-split-layout,
   .space-detail-guide,
-  .program-check-layout {
+  .program-check-layout,
+  .admin-summary,
+  .admin-columns {
     grid-template-columns: 1fr;
   }
 
@@ -8198,5 +8321,9 @@ h2,
 
   .program-check-list p {
     grid-column: 1;
+  }
+
+  .admin-item {
+    grid-template-columns: 1fr;
   }
 }

@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>신청확인 | 군북면 꿈키움센터</title>
-    <meta name="description" content="군북면 꿈키움센터 프로그램 신청확인 목업 페이지입니다.">
+    <title>교육신청 작성 | 군북면 꿈키움센터</title>
+    <meta name="description" content="군북면 꿈키움센터 교육 프로그램 신청 작성 화면입니다.">
     <link rel="stylesheet" href="assets/css/styles.css?v=20260526-16">
   </head>
   <body>
@@ -20,32 +20,49 @@
           <div class="nav-group"><a class="nav-link" href="news.html">소식마당</a><div class="nav-dropdown" data-menu-label="소식마당"><a href="news.html">공지사항</a><a href="gallery.html">꿈센터 갤러리</a><a href="village-story.html">마을 이야기</a><a href="contact.html">문의 / 제안</a></div></div>
           <div class="nav-group nav-dafarm-group"><a class="nav-link nav-external" href="https://dafarm.co.kr/" target="_blank" rel="noreferrer"><img class="nav-dafarm-logo" src="assets/images/dafarm-logo-top.jpg" alt="금산다팜 몰"></a><div class="nav-dropdown nav-dropdown-mobile-only" data-menu-label="금산다팜몰"><a href="https://dafarm.co.kr/" target="_blank" rel="noreferrer">금산다팜몰 바로가기</a></div></div>
           <div class="nav-group nav-utility utility-start"><a class="nav-link nav-login" href="login.html"><span class="login-person-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 12.4a4.1 4.1 0 1 0 0-8.2 4.1 4.1 0 0 0 0 8.2Z"></path><path d="M4.8 20.1c1.1-3.5 3.6-5.3 7.2-5.3s6.1 1.8 7.2 5.3"></path></svg></span><span>로그인</span></a></div>
-
         </nav>
       </div>
     </header>
 
     <main id="main">
       <section class="sub-hero"><img src="assets/images/subpage-hero-center-soft.png" alt="군북면 꿈키움센터를 내려다본 반투명 배경 이미지"><div class="sub-hero-content"><p class="eyebrow">PROGRAMS</p><h1><span>배움이 운영으로 이어지는</span><span>주민참여 프로그램</span></h1></div></section>
-      <nav class="breadcrumb" aria-label="현재 위치"><div class="container breadcrumb-inner"><a class="breadcrumb-home" href="index.html" aria-label="홈"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5v8.7a.8.8 0 0 1-.8.8h-5.1v-5.4H9.9V20H4.8a.8.8 0 0 1-.8-.8v-8.7Z"></path></svg><span>홈</span></a><span class="breadcrumb-separator" aria-hidden="true">›</span><a class="breadcrumb-link" href="programs.html">프로그램</a><span class="breadcrumb-separator" aria-hidden="true">›</span><a class="breadcrumb-current" href="program-check.html" aria-current="page">신청확인</a></div></nav>
-      <nav class="subnav" aria-label="프로그램 하위 메뉴"><a href="programs.html">교육신청</a><a class="is-active" href="program-check.html">신청확인</a></nav>
+      <nav class="breadcrumb" aria-label="현재 위치"><div class="container breadcrumb-inner"><a class="breadcrumb-home" href="index.html" aria-label="홈"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5v8.7a.8.8 0 0 1-.8.8h-5.1v-5.4H9.9V20H4.8a.8.8 0 0 1-.8-.8v-8.7Z"></path></svg><span>홈</span></a><span class="breadcrumb-separator" aria-hidden="true">›</span><a class="breadcrumb-link" href="programs.html">프로그램</a><span class="breadcrumb-separator" aria-hidden="true">›</span><a class="breadcrumb-current" href="program-apply.html" aria-current="page">교육신청 작성</a></div></nav>
+      <nav class="subnav" aria-label="프로그램 하위 메뉴"><a class="is-active" href="programs.html">교육신청</a><a href="program-check.html">신청확인</a></nav>
 
       <section class="section">
         <div class="container section-heading news-page-heading">
-          <p class="eyebrow">Application Check</p>
-          <h2>신청확인</h2>
+          <p class="eyebrow">Education Apply</p>
+          <h2>교육신청 작성</h2>
         </div>
         <div class="container news-page-rule" aria-hidden="true"></div>
-        <div class="container program-check-layout">
-          <form class="program-check-form" aria-label="프로그램 신청확인 검색 목업">
-            <label>신청자명<input type="text" placeholder="이름을 입력하세요"></label>
-            <label>연락처<input type="tel" placeholder="010-0000-0000"></label>
-            <button type="button">조회하기</button>
-          </form>
-          <div class="program-check-list" aria-label="신청 프로그램 목록" data-program-application-list>
-            <article><span class="status open">접수완료</span><strong>베이킹 교육과정</strong><p>2026.04.28 - 2026.06.04 · 1층 공유주방</p></article>
+
+        <form class="container space-reservation-form program-apply-form" aria-label="교육 프로그램 신청 작성" data-program-apply-form>
+          <h3>프로그램 신청</h3>
+          <div class="space-reservation-fields">
+            <div class="reservation-basic-fields">
+              <label>프로그램명
+                <select name="programName" required>
+                  <option value="베이킹 교육과정">베이킹 교육과정</option>
+                  <option value="바리스타 양성과정 2급">바리스타 양성과정 2급</option>
+                  <option value="원예심리치료교실">원예심리치료교실</option>
+                </select>
+              </label>
+              <label>신청자명<input name="applicant" type="text" placeholder="이름을 입력하세요" required></label>
+              <label>연락처<input name="phone" type="tel" placeholder="010-0000-0000" required></label>
+              <label>참여자 구분
+                <select name="group">
+                  <option>성인</option>
+                  <option>청소년</option>
+                  <option>가족</option>
+                  <option>단체</option>
+                </select>
+              </label>
+            </div>
+            <label class="reservation-purpose">신청 메모<textarea name="memo" rows="5" placeholder="참여 목적이나 요청사항을 적어주세요"></textarea></label>
+            <p class="form-status" data-form-status aria-live="polite"></p>
+            <div class="reservation-action"><button type="submit">신청하기</button></div>
           </div>
-        </div>
+        </form>
       </section>
     </main>
 
