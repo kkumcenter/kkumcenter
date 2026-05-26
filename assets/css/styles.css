@@ -491,11 +491,11 @@ button.nav-link.nav-menu-link {
   top: 82px;
   right: max(24px, calc((100% - 1480px) / 2));
   z-index: 60;
-  width: min(500px, calc(100vw - 36px));
+  width: min(440px, calc(100vw - 36px));
   height: calc(100vh - 82px);
   padding: 16px 18px 22px;
   border-left: 1px solid rgba(31, 90, 67, 0.12);
-  background: rgba(255, 253, 247, 0.98);
+  background: rgba(31, 90, 67, 0.08);
   box-shadow: -26px 28px 60px rgba(13, 36, 26, 0.16);
   opacity: 0;
   pointer-events: none;
@@ -523,7 +523,7 @@ button.nav-link.nav-menu-link {
   padding: 20px 18px;
   border: 1px solid rgba(31, 90, 67, 0.1);
   border-radius: 20px 0 0 20px;
-  background: #fff;
+  background: rgba(31, 90, 67, 0.08);
 }
 
 .all-menu-list {
@@ -535,8 +535,8 @@ button.nav-link.nav-menu-link {
   display: grid;
   grid-template-columns: 118px minmax(0, 1fr);
   align-items: start;
-  gap: 14px;
-  padding: 14px 0;
+  gap: 22px;
+  padding: 12px 0;
   border-bottom: 1px solid rgba(28, 37, 33, 0.08);
 }
 
@@ -563,10 +563,10 @@ button.nav-link.nav-menu-link {
 }
 
 .all-menu-links a {
-  min-height: 36px;
+  min-height: 32px;
   display: inline-flex;
   align-items: center;
-  padding: 0 8px;
+  padding: 0 6px;
   border-radius: 0;
   color: #46544e;
   font-size: 14.5px;
