@@ -1558,6 +1558,23 @@ h2,
   margin-bottom: 18px;
 }
 
+.news-search-heading {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.55fr) minmax(0, 1.45fr);
+  gap: 46px;
+  align-items: start;
+  margin-bottom: 18px;
+}
+
+.news-search-heading .section-heading.news-page-heading {
+  margin-bottom: 0;
+}
+
+.news-search-heading .notice-search {
+  width: min(760px, 100%);
+  justify-self: end;
+}
+
 .news-page-rule {
   height: 2px;
   margin-bottom: 22px;
@@ -6982,12 +6999,18 @@ h2,
   .rental-layout,
   .space-detail-layout,
   .program-search,
+  .news-search-heading,
   .contact-panel,
   .timeline,
   .reservation-mock,
   .news-layout {
     grid-template-columns: 1fr;
     gap: 40px;
+  }
+
+  .news-search-heading .notice-search {
+    width: 100%;
+    justify-self: stretch;
   }
 
   .shortcut-dafarm-panel {
