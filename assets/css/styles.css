@@ -491,9 +491,10 @@ button.nav-link.nav-menu-link {
   top: 82px;
   right: max(24px, calc((100% - 1480px) / 2));
   z-index: 60;
-  width: min(440px, calc(100vw - 36px));
-  height: calc(100vh - 82px);
-  padding: 16px 18px 22px;
+  width: min(390px, calc(100vw - 36px));
+  height: auto;
+  max-height: calc(100vh - 112px);
+  padding: 14px 16px 16px;
   border-left: 1px solid rgba(31, 90, 67, 0.12);
   background: #f5f2e9;
   box-shadow: -26px 28px 60px rgba(13, 36, 26, 0.16);
@@ -517,10 +518,11 @@ button.nav-link.nav-menu-link {
 
 .all-menu-inner {
   width: 100%;
-  height: 100%;
+  height: auto;
+  max-height: calc(100vh - 144px);
   margin: 0 auto;
   overflow-y: auto;
-  padding: 20px 18px;
+  padding: 18px 16px;
   border: 1px solid rgba(31, 90, 67, 0.1);
   border-radius: 20px 0 0 20px;
   background: #fffdf7;
@@ -533,10 +535,10 @@ button.nav-link.nav-menu-link {
 
 .all-menu-row {
   display: grid;
-  grid-template-columns: 118px minmax(0, 1fr);
+  grid-template-columns: 108px minmax(0, 1fr);
   align-items: start;
-  gap: 22px;
-  padding: 12px 0;
+  gap: 12px;
+  padding: 11px 0;
   border-bottom: 1px solid rgba(28, 37, 33, 0.08);
 }
 
@@ -587,8 +589,8 @@ button.nav-link.nav-menu-link {
 }
 
 .all-menu-login {
-  margin-top: 18px;
-  padding-top: 18px;
+  margin-top: 12px;
+  padding-top: 14px;
   border-top: 1px solid rgba(31, 90, 67, 0.14);
 }
 
@@ -1602,6 +1604,15 @@ h2,
 }
 
 .news-page-rule + .program-check-layout {
+  margin-top: 0;
+}
+
+.news-page-rule + .contact-tools {
+  margin-top: 0;
+}
+
+.news-page-rule + .program-list,
+.news-page-rule + .space-application-grid {
   margin-top: 0;
 }
 
