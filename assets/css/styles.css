@@ -5630,7 +5630,7 @@ h2,
 }
 
 .contact-form-row-split {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(150px, 0.58fr);
 }
 
 .contact-form-row label {
@@ -5665,6 +5665,81 @@ h2,
   min-width: 172px;
   min-height: 58px;
   margin-top: 4px;
+}
+
+.contact-followup-wrap {
+  display: grid;
+  gap: 24px;
+  margin-top: 34px;
+}
+
+.contact-lookup-section,
+.contact-answer-section {
+  padding: 34px 38px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: 0 18px 44px rgba(23, 42, 31, 0.07);
+}
+
+.contact-followup-heading,
+.contact-answer-section > div:first-child {
+  margin-bottom: 22px;
+}
+
+.contact-followup-heading h3,
+.contact-answer-section h3 {
+  margin: 6px 0 0;
+  color: var(--ink);
+  font-family: var(--font-title);
+  font-size: 30px;
+  line-height: 1.24;
+  font-weight: 500;
+}
+
+.contact-lookup-form.contact-board-form {
+  margin-top: 0;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.contact-form-row-lookup {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(150px, 0.58fr) auto;
+  align-items: end;
+}
+
+.contact-form-row-lookup button {
+  justify-self: end;
+  margin-top: 0;
+  white-space: nowrap;
+}
+
+.contact-answer-card {
+  display: grid;
+  gap: 10px;
+  padding: 26px 28px;
+  border: 1px solid rgba(31, 90, 67, 0.12);
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(248, 216, 137, 0.18), rgba(230, 240, 220, 0.38));
+}
+
+.contact-answer-card span {
+  color: var(--clay);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.contact-answer-card strong {
+  color: var(--ink);
+  font-size: 21px;
+  line-height: 1.38;
+}
+
+.contact-answer-card p {
+  margin: 0;
+  color: var(--muted-ink);
+  font-size: 16px;
+  line-height: 1.68;
 }
 
 .login-page {
@@ -7864,6 +7939,10 @@ h2,
     grid-template-columns: 1fr;
   }
 
+  .contact-form-row-lookup {
+    grid-template-columns: 1fr;
+  }
+
   .contact-form-row label + label {
     border-top: 0;
     border-left: 0;
@@ -7885,6 +7964,11 @@ h2,
 
   .contact-board-form button {
     width: 100%;
+  }
+
+  .contact-lookup-section,
+  .contact-answer-section {
+    padding: 28px 22px;
   }
 
   .transport-list article {

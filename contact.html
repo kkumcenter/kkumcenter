@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>문의 / 제안 | 군북면 꿈키움센터</title>
     <meta name="description" content="군북면 꿈키움센터 문의와 제안 안내입니다.">
-    <link rel="stylesheet" href="assets/css/styles.css?v=20260526-8">
+    <link rel="stylesheet" href="assets/css/styles.css?v=20260526-9">
   </head>
   <body>
     <a class="skip-link" href="#main">본문 바로가기</a>
@@ -59,11 +59,39 @@
             <div class="contact-form-row contact-form-row-split">
               <label><span>작성자</span><input type="text" placeholder="이름을 입력하세요"></label>
               <label><span>연락처</span><input type="tel" placeholder="연락처를 입력하세요"></label>
+              <label class="password-field"><span>비밀번호</span><input type="password" placeholder="비밀번호 입력"></label>
             </div>
             <label><span>제목</span><input type="text" placeholder="제목을 입력하세요"></label>
             <label><span>내용</span><textarea rows="8" placeholder="문의 또는 제안 내용을 입력하세요"></textarea></label>
             <button type="button">제출하기</button>
           </form>
+        </div>
+        <div class="container contact-followup-wrap">
+          <section class="contact-lookup-section" aria-labelledby="contact-lookup-title">
+            <div class="contact-followup-heading">
+              <p class="eyebrow">Reply Check</p>
+              <h3 id="contact-lookup-title">문의 / 제안 조회</h3>
+            </div>
+            <form class="contact-form contact-board-form contact-lookup-form" aria-label="문의 제안 조회 양식 목업">
+              <div class="contact-form-row contact-form-row-lookup">
+                <label><span>작성자명</span><input type="text" placeholder="이름을 입력하세요"></label>
+                <label><span>연락처</span><input type="tel" placeholder="연락처를 입력하세요"></label>
+                <label class="password-field"><span>비밀번호</span><input type="password" placeholder="비밀번호 입력"></label>
+                <button type="button">조회하기</button>
+              </div>
+            </form>
+          </section>
+          <section class="contact-answer-section" aria-labelledby="contact-answer-title">
+            <div>
+              <p class="eyebrow">Answer</p>
+              <h3 id="contact-answer-title">답변 확인</h3>
+            </div>
+            <div class="contact-answer-card">
+              <span>조회 결과</span>
+              <strong>제출한 문의와 운영자 답변이 이곳에 표시됩니다.</strong>
+              <p>작성자명, 연락처, 비밀번호로 조회하면 제출 내용과 답변 상태를 한눈에 확인할 수 있습니다.</p>
+            </div>
+          </section>
         </div>
       </section>
     </main>
