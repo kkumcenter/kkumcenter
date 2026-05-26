@@ -220,6 +220,36 @@ document.querySelectorAll("[data-home-board-tabs]").forEach((tabList) => {
   });
 });
 
+document.querySelectorAll("[data-board-pagination]").forEach((pagination) => {
+  const buttons = Array.from(pagination.querySelectorAll("[data-board-page]"));
+  const boardWrap = pagination.closest(".board-table-wrap");
+  const panels = Array.from(boardWrap?.querySelectorAll("[data-board-page-panel]") || []);
+
+  if (!buttons.length || !panels.length) return;
+
+  buttons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const targetPage = button.getAttribute("data-board-page");
+
+      buttons.forEach((item) => {
+        const isActive = item === button;
+        item.classList.toggle("is-active", isActive);
+        if (isActive) {
+          item.setAttribute("aria-current", "page");
+        } else {
+          item.removeAttribute("aria-current");
+        }
+      });
+
+      panels.forEach((panel) => {
+        const isActive = panel.getAttribute("data-board-page-panel") === targetPage;
+        panel.classList.toggle("is-active", isActive);
+        panel.hidden = !isActive;
+      });
+    });
+  });
+});
+
 const aboutSlides = Array.from(document.querySelectorAll("[data-about-slide]"));
 const aboutDots = Array.from(document.querySelectorAll("[data-about-dot]"));
 const aboutPrev = document.querySelector("[data-about-prev]");
