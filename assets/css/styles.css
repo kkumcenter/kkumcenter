@@ -4843,9 +4843,9 @@ h2,
   margin-top: auto;
   padding: 0 18px;
   border-radius: 999px;
-  color: var(--forest);
-  background: #F8D889;
-  box-shadow: 0 10px 22px rgba(18, 59, 43, 0.08);
+  color: #fff;
+  background: var(--forest);
+  box-shadow: 0 10px 22px rgba(18, 59, 43, 0.14);
   font-size: 18px;
   font-weight: 700;
   text-decoration: none;
@@ -4854,9 +4854,9 @@ h2,
 
 .space-application-card a:hover,
 .space-application-card a:focus-visible {
-  color: #123b2b;
-  background: #F3CB6F;
-  box-shadow: 0 14px 28px rgba(18, 59, 43, 0.14);
+  color: #fff;
+  background: var(--pine);
+  box-shadow: 0 14px 28px rgba(18, 59, 43, 0.2);
   transform: translateY(-2px);
 }
 
