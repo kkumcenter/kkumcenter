@@ -495,7 +495,7 @@ button.nav-link.nav-menu-link {
   height: calc(100vh - 82px);
   padding: 16px 18px 22px;
   border-left: 1px solid rgba(31, 90, 67, 0.12);
-  background: rgba(31, 90, 67, 0.08);
+  background: #f5f2e9;
   box-shadow: -26px 28px 60px rgba(13, 36, 26, 0.16);
   opacity: 0;
   pointer-events: none;
@@ -523,7 +523,7 @@ button.nav-link.nav-menu-link {
   padding: 20px 18px;
   border: 1px solid rgba(31, 90, 67, 0.1);
   border-radius: 20px 0 0 20px;
-  background: rgba(31, 90, 67, 0.08);
+  background: #fffdf7;
 }
 
 .all-menu-list {
@@ -600,16 +600,17 @@ button.nav-link.nav-menu-link {
   gap: 8px;
   width: 100%;
   border-radius: 999px;
-  color: var(--forest);
+  color: #fff;
   font-size: 16px;
   font-weight: 700;
-  background: rgba(31, 90, 67, 0.08);
+  background: #1f5a43;
+  box-shadow: 0 12px 26px rgba(31, 90, 67, 0.18);
   transition: color 0.18s ease, background 0.18s ease, transform 0.18s ease;
 }
 
 .all-menu-login-link:hover {
   color: #fff;
-  background: var(--forest);
+  background: #173f30;
   transform: translateY(-1px);
 }
 
@@ -5341,6 +5342,11 @@ h2,
   cursor: pointer;
 }
 
+.search-panel button {
+  width: 112px;
+  flex: 0 0 112px;
+}
+
 .program-toolbar,
 .notice-tools {
   display: flex;
@@ -7976,6 +7982,11 @@ h2,
 
   .news-search-heading .notice-search button {
     min-width: 0;
+  }
+
+  .search-panel button {
+    width: 100%;
+    flex-basis: auto;
   }
 
   .contact-panel .button.primary {
