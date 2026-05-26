@@ -1568,6 +1568,10 @@ h2,
   margin-top: 0;
 }
 
+.news-page-rule + .program-check-layout {
+  margin-top: 0;
+}
+
 .section-heading.compact {
   margin-bottom: 0;
 }
