@@ -1571,32 +1571,28 @@ h2,
 }
 
 .news-search-heading .notice-search {
-  width: min(760px, 100%);
-  justify-self: end;
-}
-
-#notice .notice-search {
   display: grid;
   grid-template-columns: minmax(138px, 0.28fr) minmax(0, 1fr) minmax(160px, 0.32fr);
   gap: 10px;
   width: min(860px, 100%);
+  justify-self: end;
 }
 
-#notice .notice-search select,
-#notice .notice-search input,
-#notice .notice-search button {
+.news-search-heading .notice-search select,
+.news-search-heading .notice-search input,
+.news-search-heading .notice-search button {
   width: 100%;
   min-width: 0;
 }
 
-#notice .notice-search button {
+.news-search-heading .notice-search button {
   min-width: 160px;
   padding-inline: 28px;
 }
 
 .news-page-rule {
   height: 2px;
-  margin-bottom: 22px;
+  margin-bottom: 18px;
   background: var(--forest);
 }
 
@@ -2462,12 +2458,6 @@ h2,
 .gallery-page-heading h2::after {
   display: none;
   content: none;
-}
-
-.gallery-page-heading + .gallery-grid-list {
-  margin-top: 30px;
-  padding-top: 20px;
-  border-top: 2px solid var(--forest);
 }
 
 .gallery-shell {
@@ -5457,15 +5447,17 @@ h2,
 }
 
 .notice-tools {
-  margin-top: 18px;
+  margin-top: 0;
   margin-bottom: 24px;
+  padding-top: 0;
+  border-top: 0;
 }
 
 .notice-search input {
   min-width: 460px;
 }
 
-#notice .notice-search input {
+.news-search-heading .notice-search input {
   min-width: 0;
 }
 
@@ -5479,10 +5471,6 @@ h2,
 
 .board-table {
   min-width: 780px;
-  border-top: 2px solid var(--forest);
-}
-
-#notice .board-table {
   border-top: 0;
 }
 
@@ -5550,6 +5538,14 @@ h2,
 
 .gallery-grid-list {
   grid-template-columns: repeat(4, 1fr);
+}
+
+.gallery-board-wrap .gallery-grid-list {
+  margin-top: 0;
+}
+
+.gallery-board-wrap .gallery-grid-list[hidden] {
+  display: none;
 }
 
 .gallery-grid-list article {
@@ -7974,11 +7970,11 @@ h2,
     min-width: 0;
   }
 
-  #notice .notice-search {
+  .news-search-heading .notice-search {
     grid-template-columns: 1fr;
   }
 
-  #notice .notice-search button {
+  .news-search-heading .notice-search button {
     min-width: 0;
   }
 

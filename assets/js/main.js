@@ -274,7 +274,7 @@ document.querySelectorAll("[data-home-board-tabs]").forEach((tabList) => {
 
 document.querySelectorAll("[data-board-pagination]").forEach((pagination) => {
   const buttons = Array.from(pagination.querySelectorAll("[data-board-page]"));
-  const boardWrap = pagination.closest(".board-table-wrap");
+  const boardWrap = pagination.closest("[data-board-scope]") || pagination.closest(".board-table-wrap");
   const panels = Array.from(boardWrap?.querySelectorAll("[data-board-page-panel]") || []);
 
   if (!buttons.length || !panels.length) return;
