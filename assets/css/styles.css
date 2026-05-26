@@ -1617,7 +1617,13 @@ h2,
 }
 
 .section-heading.compact {
-  margin-bottom: 0;
+  margin-bottom: 18px;
+}
+
+.subnav + .section > .container.section-heading,
+.subnav + .section > .container.program-search,
+.subnav + .section > .container.news-search-heading {
+  margin-bottom: 18px;
 }
 
 .section-heading.compact h2 {
