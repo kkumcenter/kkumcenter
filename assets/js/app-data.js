@@ -1,6 +1,7 @@
 (() => {
   const SPACE_KEY = "kkoom-space-reservations";
   const PROGRAM_KEY = "kkoom-program-applications";
+  const INQUIRY_KEY = "kkoom-inquiries";
 
   const SPACE_SLUGS = {
     공유주방: "kitchen",
@@ -131,6 +132,32 @@
     return window.KKOOM_SUPABASE_CLIENT;
   };
 
+  const getSupabaseConfig = () => {
+    const config = window.KKOOM_SUPABASE || {};
+    return config.url && config.anonKey ? config : null;
+  };
+
+  const callPublicSubmitFunction = async (action, payload) => {
+    const config = getSupabaseConfig();
+    if (!config) return null;
+
+    const response = await window.fetch(`${config.url}/functions/v1/public-submit`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        apikey: config.anonKey,
+        Authorization: `Bearer ${config.anonKey}`,
+      },
+      body: JSON.stringify({ action, payload }),
+    });
+
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      throw new Error(result.error || "Supabase 서버 함수 처리 중 문제가 발생했습니다.");
+    }
+    return result;
+  };
+
   const safeParse = (key) => {
     try {
       return JSON.parse(window.localStorage.getItem(key) || "[]");
@@ -179,6 +206,8 @@
     status.classList.toggle("is-error", isError);
   };
 
+  const getLookupPassword = (value, phone) => value || phone;
+
   const getSession = async (client) => {
     const { data } = await client.auth.getSession();
     return data?.session || null;
@@ -199,7 +228,25 @@
     if (!client) return false;
 
     const session = await getSession(client);
-    if (!session) return false;
+    if (!session) {
+      try {
+        return await callPublicSubmitFunction("space-reservation", {
+          reservationNo: reservation.id,
+          spaceName: reservation.spaceName,
+          applicantName: reservation.applicant,
+          phone: reservation.phone,
+          lookupPassword: getLookupPassword(reservation.lookupPassword, reservation.phone),
+          reservationDate: reservation.startDate,
+          endDate: reservation.endDate,
+          purpose: reservation.purpose || "공간 이용",
+          headcount: 1,
+          note: reservation.memo || null,
+        });
+      } catch (error) {
+        console.warn("Supabase public-submit function is unavailable.", error);
+        return false;
+      }
+    }
 
     const spaceId = await findSpaceId(client, reservation.spaceName);
     if (!spaceId) {
@@ -252,7 +299,23 @@
     if (!client) return false;
 
     const session = await getSession(client);
-    if (!session) return false;
+    if (!session) {
+      try {
+        const result = await callPublicSubmitFunction("program-application", {
+          applicationNo: application.id,
+          programName: application.programName,
+          applicantName: application.applicant,
+          phone: application.phone,
+          lookupPassword: getLookupPassword(application.lookupPassword, application.phone),
+          birthYear: Number(application.birthYear),
+          region: application.region,
+        });
+        return result?.status || false;
+      } catch (error) {
+        console.warn("Supabase public-submit function is unavailable.", error);
+        return false;
+      }
+    }
 
     const program = await findProgram(client, application.programName);
     if (!program) {
@@ -332,6 +395,158 @@
       createdAt: item.created_at,
       source: "supabase",
     }));
+  };
+
+  const insertSupabaseInquiry = async (inquiry) => {
+    const client = getSupabaseClient();
+    if (!client) return false;
+
+    const session = await getSession(client);
+    if (!session) {
+      try {
+        return await callPublicSubmitFunction("inquiry", {
+          inquiryNo: inquiry.id,
+          writerName: inquiry.writerName,
+          phone: inquiry.phone,
+          lookupPassword: inquiry.lookupPassword,
+          title: inquiry.title,
+          content: inquiry.content,
+        });
+      } catch (error) {
+        console.warn("Supabase public-submit function is unavailable.", error);
+        return false;
+      }
+    }
+
+    const { error } = await client.from("inquiries").insert({
+      inquiry_no: inquiry.id,
+      user_id: session.user.id,
+      writer_type: "member",
+      writer_name: inquiry.writerName,
+      phone: inquiry.phone,
+      title: inquiry.title,
+      content: inquiry.content,
+      status: "received",
+    });
+
+    if (error) throw error;
+    return true;
+  };
+
+  const lookupSupabaseInquiry = async ({ writerName, phone, lookupPassword }) => {
+    try {
+      const result = await callPublicSubmitFunction("inquiry-lookup", {
+        writerName,
+        phone,
+        lookupPassword,
+      });
+      return result?.items || null;
+    } catch (error) {
+      console.warn("Supabase public-submit function is unavailable.", error);
+      return null;
+    }
+  };
+
+  const setupContactForms = () => {
+    const form = document.querySelector("[data-contact-form]");
+    if (form) {
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const inquiry = {
+          id: createId("Q"),
+          writerName: fieldValue(form, "writerName"),
+          phone: fieldValue(form, "phone"),
+          lookupPassword: fieldValue(form, "lookupPassword"),
+          title: fieldValue(form, "title"),
+          content: fieldValue(form, "content"),
+          status: "접수",
+          answer: "",
+          createdAt: new Date().toISOString(),
+        };
+
+        if (!inquiry.writerName || !inquiry.phone || !inquiry.lookupPassword || !inquiry.title || !inquiry.content) {
+          setFormStatus(form, "작성자, 연락처, 비밀번호, 제목, 내용을 입력해 주세요.", true);
+          return;
+        }
+
+        const submitButton = form.querySelector('button[type="submit"]');
+        submitButton.disabled = true;
+
+        try {
+          const savedToSupabase = await insertSupabaseInquiry(inquiry);
+          if (!savedToSupabase) {
+            const items = safeParse(INQUIRY_KEY);
+            safeSave(INQUIRY_KEY, [inquiry, ...items]);
+          }
+
+          setFormStatus(
+            form,
+            savedToSupabase
+              ? "문의가 접수되었습니다. 답변은 조회 영역에서 확인할 수 있습니다."
+              : "문의가 임시 저장되었습니다. Supabase 연결 후 실제 저장됩니다.",
+          );
+          form.reset();
+        } catch (error) {
+          setFormStatus(form, error.message || "문의 저장 중 문제가 발생했습니다.", true);
+        } finally {
+          submitButton.disabled = false;
+        }
+      });
+    }
+
+    const lookupForm = document.querySelector("[data-contact-lookup-form]");
+    const answerCard = document.querySelector("[data-contact-answer]");
+    if (!lookupForm || !answerCard) return;
+
+    lookupForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const lookup = {
+        writerName: fieldValue(lookupForm, "writerName"),
+        phone: fieldValue(lookupForm, "phone"),
+        lookupPassword: fieldValue(lookupForm, "lookupPassword"),
+      };
+
+      if (!lookup.writerName || !lookup.phone || !lookup.lookupPassword) {
+        setFormStatus(lookupForm, "작성자명, 연락처, 비밀번호를 입력해 주세요.", true);
+        return;
+      }
+
+      const submitButton = lookupForm.querySelector('button[type="submit"]');
+      submitButton.disabled = true;
+
+      try {
+        const supabaseItems = await lookupSupabaseInquiry(lookup);
+        const items =
+          supabaseItems ||
+          safeParse(INQUIRY_KEY).filter(
+            (item) =>
+              item.writerName === lookup.writerName &&
+              item.phone === lookup.phone &&
+              item.lookupPassword === lookup.lookupPassword,
+          );
+
+        if (!items.length) {
+          answerCard.innerHTML = "<span>조회 결과</span><strong>일치하는 문의가 없습니다.</strong><p>작성자명, 연락처, 비밀번호를 다시 확인해 주세요.</p>";
+        } else {
+          answerCard.innerHTML = items
+            .map(
+              (item) => `
+                <span>${escapeHtml(item.status || "접수")}</span>
+                <strong>${escapeHtml(item.title)}</strong>
+                <p>${escapeHtml(item.answer || "아직 답변이 등록되지 않았습니다.")}</p>
+              `,
+            )
+            .join("");
+        }
+        setFormStatus(lookupForm, "문의 조회가 완료되었습니다.");
+      } catch (error) {
+        setFormStatus(lookupForm, error.message || "문의 조회 중 문제가 발생했습니다.", true);
+      } finally {
+        submitButton.disabled = false;
+      }
+    });
   };
 
   const setupSpaceReservationForms = () => {
@@ -566,6 +781,7 @@
 
   setupSpaceReservationForms();
   setupProgramApplyForm();
+  setupContactForms();
   setupCheckLists();
   setupAdminPage();
 })();

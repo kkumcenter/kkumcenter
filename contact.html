@@ -56,15 +56,16 @@
           <div class="board-count">꿈키움센터 운영, 프로그램, 공간 이용에 관한 의견을 남겨주세요.</div>
         </div>
         <div class="container contact-board-wrap">
-          <form class="contact-form contact-board-form" aria-label="문의 제안 작성 양식 목업">
+          <form class="contact-form contact-board-form" aria-label="문의 제안 작성 양식" data-contact-form>
             <div class="contact-form-row contact-form-row-split">
-              <label><span>작성자</span><input type="text" placeholder="이름을 입력하세요"></label>
-              <label><span>연락처</span><input type="tel" placeholder="연락처를 입력하세요"></label>
-              <label class="password-field"><span>비밀번호</span><input type="password" placeholder="비밀번호 입력"></label>
+              <label><span>작성자</span><input name="writerName" type="text" placeholder="이름을 입력하세요" required></label>
+              <label><span>연락처</span><input name="phone" type="tel" placeholder="연락처를 입력하세요" required></label>
+              <label class="password-field"><span>비밀번호</span><input name="lookupPassword" type="password" placeholder="비밀번호 입력" required></label>
             </div>
-            <label><span>제목</span><input type="text" placeholder="제목을 입력하세요"></label>
-            <label><span>내용</span><textarea rows="8" placeholder="문의 또는 제안 내용을 입력하세요"></textarea></label>
-            <button type="button">제출하기</button>
+            <label><span>제목</span><input name="title" type="text" placeholder="제목을 입력하세요" required></label>
+            <label><span>내용</span><textarea name="content" rows="8" placeholder="문의 또는 제안 내용을 입력하세요" required></textarea></label>
+            <p class="form-status" data-form-status aria-live="polite"></p>
+            <button type="submit">제출하기</button>
           </form>
         </div>
         <div class="container contact-followup-wrap">
@@ -73,13 +74,14 @@
               <p class="eyebrow">Reply Check</p>
               <h3 id="contact-lookup-title">문의 / 제안 조회</h3>
             </div>
-            <form class="contact-form contact-board-form contact-lookup-form" aria-label="문의 제안 조회 양식 목업">
+            <form class="contact-form contact-board-form contact-lookup-form" aria-label="문의 제안 조회 양식" data-contact-lookup-form>
               <div class="contact-form-row contact-form-row-lookup">
-                <label><span>작성자명</span><input type="text" placeholder="이름을 입력하세요"></label>
-                <label><span>연락처</span><input type="tel" placeholder="연락처를 입력하세요"></label>
-                <label class="password-field"><span>비밀번호</span><input type="password" placeholder="비밀번호 입력"></label>
-                <button type="button">조회하기</button>
+                <label><span>작성자명</span><input name="writerName" type="text" placeholder="이름을 입력하세요" required></label>
+                <label><span>연락처</span><input name="phone" type="tel" placeholder="연락처를 입력하세요" required></label>
+                <label class="password-field"><span>비밀번호</span><input name="lookupPassword" type="password" placeholder="비밀번호 입력" required></label>
+                <button type="submit">조회하기</button>
               </div>
+              <p class="form-status" data-form-status aria-live="polite"></p>
             </form>
           </section>
           <section class="contact-answer-section" aria-labelledby="contact-answer-title">
@@ -87,7 +89,7 @@
               <p class="eyebrow">Answer</p>
               <h3 id="contact-answer-title">답변 확인</h3>
             </div>
-            <div class="contact-answer-card">
+            <div class="contact-answer-card" data-contact-answer>
               <span>조회 결과</span>
               <strong>제출한 문의와 운영자 답변이 이곳에 표시됩니다.</strong>
               <p>작성자명, 연락처, 비밀번호로 조회하면 제출 내용과 답변 상태를 한눈에 확인할 수 있습니다.</p>
@@ -108,5 +110,8 @@
       <div class="container footer-meta">COPYRIGHT © GUNBUK KKUM CENTER. ALL RIGHTS RESERVED.</div>
     </footer>
     <script src="assets/js/main.js?v=20260526-5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/js/supabase-config.js?v=20260527-4"></script>
+    <script src="assets/js/app-data.js?v=20260527-4"></script>
   </body>
 </html>
