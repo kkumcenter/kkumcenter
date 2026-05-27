@@ -5,7 +5,7 @@
 -- 실제 운영 전 최종 관리자 이메일이 확정되면 아래 이메일만 교체하면 됩니다.
 insert into public.admin_email_allowlist (email, note, is_active)
 values
-  ('ddbbkk@gmail.com', '임시 관리자 계정. 실제 운영 전 변경 가능', true),
+  ('sang4307@naver.com', '임시 관리자 계정. 실제 운영 전 변경 가능', true),
   ('kkumcenter@gmail.com', '임시 관리자 계정. 실제 운영 전 변경 가능', true)
 on conflict (email) do update
 set
@@ -19,7 +19,7 @@ update public.profiles
 set
   role = 'admin',
   updated_at = now()
-where lower(email) in ('ddbbkk@gmail.com', 'kkumcenter@gmail.com');
+where lower(email) in ('sang4307@naver.com', 'kkumcenter@gmail.com');
 
 insert into public.spaces (
   slug,
