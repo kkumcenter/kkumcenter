@@ -74,7 +74,7 @@ supabase functions deploy public-submit
 현재 임시 관리자 이메일은 아래 두 개입니다.
 
 - `ddbbkk@gmail.com`
-- `tedoorynote@naver.com`
+- `kkumcenter@gmail.com`
 
 실제 운영 전 최종 관리자 이메일이 확정되면 `supabase/seed.sql`의 이메일만 변경하면 됩니다.
 

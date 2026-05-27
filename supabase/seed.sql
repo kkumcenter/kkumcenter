@@ -6,7 +6,7 @@
 insert into public.admin_email_allowlist (email, note, is_active)
 values
   ('ddbbkk@gmail.com', '임시 관리자 계정. 실제 운영 전 변경 가능', true),
-  ('tedoorynote@naver.com', '임시 관리자 계정. 실제 운영 전 변경 가능', true)
+  ('kkumcenter@gmail.com', '임시 관리자 계정. 실제 운영 전 변경 가능', true)
 on conflict (email) do update
 set
   note = excluded.note,
@@ -19,7 +19,7 @@ update public.profiles
 set
   role = 'admin',
   updated_at = now()
-where lower(email) in ('ddbbkk@gmail.com', 'tedoorynote@naver.com');
+where lower(email) in ('ddbbkk@gmail.com', 'kkumcenter@gmail.com');
 
 insert into public.spaces (
   slug,
