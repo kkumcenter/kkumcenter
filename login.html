@@ -3,9 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>로그인 | 군북면 꿈키움센터</title>
-    <meta name="description" content="군북면 꿈키움센터 로그인과 간편 가입 화면입니다.">
-    <link rel="stylesheet" href="assets/css/styles.css?v=20260527-3">
+    <title>관리자 로그인 | 군북면 꿈키움센터</title>
+    <meta name="description" content="군북면 꿈키움센터 관리자 로그인 화면입니다.">
+    <link rel="stylesheet" href="assets/css/styles.css?v=20260529-43">
   </head>
   <body>
     <a class="skip-link" href="#main">본문 바로가기</a>
@@ -21,61 +21,35 @@
           <div class="nav-group"><a class="nav-link" href="space-apply.html">공간시설</a><div class="nav-dropdown" data-menu-label="공간시설"><a href="space-apply.html">공간예약</a><a href="space-reservations.html">예약확인</a></div></div>
           <div class="nav-group"><a class="nav-link" href="programs.html">프로그램</a><div class="nav-dropdown" data-menu-label="프로그램"><a href="programs.html">교육신청</a><a href="program-check.html">신청확인</a></div></div>
           <div class="nav-group"><a class="nav-link" href="news.html">소식마당</a><div class="nav-dropdown" data-menu-label="소식마당"><a href="news.html">공지사항</a><a href="gallery.html">꿈센터 갤러리</a><a href="village-story.html">마을 이야기</a><a href="contact.html">문의 / 제안</a></div></div>
-          <div class="nav-group nav-dafarm-group"><a class="nav-link nav-external" href="https://dafarm.co.kr/" target="_blank" rel="noreferrer"><img class="nav-dafarm-logo" src="assets/images/dafarm-logo-top.jpg" alt="금산다팜 몰"></a><div class="nav-dropdown nav-dropdown-mobile-only" data-menu-label="금산다팜몰"><a href="https://dafarm.co.kr/" target="_blank" rel="noreferrer">금산다팜몰 바로가기</a></div></div>
-          <div class="nav-group nav-utility utility-start"><a class="nav-link nav-login active" href="login.html"><span class="login-person-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 12.4a4.1 4.1 0 1 0 0-8.2 4.1 4.1 0 0 0 0 8.2Z"></path><path d="M4.8 20.1c1.1-3.5 3.6-5.3 7.2-5.3s6.1 1.8 7.2 5.3"></path></svg></span><span>로그인</span></a></div>
-
+          <div class="nav-group nav-dafarm-group"><a class="nav-link nav-external" href="https://dafarm.co.kr/" target="_blank" rel="noreferrer"><img class="nav-dafarm-logo" src="assets/images/dafarm-logo-top.jpg" alt="금산다팜 몰"></a></div>
+          <div class="nav-group nav-utility utility-start"><a class="nav-link nav-login active" href="login.html" aria-label="로그인"><span class="login-person-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 12.4a4.1 4.1 0 1 0 0-8.2 4.1 4.1 0 0 0 0 8.2Z"></path><path d="M4.8 20.1c1.1-3.5 3.6-5.3 7.2-5.3s6.1 1.8 7.2 5.3"></path></svg></span><span class="sr-only">로그인</span></a></div>
         </nav>
       </div>
     </header>
 
     <main id="main" class="login-page">
-      <section class="login-hero">
-        <div class="container login-hero-inner">
-          <h1 class="login-welcome"><span>꿈키움센터 홈페이지를</span><span>방문해주셔서 감사합니다!</span></h1>
-        </div>
-      </section>
-
       <section class="section login-section">
-        <div class="container login-layout">
-          <article class="login-card">
-            <h2 class="sr-only" data-auth-title>로그인</h2>
-            <form class="login-form" aria-label="아이디 로그인 입력" data-auth-form>
+        <div class="container login-layout login-layout-single">
+          <article class="login-card admin-login-card">
+            <div class="login-card-heading">
+              <h2 data-auth-title>관리자 로그인</h2>
+            </div>
+            <form class="login-form" aria-label="관리자 로그인 입력" data-auth-form>
               <label>
-                <span class="sr-only">아이디</span>
-                <input type="email" placeholder="아이디를 입력해주세요." autocomplete="username" data-auth-email>
+                <span class="sr-only">이메일</span>
+                <input type="email" placeholder="이메일" autocomplete="username" data-auth-email required>
               </label>
               <label>
                 <span class="sr-only">비밀번호</span>
-                <input type="password" placeholder="비밀번호를 입력해주세요." autocomplete="current-password" minlength="6" data-auth-password>
+                <input type="password" placeholder="비밀번호" autocomplete="current-password" minlength="6" data-auth-password required>
               </label>
               <button type="submit" data-auth-submit>로그인</button>
             </form>
-            <nav class="account-links" aria-label="회원 계정 메뉴">
-              <button type="button" data-auth-mode="signup">회원가입</button>
-              <a href="#" data-auth-placeholder>아이디찾기</a>
-              <a href="#" data-auth-placeholder>비밀번호찾기</a>
-              <a href="admin.html">관리자</a>
-            </nav>
-            <button class="auth-mode-switch" type="button" data-auth-mode="login" hidden>로그인 화면으로 돌아가기</button>
-            <div class="auth-status" data-auth-status role="status" aria-live="polite"></div>
+            <div class="auth-status" data-auth-status role="status" aria-live="polite" hidden></div>
             <div class="auth-user-panel" data-auth-user hidden>
               <strong data-auth-user-email></strong>
+              <a class="auth-admin-link" href="admin.html">관리자페이지로 이동</a>
               <button type="button" data-auth-logout>로그아웃</button>
-            </div>
-          </article>
-
-          <article class="login-card social-card">
-            <h2>간편 가입 및 로그인</h2>
-            <div class="social-login-list" aria-label="간편 가입 및 로그인 선택">
-              <a class="social-login google" href="#" data-auth-provider="google">
-                <span class="social-left"><span class="social-mark">G</span><span class="social-label">구글</span></span>
-              </a>
-              <a class="social-login kakao" href="#" data-auth-provider="kakao">
-                <span class="social-left"><span class="social-mark" aria-hidden="true"><svg viewBox="0 0 32 32" focusable="false"><path d="M16 7C9.9 7 5 10.9 5 15.7c0 3.1 2 5.8 5 7.3l-.8 3.4a.7.7 0 0 0 1 .8l4-2.7c.6.1 1.2.1 1.8.1 6.1 0 11-3.9 11-8.8S22.1 7 16 7Z"></path></svg></span><span class="social-label">카카오</span></span>
-              </a>
-              <a class="social-login naver" href="#" data-auth-provider="naver">
-                <span class="social-left"><span class="social-mark">N</span><span class="social-label">네이버</span></span>
-              </a>
             </div>
           </article>
         </div>
@@ -87,14 +61,14 @@
         <div>
           <strong>군북면 꿈키움센터</strong>
           <p class="footer-contact">주소: 충청남도 금산군 군북면 두두리 371, 373-3 일원</p>
-          <p class="footer-contact">연락처: 운영자료 확정 후 입력</p>
+          <p class="footer-contact">연락처: 추후 안내</p>
         </div>
       </div>
       <div class="container footer-meta">COPYRIGHT © GUNBUK KKUM CENTER. ALL RIGHTS RESERVED.</div>
     </footer>
-    <script src="assets/js/main.js?v=20260526-5"></script>
+    <script src="assets/js/main.js?v=20260529-9"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/supabase-config.js?v=20260528-1"></script>
-    <script src="assets/js/auth.js?v=20260523-28"></script>
+    <script src="assets/js/auth.js?v=20260529-4"></script>
   </body>
 </html>

@@ -1,4 +1,4 @@
--- 군북면 꿈키움센터 Supabase seed data
+﻿-- 군북면 꿈키움센터 Supabase seed data
 -- 실행 순서: 1) schema.sql -> 2) seed.sql -> 3) policies.sql
 
 -- 임시 관리자 이메일입니다.
@@ -20,6 +20,55 @@ set
   role = 'admin',
   updated_at = now()
 where lower(email) in ('sang4307@naver.com', 'kkumcenter@gmail.com');
+
+-- 관리자 계정 확정: 기존 두 이메일은 항상 super_admin으로 유지합니다.
+insert into public.admin_email_allowlist (email, admin_role, note, is_active)
+values
+  ('sang4307@naver.com', 'super_admin', '관리자 계정', true),
+  ('kkumcenter@gmail.com', 'super_admin', '관리자 계정', true)
+on conflict (email) do update
+set
+  admin_role = excluded.admin_role,
+  note = excluded.note,
+  is_active = excluded.is_active,
+  updated_at = now();
+
+update public.profiles
+set
+  role = 'admin',
+  admin_role = 'super_admin',
+  name = '관리자',
+  updated_at = now()
+where lower(email) in ('sang4307@naver.com', 'kkumcenter@gmail.com');
+
+insert into public.staff_members (
+  email,
+  full_name,
+  display_name,
+  birth_date,
+  gender,
+  admin_role,
+  is_active,
+  auth_user_id
+)
+values
+  ('sang4307@naver.com', '관리자', '관리자', null, 'undisclosed', 'super_admin', true, null),
+  ('kkumcenter@gmail.com', '관리자', '관리자', null, 'undisclosed', 'super_admin', true, null)
+on conflict (email) do update
+set
+  full_name = excluded.full_name,
+  display_name = excluded.display_name,
+  admin_role = excluded.admin_role,
+  is_active = excluded.is_active,
+  updated_at = now();
+
+update public.staff_members staff
+set
+  auth_user_id = profiles.id,
+  updated_at = now()
+from public.profiles
+where lower(staff.email) = lower(profiles.email)
+  and lower(staff.email) in ('sang4307@naver.com', 'kkumcenter@gmail.com');
 
 insert into public.spaces (
   slug,

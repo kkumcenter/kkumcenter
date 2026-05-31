@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>프로그램 | 군북면 꿈키움센터</title>
     <meta name="description" content="군북면 꿈키움센터 교육신청 안내입니다.">
-    <link rel="stylesheet" href="assets/css/styles.css?v=20260527-3">
+    <link rel="stylesheet" href="assets/css/styles.css?v=20260530-6">
   </head>
   <body>
     <a class="skip-link" href="#main">본문 바로가기</a>
@@ -18,8 +18,8 @@
           <div class="nav-group"><a class="nav-link" href="space-apply.html">공간시설</a><div class="nav-dropdown" data-menu-label="공간시설"><a href="space-apply.html">공간예약</a><a href="space-reservations.html">예약확인</a></div></div>
           <div class="nav-group"><a class="nav-link active" href="programs.html">프로그램</a><div class="nav-dropdown" data-menu-label="프로그램"><a href="programs.html">교육신청</a><a href="program-check.html">신청확인</a></div></div>
           <div class="nav-group"><a class="nav-link" href="news.html">소식마당</a><div class="nav-dropdown" data-menu-label="소식마당"><a href="news.html">공지사항</a><a href="gallery.html">꿈센터 갤러리</a><a href="village-story.html">마을 이야기</a><a href="contact.html">문의 / 제안</a></div></div>
-          <div class="nav-group nav-dafarm-group"><a class="nav-link nav-external" href="https://dafarm.co.kr/" target="_blank" rel="noreferrer"><img class="nav-dafarm-logo" src="assets/images/dafarm-logo-top.jpg" alt="금산다팜 몰"></a><div class="nav-dropdown nav-dropdown-mobile-only" data-menu-label="금산다팜몰"><a href="https://dafarm.co.kr/" target="_blank" rel="noreferrer">금산다팜몰 바로가기</a></div></div>
-          <div class="nav-group nav-utility utility-start"><a class="nav-link nav-login" href="login.html"><span class="login-person-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 12.4a4.1 4.1 0 1 0 0-8.2 4.1 4.1 0 0 0 0 8.2Z"></path><path d="M4.8 20.1c1.1-3.5 3.6-5.3 7.2-5.3s6.1 1.8 7.2 5.3"></path></svg></span><span>로그인</span></a></div>
+          <div class="nav-group nav-dafarm-group"><a class="nav-link nav-external" href="https://dafarm.co.kr/" target="_blank" rel="noreferrer"><img class="nav-dafarm-logo" src="assets/images/dafarm-logo-top.jpg" alt="금산다팜 몰"></a></div>
+          <div class="nav-group nav-utility utility-start"><a class="nav-link nav-login" href="login.html" aria-label="스텝 로그인"><span class="login-person-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 12.4a4.1 4.1 0 1 0 0-8.2 4.1 4.1 0 0 0 0 8.2Z"></path><path d="M4.8 20.1c1.1-3.5 3.6-5.3 7.2-5.3s6.1 1.8 7.2 5.3"></path></svg></span><span class="sr-only">스텝 로그인</span></a></div>
 
         </nav>
       </div>
@@ -50,15 +50,18 @@
             <p class="eyebrow">Education Apply</p>
             <h2>교육신청</h2>
           </div>
-          <form class="search-panel" aria-label="프로그램 검색 목업">
-            <label>진행상태<select><option>전체</option><option>접수예정</option><option>접수중</option><option>접수마감</option></select></label>
-            <label>분야<select><option>전체</option><option>배움</option><option>돌봄</option><option>마을활동</option></select></label>
-            <label class="keyword-field">검색어<input type="search" placeholder="프로그램명 또는 키워드 입력"></label>
-            <button type="button">검색하기</button>
+          <form class="search-panel" aria-label="프로그램 검색" data-program-filter-form>
+            <span class="search-inline-label">상태</span>
+            <select name="status" aria-label="진행상태"><option value="all">전체</option><option value="scheduled">접수예정</option><option value="open">접수중</option><option value="closed">접수마감</option><option value="finished">종료</option></select>
+            <span class="search-inline-label">대상</span>
+            <select name="target" aria-label="대상"><option value="all">전체</option><option value="성인">성인</option><option value="아동청소년">아동청소년</option></select>
+            <span class="search-inline-label">검색어</span>
+            <input class="program-keyword-input" name="keyword" type="search" aria-label="프로그램명" placeholder="프로그램명">
+            <button type="submit">검색하기</button>
           </form>
         </div>
         <div class="container news-page-rule" aria-hidden="true"></div>
-        <div class="container program-list">
+        <div class="container program-list" data-program-list>
           <article class="program-list-card">
             <img src="assets/images/program-workshop.png" alt="베이킹 교육과정 이미지">
             <div><span class="status open">접수예정</span><h3>베이킹 교육과정</h3><p>공유주방에서 시작하는 주민 제과 교육 10회차 과정입니다.</p><dl><div><dt>진행기간</dt><dd>2026.04.28 - 2026.06.04</dd></div><div><dt>장소</dt><dd>1층 공유주방</dd></div><div><dt>정원</dt><dd>20명</dd></div></dl></div>
@@ -84,11 +87,14 @@
         <div>
           <strong>군북면 꿈키움센터</strong>
           <p class="footer-contact">주소: 충청남도 금산군 군북면 두두리 371, 373-3 일원</p>
-          <p class="footer-contact">연락처: 운영자료 확정 후 입력</p>
+          <p class="footer-contact">연락처: 추후 안내</p>
         </div>
       </div>
       <div class="container footer-meta">COPYRIGHT © GUNBUK KKUM CENTER. ALL RIGHTS RESERVED.</div>
     </footer>
-    <script src="assets/js/main.js?v=20260526-5"></script>
+    <script src="assets/js/main.js?v=20260529-9"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/js/supabase-config.js?v=20260528-1"></script>
+    <script src="assets/js/app-data.js?v=20260530-7"></script>
   </body>
 </html>

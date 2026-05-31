@@ -44,7 +44,7 @@ const allMenuItems = [
     label: "금산다팜몰",
     href: "https://dafarm.co.kr/",
     external: true,
-    links: [["금산다팜몰 바로가기", "https://dafarm.co.kr/", true]],
+    links: [],
   },
 ];
 
@@ -61,21 +61,25 @@ const createAllMenuPanel = () => {
             (item) => `
               <section class="all-menu-row">
                 <a class="all-menu-title" href="${item.href}"${item.external ? ' target="_blank" rel="noreferrer"' : ""}>${item.label}</a>
-                <div class="all-menu-links">
-                  ${item.links
-                    .map(
-                      ([label, href, external]) =>
-                        `<a href="${href}"${external ? ' target="_blank" rel="noreferrer"' : ""}>${label}</a>`,
-                    )
-                    .join("")}
-                </div>
+                ${
+                  item.links.length
+                    ? `<div class="all-menu-links">
+                        ${item.links
+                          .map(
+                            ([label, href, external]) =>
+                              `<a href="${href}"${external ? ' target="_blank" rel="noreferrer"' : ""}>${label}</a>`,
+                          )
+                          .join("")}
+                      </div>`
+                    : ""
+                }
               </section>
             `,
           )
           .join("")}
       </div>
       <div class="all-menu-login">
-        <a class="all-menu-login-link" href="login.html">
+        <a class="all-menu-login-link" href="login.html" aria-label="로그인">
           <span class="login-person-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" focusable="false">
               <path d="M20 21a8 8 0 0 0-16 0"></path>
@@ -121,7 +125,7 @@ const setupAllMenu = () => {
       if (allMenuToggle.getAttribute("aria-expanded") === "false") {
         allMenuPanel.hidden = true;
       }
-    }, 280);
+    }, 580);
   };
 
   const openAllMenu = () => {
@@ -170,6 +174,51 @@ const setupAllMenu = () => {
 
 setupAllMenu();
 
+const formatPhoneNumber = (value) => {
+  const digits = String(value || "").replace(/\D/g, "").slice(0, 11);
+
+  if (digits.startsWith("02")) {
+    if (digits.length <= 2) return digits;
+    if (digits.length <= 5) return `${digits.slice(0, 2)}-${digits.slice(2)}`;
+    if (digits.length <= 9) return `${digits.slice(0, 2)}-${digits.slice(2, 5)}-${digits.slice(5)}`;
+    return `${digits.slice(0, 2)}-${digits.slice(2, 6)}-${digits.slice(6, 10)}`;
+  }
+
+  if (/^1[568]\d{2}/.test(digits)) {
+    if (digits.length <= 4) return digits;
+    return `${digits.slice(0, 4)}-${digits.slice(4, 8)}`;
+  }
+
+  if (digits.length <= 3) return digits;
+  if (digits.length <= 7) return `${digits.slice(0, 3)}-${digits.slice(3)}`;
+  if (digits.length === 10) return `${digits.slice(0, 3)}-${digits.slice(3, 6)}-${digits.slice(6)}`;
+  return `${digits.slice(0, 3)}-${digits.slice(3, 7)}-${digits.slice(7, 11)}`;
+};
+
+const setupPhoneInputs = () => {
+  const applyPhoneFormat = (input) => {
+    const formatted = formatPhoneNumber(input.value);
+    if (input.value !== formatted) {
+      input.value = formatted;
+    }
+  };
+
+  document.querySelectorAll('input[type="tel"]').forEach((input) => {
+    input.inputMode = "numeric";
+    input.maxLength = 13;
+    applyPhoneFormat(input);
+  });
+
+  document.addEventListener("input", (event) => {
+    const target = event.target;
+    if (target instanceof HTMLInputElement && target.type === "tel") {
+      applyPhoneFormat(target);
+    }
+  });
+};
+
+setupPhoneInputs();
+
 if (navToggle && primaryNav) {
   navToggle.addEventListener("click", () => {
     const isOpen = navToggle.getAttribute("aria-expanded") === "true";
@@ -217,17 +266,11 @@ document.querySelectorAll("[data-home-board-tabs]").forEach((tabList) => {
       item.hidden = !isVisible;
     });
 
-    if (prevButton) {
-      const isDisabled = currentPage >= maxPage;
-      prevButton.disabled = isDisabled;
-      prevButton.setAttribute("aria-disabled", String(isDisabled));
-    }
-
-    if (nextButton) {
-      const isDisabled = currentPage <= 0;
-      nextButton.disabled = isDisabled;
-      nextButton.setAttribute("aria-disabled", String(isDisabled));
-    }
+    [prevButton, nextButton].forEach((button) => {
+      if (!button) return;
+      button.disabled = false;
+      button.setAttribute("aria-disabled", "false");
+    });
   };
 
   const activateTab = (target) => {
@@ -260,12 +303,17 @@ document.querySelectorAll("[data-home-board-tabs]").forEach((tabList) => {
     const activePanel = getActivePanel();
     const items = Array.from(activePanel?.querySelectorAll("[data-home-board-item]") || []);
     const maxPage = Math.max(0, Math.ceil(items.length / pageSize) - 1);
-    pageState[activeTab] = Math.min(maxPage, (pageState[activeTab] || 0) + 1);
+    if (maxPage <= 0) return;
+    pageState[activeTab] = ((pageState[activeTab] || 0) - 1 + maxPage + 1) % (maxPage + 1);
     updateBoardItems();
   });
 
   nextButton?.addEventListener("click", () => {
-    pageState[activeTab] = Math.max(0, (pageState[activeTab] || 0) - 1);
+    const activePanel = getActivePanel();
+    const items = Array.from(activePanel?.querySelectorAll("[data-home-board-item]") || []);
+    const maxPage = Math.max(0, Math.ceil(items.length / pageSize) - 1);
+    if (maxPage <= 0) return;
+    pageState[activeTab] = ((pageState[activeTab] || 0) + 1) % (maxPage + 1);
     updateBoardItems();
   });
 
@@ -366,3 +414,71 @@ document.querySelectorAll("[data-carousel]").forEach((carousel) => {
   prev?.addEventListener("click", () => move(-1));
   next?.addEventListener("click", () => move(1));
 });
+
+const setupSuperAdminHeaderLink = async () => {
+  if (!primaryNav || document.querySelector("[data-admin-page-link]")) return;
+
+  const loadScript = (src, id) =>
+    new Promise((resolve, reject) => {
+      if (id && document.getElementById(id)) {
+        resolve();
+        return;
+      }
+      const script = document.createElement("script");
+      script.src = src;
+      if (id) script.id = id;
+      script.onload = resolve;
+      script.onerror = reject;
+      document.head.appendChild(script);
+    });
+
+  try {
+    if (!window.KKOOM_SUPABASE) {
+      await loadScript("assets/js/supabase-config.js?v=20260528-1", "kkoom-supabase-config-loader");
+    }
+    const config = window.KKOOM_SUPABASE || {};
+    if (!config.url || !config.anonKey) return;
+
+    if (!window.supabase) {
+      await loadScript("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2", "kkoom-supabase-sdk-loader");
+    }
+    if (!window.supabase) return;
+
+    const client = window.KKOOM_SUPABASE_CLIENT || window.supabase.createClient(config.url, config.anonKey);
+    window.KKOOM_SUPABASE_CLIENT = client;
+
+    const { data } = await client.auth.getSession();
+    const session = data?.session;
+    if (!session?.user?.id) return;
+
+    const { data: profile, error } = await client
+      .from("profiles")
+      .select("role, admin_role")
+      .eq("id", session.user.id)
+      .maybeSingle();
+
+    if (error || profile?.role !== "admin" || profile.admin_role !== "super_admin") return;
+
+    const loginGroup = primaryNav.querySelector(".nav-login")?.closest(".nav-group");
+    loginGroup?.classList.remove("utility-start");
+
+    const group = document.createElement("div");
+    group.className = "nav-group nav-utility utility-start nav-admin-page-group";
+    group.innerHTML = '<a class="nav-link nav-admin-page-link" href="admin.html" data-admin-page-link>관리자</a>';
+
+    if (loginGroup) {
+      primaryNav.insertBefore(group, loginGroup);
+    } else {
+      const allMenuControl = primaryNav.querySelector(".nav-all-menu-control");
+      if (allMenuControl) {
+        primaryNav.insertBefore(group, allMenuControl);
+      } else {
+        primaryNav.appendChild(group);
+      }
+    }
+  } catch (error) {
+    console.warn("Admin header link skipped:", error);
+  }
+};
+
+setupSuperAdminHeaderLink();

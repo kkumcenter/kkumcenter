@@ -1,0 +1,147 @@
+﻿<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>게시글 작성 | 군북면 꿈키움센터</title>
+    <meta name="description" content="군북면 꿈키움센터 관리자 게시글 작성 화면입니다.">
+    <link rel="stylesheet" href="assets/css/styles.css?v=20260530-1">
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#main">본문 바로가기</a>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="index.html" aria-label="군북면 꿈키움센터 홈"><img class="brand-symbol" src="assets/images/kkoom-logo-symbol.png" alt="" aria-hidden="true"><span class="brand-wordmark"><strong>꿈키움센터</strong><small>군북면</small></span></a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav"><span></span><span></span><span></span><span class="sr-only">메뉴 열기</span></button>
+        <nav class="primary-nav" id="primary-nav" aria-label="주요 메뉴">
+          <div class="nav-group"><a class="nav-link" href="about.html">센터소개</a><div class="nav-dropdown" data-menu-label="센터소개"><a href="about.html">인사말</a><a href="vision.html">비전</a><a href="history.html">연혁</a><a href="spaces.html">시설소개</a><a href="location.html">오시는길</a></div></div>
+          <div class="nav-group"><a class="nav-link" href="space-apply.html">공간시설</a><div class="nav-dropdown" data-menu-label="공간시설"><a href="space-apply.html">공간예약</a><a href="space-reservations.html">예약확인</a></div></div>
+          <div class="nav-group"><a class="nav-link" href="programs.html">프로그램</a><div class="nav-dropdown" data-menu-label="프로그램"><a href="programs.html">교육신청</a><a href="program-check.html">신청확인</a></div></div>
+          <div class="nav-group"><a class="nav-link active" href="news.html">소식마당</a><div class="nav-dropdown" data-menu-label="소식마당"><a href="news.html">공지사항</a><a href="gallery.html">꿈센터 갤러리</a><a href="village-story.html">마을 이야기</a><a href="contact.html">문의 / 제안</a></div></div>
+          <div class="nav-group nav-dafarm-group"><a class="nav-link nav-external" href="https://dafarm.co.kr/" target="_blank" rel="noreferrer"><img class="nav-dafarm-logo" src="assets/images/dafarm-logo-top.jpg" alt="금산다팜 몰"></a></div>
+          <div class="nav-group nav-utility utility-start"><a class="nav-link nav-login" href="login.html" aria-label="스텝 로그인"><span class="login-person-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 12.4a4.1 4.1 0 1 0 0-8.2 4.1 4.1 0 0 0 0 8.2Z"></path><path d="M4.8 20.1c1.1-3.5 3.6-5.3 7.2-5.3s6.1 1.8 7.2 5.3"></path></svg></span><span class="sr-only">스텝 로그인</span></a></div>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="sub-hero"><img src="assets/images/subpage-hero-center-soft.png" alt="군북면 꿈키움센터를 내려다본 반투명 배경 이미지"><div class="sub-hero-content"><p class="eyebrow">게시글 작성</p><h1><span>센터와 마을의 소식을</span><span>새 글로 등록합니다</span></h1></div></section>
+
+      <nav class="breadcrumb" aria-label="현재 위치">
+        <div class="container breadcrumb-inner">
+          <a class="breadcrumb-home" href="index.html" aria-label="홈"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5v8.7a.8.8 0 0 1-.8.8h-5.1v-5.4H9.9V20H4.8a.8.8 0 0 1-.8-.8v-8.7Z"></path></svg><span>홈</span></a>
+          <span class="breadcrumb-separator" aria-hidden="true">›</span>
+          <a class="breadcrumb-link" href="news.html">소식마당</a>
+          <span class="breadcrumb-separator" aria-hidden="true">›</span>
+          <a class="breadcrumb-current" href="board-write.html" aria-current="page">게시글 작성</a>
+        </div>
+      </nav>
+
+      <nav class="subnav" aria-label="소식마당 하위 메뉴">
+        <a href="news.html">공지사항</a>
+        <a href="gallery.html">꿈센터 갤러리</a>
+        <a href="village-story.html">마을 이야기</a>
+        <a href="contact.html">문의 / 제안</a>
+      </nav>
+
+      <section class="section board-write-section" data-board-write-page>
+        <div class="container board-write-shell">
+          <div class="board-write-head">
+            <div>
+              <p class="eyebrow" data-board-write-eyebrow>게시글 작성</p>
+              <h2 data-board-write-title>게시글 작성</h2>
+            </div>
+            <a class="button ghost" href="news.html" data-board-back-link>목록으로</a>
+          </div>
+
+          <form class="board-write-form" data-board-write-form hidden>
+            <div class="board-write-grid">
+              <label class="board-write-title-field"><span>제목</span><input name="title" type="text" placeholder="제목을 입력하세요" required></label>
+              <label><span>공개상태</span><select name="status"><option value="public">공개</option><option value="draft">임시저장</option><option value="private">비공개</option><option value="hidden">숨김 처리됨</option></select></label>
+            </div>
+
+            <section class="board-write-card">
+              <div class="board-write-card-head">
+                <div>
+                  <p class="eyebrow">본문</p>
+                  <h3>본문</h3>
+                </div>
+              </div>
+              <div id="board-editor" class="board-toast-editor"></div>
+              <textarea name="contentFallback" rows="12" class="board-editor-fallback" placeholder="본문을 입력하세요" hidden></textarea>
+              <p class="board-help-text">본문 안에서 이미지를 삽입하면 자르기, 회전, 선택 영역 모자이크 후 함께 편집할 수 있습니다.</p>
+            </section>
+
+            <section class="board-write-card">
+              <div class="board-write-card-head">
+                <div>
+                  <p class="eyebrow">파일 첨부</p>
+                  <h3>파일 첨부</h3>
+                </div>
+                <label class="board-file-button"><input name="files" type="file" multiple data-board-file-input>파일 선택</label>
+              </div>
+              <div class="board-upload-list" data-board-file-list></div>
+            </section>
+
+            <p class="form-status" data-form-status aria-live="polite"></p>
+            <div class="board-write-actions">
+              <a class="button ghost" href="news.html" data-board-cancel-link>취소</a>
+              <button type="submit">저장하기</button>
+            </div>
+          </form>
+
+          <article class="empty-state" data-board-write-guard>
+            <strong>스텝 권한을 확인하고 있습니다.</strong>
+            <p>권한 확인 후 글쓰기 화면이 열립니다.</p>
+          </article>
+        </div>
+
+        <div class="image-edit-modal" data-image-edit-modal hidden>
+          <div class="image-edit-dialog" role="dialog" aria-modal="true" aria-labelledby="image-edit-title">
+            <div class="image-edit-head">
+              <div>
+                <p class="eyebrow">이미지 편집</p>
+                <h3 id="image-edit-title">이미지 편집</h3>
+              </div>
+              <button type="button" aria-label="닫기" data-image-edit-cancel>×</button>
+            </div>
+            <div class="image-edit-canvas"><img alt="편집할 이미지" data-image-edit-preview></div>
+            <div class="image-edit-tools">
+              <button type="button" data-image-rotate-left>왼쪽 회전</button>
+              <button type="button" data-image-rotate-right>오른쪽 회전</button>
+              <button type="button" data-image-apply-crop>자르기 적용</button>
+              <button type="button" data-image-apply-mosaic>선택영역 모자이크</button>
+            </div>
+            <p class="board-help-text">모자이크할 부분을 사각형으로 잡은 뒤 `선택영역 모자이크`를 누르세요.</p>
+            <div class="image-edit-actions">
+              <button type="button" data-image-use-original>원본 첨부</button>
+              <button type="button" data-image-edit-cancel>취소</button>
+              <button type="button" data-image-edit-done>편집 완료</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-grid footer-simple">
+        <div>
+          <strong>군북면 꿈키움센터</strong>
+          <p class="footer-contact">주소: 충청남도 금산군 군북면 두두리 371, 373-3 일원</p>
+          <p class="footer-contact">연락처: 추후 안내</p>
+        </div>
+      </div>
+      <div class="container footer-meta">COPYRIGHT © GUNBUK KKUM CENTER. ALL RIGHTS RESERVED.</div>
+    </footer>
+    <script src="assets/js/main.js?v=20260529-9"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/js/supabase-config.js?v=20260528-1"></script>
+    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+    <script src="https://uicdn.toast.com/editor/latest/i18n/ko-kr.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
+    <script src="assets/js/board-write.js?v=20260530-1"></script>
+  </body>
+</html>

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>교육신청 작성 | 군북면 꿈키움센터</title>
     <meta name="description" content="군북면 꿈키움센터 교육 프로그램 신청 작성 화면입니다.">
-    <link rel="stylesheet" href="assets/css/styles.css?v=20260527-3">
+    <link rel="stylesheet" href="assets/css/styles.css?v=20260529-43">
   </head>
   <body>
     <a class="skip-link" href="#main">본문 바로가기</a>
@@ -18,8 +18,8 @@
           <div class="nav-group"><a class="nav-link" href="space-apply.html">공간시설</a><div class="nav-dropdown" data-menu-label="공간시설"><a href="space-apply.html">공간예약</a><a href="space-reservations.html">예약확인</a></div></div>
           <div class="nav-group"><a class="nav-link active" href="programs.html">프로그램</a><div class="nav-dropdown" data-menu-label="프로그램"><a href="programs.html">교육신청</a><a href="program-check.html">신청확인</a></div></div>
           <div class="nav-group"><a class="nav-link" href="news.html">소식마당</a><div class="nav-dropdown" data-menu-label="소식마당"><a href="news.html">공지사항</a><a href="gallery.html">꿈센터 갤러리</a><a href="village-story.html">마을 이야기</a><a href="contact.html">문의 / 제안</a></div></div>
-          <div class="nav-group nav-dafarm-group"><a class="nav-link nav-external" href="https://dafarm.co.kr/" target="_blank" rel="noreferrer"><img class="nav-dafarm-logo" src="assets/images/dafarm-logo-top.jpg" alt="금산다팜 몰"></a><div class="nav-dropdown nav-dropdown-mobile-only" data-menu-label="금산다팜몰"><a href="https://dafarm.co.kr/" target="_blank" rel="noreferrer">금산다팜몰 바로가기</a></div></div>
-          <div class="nav-group nav-utility utility-start"><a class="nav-link nav-login" href="login.html"><span class="login-person-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 12.4a4.1 4.1 0 1 0 0-8.2 4.1 4.1 0 0 0 0 8.2Z"></path><path d="M4.8 20.1c1.1-3.5 3.6-5.3 7.2-5.3s6.1 1.8 7.2 5.3"></path></svg></span><span>로그인</span></a></div>
+          <div class="nav-group nav-dafarm-group"><a class="nav-link nav-external" href="https://dafarm.co.kr/" target="_blank" rel="noreferrer"><img class="nav-dafarm-logo" src="assets/images/dafarm-logo-top.jpg" alt="금산다팜 몰"></a></div>
+          <div class="nav-group nav-utility utility-start"><a class="nav-link nav-login" href="login.html" aria-label="스텝 로그인"><span class="login-person-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 12.4a4.1 4.1 0 1 0 0-8.2 4.1 4.1 0 0 0 0 8.2Z"></path><path d="M4.8 20.1c1.1-3.5 3.6-5.3 7.2-5.3s6.1 1.8 7.2 5.3"></path></svg></span><span class="sr-only">스텝 로그인</span></a></div>
         </nav>
       </div>
     </header>
@@ -36,23 +36,26 @@
         </div>
         <div class="container news-page-rule" aria-hidden="true"></div>
 
-        <form class="container space-reservation-form program-apply-form" aria-label="교육 프로그램 신청 작성" data-program-apply-form>
+        <form class="container space-reservation-form program-apply-form" autocomplete="off" aria-label="교육 프로그램 신청 작성" data-program-apply-form>
           <h3>프로그램 신청</h3>
           <div class="space-reservation-fields">
             <div class="reservation-basic-fields">
               <label>프로그램명
                 <select name="programName" required>
+                  <option value="">신청할 프로그램을 선택하세요</option>
                   <option value="베이킹 교육과정">베이킹 교육과정</option>
                   <option value="바리스타 양성과정 2급">바리스타 양성과정 2급</option>
                   <option value="원예심리치료교실">원예심리치료교실</option>
                 </select>
               </label>
-              <label>신청자명<input name="applicant" type="text" placeholder="이름을 입력하세요" required></label>
-              <label>연락처<input name="phone" type="tel" placeholder="010-0000-0000" required></label>
-              <label>출생연도<input name="birthYear" type="number" inputmode="numeric" min="1900" max="2100" placeholder="예: 1985" required></label>
-              <label>지역<input name="region" type="text" placeholder="예: 금산군 군북면" required></label>
+              <label>비밀번호<input name="programPassword" type="password" autocomplete="new-password" placeholder="조회용 비밀번호" minlength="4" required></label>
+              <label>신청자명<input name="programApplicant" type="text" autocomplete="off" placeholder="이름을 입력하세요" required></label>
+              <label>연락처<input name="programPhone" type="tel" autocomplete="off" placeholder="010-0000-0000" required></label>
+              <label>출생연도<input name="programBirthYear" type="number" autocomplete="off" inputmode="numeric" min="1900" max="2100" placeholder="예: 1900" required></label>
+              <label>주소(시·군·구)<input name="programRegion" type="text" autocomplete="off" placeholder="예: 금산군 군북면" required></label>
             </div>
             <label class="reservation-purpose">신청 메모<textarea name="memo" rows="5" placeholder="참여 목적이나 요청사항을 적어주세요"></textarea></label>
+            <label class="privacy-consent"><input name="privacyConsent" type="checkbox" required><span>개인정보 수집·이용에 동의합니다. 수집 항목은 이름, 연락처, 출생연도, 주소(시·군·구), 조회용 비밀번호이며 교육신청 접수·확인과 운영 통계에 사용합니다.</span></label>
             <p class="form-status" data-form-status aria-live="polite"></p>
             <div class="reservation-action"><button type="submit">신청하기</button></div>
           </div>
@@ -60,10 +63,10 @@
       </section>
     </main>
 
-    <footer class="site-footer"><div class="container footer-grid footer-simple"><div><strong>군북면 꿈키움센터</strong><p class="footer-contact">주소: 충청남도 금산군 군북면 두두리 371, 373-3 일원</p><p class="footer-contact">연락처: 운영자료 확정 후 입력</p></div></div><div class="container footer-meta">COPYRIGHT © GUNBUK KKUM CENTER. ALL RIGHTS RESERVED.</div></footer>
-    <script src="assets/js/main.js?v=20260526-5"></script>
+    <footer class="site-footer"><div class="container footer-grid footer-simple"><div><strong>군북면 꿈키움센터</strong><p class="footer-contact">주소: 충청남도 금산군 군북면 두두리 371, 373-3 일원</p><p class="footer-contact">연락처: 추후 안내</p></div></div><div class="container footer-meta">COPYRIGHT © GUNBUK KKUM CENTER. ALL RIGHTS RESERVED.</div></footer>
+    <script src="assets/js/main.js?v=20260529-9"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/supabase-config.js?v=20260528-1"></script>
-    <script src="assets/js/app-data.js?v=20260527-2"></script>
+    <script src="assets/js/app-data.js?v=20260530-7"></script>
   </body>
 </html>

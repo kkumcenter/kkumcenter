@@ -1,8 +1,4 @@
 (() => {
-  const SPACE_KEY = "kkoom-space-reservations";
-  const PROGRAM_KEY = "kkoom-program-applications";
-  const INQUIRY_KEY = "kkoom-inquiries";
-
   const SPACE_SLUGS = {
     공유주방: "kitchen",
     대회의실: "main-hall",
@@ -27,101 +23,11 @@
     },
   };
 
-  const LOCAL_STATUS_TO_VALUE = {
-    space: {
-      승인대기: "received",
-      승인완료: "approved",
-      이용완료: "approved",
-      반려: "rejected",
-      취소: "canceled",
-    },
-    program: {
-      접수완료: "completed",
-      확인중: "completed",
-      수강완료: "approved",
-      신청완료: "completed",
-      대기: "waiting",
-      취소: "canceled",
-    },
+  const INQUIRY_STATUS = {
+    received: "접수",
+    checking: "확인중",
+    answered: "답변완료",
   };
-
-  const sampleSpaceReservations = [
-    {
-      id: "R-2026-014",
-      spaceName: "공유주방",
-      applicant: "김○○",
-      phone: "010-1234-0000",
-      startDate: "2026-06-20",
-      endDate: "2026-06-20",
-      purpose: "베이킹 교육 준비",
-      memo: "오븐 사용 예정",
-      status: "승인대기",
-      createdAt: "2026-06-10T09:00:00.000Z",
-      source: "sample",
-    },
-    {
-      id: "R-2026-013",
-      spaceName: "강의실",
-      applicant: "박○○",
-      phone: "010-2345-0000",
-      startDate: "2026-06-18",
-      endDate: "2026-06-18",
-      purpose: "주민교육",
-      memo: "프로젝터 사용",
-      status: "승인완료",
-      createdAt: "2026-06-08T09:00:00.000Z",
-      source: "sample",
-    },
-    {
-      id: "R-2026-012",
-      spaceName: "소회의실",
-      applicant: "이○○",
-      phone: "010-3456-0000",
-      startDate: "2026-06-14",
-      endDate: "2026-06-14",
-      purpose: "마을 회의",
-      memo: "",
-      status: "이용완료",
-      createdAt: "2026-06-04T09:00:00.000Z",
-      source: "sample",
-    },
-  ];
-
-  const sampleProgramApplications = [
-    {
-      id: "P-2026-021",
-      programName: "베이킹 교육과정",
-      applicant: "김○○",
-      phone: "010-1234-0000",
-      group: "성인",
-      memo: "초보자 참여",
-      status: "접수완료",
-      createdAt: "2026-06-11T09:00:00.000Z",
-      source: "sample",
-    },
-    {
-      id: "P-2026-020",
-      programName: "원예심리치료교실",
-      applicant: "박○○",
-      phone: "010-2345-0000",
-      group: "성인",
-      memo: "",
-      status: "확인중",
-      createdAt: "2026-06-07T09:00:00.000Z",
-      source: "sample",
-    },
-    {
-      id: "P-2026-019",
-      programName: "바리스타 양성과정 2급",
-      applicant: "이○○",
-      phone: "010-3456-0000",
-      group: "성인",
-      memo: "수료 확인",
-      status: "수강완료",
-      createdAt: "2026-05-28T09:00:00.000Z",
-      source: "sample",
-    },
-  ];
 
   const getSupabaseClient = () => {
     const config = window.KKOOM_SUPABASE || {};
@@ -158,17 +64,34 @@
     return result;
   };
 
-  const safeParse = (key) => {
-    try {
-      return JSON.parse(window.localStorage.getItem(key) || "[]");
-    } catch {
-      return [];
-    }
-  };
+  const loadExternalStyle = (id, href) =>
+    new Promise((resolve, reject) => {
+      if (document.getElementById(id)) {
+        resolve();
+        return;
+      }
+      const link = document.createElement("link");
+      link.id = id;
+      link.rel = "stylesheet";
+      link.href = href;
+      link.onload = resolve;
+      link.onerror = reject;
+      document.head.appendChild(link);
+    });
 
-  const safeSave = (key, items) => {
-    window.localStorage.setItem(key, JSON.stringify(items));
-  };
+  const loadExternalScript = (id, src) =>
+    new Promise((resolve, reject) => {
+      if (document.getElementById(id)) {
+        resolve();
+        return;
+      }
+      const script = document.createElement("script");
+      script.id = id;
+      script.src = src;
+      script.onload = resolve;
+      script.onerror = reject;
+      document.body.appendChild(script);
+    });
 
   const escapeHtml = (value) =>
     String(value ?? "")
@@ -190,12 +113,43 @@
     return "closed";
   };
 
-  const getStatusValue = (type, label) =>
-    Object.entries(STATUS[type]).find(([, value]) => value === label)?.[0] ||
-    LOCAL_STATUS_TO_VALUE[type]?.[label] ||
-    label;
-
   const getStatusLabel = (type, value) => STATUS[type]?.[value] || value || "-";
+
+  const getInquiryStatusLabel = (value) => INQUIRY_STATUS[value] || value || "-";
+
+  const getProgramStatusLabel = (value) => {
+    if (value === "open") return "접수중";
+    if (value === "closed") return "접수마감";
+    if (value === "finished") return "종료";
+    return "접수예정";
+  };
+
+  const programStatusClass = (value) => {
+    if (value === "open") return "ongoing";
+    if (value === "scheduled") return "open";
+    return "closed";
+  };
+
+  const formatDate = (value) => {
+    if (!value) return "-";
+    const text = String(value);
+    return /^\d{4}-\d{2}-\d{2}/.test(text) ? text.slice(0, 10).replaceAll("-", ".") : text;
+  };
+
+  const formatDateRange = (start, end) => {
+    const startText = formatDate(start);
+    const endText = formatDate(end);
+    if (startText === "-" && endText === "-") return "-";
+    if (startText === endText) return startText;
+    return `${startText} - ${endText}`;
+  };
+
+  const formatAdminDate = (value) => {
+    if (!value) return "-";
+    const text = String(value);
+    if (/^\d{4}-\d{2}-\d{2}/.test(text)) return text.slice(5, 10).replace("-", ".");
+    return text;
+  };
 
   const fieldValue = (form, name) => form.elements[name]?.value?.trim() || "";
 
@@ -224,53 +178,20 @@
   };
 
   const insertSupabaseReservation = async (reservation) => {
-    const client = getSupabaseClient();
-    if (!client) return false;
-
-    const session = await getSession(client);
-    if (!session) {
-      try {
-        return await callPublicSubmitFunction("space-reservation", {
-          reservationNo: reservation.id,
-          spaceName: reservation.spaceName,
-          applicantName: reservation.applicant,
-          phone: reservation.phone,
-          lookupPassword: getLookupPassword(reservation.lookupPassword, reservation.phone),
-          reservationDate: reservation.startDate,
-          endDate: reservation.endDate,
-          purpose: reservation.purpose || "공간 이용",
-          headcount: 1,
-          note: reservation.memo || null,
-        });
-      } catch (error) {
-        console.warn("Supabase public-submit function is unavailable.", error);
-        return false;
-      }
-    }
-
-    const spaceId = await findSpaceId(client, reservation.spaceName);
-    if (!spaceId) {
-      throw new Error("Supabase에 해당 공간이 등록되어 있지 않습니다. seed.sql을 먼저 실행해 주세요.");
-    }
-
-    const { error } = await client.from("space_reservations").insert({
-      reservation_no: reservation.id,
-      space_id: spaceId,
-      user_id: session?.user?.id || null,
-      applicant_type: session ? "member" : "guest",
-      applicant_name: reservation.applicant,
+    if (!getSupabaseConfig()) throw new Error("예약 접수 서버 연결 정보가 필요합니다.");
+    return await callPublicSubmitFunction("space-reservation", {
+      spaceName: reservation.spaceName,
+      applicantName: reservation.applicant,
       phone: reservation.phone,
-      reservation_date: reservation.startDate,
-      start_time: "09:00",
-      end_time: "18:00",
+      birthYear: Number(reservation.birthYear),
+      region: reservation.region,
+      lookupPassword: reservation.lookupPassword,
+      reservationDate: reservation.startDate,
+      endDate: reservation.endDate,
       purpose: reservation.purpose || "공간 이용",
-      headcount: 1,
+      headcount: Number(reservation.headcount || 1),
       note: reservation.memo || null,
-      status: "received",
     });
-
-    if (error) throw error;
-    return true;
   };
 
   const findProgram = async (client, title) => {
@@ -295,49 +216,16 @@
   };
 
   const insertSupabaseProgramApplication = async (application) => {
-    const client = getSupabaseClient();
-    if (!client) return false;
-
-    const session = await getSession(client);
-    if (!session) {
-      try {
-        const result = await callPublicSubmitFunction("program-application", {
-          applicationNo: application.id,
-          programName: application.programName,
-          applicantName: application.applicant,
-          phone: application.phone,
-          lookupPassword: getLookupPassword(application.lookupPassword, application.phone),
-          birthYear: Number(application.birthYear),
-          region: application.region,
-        });
-        return result?.status || false;
-      } catch (error) {
-        console.warn("Supabase public-submit function is unavailable.", error);
-        return false;
-      }
-    }
-
-    const program = await findProgram(client, application.programName);
-    if (!program) {
-      throw new Error("Supabase에 해당 프로그램이 등록되어 있지 않습니다. seed.sql의 프로그램 데이터를 확인해 주세요.");
-    }
-
-    const status = await getProgramApplicationStatus(client, program);
-    const { error } = await client.from("program_applications").insert({
-      application_no: application.id,
-      program_id: program.id,
-      user_id: session?.user?.id || null,
-      applicant_type: session ? "member" : "guest",
-      applicant_name: application.applicant,
+    if (!getSupabaseConfig()) throw new Error("교육신청 접수 서버 연결 정보가 필요합니다.");
+    const result = await callPublicSubmitFunction("program-application", {
+      programName: application.programName,
+      applicantName: application.applicant,
       phone: application.phone,
-      birth_year: Number(application.birthYear),
+      lookupPassword: application.lookupPassword,
+      birthYear: Number(application.birthYear),
       region: application.region,
-      status,
-      waitlist_order: status === "waiting" ? 1 : null,
     });
-
-    if (error) throw error;
-    return status;
+    return result?.status || false;
   };
 
   const fetchSupabaseSpaceReservations = async () => {
@@ -397,58 +285,273 @@
     }));
   };
 
-  const insertSupabaseInquiry = async (inquiry) => {
+  const normalizeProgram = (item) => ({
+    id: item.id,
+    title: item.title,
+    summary: item.summary || "",
+    content: item.content || "",
+    imageUrl: item.image_url || "assets/images/program-workshop.png",
+    place: item.place || "-",
+    instructor: item.instructor || "",
+    target: item.target || "전체",
+    capacity: item.capacity || 0,
+    startDate: item.start_date,
+    endDate: item.end_date,
+    applyStartDate: item.apply_start_date,
+    applyEndDate: item.apply_end_date,
+    status: item.status || "scheduled",
+    isActive: item.is_active !== false,
+  });
+
+  const fetchSupabasePrograms = async ({ openOnly = false } = {}) => {
     const client = getSupabaseClient();
-    if (!client) return false;
+    if (!client) return null;
 
-    const session = await getSession(client);
-    if (!session) {
-      try {
-        return await callPublicSubmitFunction("inquiry", {
-          inquiryNo: inquiry.id,
-          writerName: inquiry.writerName,
-          phone: inquiry.phone,
-          lookupPassword: inquiry.lookupPassword,
-          title: inquiry.title,
-          content: inquiry.content,
-        });
-      } catch (error) {
-        console.warn("Supabase public-submit function is unavailable.", error);
-        return false;
-      }
-    }
+    let query = client
+      .from("programs")
+      .select("id, title, summary, content, image_url, place, instructor, target, capacity, start_date, end_date, apply_start_date, apply_end_date, status, is_active")
+      .eq("is_active", true)
+      .order("apply_start_date", { ascending: false });
 
-    const { error } = await client.from("inquiries").insert({
-      inquiry_no: inquiry.id,
-      user_id: session.user.id,
-      writer_type: "member",
-      writer_name: inquiry.writerName,
-      phone: inquiry.phone,
-      title: inquiry.title,
-      content: inquiry.content,
-      status: "received",
-    });
+    if (openOnly) query = query.eq("status", "open");
 
+    const { data, error } = await query;
     if (error) throw error;
-    return true;
+    return (data || []).map(normalizeProgram);
   };
 
-  const lookupSupabaseInquiry = async ({ writerName, phone, lookupPassword }) => {
-    try {
-      const result = await callPublicSubmitFunction("inquiry-lookup", {
-        writerName,
-        phone,
-        lookupPassword,
-      });
-      return result?.items || null;
-    } catch (error) {
-      console.warn("Supabase public-submit function is unavailable.", error);
-      return null;
-    }
+  const lookupSupabaseProgramApplication = async (lookup) => {
+    const result = await callPublicSubmitFunction("program-lookup", {
+      applicantName: lookup.applicantName,
+      phone: lookup.phone,
+      lookupPassword: lookup.lookupPassword,
+    });
+    return result?.items || (result?.item ? [result.item] : []);
+  };
+
+  const fetchSupabaseInquiries = async () => {
+    const client = getSupabaseClient();
+    if (!client) return null;
+    const session = await getSession(client);
+    if (!session) return null;
+
+    const { data, error } = await client
+      .from("inquiries")
+      .select("id, inquiry_no, writer_name, phone, title, content, status, answer, created_at")
+      .order("created_at", { ascending: false })
+      .limit(50);
+
+    if (error) throw error;
+    return data.map((item) => ({
+      rowId: item.id,
+      id: item.inquiry_no,
+      writerName: item.writer_name,
+      phone: item.phone,
+      title: item.title,
+      content: item.content,
+      status: getInquiryStatusLabel(item.status),
+      statusValue: item.status,
+      answer: item.answer || "",
+      createdAt: item.created_at,
+      source: "supabase",
+    }));
+  };
+
+  const insertSupabaseInquiry = async (inquiry) => {
+    if (!getSupabaseConfig()) throw new Error("문의 접수 서버 연결 정보가 필요합니다.");
+    return await callPublicSubmitFunction("inquiry", {
+      inquiryNo: inquiry.id,
+      writerName: inquiry.writerName,
+      phone: inquiry.phone,
+      birthYear: Number(inquiry.birthYear),
+      region: inquiry.region,
+      lookupPassword: inquiry.lookupPassword,
+      title: inquiry.title,
+      content: inquiry.content,
+    });
+  };
+
+  const lookupSupabaseInquiry = async ({ inquiryNo, lookupPassword }) => {
+    const result = await callPublicSubmitFunction("inquiry-open", {
+      inquiryNo,
+      lookupPassword,
+    });
+    return result?.item || null;
+  };
+
+  const lookupSupabaseSpaceReservation = async (lookup) => {
+    const result = await callPublicSubmitFunction("space-lookup", {
+      applicantName: lookup.applicantName,
+      phone: lookup.phone,
+      lookupPassword: lookup.lookupPassword,
+    });
+    return result?.items || (result?.item ? [result.item] : []);
   };
 
   const setupContactForms = () => {
+    const publicList = document.querySelector("[data-inquiry-public-list]");
     const form = document.querySelector("[data-contact-form]");
+    const passwordModal = document.querySelector("[data-inquiry-password-modal]");
+    const passwordForm = document.querySelector("[data-inquiry-password-form]");
+    const passwordNo = document.querySelector("[data-inquiry-password-no]");
+    const detailModal = document.querySelector("[data-inquiry-detail-modal]");
+    const detailContent = document.querySelector("[data-inquiry-detail-content]");
+    let selectedInquiryNo = "";
+    let isSuperAdmin = false;
+    let currentSession = null;
+
+    const maskExceptFirst = (value, fallback = "-") => {
+      const text = String(value || "").trim();
+      if (!text) return fallback;
+      const chars = Array.from(text);
+      return `${chars[0]}${"*".repeat(Math.max(0, chars.length - 1))}`;
+    };
+
+    const toPublicInquiryItem = (item) => ({
+      id: item.id,
+      title: maskExceptFirst(item.title, "비공개 문의"),
+      writerName: maskExceptFirst(item.writerName, "익명"),
+      status: item.status || "접수",
+      createdAt: item.createdAt,
+    });
+
+    const checkSuperAdmin = async () => {
+      const client = getSupabaseClient();
+      if (!client) return false;
+      currentSession = await getSession(client);
+      if (!currentSession?.user?.id) return false;
+
+      const { data, error } = await client
+        .from("profiles")
+        .select("role, admin_role")
+        .eq("id", currentSession.user.id)
+        .maybeSingle();
+      if (error) throw error;
+      return data?.role === "admin" && data.admin_role === "super_admin";
+    };
+
+    const renderPublicInquiryList = (items) => {
+      if (!publicList) return;
+      publicList.innerHTML = items.length
+        ? items
+            .map(
+              (item) => `
+                <tr class="inquiry-public-row" data-inquiry-open="${escapeHtml(item.id)}" tabindex="0">
+                  <td>${escapeHtml(item.id)}</td>
+                  <td>${escapeHtml(item.title)}</td>
+                  <td>${escapeHtml(item.writerName)}</td>
+                  <td>${escapeHtml(formatAdminDate(item.createdAt))}</td>
+                  <td>
+                    <span class="status ${statusClass(item.status)}">${escapeHtml(item.status)}</span>
+                    ${
+                      isSuperAdmin
+                        ? `<button class="inquiry-answer-button" type="button" data-inquiry-answer="${escapeHtml(item.id)}">답변</button>`
+                        : ""
+                    }
+                  </td>
+                </tr>
+              `,
+            )
+            .join("")
+        : '<tr><td colspan="5">등록된 문의가 없습니다.</td></tr>';
+    };
+
+    const closeModal = (modal) => {
+      if (modal) modal.hidden = true;
+    };
+
+    const openModal = (modal) => {
+      if (modal) modal.hidden = false;
+    };
+
+    const openPasswordModal = (inquiryNo) => {
+      selectedInquiryNo = inquiryNo;
+      if (passwordNo) passwordNo.textContent = inquiryNo;
+      if (passwordForm) {
+        passwordForm.reset();
+        setFormStatus(passwordForm, "");
+      }
+      openModal(passwordModal);
+      passwordForm?.elements.inquiryOpenPassword?.focus();
+    };
+
+    const renderInquiryDetail = (item, { adminMode = false } = {}) => {
+      if (!detailContent) return;
+      const rowId = item.rowId || item.id || "";
+      const status = item.status || "접수";
+      detailContent.innerHTML = `
+        <article class="contact-answer-card inquiry-detail-card">
+          <span>${escapeHtml(status)}</span>
+          <strong>${escapeHtml(item.title || "문의 상세")}</strong>
+          <dl class="inquiry-detail-meta">
+            <div><dt>문의번호</dt><dd>${escapeHtml(item.id || item.inquiryNo || "-")}</dd></div>
+            <div><dt>작성일</dt><dd>${escapeHtml(formatAdminDate(item.createdAt))}</dd></div>
+            ${adminMode && item.writerName ? `<div><dt>작성자</dt><dd>${escapeHtml(item.writerName)}</dd></div>` : ""}
+            ${adminMode && item.phone ? `<div><dt>연락처</dt><dd>${escapeHtml(item.phone)}</dd></div>` : ""}
+          </dl>
+          <div class="inquiry-detail-block">
+            <h4>문의내용</h4>
+            <p>${escapeHtml(item.content || "")}</p>
+          </div>
+          <div class="contact-answer-reply inquiry-detail-block">
+            <h4>답변</h4>
+            <p>${escapeHtml(item.answer || "아직 답변이 등록되지 않았습니다.")}</p>
+          </div>
+          ${
+            isSuperAdmin && adminMode
+              ? `<form class="inquiry-answer-form" data-inquiry-answer-form data-row-id="${escapeHtml(rowId)}" data-inquiry-no="${escapeHtml(item.id || item.inquiryNo || "")}">
+                  <label><span>관리자 답변</span><textarea name="answer" rows="5" required>${escapeHtml(item.answer || "")}</textarea></label>
+                  <p class="form-status" data-form-status aria-live="polite"></p>
+                  <div class="inquiry-modal-actions">
+                    <button type="button" data-inquiry-modal-close>닫기</button>
+                    <button type="submit">답변 저장</button>
+                  </div>
+                </form>`
+              : ""
+          }
+        </article>
+      `;
+      openModal(detailModal);
+    };
+
+    const fetchAdminInquiry = async (inquiryNo) => {
+      const client = getSupabaseClient();
+      if (!client || !isSuperAdmin) throw new Error("관리자만 답변할 수 있습니다.");
+
+      const { data, error } = await client
+        .from("inquiries")
+        .select("id, inquiry_no, writer_name, phone, title, content, status, answer, created_at, answered_at")
+        .eq("inquiry_no", inquiryNo)
+        .maybeSingle();
+      if (error) throw error;
+      if (!data) throw new Error("문의를 찾을 수 없습니다.");
+      return {
+        rowId: data.id,
+        id: data.inquiry_no,
+        writerName: data.writer_name,
+        phone: data.phone,
+        title: data.title,
+        content: data.content,
+        status: getInquiryStatusLabel(data.status),
+        answer: data.answer || "",
+        createdAt: data.created_at,
+      };
+    };
+
+    const loadPublicInquiryList = async () => {
+      if (!publicList) return;
+      try {
+        isSuperAdmin = await checkSuperAdmin();
+        const result = await callPublicSubmitFunction("inquiry-list", {});
+        renderPublicInquiryList(result?.items || []);
+      } catch (error) {
+        console.warn("Supabase inquiry public list error:", error);
+        renderPublicInquiryList([]);
+      }
+    };
+
+    loadPublicInquiryList();
+
     if (form) {
       form.addEventListener("submit", async (event) => {
         event.preventDefault();
@@ -457,16 +560,23 @@
           id: createId("Q"),
           writerName: fieldValue(form, "writerName"),
           phone: fieldValue(form, "phone"),
-          lookupPassword: fieldValue(form, "lookupPassword"),
+          birthYear: fieldValue(form, "birthYear"),
+          region: fieldValue(form, "inquiryRegion"),
+          lookupPassword: fieldValue(form, "inquiryPassword"),
           title: fieldValue(form, "title"),
-          content: fieldValue(form, "content"),
-          status: "접수",
-          answer: "",
-          createdAt: new Date().toISOString(),
-        };
+        content: fieldValue(form, "content"),
+        status: "접수",
+        answer: "",
+        createdAt: new Date().toISOString(),
+      };
 
-        if (!inquiry.writerName || !inquiry.phone || !inquiry.lookupPassword || !inquiry.title || !inquiry.content) {
-          setFormStatus(form, "작성자, 연락처, 비밀번호, 제목, 내용을 입력해 주세요.", true);
+        if (form.elements.privacyConsent && !form.elements.privacyConsent.checked) {
+          setFormStatus(form, "개인정보 수집·이용에 동의해주세요.", true);
+          return;
+        }
+
+        if (!inquiry.writerName || !inquiry.phone || !inquiry.birthYear || !inquiry.region || !inquiry.lookupPassword || !inquiry.title || !inquiry.content) {
+          setFormStatus(form, "이름, 연락처, 출생연도, 주소, 비밀번호, 제목, 내용을 모두 입력해주세요.", true);
           return;
         }
 
@@ -474,19 +584,10 @@
         submitButton.disabled = true;
 
         try {
-          const savedToSupabase = await insertSupabaseInquiry(inquiry);
-          if (!savedToSupabase) {
-            const items = safeParse(INQUIRY_KEY);
-            safeSave(INQUIRY_KEY, [inquiry, ...items]);
-          }
-
-          setFormStatus(
-            form,
-            savedToSupabase
-              ? "문의가 접수되었습니다. 답변은 조회 영역에서 확인할 수 있습니다."
-              : "문의가 임시 저장되었습니다. Supabase 연결 후 실제 저장됩니다.",
-          );
+          await insertSupabaseInquiry(inquiry);
+          setFormStatus(form, `문의가 접수되었습니다. 상세 조회 시 문의번호 ${inquiry.id}를 함께 입력해주세요.`);
           form.reset();
+          loadPublicInquiryList();
         } catch (error) {
           setFormStatus(form, error.message || "문의 저장 중 문제가 발생했습니다.", true);
         } finally {
@@ -495,57 +596,127 @@
       });
     }
 
-    const lookupForm = document.querySelector("[data-contact-lookup-form]");
-    const answerCard = document.querySelector("[data-contact-answer]");
-    if (!lookupForm || !answerCard) return;
+    publicList?.addEventListener("click", async (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLElement)) return;
 
-    lookupForm.addEventListener("submit", async (event) => {
-      event.preventDefault();
-
-      const lookup = {
-        writerName: fieldValue(lookupForm, "writerName"),
-        phone: fieldValue(lookupForm, "phone"),
-        lookupPassword: fieldValue(lookupForm, "lookupPassword"),
-      };
-
-      if (!lookup.writerName || !lookup.phone || !lookup.lookupPassword) {
-        setFormStatus(lookupForm, "작성자명, 연락처, 비밀번호를 입력해 주세요.", true);
+      const answerNo = target.dataset.inquiryAnswer;
+      if (answerNo) {
+        try {
+          selectedInquiryNo = answerNo;
+          renderInquiryDetail(await fetchAdminInquiry(answerNo), { adminMode: true });
+        } catch (error) {
+          window.alert(error.message || "문의를 불러오지 못했습니다.");
+        }
         return;
       }
 
-      const submitButton = lookupForm.querySelector('button[type="submit"]');
-      submitButton.disabled = true;
+      const row = target.closest("[data-inquiry-open]");
+      if (row instanceof HTMLElement) openPasswordModal(row.dataset.inquiryOpen || "");
+    });
+
+    publicList?.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter" && event.key !== " ") return;
+      const target = event.target;
+      if (!(target instanceof HTMLElement)) return;
+      const row = target.closest("[data-inquiry-open]");
+      if (!(row instanceof HTMLElement)) return;
+      event.preventDefault();
+      openPasswordModal(row.dataset.inquiryOpen || "");
+    });
+
+    passwordForm?.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const lookup = {
+        inquiryNo: selectedInquiryNo,
+        lookupPassword: fieldValue(passwordForm, "inquiryOpenPassword"),
+      };
+
+      if (!lookup.inquiryNo || !lookup.lookupPassword) {
+        setFormStatus(passwordForm, "비밀번호를 입력해주세요.", true);
+        return;
+      }
+
+      const submitButton = passwordForm.querySelector('button[type="submit"]');
+      if (submitButton) submitButton.disabled = true;
 
       try {
-        const supabaseItems = await lookupSupabaseInquiry(lookup);
-        const items =
-          supabaseItems ||
-          safeParse(INQUIRY_KEY).filter(
-            (item) =>
-              item.writerName === lookup.writerName &&
-              item.phone === lookup.phone &&
-              item.lookupPassword === lookup.lookupPassword,
-          );
+        const supabaseItem = await lookupSupabaseInquiry(lookup);
+        const item = supabaseItem || null;
 
-        if (!items.length) {
-          answerCard.innerHTML = "<span>조회 결과</span><strong>일치하는 문의가 없습니다.</strong><p>작성자명, 연락처, 비밀번호를 다시 확인해 주세요.</p>";
+        if (!item) {
+          setFormStatus(passwordForm, "비밀번호가 일치하지 않습니다.", true);
         } else {
-          answerCard.innerHTML = items
-            .map(
-              (item) => `
-                <span>${escapeHtml(item.status || "접수")}</span>
-                <strong>${escapeHtml(item.title)}</strong>
-                <p>${escapeHtml(item.answer || "아직 답변이 등록되지 않았습니다.")}</p>
-              `,
-            )
-            .join("");
+          closeModal(passwordModal);
+          renderInquiryDetail(item);
         }
-        setFormStatus(lookupForm, "문의 조회가 완료되었습니다.");
       } catch (error) {
-        setFormStatus(lookupForm, error.message || "문의 조회 중 문제가 발생했습니다.", true);
+        setFormStatus(passwordForm, error.message || "문의 조회 중 문제가 발생했습니다.", true);
+      } finally {
+        if (submitButton) submitButton.disabled = false;
+      }
+    });
+
+    detailContent?.addEventListener("submit", async (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLFormElement) || !target.matches("[data-inquiry-answer-form]")) return;
+      event.preventDefault();
+
+      const answer = fieldValue(target, "answer");
+      if (!answer) {
+        setFormStatus(target, "답변 내용을 입력해주세요.", true);
+        return;
+      }
+
+      const client = getSupabaseClient();
+      if (!client || !currentSession?.user?.id) {
+        setFormStatus(target, "관리자 권한 확인 후 답변을 저장할 수 있습니다.", true);
+        return;
+      }
+
+      const submitButton = target.querySelector('button[type="submit"]');
+      submitButton.disabled = true;
+      try {
+        const { error } = await client
+          .from("inquiries")
+          .update({
+            answer,
+            status: "answered",
+            answered_by: currentSession.user.id,
+            answered_at: new Date().toISOString(),
+          })
+          .eq("id", target.dataset.rowId);
+        if (error) throw error;
+        setFormStatus(target, "답변을 저장했습니다.");
+        await loadPublicInquiryList();
+        const item = await fetchAdminInquiry(target.dataset.inquiryNo || selectedInquiryNo);
+        renderInquiryDetail(item, { adminMode: true });
+      } catch (error) {
+        setFormStatus(target, error.message || "답변 저장 중 문제가 발생했습니다.", true);
       } finally {
         submitButton.disabled = false;
       }
+    });
+
+    detailContent?.addEventListener("click", (event) => {
+      const target = event.target;
+      if (target instanceof HTMLElement && target.matches("[data-inquiry-modal-close]")) {
+        closeModal(detailModal);
+      }
+    });
+
+    document.querySelectorAll("[data-inquiry-modal-close]").forEach((button) => {
+      button.addEventListener("click", () => {
+        closeModal(passwordModal);
+        closeModal(detailModal);
+      });
+    });
+
+    [passwordModal, detailModal].forEach((modal) => {
+      modal?.addEventListener("click", (event) => {
+        if (event.target === modal) closeModal(modal);
+      });
     });
   };
 
@@ -558,8 +729,11 @@
           id: createId("R"),
           spaceName: form.dataset.spaceName || "공간",
           floor: form.dataset.spaceFloor || "",
-          applicant: fieldValue(form, "applicant"),
-          phone: fieldValue(form, "phone"),
+          applicant: fieldValue(form, "spaceApplicant") || fieldValue(form, "applicant"),
+          phone: fieldValue(form, "spacePhone") || fieldValue(form, "phone"),
+          birthYear: fieldValue(form, "spaceBirthYear") || fieldValue(form, "birthYear"),
+          region: fieldValue(form, "spaceRegion") || fieldValue(form, "region"),
+          lookupPassword: fieldValue(form, "spacePassword") || fieldValue(form, "lookupPassword"),
           startDate: fieldValue(form, "startDate"),
           endDate: fieldValue(form, "endDate"),
           purpose: fieldValue(form, "purpose"),
@@ -569,8 +743,13 @@
           source: "local",
         };
 
-        if (!reservation.applicant || !reservation.phone || !reservation.startDate || !reservation.endDate) {
-          setFormStatus(form, "신청자명, 연락처, 예약일을 입력해 주세요.", true);
+        if (form.elements.privacyConsent && !form.elements.privacyConsent.checked) {
+          setFormStatus(form, "개인정보 수집·이용에 동의해주세요.", true);
+          return;
+        }
+
+        if (!reservation.applicant || !reservation.phone || !reservation.birthYear || !reservation.region || !reservation.lookupPassword || !reservation.startDate || !reservation.endDate) {
+          setFormStatus(form, "이름, 연락처, 출생연도, 주소, 비밀번호, 예약일을 모두 입력해주세요.", true);
           return;
         }
 
@@ -578,18 +757,8 @@
         submitButton.disabled = true;
 
         try {
-          const savedToSupabase = await insertSupabaseReservation(reservation);
-          if (!savedToSupabase) {
-            const items = safeParse(SPACE_KEY);
-            safeSave(SPACE_KEY, [reservation, ...items]);
-          }
-
-          setFormStatus(
-            form,
-            savedToSupabase
-              ? "예약 신청이 접수되었습니다. 관리자 확인 후 승인됩니다."
-              : "예약 신청이 임시 저장되었습니다. Supabase 연결 후 실제 저장됩니다.",
-          );
+          await insertSupabaseReservation(reservation);
+          setFormStatus(form, "예약 신청이 접수되었습니다. 예약확인 시 신청자명, 연락처, 비밀번호를 입력해주세요.");
           window.setTimeout(() => {
             window.location.href = "space-reservations.html";
           }, 650);
@@ -602,6 +771,135 @@
     });
   };
 
+  const setupSpaceReservationCalendars = async () => {
+    const inputs = document.querySelectorAll(
+      '[data-space-reservation-form] input[name="startDate"], [data-space-reservation-form] input[name="endDate"]',
+    );
+    if (!inputs.length) return;
+
+    try {
+      await loadExternalStyle("flatpickr-style", "https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css");
+      await loadExternalScript("flatpickr-script", "https://cdn.jsdelivr.net/npm/flatpickr");
+      await loadExternalScript("flatpickr-ko", "https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js");
+
+      inputs.forEach((input) => {
+        if (input._flatpickr || !window.flatpickr) return;
+        window.flatpickr(input, {
+          dateFormat: "Y-m-d",
+          disableMobile: true,
+          locale: window.flatpickr.l10ns?.ko || "ko",
+          monthSelectorType: "dropdown",
+          onReady: (_selectedDates, _dateStr, instance) => {
+            instance.calendarContainer.classList.add("kkoom-space-calendar");
+          },
+        });
+      });
+    } catch (error) {
+      console.warn("Large date picker fallback:", error);
+    }
+  };
+
+  const setupProgramCatalogPage = async () => {
+    const list = document.querySelector("[data-program-list]");
+    if (!list) return;
+
+    const form = document.querySelector("[data-program-filter-form]");
+    let programs = [];
+    const INITIAL_PROGRAM_LIMIT = 6;
+    let visibleLimit = INITIAL_PROGRAM_LIMIT;
+    let resultCount = document.querySelector("[data-program-result-count]");
+    if (!resultCount && form) {
+      resultCount = document.createElement("p");
+      resultCount.className = "program-result-count";
+      resultCount.dataset.programResultCount = "";
+      form.insertAdjacentElement("afterend", resultCount);
+    }
+
+    const moreWrap = document.createElement("div");
+    moreWrap.className = "program-list-more";
+    moreWrap.innerHTML = '<button type="button" data-program-more hidden>더보기</button>';
+    list.insertAdjacentElement("afterend", moreWrap);
+    const moreButton = moreWrap.querySelector("[data-program-more]");
+
+    const programSortRank = (program) => ({ open: 0, scheduled: 1, closed: 2, finished: 3 }[program.status] ?? 4);
+    const programDateValue = (program) => Date.parse(program.applyStartDate || program.startDate || "") || 0;
+
+    const renderPrograms = ({ resetLimit = false } = {}) => {
+      if (resetLimit) visibleLimit = INITIAL_PROGRAM_LIMIT;
+      const status = form?.elements.status?.value || "all";
+      const target = form?.elements.target?.value || "all";
+      const keyword = (form?.elements.keyword?.value || "").trim().toLowerCase();
+      const filtered = programs
+        .filter((program) => {
+          const matchesStatus = status === "all" ? ["open", "scheduled"].includes(program.status) : program.status === status;
+          const matchesTarget = target === "all" || program.target === target;
+          const haystack = `${program.title} ${program.summary} ${program.content} ${program.place} ${program.instructor}`.toLowerCase();
+          return matchesStatus && matchesTarget && (!keyword || haystack.includes(keyword));
+        })
+        .sort((a, b) => programSortRank(a) - programSortRank(b) || programDateValue(b) - programDateValue(a));
+      const visiblePrograms = filtered.slice(0, visibleLimit);
+
+      if (resultCount) {
+        resultCount.textContent = filtered.length
+          ? `총 ${filtered.length}개 교육 중 ${visiblePrograms.length}개를 보여드립니다.`
+          : "조건에 맞는 교육이 없습니다.";
+      }
+
+      list.innerHTML = visiblePrograms.length
+        ? visiblePrograms
+            .map((program) => {
+              const canApply = program.status === "open";
+              return `
+                <article class="program-list-card">
+                  <img src="${escapeHtml(program.imageUrl)}" alt="${escapeHtml(program.title)} 이미지">
+                  <div>
+                    <span class="status ${programStatusClass(program.status)}">${escapeHtml(getProgramStatusLabel(program.status))}</span>
+                    <h3>${escapeHtml(program.title)}</h3>
+                    <p>${escapeHtml(program.summary || program.content || "교육 상세내용을 확인해주세요.")}</p>
+                    <dl>
+                      <div><dt>모집기간</dt><dd>${escapeHtml(formatDateRange(program.applyStartDate, program.applyEndDate))}</dd></div>
+                      <div><dt>진행기간</dt><dd>${escapeHtml(formatDateRange(program.startDate, program.endDate))}</dd></div>
+                      <div><dt>장소</dt><dd>${escapeHtml(program.place)}</dd></div>
+                      <div><dt>대상</dt><dd>${escapeHtml(program.target)}</dd></div>
+                      <div><dt>정원</dt><dd>${escapeHtml(program.capacity)}명</dd></div>
+                    </dl>
+                  </div>
+                  ${
+                    canApply
+                      ? `<a href="program-apply.html?program=${encodeURIComponent(program.title)}">신청하기</a>`
+                      : `<span class="program-apply-disabled">${escapeHtml(getProgramStatusLabel(program.status))}</span>`
+                  }
+                </article>
+              `;
+            })
+            .join("")
+        : `<article class="empty-state program-list-empty"><strong>조건에 맞는 교육이 없습니다.</strong><p>검색 조건을 바꾸거나 다음 모집을 기다려주세요.</p></article>`;
+
+      if (moreButton) {
+        moreButton.hidden = visiblePrograms.length >= filtered.length;
+      }
+    };
+
+    try {
+      const loadedPrograms = await fetchSupabasePrograms();
+      if (!loadedPrograms) return;
+      programs = loadedPrograms;
+      renderPrograms();
+      form?.addEventListener("submit", (event) => {
+        event.preventDefault();
+        renderPrograms({ resetLimit: true });
+      });
+      form?.addEventListener("change", () => renderPrograms({ resetLimit: true }));
+      form?.elements.keyword?.addEventListener("input", () => renderPrograms({ resetLimit: true }));
+      moreButton?.addEventListener("click", () => {
+        visibleLimit += INITIAL_PROGRAM_LIMIT;
+        renderPrograms();
+      });
+    } catch (error) {
+      console.warn("Supabase program catalog fallback:", error);
+    }
+  };
+
   const setupProgramApplyForm = () => {
     const form = document.querySelector("[data-program-apply-form]");
     if (!form) return;
@@ -609,9 +907,36 @@
     const params = new URLSearchParams(window.location.search);
     const selectedProgram = params.get("program");
     const programSelect = form.elements.programName;
-    if (selectedProgram && programSelect) {
-      programSelect.value = selectedProgram;
-    }
+    const submitButton = form.querySelector('button[type="submit"]');
+
+    const populateProgramOptions = async () => {
+      if (!programSelect) return;
+      try {
+        const programs = await fetchSupabasePrograms({ openOnly: true });
+        if (!programs) {
+          if (selectedProgram) programSelect.value = selectedProgram;
+          return;
+        }
+
+        programSelect.innerHTML = `<option value="">신청할 프로그램을 선택하세요</option>${programs
+          .map((program) => `<option value="${escapeHtml(program.title)}">${escapeHtml(program.title)}</option>`)
+          .join("")}`;
+
+        if (selectedProgram && programs.some((program) => program.title === selectedProgram)) {
+          programSelect.value = selectedProgram;
+        }
+
+        if (!programs.length) {
+          if (submitButton) submitButton.disabled = true;
+          setFormStatus(form, "현재 신청 가능한 교육이 없습니다.", true);
+        }
+      } catch (error) {
+        console.warn("Supabase program option fallback:", error);
+        if (selectedProgram && programSelect) programSelect.value = selectedProgram;
+      }
+    };
+
+    populateProgramOptions();
 
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
@@ -619,37 +944,36 @@
       const application = {
         id: createId("P"),
         programName: fieldValue(form, "programName") || "프로그램",
-        applicant: fieldValue(form, "applicant"),
-        phone: fieldValue(form, "phone"),
-        birthYear: fieldValue(form, "birthYear"),
-        region: fieldValue(form, "region"),
-        group: fieldValue(form, "region") || "참여자",
+        applicant: fieldValue(form, "programApplicant") || fieldValue(form, "applicant"),
+        phone: fieldValue(form, "programPhone") || fieldValue(form, "phone"),
+        birthYear: fieldValue(form, "programBirthYear") || fieldValue(form, "birthYear"),
+        region: fieldValue(form, "programRegion") || fieldValue(form, "region"),
+        lookupPassword: fieldValue(form, "programPassword") || fieldValue(form, "lookupPassword"),
+        group: fieldValue(form, "programRegion") || fieldValue(form, "region") || "참여자",
         memo: fieldValue(form, "memo"),
         status: "접수완료",
         createdAt: new Date().toISOString(),
         source: "local",
       };
 
-      if (!application.programName || !application.applicant || !application.phone || !application.birthYear || !application.region) {
-        setFormStatus(form, "프로그램명, 신청자명, 연락처, 출생연도, 지역을 입력해 주세요.", true);
+      if (form.elements.privacyConsent && !form.elements.privacyConsent.checked) {
+        setFormStatus(form, "개인정보 수집·이용에 동의해주세요.", true);
         return;
       }
 
-      const submitButton = form.querySelector('button[type="submit"]');
+      if (!application.programName || !application.applicant || !application.phone || !application.birthYear || !application.region || !application.lookupPassword) {
+        setFormStatus(form, "프로그램명, 이름, 연락처, 출생연도, 주소, 비밀번호를 모두 입력해주세요.", true);
+        return;
+      }
+
       submitButton.disabled = true;
 
       try {
         const supabaseStatus = await insertSupabaseProgramApplication(application);
-        if (!supabaseStatus) {
-          const items = safeParse(PROGRAM_KEY);
-          safeSave(PROGRAM_KEY, [application, ...items]);
-        }
 
         setFormStatus(
           form,
-          supabaseStatus
-            ? `교육 신청이 ${getStatusLabel("program", supabaseStatus)} 상태로 접수되었습니다.`
-            : "교육 신청이 임시 저장되었습니다. Supabase 연결 후 실제 저장됩니다.",
+          `교육 신청이 ${getStatusLabel("program", supabaseStatus)} 상태로 접수되었습니다. 신청확인 시 신청자명, 연락처, 비밀번호를 입력해주세요.`,
         );
         window.setTimeout(() => {
           window.location.href = "program-check.html";
@@ -667,14 +991,14 @@
     const emptyText = type === "space" ? "아직 저장된 공간 예약이 없습니다." : "아직 저장된 교육 신청이 없습니다.";
     container.innerHTML = items.length
       ? items
-          .map((item) => {
-            const title = type === "space" ? item.spaceName : item.programName;
-            const meta =
-              type === "space"
-                ? `${item.id} · ${item.startDate || "-"}${item.endDate && item.endDate !== item.startDate ? ` - ${item.endDate}` : ""} · ${item.applicant || "-"}`
-                : `${item.id} · ${item.group || "참여자"} · ${item.applicant || "-"}`;
-            return `<article><span class="status ${statusClass(item.status)}">${escapeHtml(item.status)}</span><strong>${escapeHtml(title)}</strong><p>${escapeHtml(meta)}</p></article>`;
-          })
+      .map((item) => {
+        const title = type === "space" ? item.spaceName : item.programName;
+        const meta =
+          type === "space"
+            ? `${item.startDate || "-"}${item.endDate && item.endDate !== item.startDate ? ` - ${item.endDate}` : ""} · ${item.applicant || "-"}`
+            : `${item.group || "참여자"} · ${item.applicant || "-"}`;
+        return `<article><span class="status ${statusClass(item.status)}">${escapeHtml(item.status)}</span><strong>${escapeHtml(title)}</strong><p>${escapeHtml(meta)}</p></article>`;
+      })
           .join("")
       : `<article class="empty-state"><strong>${emptyText}</strong><p>신청을 완료하면 이곳에 목록이 표시됩니다.</p></article>`;
   };
@@ -682,106 +1006,119 @@
   const setupCheckLists = async () => {
     const spaceList = document.querySelector("[data-space-reservation-list]");
     if (spaceList) {
+      const spaceCheckForm = document.querySelector("[data-space-check-form]");
+      if (spaceCheckForm) {
+        spaceList.innerHTML = '<article class="empty-state"><strong>예약 내역을 조회해주세요.</strong><p>신청자명, 연락처, 비밀번호가 일치할 때 본인 예약만 표시됩니다.</p></article>';
+        spaceCheckForm.addEventListener("submit", async (event) => {
+          event.preventDefault();
+          const lookup = {
+            applicantName: fieldValue(spaceCheckForm, "applicantName"),
+            phone: fieldValue(spaceCheckForm, "phone"),
+            lookupPassword: fieldValue(spaceCheckForm, "lookupPassword"),
+          };
+          if (!lookup.applicantName || !lookup.phone || !lookup.lookupPassword) {
+            spaceList.innerHTML = '<article class="empty-state"><strong>신청자명, 연락처, 비밀번호를 모두 입력해주세요.</strong></article>';
+            return;
+          }
+          const submitButton = spaceCheckForm.querySelector('button[type="submit"]');
+          if (submitButton) submitButton.disabled = true;
+          try {
+            const items = await lookupSupabaseSpaceReservation(lookup);
+            if (!items.length) {
+              spaceList.innerHTML = '<article class="empty-state"><strong>일치하는 예약 내역이 없습니다.</strong><p>신청자명, 연락처, 비밀번호를 다시 확인해주세요.</p></article>';
+              return;
+            }
+            renderList(
+              spaceList,
+              items.map((item) => ({
+                id: item.id,
+                spaceName: item.spaceName,
+                applicant: item.applicant,
+                startDate: item.reservationDate,
+                endDate: item.reservationDate,
+                status: item.statusLabel,
+                createdAt: item.createdAt,
+              })),
+              "space",
+            );
+          } catch (error) {
+            spaceList.innerHTML = `<article class="empty-state"><strong>${escapeHtml(error.message || "예약 내역을 조회하지 못했습니다.")}</strong></article>`;
+          } finally {
+            if (submitButton) submitButton.disabled = false;
+          }
+        });
+        return;
+      }
+
       try {
         const supabaseItems = await fetchSupabaseSpaceReservations();
-        renderList(spaceList, supabaseItems || [...safeParse(SPACE_KEY), ...sampleSpaceReservations], "space");
+        renderList(spaceList, supabaseItems || [], "space");
       } catch (error) {
-        renderList(spaceList, [...safeParse(SPACE_KEY), ...sampleSpaceReservations], "space");
+        renderList(spaceList, [], "space");
         console.warn("Supabase space list fallback:", error);
       }
     }
 
     const programList = document.querySelector("[data-program-application-list]");
     if (programList) {
+      const programCheckForm = document.querySelector("[data-program-check-form]");
+      if (programCheckForm) {
+        renderList(programList, [], "program");
+        programList.innerHTML = '<article class="empty-state"><strong>신청 내역을 조회해주세요.</strong><p>신청자명, 연락처, 비밀번호가 일치할 때 본인 신청만 표시됩니다.</p></article>';
+        programCheckForm.addEventListener("submit", async (event) => {
+          event.preventDefault();
+          const lookup = {
+            applicantName: fieldValue(programCheckForm, "applicantName"),
+            phone: fieldValue(programCheckForm, "phone"),
+            lookupPassword: fieldValue(programCheckForm, "lookupPassword"),
+          };
+          if (!lookup.applicantName || !lookup.phone || !lookup.lookupPassword) {
+            programList.innerHTML = '<article class="empty-state"><strong>신청자명, 연락처, 비밀번호를 모두 입력해주세요.</strong></article>';
+            return;
+          }
+          const submitButton = programCheckForm.querySelector('button[type="submit"]');
+          if (submitButton) submitButton.disabled = true;
+          try {
+            const items = await lookupSupabaseProgramApplication(lookup);
+            if (!items.length) {
+              programList.innerHTML = '<article class="empty-state"><strong>일치하는 신청 내역이 없습니다.</strong><p>신청자명, 연락처, 비밀번호를 다시 확인해주세요.</p></article>';
+              return;
+            }
+            renderList(
+              programList,
+              items.map((item) => ({
+                id: item.id,
+                programName: item.programName,
+                applicant: item.applicant,
+                group: item.region,
+                status: item.statusLabel,
+                createdAt: item.createdAt,
+              })),
+              "program",
+            );
+          } catch (error) {
+            programList.innerHTML = `<article class="empty-state"><strong>${escapeHtml(error.message || "신청 내역을 조회하지 못했습니다.")}</strong></article>`;
+          } finally {
+            if (submitButton) submitButton.disabled = false;
+          }
+        });
+        return;
+      }
+
       try {
         const supabaseItems = await fetchSupabaseProgramApplications();
-        renderList(programList, supabaseItems || [...safeParse(PROGRAM_KEY), ...sampleProgramApplications], "program");
+        renderList(programList, supabaseItems || [], "program");
       } catch (error) {
-        renderList(programList, [...safeParse(PROGRAM_KEY), ...sampleProgramApplications], "program");
+        renderList(programList, [], "program");
         console.warn("Supabase program list fallback:", error);
       }
     }
   };
 
-  const renderAdminList = (container, items, type) => {
-    if (!container) return;
-    const options = Object.entries(STATUS[type]);
-    container.innerHTML = items
-      .map((item) => {
-        const title = type === "space" ? item.spaceName : item.programName;
-        const date = type === "space" ? item.startDate || "-" : item.createdAt?.slice(0, 10) || "-";
-        const value = item.statusValue || getStatusValue(type, item.status);
-        return `
-          <article class="admin-item">
-            <div>
-              <span class="status ${statusClass(item.status)}">${escapeHtml(item.status)}</span>
-              <strong>${escapeHtml(title)}</strong>
-              <p>${escapeHtml(item.id)} · ${escapeHtml(item.applicant || "-")} · ${escapeHtml(date)}</p>
-            </div>
-            <select data-admin-status="${escapeHtml(type)}" data-admin-id="${escapeHtml(item.rowId || item.id)}" data-admin-source="${escapeHtml(item.source || "local")}">
-              ${options
-                .map(([optionValue, label]) => `<option value="${optionValue}"${optionValue === value ? " selected" : ""}>${label}</option>`)
-                .join("")}
-            </select>
-          </article>
-        `;
-      })
-      .join("");
-  };
-
-  const setupAdminPage = async () => {
-    const dashboard = document.querySelector("[data-admin-dashboard]");
-    if (!dashboard) return;
-
-    let spaceItems = [...safeParse(SPACE_KEY), ...sampleSpaceReservations];
-    let programItems = [...safeParse(PROGRAM_KEY), ...sampleProgramApplications];
-
-    try {
-      spaceItems = (await fetchSupabaseSpaceReservations()) || spaceItems;
-      programItems = (await fetchSupabaseProgramApplications()) || programItems;
-    } catch (error) {
-      console.warn("Supabase admin fallback:", error);
-    }
-
-    dashboard.querySelector("[data-admin-space-count]").textContent = String(spaceItems.length);
-    dashboard.querySelector("[data-admin-program-count]").textContent = String(programItems.length);
-    dashboard.querySelector("[data-admin-waiting-count]").textContent = String(
-      [...spaceItems, ...programItems].filter((item) => ["접수", "승인대기", "대기", "확인중"].includes(item.status)).length,
-    );
-
-    renderAdminList(dashboard.querySelector("[data-admin-space-list]"), spaceItems, "space");
-    renderAdminList(dashboard.querySelector("[data-admin-program-list]"), programItems, "program");
-
-    dashboard.addEventListener("change", async (event) => {
-      const target = event.target;
-      if (!(target instanceof HTMLSelectElement) || !target.dataset.adminStatus) return;
-
-      const type = target.dataset.adminStatus;
-      const source = target.dataset.adminSource;
-      const label = getStatusLabel(type, target.value);
-
-      if (source === "supabase") {
-        const client = getSupabaseClient();
-        const table = type === "space" ? "space_reservations" : "program_applications";
-        const { error } = await client.from(table).update({ status: target.value }).eq("id", target.dataset.adminId);
-        if (error) {
-          window.alert(error.message || "상태 변경 중 문제가 발생했습니다.");
-        }
-        return;
-      }
-
-      const key = type === "space" ? SPACE_KEY : PROGRAM_KEY;
-      const items = safeParse(key);
-      const updated = items.map((item) =>
-        item.id === target.dataset.adminId ? { ...item, status: label } : item,
-      );
-      safeSave(key, updated);
-    });
-  };
-
   setupSpaceReservationForms();
+  setupSpaceReservationCalendars();
+  setupProgramCatalogPage();
   setupProgramApplyForm();
   setupContactForms();
   setupCheckLists();
-  setupAdminPage();
 })();

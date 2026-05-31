@@ -3,69 +3,327 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>관리자 | 군북면 꿈키움센터</title>
-    <meta name="description" content="군북면 꿈키움센터 관리자 목업 화면입니다.">
-    <link rel="stylesheet" href="assets/css/styles.css?v=20260527-3">
+    <title>관리자페이지 | 군북면 꿈키움센터</title>
+    <meta name="description" content="군북면 꿈키움센터 관리자 승인 및 관리 페이지입니다.">
+    <link rel="stylesheet" href="assets/css/styles.css?v=20260530-6">
   </head>
-  <body>
+  <body class="admin-page admin-approval-page">
     <a class="skip-link" href="#main">본문 바로가기</a>
     <header class="site-header">
       <div class="header-inner">
-        <a class="brand" href="index.html" aria-label="군북면 꿈키움센터 홈"><img class="brand-symbol" src="assets/images/kkoom-logo-symbol.png" alt="" aria-hidden="true"><span class="brand-wordmark"><strong>꿈키움센터</strong><small>군북면</small></span></a>
+        <a class="brand" href="index.html" aria-label="군북면 꿈키움센터 홈">
+          <img class="brand-symbol" src="assets/images/kkoom-logo-symbol.png" alt="" aria-hidden="true">
+          <span class="brand-wordmark"><strong>꿈키움센터</strong><small>군북면</small></span>
+        </a>
         <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav"><span></span><span></span><span></span><span class="sr-only">메뉴 열기</span></button>
         <nav class="primary-nav" id="primary-nav" aria-label="주요 메뉴">
           <div class="nav-group"><a class="nav-link" href="about.html">센터소개</a><div class="nav-dropdown" data-menu-label="센터소개"><a href="about.html">인사말</a><a href="vision.html">비전</a><a href="history.html">연혁</a><a href="spaces.html">시설소개</a><a href="location.html">오시는길</a></div></div>
           <div class="nav-group"><a class="nav-link" href="space-apply.html">공간시설</a><div class="nav-dropdown" data-menu-label="공간시설"><a href="space-apply.html">공간예약</a><a href="space-reservations.html">예약확인</a></div></div>
           <div class="nav-group"><a class="nav-link" href="programs.html">프로그램</a><div class="nav-dropdown" data-menu-label="프로그램"><a href="programs.html">교육신청</a><a href="program-check.html">신청확인</a></div></div>
           <div class="nav-group"><a class="nav-link" href="news.html">소식마당</a><div class="nav-dropdown" data-menu-label="소식마당"><a href="news.html">공지사항</a><a href="gallery.html">꿈센터 갤러리</a><a href="village-story.html">마을 이야기</a><a href="contact.html">문의 / 제안</a></div></div>
-          <div class="nav-group nav-dafarm-group"><a class="nav-link nav-external" href="https://dafarm.co.kr/" target="_blank" rel="noreferrer"><img class="nav-dafarm-logo" src="assets/images/dafarm-logo-top.jpg" alt="금산다팜 몰"></a><div class="nav-dropdown nav-dropdown-mobile-only" data-menu-label="금산다팜몰"><a href="https://dafarm.co.kr/" target="_blank" rel="noreferrer">금산다팜몰 바로가기</a></div></div>
-          <div class="nav-group nav-utility utility-start"><a class="nav-link nav-login" href="login.html"><span class="login-person-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 12.4a4.1 4.1 0 1 0 0-8.2 4.1 4.1 0 0 0 0 8.2Z"></path><path d="M4.8 20.1c1.1-3.5 3.6-5.3 7.2-5.3s6.1 1.8 7.2 5.3"></path></svg></span><span>로그인</span></a></div>
+          <div class="nav-group nav-dafarm-group"><a class="nav-link nav-external" href="https://dafarm.co.kr/" target="_blank" rel="noreferrer"><img class="nav-dafarm-logo" src="assets/images/dafarm-logo-top.jpg" alt="금산다팜 몰"></a></div>
+          <div class="nav-group nav-utility utility-start"><a class="nav-link nav-login" href="login.html" aria-label="스텝 로그인"><span class="login-person-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 12.4a4.1 4.1 0 1 0 0-8.2 4.1 4.1 0 0 0 0 8.2Z"></path><path d="M4.8 20.1c1.1-3.5 3.6-5.3 7.2-5.3s6.1 1.8 7.2 5.3"></path></svg></span><span class="sr-only">스텝 로그인</span></a></div>
         </nav>
       </div>
     </header>
 
-    <main id="main">
-      <section class="sub-hero"><img src="assets/images/subpage-hero-center-soft.png" alt="군북면 꿈키움센터를 내려다본 반투명 배경 이미지"><div class="sub-hero-content"><p class="eyebrow">ADMIN</p><h1><span>예약과 신청을 확인하는</span><span>관리자 화면</span></h1></div></section>
-      <nav class="breadcrumb" aria-label="현재 위치"><div class="container breadcrumb-inner"><a class="breadcrumb-home" href="index.html" aria-label="홈"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5v8.7a.8.8 0 0 1-.8.8h-5.1v-5.4H9.9V20H4.8a.8.8 0 0 1-.8-.8v-8.7Z"></path></svg><span>홈</span></a><span class="breadcrumb-separator" aria-hidden="true">›</span><a class="breadcrumb-current" href="admin.html" aria-current="page">관리자</a></div></nav>
-
-      <section class="section">
-        <div class="container section-heading news-page-heading">
-          <p class="eyebrow">Admin Dashboard</p>
-          <h2>관리자 페이지</h2>
-        </div>
-        <div class="container news-page-rule" aria-hidden="true"></div>
-
-        <div class="container admin-dashboard" data-admin-dashboard>
-          <div class="admin-summary">
-            <article><span>공간예약</span><strong data-admin-space-count>0</strong></article>
-            <article><span>교육신청</span><strong data-admin-program-count>0</strong></article>
-            <article><span>확인 필요</span><strong data-admin-waiting-count>0</strong></article>
+    <main class="admin-approval-main" id="main" data-admin-approval-dashboard>
+      <section class="admin-approval-hero">
+        <div class="container admin-approval-hero-inner">
+          <div class="admin-approval-title-block">
+            <h1>관리자페이지</h1>
+            <div class="admin-approval-session">
+              <span data-admin-approval-role>권한 확인 중</span>
+            </div>
           </div>
 
-          <div class="admin-columns">
-            <section class="admin-panel">
-              <div class="admin-panel-heading">
-                <p class="eyebrow">Space</p>
-                <h3>공간예약 관리</h3>
+          <div class="admin-pending-summary" aria-label="미처리 현황">
+            <article class="admin-pending-card admin-pending-space">
+              <span class="admin-pending-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" focusable="false"><path d="M4 10.2 12 4l8 6.2V20a1 1 0 0 1-1 1h-5.2v-6.2H10.2V21H5a1 1 0 0 1-1-1v-9.8Z"></path></svg>
+              </span>
+              <div class="admin-pending-copy">
+                <span>공간예약</span>
+                <button class="admin-pending-count" type="button" data-pending-jump="space" aria-label="공간예약 승인 화면으로 이동">
+                  <strong data-pending-space-count>0</strong><span class="admin-pending-unit">건</span>
+                </button>
+                <em>승인 대기</em>
               </div>
-              <div class="admin-list" data-admin-space-list></div>
-            </section>
-            <section class="admin-panel">
-              <div class="admin-panel-heading">
-                <p class="eyebrow">Program</p>
-                <h3>교육신청 관리</h3>
+            </article>
+            <article class="admin-pending-card admin-pending-program">
+              <span class="admin-pending-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" focusable="false"><path d="M7 3v3M17 3v3M4.8 8.2h14.4M6 5h12a2 2 0 0 1 2 2v11.2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"></path><path d="m9 14 2 2 4-5"></path></svg>
+              </span>
+              <div class="admin-pending-copy">
+                <span>교육신청</span>
+                <button class="admin-pending-count" type="button" data-pending-jump="program" aria-label="교육신청 승인 화면으로 이동">
+                  <strong data-pending-program-count>0</strong><span class="admin-pending-unit">건</span>
+                </button>
+                <em>확인 필요</em>
               </div>
-              <div class="admin-list" data-admin-program-list></div>
-            </section>
+            </article>
+            <article class="admin-pending-card admin-pending-inquiry">
+              <span class="admin-pending-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" focusable="false"><path d="M5 5.6h14a2 2 0 0 1 2 2v7.6a2 2 0 0 1-2 2h-6.7L8 20v-2.8H5a2 2 0 0 1-2-2V7.6a2 2 0 0 1 2-2Z"></path><path d="M8 10h8M8 14h5"></path></svg>
+              </span>
+              <div class="admin-pending-copy">
+                <span>문의/제안</span>
+                <a class="admin-pending-count" href="contact.html" aria-label="문의 답변 화면으로 이동">
+                  <strong data-pending-inquiry-count>0</strong><span class="admin-pending-unit">건</span>
+                </a>
+                <em>답변 대기</em>
+              </div>
+            </article>
           </div>
         </div>
       </section>
+
+      <section class="container admin-approval-tabs" id="approval-tabs" aria-labelledby="approval-tabs-title">
+        <div class="admin-approval-section-head">
+          <div>
+            <h2 id="approval-tabs-title">승인 및 관리</h2>
+          </div>
+        </div>
+
+        <div class="admin-tab-list" role="tablist" aria-label="승인 및 관리 탭">
+          <button class="is-active" type="button" role="tab" id="tab-space" aria-selected="true" aria-controls="panel-space" data-admin-tab="space">공간예약 승인</button>
+          <button type="button" role="tab" id="tab-program" aria-selected="false" aria-controls="panel-program" data-admin-tab="program">교육신청 승인</button>
+          <button type="button" role="tab" id="tab-program-manage" aria-selected="false" aria-controls="panel-program-manage" data-admin-tab="program-manage">교육 관리</button>
+          <button type="button" role="tab" id="tab-settings" aria-selected="false" aria-controls="panel-settings" data-admin-tab="settings">관리자·스텝 설정</button>
+        </div>
+
+        <section class="admin-tab-panel is-active" role="tabpanel" id="panel-space" aria-labelledby="tab-space" data-admin-panel="space">
+          <div class="admin-bulk-toolbar" aria-label="공간예약 목록 및 일괄 처리">
+            <div class="admin-list-control-group">
+              <label class="admin-page-size-control">목록
+                <select data-space-page-size aria-label="공간예약 목록 줄 수 선택">
+                  <option value="10">10줄보기</option>
+                  <option value="30">30줄보기</option>
+                  <option value="50">50줄보기</option>
+                </select>
+              </label>
+              <div class="admin-page-nav" aria-label="공간예약 목록 페이지 이동">
+                <button type="button" data-space-page-prev>이전</button>
+                <span data-space-page-info>1 / 1</span>
+                <button type="button" data-space-page-next>다음</button>
+              </div>
+            </div>
+            <div class="admin-bulk-action-group">
+              <span data-space-selected-count>0건 선택</span>
+              <button type="button" data-space-bulk-approve disabled>선택 승인</button>
+            </div>
+          </div>
+          <div class="admin-approval-table-wrap">
+            <table class="admin-approval-table">
+              <caption>공간예약 승인 대기 목록</caption>
+              <thead>
+                <tr>
+                  <th scope="col" class="admin-select-cell"><input class="admin-row-check" type="checkbox" aria-label="공간예약 현재 페이지 전체선택" data-space-select-all></th>
+                  <th scope="col">공간</th>
+                  <th scope="col">신청자</th>
+                  <th scope="col">연락처</th>
+                  <th scope="col">예약일</th>
+                  <th scope="col">처리</th>
+                </tr>
+              </thead>
+              <tbody data-space-approval-list>
+                <tr><td colspan="6">공간예약 목록을 불러오고 있습니다.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="admin-tab-panel" role="tabpanel" id="panel-program" aria-labelledby="tab-program" data-admin-panel="program" hidden>
+          <div class="admin-bulk-toolbar" aria-label="교육신청 목록 및 일괄 처리">
+            <div class="admin-list-control-group">
+              <label class="admin-page-size-control">목록
+                <select data-program-page-size aria-label="교육신청 목록 줄 수 선택">
+                  <option value="10">10줄보기</option>
+                  <option value="30">30줄보기</option>
+                  <option value="50">50줄보기</option>
+                </select>
+              </label>
+              <div class="admin-page-nav" aria-label="교육신청 목록 페이지 이동">
+                <button type="button" data-program-page-prev>이전</button>
+                <span data-program-page-info>1 / 1</span>
+                <button type="button" data-program-page-next>다음</button>
+              </div>
+            </div>
+            <div class="admin-bulk-action-group">
+              <span data-program-selected-count>0건 선택</span>
+              <button type="button" data-program-bulk-approve disabled>선택 승인</button>
+            </div>
+          </div>
+          <div class="admin-approval-table-wrap">
+            <table class="admin-approval-table">
+              <caption>교육신청 승인 대기 목록</caption>
+              <thead>
+                <tr>
+                  <th scope="col" class="admin-select-cell"><input class="admin-row-check" type="checkbox" aria-label="교육신청 현재 페이지 전체선택" data-program-select-all></th>
+                  <th scope="col">프로그램</th>
+                  <th scope="col">신청자</th>
+                  <th scope="col">연락처</th>
+                  <th scope="col">접수일</th>
+                  <th scope="col">처리</th>
+                </tr>
+              </thead>
+              <tbody data-program-approval-list>
+                <tr><td colspan="6">교육신청 목록을 불러오고 있습니다.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="admin-tab-panel" role="tabpanel" id="panel-program-manage" aria-labelledby="tab-program-manage" data-admin-panel="program-manage" hidden>
+          <div class="admin-program-head">
+            <div>
+              <h3>교육 관리</h3>
+              <p>교육 현황을 확인하고 신규 교육 등록과 수정·숨김 처리를 함께 관리합니다.</p>
+            </div>
+            <button class="admin-refresh-button" type="button" data-program-status-refresh>새로고침</button>
+          </div>
+          <div class="admin-program-summary" data-program-status-summary>
+            <article><span>전체 교육</span><strong>0</strong></article>
+            <article><span>접수중</span><strong>0</strong></article>
+            <article><span>승인 대기</span><strong>0</strong></article>
+          </div>
+          <div class="admin-program-filterbar" aria-label="교육 관리 목록 검색">
+            <label>상태
+              <select data-program-manage-status>
+                <option value="all">전체 상태</option>
+                <option value="scheduled">접수예정</option>
+                <option value="open">접수중</option>
+                <option value="closed">접수마감</option>
+                <option value="finished">종료</option>
+                <option value="hidden">숨김</option>
+              </select>
+            </label>
+            <label>대상
+              <select data-program-manage-target>
+                <option value="all">전체 대상</option>
+                <option value="전체">전체</option>
+                <option value="성인">성인</option>
+                <option value="아동청소년">아동청소년</option>
+              </select>
+            </label>
+            <label>연도
+              <select data-program-manage-year>
+                <option value="current">올해</option>
+                <option value="all">전체 연도</option>
+              </select>
+            </label>
+            <label class="admin-program-filter-keyword">검색어
+              <input type="search" placeholder="교육명, 장소, 강사" data-program-manage-keyword>
+            </label>
+            <label>목록
+              <select data-program-manage-page-size>
+                <option value="10">10줄보기</option>
+                <option value="30">30줄보기</option>
+                <option value="50">50줄보기</option>
+              </select>
+            </label>
+            <div class="admin-program-page-nav" aria-label="교육 관리 목록 페이지 이동">
+              <button type="button" data-program-manage-page-prev>이전</button>
+              <span data-program-manage-page-info>1 / 1</span>
+              <button type="button" data-program-manage-page-next>다음</button>
+            </div>
+            <p class="admin-program-filter-result" data-program-manage-result>교육 목록을 불러오고 있습니다.</p>
+          </div>
+          <div class="admin-program-status-list" data-program-status-list>
+            <article class="empty-state"><strong>교육 목록을 불러오고 있습니다.</strong></article>
+          </div>
+          <form class="admin-program-form" autocomplete="off" data-program-manage-form>
+            <input type="hidden" name="id">
+            <div class="admin-program-form-grid">
+              <label class="admin-program-title">프로그램명<input name="title" type="text" placeholder="예: 베이킹 교육과정" required></label>
+              <label>대상
+                <select name="target">
+                  <option value="전체">전체</option>
+                  <option value="성인">성인</option>
+                  <option value="아동청소년">아동청소년</option>
+                </select>
+              </label>
+              <label>정원<input name="capacity" type="number" min="1" inputmode="numeric" placeholder="20" required></label>
+              <label>모집 시작일<input name="applyStartDate" type="date" required></label>
+              <label>모집 종료일<input name="applyEndDate" type="date" required></label>
+              <label>수업 시작일<input name="startDate" type="date" required></label>
+              <label>수업 종료일<input name="endDate" type="date" required></label>
+              <label class="admin-program-place">장소<input name="place" type="text" placeholder="예: 1층 공유주방" required></label>
+              <label>강사<input name="instructor" type="text" placeholder="강사명"></label>
+              <label>상태
+                <select name="status" required>
+                  <option value="scheduled">접수예정</option>
+                  <option value="open">접수중</option>
+                  <option value="closed">접수마감</option>
+                  <option value="finished">종료</option>
+                </select>
+              </label>
+              <label class="admin-program-image">대표 이미지 주소<input name="imageUrl" type="url" placeholder="https://..."></label>
+              <label class="admin-program-summary-field">요약<input name="summary" type="text" placeholder="목록에 보이는 짧은 소개"></label>
+              <label class="admin-program-content">상세내용<textarea name="content" rows="6" placeholder="교육 목표, 회차 구성, 준비물 등을 적어주세요." required></textarea></label>
+            </div>
+            <div class="admin-program-form-actions">
+              <p class="form-status" data-form-status aria-live="polite"></p>
+              <button class="button tertiary" type="button" data-program-form-reset hidden>수정 취소</button>
+              <button class="button primary" type="submit">저장하기</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="admin-tab-panel" role="tabpanel" id="panel-settings" aria-labelledby="tab-settings" data-admin-panel="settings" hidden>
+          <div class="admin-settings-grid">
+            <article class="admin-panel admin-settings-card">
+              <div class="admin-panel-heading">
+                <div>
+                  <h2>관리자·스텝 등록</h2>
+                  <p>이름과 표시명을 함께 등록합니다. 스텝 표시명은 게시글 작성자명으로 사용됩니다. 현재 권한: <strong data-admin-settings-role>권한 확인 중</strong></p>
+                </div>
+              </div>
+              <form class="admin-settings-form" data-admin-register-form>
+                <label class="admin-settings-name">이름<input name="fullName" type="text" placeholder="실명" autocomplete="off" required></label>
+                <label class="admin-settings-birth">생년월일<input name="birthDate" type="date" autocomplete="off" required></label>
+                <label>성별
+                  <select name="gender" required>
+                    <option value="">선택</option>
+                    <option value="female">여성</option>
+                    <option value="male">남성</option>
+                    <option value="other">기타</option>
+                    <option value="undisclosed">응답 안 함</option>
+                  </select>
+                </label>
+                <label class="admin-settings-email">이메일<input name="email" type="email" placeholder="staff@example.com" autocomplete="off" required></label>
+                <label class="admin-settings-display-name">표시명<input name="displayName" type="text" placeholder="예: 스텝1, 스텝_2, 스텝_Jin" autocomplete="off" required></label>
+                <label class="admin-settings-role">권한
+                  <select name="adminRole">
+                    <option value="super_admin">관리자</option>
+                    <option value="board_admin">스텝</option>
+                  </select>
+                </label>
+                <p class="form-status" data-form-status aria-live="polite"></p>
+                <button class="button primary admin-settings-submit" type="submit">등록 / 수정</button>
+              </form>
+            </article>
+
+            <article class="admin-panel admin-settings-card">
+              <div class="admin-panel-heading">
+                <div>
+                  <h2>관리자·스텝 목록</h2>
+                  <p>관리자와 스텝 권한을 확인합니다.</p>
+                </div>
+              </div>
+              <div class="admin-settings-list" data-admin-allowlist>
+                <article class="empty-state"><strong>관리자·스텝 목록을 불러오고 있습니다.</strong></article>
+              </div>
+            </article>
+          </div>
+        </section>
+      </section>
     </main>
 
-    <footer class="site-footer"><div class="container footer-grid footer-simple"><div><strong>군북면 꿈키움센터</strong><p class="footer-contact">주소: 충청남도 금산군 군북면 두두리 371, 373-3 일원</p><p class="footer-contact">연락처: 운영자료 확정 후 입력</p></div></div><div class="container footer-meta">COPYRIGHT © GUNBUK KKUM CENTER. ALL RIGHTS RESERVED.</div></footer>
-    <script src="assets/js/main.js?v=20260526-5"></script>
+    <script src="assets/js/main.js?v=20260529-9"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/supabase-config.js?v=20260528-1"></script>
-    <script src="assets/js/app-data.js?v=20260527-2"></script>
+    <script src="assets/js/admin-approvals.js?v=20260530-6"></script>
+    <script src="assets/js/admin-settings.js?v=20260529-6"></script>
   </body>
 </html>

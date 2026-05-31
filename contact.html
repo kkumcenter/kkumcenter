@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>문의 / 제안 | 군북면 꿈키움센터</title>
-    <meta name="description" content="군북면 꿈키움센터 문의와 제안 안내입니다.">
-    <link rel="stylesheet" href="assets/css/styles.css?v=20260527-3">
+    <meta name="description" content="군북면 꿈키움센터 문의와 제안을 비공개 게시판으로 접수하고 조회합니다.">
+    <link rel="stylesheet" href="assets/css/styles.css?v=20260529-43">
   </head>
   <body>
     <a class="skip-link" href="#main">본문 바로가기</a>
@@ -18,15 +18,14 @@
           <div class="nav-group"><a class="nav-link" href="space-apply.html">공간시설</a><div class="nav-dropdown" data-menu-label="공간시설"><a href="space-apply.html">공간예약</a><a href="space-reservations.html">예약확인</a></div></div>
           <div class="nav-group"><a class="nav-link" href="programs.html">프로그램</a><div class="nav-dropdown" data-menu-label="프로그램"><a href="programs.html">교육신청</a><a href="program-check.html">신청확인</a></div></div>
           <div class="nav-group"><a class="nav-link active" href="news.html">소식마당</a><div class="nav-dropdown" data-menu-label="소식마당"><a href="news.html">공지사항</a><a href="gallery.html">꿈센터 갤러리</a><a href="village-story.html">마을 이야기</a><a href="contact.html">문의 / 제안</a></div></div>
-          <div class="nav-group nav-dafarm-group"><a class="nav-link nav-external" href="https://dafarm.co.kr/" target="_blank" rel="noreferrer"><img class="nav-dafarm-logo" src="assets/images/dafarm-logo-top.jpg" alt="금산다팜 몰"></a><div class="nav-dropdown nav-dropdown-mobile-only" data-menu-label="금산다팜몰"><a href="https://dafarm.co.kr/" target="_blank" rel="noreferrer">금산다팜몰 바로가기</a></div></div>
-          <div class="nav-group nav-utility utility-start"><a class="nav-link nav-login" href="login.html"><span class="login-person-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 12.4a4.1 4.1 0 1 0 0-8.2 4.1 4.1 0 0 0 0 8.2Z"></path><path d="M4.8 20.1c1.1-3.5 3.6-5.3 7.2-5.3s6.1 1.8 7.2 5.3"></path></svg></span><span>로그인</span></a></div>
-
+          <div class="nav-group nav-dafarm-group"><a class="nav-link nav-external" href="https://dafarm.co.kr/" target="_blank" rel="noreferrer"><img class="nav-dafarm-logo" src="assets/images/dafarm-logo-top.jpg" alt="금산다팜 몰"></a></div>
+          <div class="nav-group nav-utility utility-start"><a class="nav-link nav-login" href="login.html" aria-label="스텝 로그인"><span class="login-person-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 12.4a4.1 4.1 0 1 0 0-8.2 4.1 4.1 0 0 0 0 8.2Z"></path><path d="M4.8 20.1c1.1-3.5 3.6-5.3 7.2-5.3"></path></svg></span><span class="sr-only">스텝 로그인</span></a></div>
         </nav>
       </div>
     </header>
 
     <main id="main">
-      <section class="sub-hero"><img src="assets/images/subpage-hero-center-soft.png" alt="군북면 꿈키움센터를 내려다본 반투명 배경 이미지"><div class="sub-hero-content"><p class="eyebrow">NEWS</p><h1><span>센터와 마을의 이야기를 전하는</span><span>소식마당</span></h1></div></section>
+      <section class="sub-hero"><img src="assets/images/subpage-hero-center-soft.png" alt="군북면 꿈키움센터 외부 풍경"><div class="sub-hero-content"><p class="eyebrow">NEWS</p><h1><span>센터와 마을의 이야기를 전하는</span><span>소식마당</span></h1></div></section>
 
       <nav class="breadcrumb" aria-label="현재 위치">
         <div class="container breadcrumb-inner">
@@ -38,7 +37,6 @@
         </div>
       </nav>
 
-
       <nav class="subnav" aria-label="소식마당 하위 메뉴">
         <a href="news.html">공지사항</a>
         <a href="gallery.html">꿈센터 갤러리</a>
@@ -46,55 +44,103 @@
         <a class="is-active" href="contact.html">문의 / 제안</a>
       </nav>
 
-      <section class="section">
+      <section class="section inquiry-board-section">
         <div class="container section-heading">
-          <p class="eyebrow">Contact & Suggestion</p>
+          <p class="eyebrow">Inquiry Board</p>
           <h2>문의 / 제안</h2>
         </div>
         <div class="container news-page-rule" aria-hidden="true"></div>
-        <div class="container notice-tools contact-tools">
-          <div class="board-count">꿈키움센터 운영, 프로그램, 공간 이용에 관한 의견을 남겨주세요.</div>
-        </div>
-        <div class="container contact-board-wrap">
-          <form class="contact-form contact-board-form" aria-label="문의 제안 작성 양식" data-contact-form>
-            <div class="contact-form-row contact-form-row-split">
-              <label><span>작성자</span><input name="writerName" type="text" placeholder="이름을 입력하세요" required></label>
-              <label><span>연락처</span><input name="phone" type="tel" placeholder="연락처를 입력하세요" required></label>
-              <label class="password-field"><span>비밀번호</span><input name="lookupPassword" type="password" placeholder="비밀번호 입력" required></label>
-            </div>
-            <label><span>제목</span><input name="title" type="text" placeholder="제목을 입력하세요" required></label>
-            <label><span>내용</span><textarea name="content" rows="8" placeholder="문의 또는 제안 내용을 입력하세요" required></textarea></label>
-            <p class="form-status" data-form-status aria-live="polite"></p>
-            <button type="submit">제출하기</button>
-          </form>
-        </div>
-        <div class="container contact-followup-wrap">
-          <section class="contact-lookup-section" aria-labelledby="contact-lookup-title">
-            <div class="contact-followup-heading">
-              <p class="eyebrow">Reply Check</p>
-              <h3 id="contact-lookup-title">문의 / 제안 조회</h3>
-            </div>
-            <form class="contact-form contact-board-form contact-lookup-form" aria-label="문의 제안 조회 양식" data-contact-lookup-form>
-              <div class="contact-form-row contact-form-row-lookup">
-                <label><span>작성자명</span><input name="writerName" type="text" placeholder="이름을 입력하세요" required></label>
-                <label><span>연락처</span><input name="phone" type="tel" placeholder="연락처를 입력하세요" required></label>
-                <label class="password-field"><span>비밀번호</span><input name="lookupPassword" type="password" placeholder="비밀번호 입력" required></label>
-                <button type="submit">조회하기</button>
+
+        <div class="container inquiry-board-layout">
+          <section class="inquiry-list-panel" aria-labelledby="inquiry-list-title">
+            <div class="inquiry-panel-head">
+              <div>
+                <h3 id="inquiry-list-title">문의 목록</h3>
               </div>
+            </div>
+            <div class="inquiry-table-wrap">
+              <table class="board-table inquiry-public-table">
+                <caption>문의 제안 공개 목록</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">문의번호</th>
+                    <th scope="col">제목</th>
+                    <th scope="col">작성자</th>
+                    <th scope="col">작성일</th>
+                    <th scope="col">처리상태</th>
+                  </tr>
+                </thead>
+                <tbody data-inquiry-public-list>
+                  <tr><td colspan="5">문의 목록을 불러오고 있습니다.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="inquiry-write-panel" aria-labelledby="inquiry-write-title">
+            <div class="inquiry-write-box">
+              <div class="inquiry-panel-head">
+                <div>
+                  <h3 id="inquiry-write-title">문의 작성</h3>
+                </div>
+              </div>
+              <form class="contact-form contact-board-form" aria-label="문의 제안 작성 양식" autocomplete="off" data-contact-form>
+                <div class="contact-form-row inquiry-title-row">
+                  <label><span>제목</span><input name="title" type="text" placeholder="제목" required></label>
+                  <label class="password-field"><span>비밀번호</span><input name="inquiryPassword" type="password" autocomplete="new-password" placeholder="조회용 비밀번호" minlength="4" required></label>
+                </div>
+                <div class="contact-form-row inquiry-applicant-row">
+                  <label><span>신청자명</span><input name="writerName" type="text" autocomplete="name" placeholder="신청자명" required></label>
+                  <label><span>연락처</span><input name="phone" type="tel" autocomplete="tel" placeholder="010-0000-0000" required></label>
+                  <label><span>출생연도</span><input name="birthYear" type="number" inputmode="numeric" min="1900" max="2100" autocomplete="off" placeholder="예: 1900" required></label>
+                  <label><span>주소(시·군·구)</span><input name="inquiryRegion" type="text" autocomplete="off" placeholder="예: 금산군 군북면" required></label>
+                </div>
+                <label><span>내용</span><textarea name="content" rows="8" placeholder="문의 또는 제안 내용을 입력해주세요." required></textarea></label>
+                <label class="privacy-consent"><input name="privacyConsent" type="checkbox" required><span>개인정보 수집·이용에 동의합니다. 수집 항목은 이름, 연락처, 출생연도, 주소(시·군·구), 조회용 비밀번호이며 문의 접수·답변 확인과 운영 통계에 사용합니다.</span></label>
+                <p class="form-status" data-form-status aria-live="polite"></p>
+                <button type="submit">등록하기</button>
+              </form>
+            </div>
+          </section>
+        </div>
+
+        <div class="inquiry-modal" data-inquiry-password-modal hidden>
+          <div class="inquiry-modal-dialog inquiry-password-dialog" role="dialog" aria-modal="true" aria-labelledby="inquiry-password-title">
+            <form autocomplete="off" data-inquiry-password-form>
+              <div class="inquiry-modal-head">
+                <div>
+                  <p class="eyebrow">Private Check</p>
+                  <h3 id="inquiry-password-title">비밀번호 확인</h3>
+                </div>
+                <button type="button" aria-label="닫기" data-inquiry-modal-close>×</button>
+              </div>
+              <p class="inquiry-modal-guide"><strong data-inquiry-password-no>문의번호</strong> 글을 확인하려면 작성 시 입력한 비밀번호를 입력해주세요.</p>
+              <label><span>비밀번호</span><input name="inquiryOpenPassword" type="password" placeholder="조회용 비밀번호" autocomplete="new-password" required></label>
               <p class="form-status" data-form-status aria-live="polite"></p>
+              <div class="inquiry-modal-actions">
+                <button type="button" data-inquiry-modal-close>취소</button>
+                <button type="submit">확인</button>
+              </div>
             </form>
-          </section>
-          <section class="contact-answer-section" aria-labelledby="contact-answer-title">
-            <div>
-              <p class="eyebrow">Answer</p>
-              <h3 id="contact-answer-title">답변 확인</h3>
+          </div>
+        </div>
+
+        <div class="inquiry-modal" data-inquiry-detail-modal hidden>
+          <div class="inquiry-modal-dialog inquiry-detail-dialog" role="dialog" aria-modal="true" aria-labelledby="inquiry-detail-title">
+            <div class="inquiry-modal-head">
+              <div>
+                <p class="eyebrow">Inquiry Detail</p>
+                <h3 id="inquiry-detail-title">문의 상세</h3>
+              </div>
+              <button type="button" aria-label="닫기" data-inquiry-modal-close>×</button>
             </div>
-            <div class="contact-answer-card" data-contact-answer>
-              <span>조회 결과</span>
-              <strong>제출한 문의와 운영자 답변이 이곳에 표시됩니다.</strong>
-              <p>작성자명, 연락처, 비밀번호로 조회하면 제출 내용과 답변 상태를 한눈에 확인할 수 있습니다.</p>
+            <div data-inquiry-detail-content>
+              <article class="contact-answer-card">
+                <span>조회 결과</span>
+                <strong>문의 글을 불러오고 있습니다.</strong>
+              </article>
             </div>
-          </section>
+          </div>
         </div>
       </section>
     </main>
@@ -104,14 +150,14 @@
         <div>
           <strong>군북면 꿈키움센터</strong>
           <p class="footer-contact">주소: 충청남도 금산군 군북면 두두리 371, 373-3 일원</p>
-          <p class="footer-contact">연락처: 운영자료 확정 후 입력</p>
+          <p class="footer-contact">연락처: 추후 안내</p>
         </div>
       </div>
       <div class="container footer-meta">COPYRIGHT © GUNBUK KKUM CENTER. ALL RIGHTS RESERVED.</div>
     </footer>
-    <script src="assets/js/main.js?v=20260526-5"></script>
+    <script src="assets/js/main.js?v=20260529-9"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/supabase-config.js?v=20260528-1"></script>
-    <script src="assets/js/app-data.js?v=20260527-4"></script>
+    <script src="assets/js/app-data.js?v=20260530-7"></script>
   </body>
 </html>
