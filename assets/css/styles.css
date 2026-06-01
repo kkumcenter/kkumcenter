@@ -3581,7 +3581,7 @@ h2,
 
 .subnav a:hover:not(.is-active),
 .subnav a:focus-visible:not(.is-active) {
-  color: #6b704f;
+  color: var(--sun);
 }
 
 .subnav a:hover::after,
@@ -5377,7 +5377,7 @@ h2,
 .program-check-form button {
   width: 100%;
   min-height: 54px;
-  border: 0;
+  border: 2px solid rgba(31, 90, 67, 0.38);
   border-radius: 999px;
   padding: 0 30px;
   color: #fff;
@@ -5392,6 +5392,7 @@ h2,
 
 .program-check-form button:hover,
 .program-check-form button:focus-visible {
+  border-color: rgba(214, 164, 67, 0.86);
   color: #123b2b;
   background: linear-gradient(135deg, var(--sun), #f2b24f);
   box-shadow: 0 22px 42px rgba(214, 164, 67, 0.28);
