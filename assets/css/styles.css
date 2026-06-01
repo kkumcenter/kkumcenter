@@ -5273,6 +5273,7 @@ h2,
   font-weight: 900;
   cursor: pointer;
   box-shadow: 0 12px 24px rgba(18, 59, 43, 0.16);
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
 .reservation-action button:hover,
@@ -5281,6 +5282,12 @@ h2,
 .contact-board-form button:focus-visible {
   color: #123b2b;
   background: #f3cb6f;
+}
+
+.program-apply-form .reservation-action button:hover,
+.program-apply-form .reservation-action button:focus-visible {
+  color: var(--forest);
+  background: #e6efd8;
 }
 
 .space-detail-guide {
@@ -6318,6 +6325,15 @@ body.admin-page {
   background: var(--forest);
   font-weight: 700;
   cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.program-search .search-panel button:hover,
+.program-search .search-panel button:focus-visible,
+.notice-search button:hover,
+.notice-search button:focus-visible {
+  color: var(--forest);
+  background: #e6efd8;
 }
 
 .search-panel button {
@@ -6457,6 +6473,13 @@ body.admin-page {
   color: #fff;
   background: var(--forest);
   font-weight: 700;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.program-list-card > a:hover,
+.program-list-card > a:focus-visible {
+  color: var(--forest);
+  background: #e6efd8;
 }
 
 .program-list-more {
@@ -10043,17 +10066,24 @@ body.admin-page {
   font-size: 16px;
   font-weight: 900;
   box-shadow: none;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
 .contact-board-form[data-contact-form] > button[type="submit"]:hover,
 .contact-board-form[data-contact-form] > button[type="submit"]:focus-visible {
-  color: #fff;
-  background: var(--forest);
-  filter: brightness(0.94);
+  color: var(--forest);
+  background: #e6efd8;
+  filter: none;
 }
 
 .board-admin-toolbar-bottom .board-create-button::after {
   display: none;
+}
+
+.board-create-button:hover,
+.board-create-button:focus-visible {
+  color: var(--forest);
+  background: #e6efd8;
 }
 
 .board-list-shell {
@@ -10106,6 +10136,10 @@ body.admin-page {
   border-radius: 8px;
   cursor: pointer;
   font: inherit;
+}
+
+.board-create-button {
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
 .board-title-button {
