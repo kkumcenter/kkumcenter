@@ -5273,11 +5273,14 @@ h2,
   font-weight: 900;
   cursor: pointer;
   box-shadow: 0 12px 24px rgba(18, 59, 43, 0.16);
-  transition: background 0.2s ease, color 0.2s ease;
+  transition: background 0.2s ease;
 }
 
 .reservation-action button:hover,
-.reservation-action button:focus-visible,
+.reservation-action button:focus-visible {
+  background: var(--sun);
+}
+
 .contact-board-form button:hover,
 .contact-board-form button:focus-visible {
   color: #123b2b;
@@ -11717,6 +11720,11 @@ body.admin-page {
   justify-content: space-between;
   gap: 18px;
   margin-bottom: 18px;
+}
+
+.admin-program-head-actions-only {
+  justify-content: flex-end;
+  margin-bottom: 14px;
 }
 
 .admin-program-head h3 {
