@@ -11706,39 +11706,9 @@ body.admin-page {
   font-weight: 700;
 }
 
-.admin-program-summary {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-  margin-bottom: 18px;
-}
-
-.admin-program-summary article {
-  padding: 16px 18px;
-  border: 1px solid rgba(15, 42, 77, 0.1);
-  border-radius: 8px;
-  background: linear-gradient(135deg, #f7fbff 0%, #f3fbef 100%);
-}
-
-.admin-program-summary span {
-  display: block;
-  color: #687689;
-  font-size: 13px;
-  font-weight: 900;
-}
-
-.admin-program-summary strong {
-  display: block;
-  margin-top: 6px;
-  color: #17243a;
-  font-size: 30px;
-  line-height: 1;
-  font-weight: 900;
-}
-
 .admin-program-filterbar {
   display: grid;
-  grid-template-columns: minmax(110px, 0.85fr) minmax(110px, 0.85fr) minmax(110px, 0.85fr) minmax(180px, 1.45fr) minmax(110px, 0.8fr) auto;
+  grid-template-columns: minmax(110px, 0.85fr) minmax(120px, 0.9fr) minmax(110px, 0.85fr) minmax(120px, 0.9fr) minmax(180px, 1.45fr) minmax(110px, 0.8fr);
   gap: 10px;
   align-items: end;
   margin-bottom: 14px;
@@ -11781,9 +11751,11 @@ body.admin-page {
 .admin-program-page-nav {
   display: inline-flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: center;
   gap: 8px;
   min-height: 42px;
+  width: 100%;
+  margin-top: 14px;
 }
 
 .admin-program-page-nav button {
@@ -12189,7 +12161,6 @@ body.admin-page {
 }
 
 @media (max-width: 900px) {
-  .admin-program-summary,
   .admin-program-filterbar {
     grid-template-columns: 1fr;
   }

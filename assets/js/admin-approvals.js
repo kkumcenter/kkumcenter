@@ -37,12 +37,12 @@
     programPageNext: dashboard.querySelector("[data-program-page-next]"),
     spacePageInfo: dashboard.querySelector("[data-space-page-info]"),
     programPageInfo: dashboard.querySelector("[data-program-page-info]"),
-    programStatusSummary: dashboard.querySelector("[data-program-status-summary]"),
     programStatusList: dashboard.querySelector("[data-program-status-list]"),
     programStatusRefresh: dashboard.querySelector("[data-program-status-refresh]"),
     programManageForm: dashboard.querySelector("[data-program-manage-form]"),
     programFormReset: dashboard.querySelector("[data-program-form-reset]"),
     programManageStatus: dashboard.querySelector("[data-program-manage-status]"),
+    programManageApplicationStatus: dashboard.querySelector("[data-program-manage-application-status]"),
     programManageTarget: dashboard.querySelector("[data-program-manage-target]"),
     programManageYear: dashboard.querySelector("[data-program-manage-year]"),
     programManageKeyword: dashboard.querySelector("[data-program-manage-keyword]"),
@@ -328,7 +328,7 @@
     const years = getProgramManageYears();
     nodes.programManageYear.innerHTML = `
       <option value="current">올해</option>
-      <option value="all">전체 연도</option>
+      <option value="all">전체 수업연도</option>
       ${years.map((year) => `<option value="${year}">${year}년</option>`).join("")}
     `;
     nodes.programManageYear.value = [...nodes.programManageYear.options].some((option) => option.value === currentValue)
@@ -338,6 +338,7 @@
 
   const getFilteredProgramCatalog = () => {
     const status = nodes.programManageStatus?.value || "all";
+    const applicationStatus = nodes.programManageApplicationStatus?.value || "all";
     const target = nodes.programManageTarget?.value || "all";
     const yearValue = nodes.programManageYear?.value || "current";
     const keyword = (nodes.programManageKeyword?.value || "").trim().toLowerCase();
@@ -349,10 +350,15 @@
         const hidden = program.is_active === false;
         const programYear = getProgramManageYear(program);
         const matchesStatus = status === "all" || (status === "hidden" ? hidden : !hidden && program.status === status);
+        const matchesApplicationStatus =
+          applicationStatus === "all" ||
+          state.allProgramApplications.some(
+            (application) => String(application.program_id) === String(program.id) && application.status === applicationStatus,
+          );
         const matchesTarget = target === "all" || program.target === target;
         const matchesYear = yearValue === "all" || programYear === (yearValue === "current" ? currentYear : Number(yearValue));
         const haystack = `${program.title} ${program.summary} ${program.content} ${program.place} ${program.instructor}`.toLowerCase();
-        return matchesStatus && matchesTarget && matchesYear && (!keyword || haystack.includes(keyword));
+        return matchesStatus && matchesApplicationStatus && matchesTarget && matchesYear && (!keyword || haystack.includes(keyword));
       })
       .sort((a, b) => {
         const hiddenDiff = Number(a.is_active === false) - Number(b.is_active === false);
@@ -481,19 +487,6 @@
     };
   };
 
-  const renderProgramStatusSummary = () => {
-    if (!nodes.programStatusSummary) return;
-    const activePrograms = state.programCatalog.filter((item) => item.is_active !== false);
-    const totalPrograms = state.programCatalog.length;
-    const openPrograms = activePrograms.filter((item) => item.status === "open").length;
-    const waitingApplications = state.allProgramApplications.filter((item) => ["completed", "waiting"].includes(item.status)).length;
-    nodes.programStatusSummary.innerHTML = `
-      <article><span>전체 교육</span><strong>${totalPrograms}</strong></article>
-      <article><span>접수중</span><strong>${openPrograms}</strong></article>
-      <article><span>승인 대기</span><strong>${waitingApplications}</strong></article>
-    `;
-  };
-
   const renderProgramStatusList = () => {
     if (!nodes.programStatusList) return;
     syncProgramManageYearOptions();
@@ -519,7 +512,7 @@
     }
 
     if (!filteredPrograms.length) {
-      nodes.programStatusList.innerHTML = '<article class="empty-state"><strong>조건에 맞는 교육이 없습니다.</strong><p>모집상태, 대상, 연도, 검색어를 다시 확인해주세요.</p></article>';
+      nodes.programStatusList.innerHTML = '<article class="empty-state"><strong>조건에 맞는 교육이 없습니다.</strong><p>모집상태, 접수상태, 대상, 수업연도, 검색어를 다시 확인해주세요.</p></article>';
       return;
     }
 
@@ -586,7 +579,6 @@
   };
 
   const renderProgramManagement = () => {
-    renderProgramStatusSummary();
     renderProgramStatusList();
   };
 
@@ -966,7 +958,7 @@
       return;
     }
 
-    if (target instanceof HTMLSelectElement && target.matches("[data-program-manage-status], [data-program-manage-target], [data-program-manage-year]")) {
+    if (target instanceof HTMLSelectElement && target.matches("[data-program-manage-status], [data-program-manage-application-status], [data-program-manage-target], [data-program-manage-year]")) {
       state.programManagePage = 1;
       renderProgramManagement();
       return;
