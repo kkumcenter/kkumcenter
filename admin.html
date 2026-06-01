@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>관리자페이지 | 군북면 꿈키움센터</title>
     <meta name="description" content="군북면 꿈키움센터 관리자 승인 및 관리 페이지입니다.">
-    <link rel="stylesheet" href="assets/css/styles.css?v=20260530-6">
+    <link rel="stylesheet" href="assets/css/styles.css?v=20260601-2">
   </head>
   <body class="admin-page admin-approval-page">
     <a class="skip-link" href="#main">본문 바로가기</a>
@@ -188,9 +188,9 @@
             <article><span>승인 대기</span><strong>0</strong></article>
           </div>
           <div class="admin-program-filterbar" aria-label="교육 관리 목록 검색">
-            <label>상태
+            <label>모집상태
               <select data-program-manage-status>
-                <option value="all">전체 상태</option>
+                <option value="all">전체 모집상태</option>
                 <option value="scheduled">접수예정</option>
                 <option value="open">접수중</option>
                 <option value="closed">접수마감</option>
@@ -250,7 +250,7 @@
               <label>수업 종료일<input name="endDate" type="date" required></label>
               <label class="admin-program-place">장소<input name="place" type="text" placeholder="예: 1층 공유주방" required></label>
               <label>강사<input name="instructor" type="text" placeholder="강사명"></label>
-              <label>상태
+              <label>모집상태
                 <select name="status" required>
                   <option value="scheduled">접수예정</option>
                   <option value="open">접수중</option>
@@ -323,7 +323,7 @@
     <script src="assets/js/main.js?v=20260529-9"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/supabase-config.js?v=20260528-1"></script>
-    <script src="assets/js/admin-approvals.js?v=20260530-6"></script>
+    <script src="assets/js/admin-approvals.js?v=20260601-2"></script>
     <script src="assets/js/admin-settings.js?v=20260529-6"></script>
   </body>
 </html>

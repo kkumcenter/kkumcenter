@@ -5820,6 +5820,10 @@ body.admin-page {
   font-weight: 900;
 }
 
+.admin-approval-tabs .admin-panel-heading h2 {
+  font-size: 22px;
+}
+
 .admin-panel-heading p {
   margin: 5px 0 0;
   color: var(--admin-muted);
@@ -11270,6 +11274,33 @@ body.admin-page {
   border-collapse: collapse;
   min-width: 760px;
   table-layout: fixed;
+}
+
+.admin-approval-table caption,
+.admin-program-list-table caption {
+  caption-side: top;
+  padding: 0 0 12px;
+  color: #17243a;
+  text-align: left;
+  font-size: 22px;
+  line-height: 1.25;
+  font-weight: 900;
+}
+
+.admin-approval-table caption::before,
+.admin-program-list-table caption::before,
+.admin-approval-tabs .admin-panel-heading h2::before {
+  content: "[";
+  margin-right: 4px;
+  color: #0f6fe8;
+}
+
+.admin-approval-table caption::after,
+.admin-program-list-table caption::after,
+.admin-approval-tabs .admin-panel-heading h2::after {
+  content: "]";
+  margin-left: 4px;
+  color: #0f6fe8;
 }
 
 .admin-approval-table th,

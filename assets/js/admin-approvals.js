@@ -519,7 +519,7 @@
     }
 
     if (!filteredPrograms.length) {
-      nodes.programStatusList.innerHTML = '<article class="empty-state"><strong>조건에 맞는 교육이 없습니다.</strong><p>상태, 대상, 연도, 검색어를 다시 확인해주세요.</p></article>';
+      nodes.programStatusList.innerHTML = '<article class="empty-state"><strong>조건에 맞는 교육이 없습니다.</strong><p>모집상태, 대상, 연도, 검색어를 다시 확인해주세요.</p></article>';
       return;
     }
 
@@ -537,7 +537,7 @@
             <td>${escapeHtml(formatDateRange(program.apply_start_date, program.apply_end_date))}</td>
             <td>${escapeHtml(formatDateRange(program.start_date, program.end_date))}</td>
             <td><span class="admin-program-run-state">${escapeHtml(educationRunStatusLabel(program))}</span></td>
-            <td>${escapeHtml(program.capacity)}명</td>
+            <td>${escapeHtml(program.capacity)}</td>
             <td class="admin-program-stats-cell">
               <div class="admin-program-stats-row">
                 <span>신청 ${stats.total}</span>
@@ -569,11 +569,11 @@
           <caption>교육 관리 목록</caption>
           <thead>
             <tr>
-              <th scope="col">상태</th>
+              <th scope="col">모집상태</th>
               <th scope="col">교육명</th>
               <th scope="col">모집기간</th>
               <th scope="col">수업기간</th>
-              <th scope="col">상황</th>
+              <th scope="col">수업상태</th>
               <th scope="col">정원</th>
               <th scope="col">신청현황</th>
               <th scope="col">관리</th>
