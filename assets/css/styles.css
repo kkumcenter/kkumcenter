@@ -6271,7 +6271,8 @@ body.admin-page {
 
 .program-search {
   align-items: center;
-  grid-template-columns: minmax(220px, 0.55fr) minmax(0, 1.45fr);
+  grid-template-columns: minmax(170px, 0.38fr) minmax(0, 1.62fr);
+  gap: 28px;
 }
 
 .search-panel,
@@ -6330,9 +6331,11 @@ body.admin-page {
 
 .program-search .search-panel {
   display: grid;
-  grid-template-columns: auto minmax(108px, 0.72fr) auto minmax(108px, 0.72fr) auto minmax(130px, 1fr) 112px;
+  grid-template-columns: auto minmax(96px, 0.62fr) auto minmax(96px, 0.62fr) auto minmax(120px, 1fr) minmax(160px, 0.32fr);
   gap: 8px;
   align-items: center;
+  justify-self: end;
+  width: min(960px, 100%);
   padding: 16px 18px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -6361,7 +6364,10 @@ body.admin-page {
 }
 
 .program-search .search-panel button {
-  min-height: 50px;
+  width: 100%;
+  min-width: 160px;
+  min-height: 44px;
+  padding-inline: 28px;
   font-size: 16px;
   font-weight: 900;
 }
