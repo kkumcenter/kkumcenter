@@ -848,14 +848,6 @@
     let programs = [];
     const INITIAL_PROGRAM_LIMIT = 6;
     let visibleLimit = INITIAL_PROGRAM_LIMIT;
-    let resultCount = document.querySelector("[data-program-result-count]");
-    if (!resultCount && form) {
-      resultCount = document.createElement("p");
-      resultCount.className = "program-result-count";
-      resultCount.dataset.programResultCount = "";
-      form.insertAdjacentElement("afterend", resultCount);
-    }
-
     const moreWrap = document.createElement("div");
     moreWrap.className = "program-list-more";
     moreWrap.innerHTML = '<button type="button" data-program-more hidden>더보기</button>';
@@ -879,12 +871,6 @@
         })
         .sort((a, b) => programSortRank(a) - programSortRank(b) || programDateValue(b) - programDateValue(a));
       const visiblePrograms = filtered.slice(0, visibleLimit);
-
-      if (resultCount) {
-        resultCount.textContent = filtered.length
-          ? `총 ${filtered.length}개 교육 중 ${visiblePrograms.length}개를 보여드립니다.`
-          : "조건에 맞는 교육이 없습니다.";
-      }
 
       list.innerHTML = visiblePrograms.length
         ? visiblePrograms

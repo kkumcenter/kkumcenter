@@ -5380,8 +5380,8 @@ h2,
   border: 0;
   border-radius: 999px;
   padding: 0 30px;
-  color: #123b2b;
-  background: #fab848;
+  color: #fff;
+  background: var(--forest);
   font: inherit;
   font-weight: 900;
   white-space: nowrap;
@@ -5392,9 +5392,9 @@ h2,
 
 .program-check-form button:hover,
 .program-check-form button:focus-visible {
-  color: #fff;
-  background: linear-gradient(135deg, var(--forest), var(--leaf));
-  box-shadow: 0 22px 42px rgba(18, 59, 43, 0.24);
+  color: #123b2b;
+  background: linear-gradient(135deg, var(--sun), #f2b24f);
+  box-shadow: 0 22px 42px rgba(214, 164, 67, 0.28);
   transform: translateY(-5px);
 }
 
@@ -6363,15 +6363,6 @@ body.admin-page {
   min-height: 50px;
   font-size: 16px;
   font-weight: 900;
-}
-
-.program-result-count {
-  grid-column: 1 / -1;
-  margin: 10px 0 0;
-  color: #526177;
-  font-size: 14px;
-  font-weight: 800;
-  text-align: right;
 }
 
 @media (min-width: 901px) {
@@ -12200,7 +12191,4 @@ body.admin-page {
     grid-template-columns: 1fr;
   }
 
-  .program-result-count {
-    text-align: left;
-  }
 }
