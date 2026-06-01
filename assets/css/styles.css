@@ -11843,11 +11843,41 @@ body.admin-page {
   width: 100%;
   min-width: 1020px;
   border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.admin-program-col-status {
+  width: 108px;
+}
+
+.admin-program-col-title {
+  width: auto;
+}
+
+.admin-program-col-apply,
+.admin-program-col-period {
+  width: 132px;
+}
+
+.admin-program-col-run {
+  width: 96px;
+}
+
+.admin-program-col-capacity {
+  width: 64px;
+}
+
+.admin-program-col-stats {
+  width: 126px;
+}
+
+.admin-program-col-actions {
+  width: 104px;
 }
 
 .admin-program-list-table th,
 .admin-program-list-table td {
-  padding: 13px 12px;
+  padding: 13px 10px;
   border-bottom: 1px solid rgba(15, 42, 77, 0.08);
   color: #24324a;
   text-align: left;
@@ -11877,7 +11907,7 @@ body.admin-page {
 }
 
 .admin-program-title-cell {
-  min-width: 260px;
+  min-width: 0;
 }
 
 .admin-program-title-cell button {
@@ -11925,13 +11955,13 @@ body.admin-page {
 }
 
 .admin-program-stats-cell {
-  min-width: 150px;
+  min-width: 0;
 }
 
 .admin-program-stats-row {
   display: flex;
   flex-wrap: nowrap;
-  gap: 8px;
+  gap: 6px;
   min-width: 0;
 }
 
@@ -11939,6 +11969,7 @@ body.admin-page {
   display: inline-flex;
   margin: 2px 0;
   color: #526177;
+  font-size: 13px;
   white-space: nowrap;
 }
 
@@ -12140,19 +12171,19 @@ body.admin-page {
 
 .admin-program-manage-actions {
   display: inline-flex;
-  gap: 8px;
+  gap: 6px;
 }
 
 .admin-program-manage-actions button {
   min-height: 36px;
-  padding: 0 13px;
+  padding: 0 10px;
   border: 0;
   border-radius: 8px;
   color: #fff;
   background: #0f6fe8;
   cursor: pointer;
   font: inherit;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 900;
 }
 

@@ -560,6 +560,16 @@
       <div class="admin-program-list-wrap">
         <table class="admin-program-list-table">
           <caption>교육 관리 목록</caption>
+          <colgroup>
+            <col class="admin-program-col-status">
+            <col class="admin-program-col-title">
+            <col class="admin-program-col-apply">
+            <col class="admin-program-col-period">
+            <col class="admin-program-col-run">
+            <col class="admin-program-col-capacity">
+            <col class="admin-program-col-stats">
+            <col class="admin-program-col-actions">
+          </colgroup>
           <thead>
             <tr>
               <th scope="col">모집상태</th>
