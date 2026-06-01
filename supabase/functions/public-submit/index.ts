@@ -521,6 +521,7 @@ Deno.serve(async (request) => {
     if (action === "program-save") {
       const admin = await requireSuperAdmin(request, supabase);
       const programId = String(data.id || "").trim();
+      const isActiveValue = typeof data.isActive === "boolean" ? data.isActive : String(data.isActive ?? "true") !== "false";
       const payload = {
         title: requireText(data, "title"),
         summary: optionalText(data, "summary"),
@@ -535,7 +536,7 @@ Deno.serve(async (request) => {
         start_date: requireDateValue(data, "startDate"),
         end_date: requireDateValue(data, "endDate"),
         status: requireProgramStatus(data),
-        is_active: true,
+        is_active: isActiveValue,
       };
 
       const { data: saved, error } = programId

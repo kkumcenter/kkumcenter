@@ -14,6 +14,7 @@
 
   const TABLE_COLSPAN = 6;
   const PAGE_SIZE_OPTIONS = [10, 30, 50];
+  const APPLICANT_PAGE_SIZE_OPTIONS = [10, 30];
 
   const nodes = {
     role: dashboard.querySelector("[data-admin-approval-role]"),
@@ -51,6 +52,8 @@
     programManagePageNext: dashboard.querySelector("[data-program-manage-page-next]"),
     programManagePageInfo: dashboard.querySelector("[data-program-manage-page-info]"),
     programManageResult: dashboard.querySelector("[data-program-manage-result]"),
+    programSelectedGuide: dashboard.querySelector("[data-program-selected-guide]"),
+    programSelectedApplicants: dashboard.querySelector("[data-program-selected-applicants]"),
   };
 
   const state = {
@@ -69,6 +72,9 @@
     programPageSize: 10,
     programManagePage: 1,
     programManagePageSize: 10,
+    selectedProgramId: null,
+    selectedProgramApplicantPage: 1,
+    selectedProgramApplicantPageSize: 10,
     detail: null,
   };
 
@@ -124,6 +130,13 @@
     if (status === "canceled") return "취소";
     if (status === "completed") return "접수완료";
     return "접수완료";
+  };
+
+  const statusClass = (value) => {
+    const text = String(value || "");
+    if (text.includes("승인") || text.includes("접수")) return "ongoing";
+    if (text.includes("대기")) return "open";
+    return "closed";
   };
 
   const educationStatusLabel = (status) => {
@@ -520,11 +533,12 @@
       .map((program) => {
         const stats = getProgramStats(program.id);
         const hidden = program.is_active === false;
+        const selected = String(state.selectedProgramId || "") === String(program.id);
         return `
-          <tr class="${hidden ? "is-hidden" : ""}">
+          <tr class="${hidden ? "is-hidden" : ""}${selected ? " is-selected" : ""}">
             <td><span class="status ${hidden ? "closed" : educationStatusClass(program.status)}">${escapeHtml(hidden ? "숨김" : educationStatusLabel(program.status))}</span></td>
             <td class="admin-program-title-cell">
-              <button type="button" data-program-applicants="${escapeHtml(program.id)}">${escapeHtml(program.title)}</button>
+              <button type="button" data-program-manage-select="${escapeHtml(program.id)}" aria-pressed="${selected ? "true" : "false"}">${escapeHtml(program.title)}</button>
               <span>${escapeHtml(displayValue(program.summary || program.content))}</span>
             </td>
             <td>${escapeHtml(formatDateRange(program.apply_start_date, program.apply_end_date))}</td>
@@ -539,16 +553,6 @@
               <div class="admin-program-stats-row">
                 <span>대기 ${stats.waiting + stats.completed}</span>
                 <span>취소 ${stats.canceled}</span>
-              </div>
-            </td>
-            <td>
-              <div class="admin-program-manage-actions">
-                <button type="button" data-program-edit="${escapeHtml(program.id)}">수정</button>
-                ${
-                  hidden
-                    ? `<button type="button" data-program-restore="${escapeHtml(program.id)}">복구</button>`
-                    : `<button type="button" data-program-hide="${escapeHtml(program.id)}">숨김</button>`
-                }
               </div>
             </td>
           </tr>
@@ -568,7 +572,6 @@
             <col class="admin-program-col-run">
             <col class="admin-program-col-capacity">
             <col class="admin-program-col-stats">
-            <col class="admin-program-col-actions">
           </colgroup>
           <thead>
             <tr>
@@ -579,7 +582,6 @@
               <th scope="col">수업상태</th>
               <th scope="col">정원</th>
               <th scope="col">신청현황</th>
-              <th scope="col">관리</th>
             </tr>
           </thead>
           <tbody>${rows}</tbody>
@@ -588,8 +590,95 @@
     `;
   };
 
+  const getSelectedProgramApplications = () => {
+    if (!state.selectedProgramId) return [];
+    return state.allProgramApplications.filter((item) => String(item.program_id) === String(state.selectedProgramId));
+  };
+
+  const renderSelectedProgramApplicants = () => {
+    if (!nodes.programSelectedApplicants) return;
+    const selectedProgram = state.programCatalog.find((item) => String(item.id) === String(state.selectedProgramId));
+    if (!state.selectedProgramId || !selectedProgram) {
+      if (nodes.programSelectedGuide) {
+        nodes.programSelectedGuide.textContent = "교육명을 클릭하면 교육 수정과 교육생 모집현황을 함께 확인할 수 있습니다.";
+      }
+      nodes.programSelectedApplicants.innerHTML = '<article class="empty-state"><strong>교육을 선택해주세요.</strong><p>교육명을 클릭하면 신청자 목록과 승인/취소 버튼이 여기에 표시됩니다.</p></article>';
+      return;
+    }
+
+    const applications = getSelectedProgramApplications();
+    state.selectedProgramApplicantPage = clampPage(state.selectedProgramApplicantPage, applications, state.selectedProgramApplicantPageSize);
+    const visibleApplications = getPagedItems(applications, state.selectedProgramApplicantPage, state.selectedProgramApplicantPageSize);
+    const totalPages = getTotalPages(applications, state.selectedProgramApplicantPageSize);
+    const stats = getProgramStats(selectedProgram.id);
+    if (nodes.programSelectedGuide) {
+      nodes.programSelectedGuide.textContent = `${selectedProgram.title} 신청 ${stats.total}건 · 승인 ${stats.approved}건 · 대기 ${stats.waiting + stats.completed}건 · 취소 ${stats.canceled}건`;
+    }
+
+    if (!applications.length) {
+      nodes.programSelectedApplicants.innerHTML = '<article class="empty-state"><strong>아직 신청자가 없습니다.</strong><p>교육 정보는 위 입력란에서 수정할 수 있습니다.</p></article>';
+      return;
+    }
+
+    nodes.programSelectedApplicants.innerHTML = `
+      <div class="admin-program-applicants-head">
+        <h4>교육생 모집현황</h4>
+        <label>목록
+          <select data-selected-program-applicant-page-size>
+            ${APPLICANT_PAGE_SIZE_OPTIONS.map((size) => `<option value="${size}"${state.selectedProgramApplicantPageSize === size ? " selected" : ""}>${size}줄보기</option>`).join("")}
+          </select>
+        </label>
+      </div>
+      <div class="admin-applicant-table-wrap">
+        <table class="admin-applicant-table">
+          <thead>
+            <tr>
+              <th>신청번호</th>
+              <th>이름</th>
+              <th>연락처</th>
+              <th>출생연도</th>
+              <th>주소</th>
+              <th>상태</th>
+              <th>신청일</th>
+              <th>처리</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${visibleApplications
+              .map(
+                (item) => `
+                  <tr>
+                    <td>${escapeHtml(displayValue(item.application_no))}</td>
+                    <td>${escapeHtml(displayValue(item.applicant_name))}</td>
+                    <td>${escapeHtml(displayValue(item.phone))}</td>
+                    <td>${escapeHtml(displayValue(item.birth_year))}</td>
+                    <td>${escapeHtml(displayValue(item.region))}</td>
+                    <td><span class="status ${statusClass(programStatusLabel(item.status))}">${escapeHtml(programStatusLabel(item.status))}</span></td>
+                    <td>${escapeHtml(formatDate(item.created_at))}</td>
+                    <td>
+                      <div class="admin-approval-actions">
+                        <button type="button" data-selected-program-approve="${escapeHtml(item.id)}"${item.status === "approved" ? " disabled" : ""}>승인</button>
+                        <button type="button" data-selected-program-cancel="${escapeHtml(item.id)}"${item.status === "canceled" ? " disabled" : ""}>취소</button>
+                      </div>
+                    </td>
+                  </tr>
+                `,
+              )
+              .join("")}
+          </tbody>
+        </table>
+      </div>
+      <div class="admin-program-page-nav admin-program-applicant-page-nav" aria-label="선택 교육 신청자 페이지 이동">
+        <button type="button" data-selected-program-applicant-prev${state.selectedProgramApplicantPage <= 1 ? " disabled" : ""}>이전</button>
+        <span>${state.selectedProgramApplicantPage} / ${totalPages}</span>
+        <button type="button" data-selected-program-applicant-next${state.selectedProgramApplicantPage >= totalPages ? " disabled" : ""}>다음</button>
+      </div>
+    `;
+  };
+
   const renderProgramManagement = () => {
     renderProgramStatusList();
+    renderSelectedProgramApplicants();
   };
 
   const renderAll = () => {
@@ -830,20 +919,25 @@
     }
   };
 
-  const resetProgramForm = () => {
+  const resetProgramForm = (options = {}) => {
     if (!nodes.programManageForm) return;
+    state.selectedProgramId = null;
+    state.selectedProgramApplicantPage = 1;
     nodes.programManageForm.reset();
     nodes.programManageForm.elements.id.value = "";
+    if (nodes.programManageForm.elements.isActive) nodes.programManageForm.elements.isActive.value = "true";
     setFormStatus(nodes.programManageForm, "");
-    if (nodes.programFormReset) nodes.programFormReset.hidden = true;
     const submit = nodes.programManageForm.querySelector('button[type="submit"]');
     if (submit) submit.textContent = "저장하기";
+    if (options.render !== false) renderProgramManagement();
   };
 
-  const fillProgramForm = (programId) => {
+  const fillProgramForm = (programId, options = {}) => {
     if (!nodes.programManageForm) return;
     const item = state.programCatalog.find((entry) => String(entry.id) === String(programId));
     if (!item) return;
+    state.selectedProgramId = String(item.id);
+    state.selectedProgramApplicantPage = 1;
     const form = nodes.programManageForm;
     form.elements.id.value = item.id || "";
     form.elements.title.value = item.title || "";
@@ -859,11 +953,12 @@
     form.elements.imageUrl.value = item.image_url || "";
     form.elements.summary.value = item.summary || "";
     form.elements.content.value = item.content || "";
+    if (form.elements.isActive) form.elements.isActive.value = item.is_active === false ? "false" : "true";
     setFormStatus(form, "수정할 교육을 불러왔습니다.");
-    if (nodes.programFormReset) nodes.programFormReset.hidden = false;
     const submit = form.querySelector('button[type="submit"]');
     if (submit) submit.textContent = "수정 저장";
-    form.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (options.render !== false) renderProgramManagement();
+    if (options.scroll !== false) form.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   const saveProgramFromForm = async (form) => {
@@ -882,6 +977,7 @@
       imageUrl: form.elements.imageUrl.value.trim(),
       summary: form.elements.summary.value.trim(),
       content: form.elements.content.value.trim(),
+      isActive: form.elements.isActive ? form.elements.isActive.value === "true" : true,
     };
     if (!payload.title || !payload.capacity || !payload.applyStartDate || !payload.applyEndDate || !payload.startDate || !payload.endDate || !payload.place || !payload.content) {
       setFormStatus(form, "프로그램명, 정원, 날짜, 장소, 상세내용을 입력해주세요.", true);
@@ -891,10 +987,12 @@
     const submit = form.querySelector('button[type="submit"]');
     submit.disabled = true;
     try {
-      await callPublicSubmitFunction("program-save", payload);
-      resetProgramForm();
-      setFormStatus(form, "교육 정보를 저장했습니다.");
+      const result = await callPublicSubmitFunction("program-save", payload);
+      state.selectedProgramId = String(result?.item?.id || payload.id || "");
       await load();
+      if (state.selectedProgramId) fillProgramForm(state.selectedProgramId, { scroll: false, render: false });
+      renderProgramManagement();
+      setFormStatus(form, "교육 정보를 저장했습니다.");
     } catch (error) {
       setFormStatus(form, friendlyErrorMessage(error, "교육 정보를 저장하지 못했습니다."), true);
     } finally {
@@ -965,6 +1063,14 @@
       state.programManagePageSize = PAGE_SIZE_OPTIONS.includes(nextPageSize) ? nextPageSize : 10;
       state.programManagePage = 1;
       renderProgramManagement();
+      return;
+    }
+
+    if (target instanceof HTMLSelectElement && target.matches("[data-selected-program-applicant-page-size]")) {
+      const nextPageSize = Number(target.value);
+      state.selectedProgramApplicantPageSize = APPLICANT_PAGE_SIZE_OPTIONS.includes(nextPageSize) ? nextPageSize : 10;
+      state.selectedProgramApplicantPage = 1;
+      renderSelectedProgramApplicants();
       return;
     }
 
@@ -1099,33 +1205,47 @@
       return;
     }
 
-    const programApplicants = target.closest("[data-program-applicants]");
-    if (programApplicants instanceof HTMLElement) {
-      await openProgramApplicants(programApplicants.dataset.programApplicants);
+    const programSelect = target.closest("[data-program-manage-select]");
+    if (programSelect instanceof HTMLElement) {
+      fillProgramForm(programSelect.dataset.programManageSelect);
       return;
     }
 
-    const programEdit = target.closest("[data-program-edit]");
-    if (programEdit instanceof HTMLElement) {
-      fillProgramForm(programEdit.dataset.programEdit);
-      activateTab("program-manage");
+    if (target.closest("[data-selected-program-applicant-prev]")) {
+      state.selectedProgramApplicantPage = Math.max(1, state.selectedProgramApplicantPage - 1);
+      renderSelectedProgramApplicants();
       return;
     }
 
-    const programHide = target.closest("[data-program-hide]");
-    if (programHide instanceof HTMLButtonElement) {
-      await runAction(programHide, () => hideOrRestoreProgram(programHide.dataset.programHide, false));
-      return;
-    }
-
-    const programRestore = target.closest("[data-program-restore]");
-    if (programRestore instanceof HTMLButtonElement) {
-      await runAction(programRestore, () => hideOrRestoreProgram(programRestore.dataset.programRestore, true));
+    if (target.closest("[data-selected-program-applicant-next]")) {
+      state.selectedProgramApplicantPage = clampPage(state.selectedProgramApplicantPage + 1, getSelectedProgramApplications(), state.selectedProgramApplicantPageSize);
+      renderSelectedProgramApplicants();
       return;
     }
 
     if (target.closest("[data-program-form-reset]")) {
       resetProgramForm();
+      return;
+    }
+
+    const selectedProgramApprove = target.closest("[data-selected-program-approve]");
+    if (selectedProgramApprove instanceof HTMLButtonElement) {
+      const id = selectedProgramApprove.dataset.selectedProgramApprove;
+      await runAction(selectedProgramApprove, async () => {
+        await updatePrograms(id, "approved");
+        await load();
+      });
+      return;
+    }
+
+    const selectedProgramCancel = target.closest("[data-selected-program-cancel]");
+    if (selectedProgramCancel instanceof HTMLButtonElement) {
+      const id = selectedProgramCancel.dataset.selectedProgramCancel;
+      await runAction(selectedProgramCancel, async () => {
+        if (!window.confirm("이 교육신청을 취소 처리할까요?")) return;
+        await updatePrograms(id, "canceled");
+        await load();
+      });
       return;
     }
 

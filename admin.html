@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>관리자페이지 | 군북면 꿈키움센터</title>
     <meta name="description" content="군북면 꿈키움센터 관리자 승인 및 관리 페이지입니다.">
-    <link rel="stylesheet" href="assets/css/styles.css?v=20260601-13">
+    <link rel="stylesheet" href="assets/css/styles.css?v=20260601-14">
   </head>
   <body class="admin-page admin-approval-page">
     <a class="skip-link" href="#main">본문 바로가기</a>
@@ -229,6 +229,13 @@
             <span data-program-manage-page-info>1 / 1</span>
             <button type="button" data-program-manage-page-next>다음</button>
           </div>
+          <div class="admin-program-selected-head">
+            <div>
+              <h3>선택한 교육 관리</h3>
+              <p data-program-selected-guide>교육명을 클릭하면 교육 수정과 교육생 모집현황을 함께 확인할 수 있습니다.</p>
+            </div>
+            <button class="admin-refresh-button" type="button" data-program-form-reset>신규 교육 등록</button>
+          </div>
           <form class="admin-program-form" autocomplete="off" data-program-manage-form>
             <input type="hidden" name="id">
             <div class="admin-program-form-grid">
@@ -255,16 +262,24 @@
                   <option value="finished">종료</option>
                 </select>
               </label>
+              <label>공개상태
+                <select name="isActive" required>
+                  <option value="true">공개</option>
+                  <option value="false">숨김</option>
+                </select>
+              </label>
               <label class="admin-program-image">대표 이미지 주소<input name="imageUrl" type="url" placeholder="https://..."></label>
               <label class="admin-program-summary-field">요약<input name="summary" type="text" placeholder="목록에 보이는 짧은 소개"></label>
               <label class="admin-program-content">상세내용<textarea name="content" rows="6" placeholder="교육 목표, 회차 구성, 준비물 등을 적어주세요." required></textarea></label>
             </div>
             <div class="admin-program-form-actions">
               <p class="form-status" data-form-status aria-live="polite"></p>
-              <button class="button tertiary" type="button" data-program-form-reset hidden>수정 취소</button>
               <button class="button primary" type="submit">저장하기</button>
             </div>
           </form>
+          <section class="admin-program-applicants-panel" data-program-selected-applicants>
+            <article class="empty-state"><strong>교육을 선택해주세요.</strong><p>교육명을 클릭하면 신청자 목록과 승인/취소 버튼이 여기에 표시됩니다.</p></article>
+          </section>
         </section>
 
         <section class="admin-tab-panel" role="tabpanel" id="panel-settings" aria-labelledby="tab-settings" data-admin-panel="settings" hidden>
@@ -320,7 +335,7 @@
     <script src="assets/js/main.js?v=20260529-9"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/supabase-config.js?v=20260528-1"></script>
-    <script src="assets/js/admin-approvals.js?v=20260601-4"></script>
+    <script src="assets/js/admin-approvals.js?v=20260601-5"></script>
     <script src="assets/js/admin-settings.js?v=20260529-6"></script>
   </body>
 </html>

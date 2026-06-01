@@ -11825,6 +11825,7 @@ body.admin-page {
 }
 
 .admin-program-filter-result {
+  display: none;
   grid-column: 1 / -1;
   margin: 0;
   color: #526177;
@@ -11905,6 +11906,15 @@ body.admin-page {
 
 .admin-program-list-table tr.is-hidden {
   background: #f6f8f7;
+}
+
+.admin-program-list-table tr.is-selected td {
+  background: #eef8f2;
+  box-shadow: inset 0 1px 0 rgba(31, 90, 67, 0.12), inset 0 -1px 0 rgba(31, 90, 67, 0.12);
+}
+
+.admin-program-list-table tr.is-selected td:first-child {
+  box-shadow: inset 3px 0 0 #21bc78, inset 0 1px 0 rgba(31, 90, 67, 0.12), inset 0 -1px 0 rgba(31, 90, 67, 0.12);
 }
 
 .admin-program-list-table tr.is-hidden .admin-program-title-cell button {
@@ -12066,8 +12076,30 @@ body.admin-page {
   border-top: 1px solid rgba(15, 42, 77, 0.08);
 }
 
-.admin-program-status-list + .admin-program-form {
-  margin-top: 20px;
+.admin-program-selected-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 18px;
+  margin: 22px 0 12px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(15, 42, 77, 0.1);
+}
+
+.admin-program-selected-head h3 {
+  margin: 0;
+  color: #17243a;
+  font-size: 22px;
+  line-height: 1.25;
+  font-weight: 900;
+}
+
+.admin-program-selected-head p {
+  margin: 6px 0 0;
+  color: #687689;
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 700;
 }
 
 .admin-program-form {
@@ -12200,10 +12232,63 @@ body.admin-page {
   background: #147a55;
 }
 
+.admin-program-applicants-panel {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.admin-program-applicants-panel .empty-state {
+  margin: 0;
+}
+
+.admin-program-applicants-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 16px 18px;
+  border: 1px solid rgba(15, 42, 77, 0.11);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 12px 30px rgba(25, 44, 72, 0.05);
+}
+
+.admin-program-applicants-head h4 {
+  margin: 0;
+  color: #17243a;
+  font-size: 19px;
+  line-height: 1.25;
+  font-weight: 900;
+}
+
+.admin-program-applicants-head label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #526177;
+  font-size: 13px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.admin-program-applicants-head select {
+  min-height: 38px;
+  border: 1px solid rgba(15, 42, 77, 0.13);
+  border-radius: 8px;
+  padding: 0 10px;
+  background: #fff;
+  color: #24324a;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 800;
+}
+
 .admin-applicant-table-wrap {
   overflow-x: auto;
   border: 1px solid rgba(15, 42, 77, 0.1);
   border-radius: 8px;
+  background: #fff;
 }
 
 .admin-applicant-table {
@@ -12224,6 +12309,10 @@ body.admin-page {
   background: #f6f9fc;
   font-size: 13px;
   font-weight: 900;
+}
+
+.admin-program-applicants-panel .admin-applicant-table {
+  min-width: 940px;
 }
 
 .admin-detail-loading,
@@ -12259,6 +12348,8 @@ body.admin-page {
 
 @media (max-width: 640px) {
   .admin-program-head,
+  .admin-program-selected-head,
+  .admin-program-applicants-head,
   .admin-program-manage-item,
   .admin-program-form-actions,
   .admin-program-page-nav {
