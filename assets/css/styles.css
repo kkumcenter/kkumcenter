@@ -117,6 +117,10 @@ a {
   text-decoration: none;
 }
 
+.mobile-hero-break {
+  display: none;
+}
+
 strong {
   font-weight: 700;
 }
@@ -12268,4 +12272,352 @@ body.admin-page {
     grid-template-columns: 1fr;
   }
 
+}
+
+@media (max-width: 700px) {
+  .sub-hero h1 {
+    max-width: 100%;
+    font-size: clamp(30px, 8vw, 34px);
+    line-height: 1.22;
+    overflow-wrap: anywhere;
+    word-break: normal;
+  }
+
+  .sub-hero h1 span {
+    display: inline;
+  }
+
+  .sub-hero h1 span + span::before {
+    content: " ";
+  }
+
+  .program-check-form[data-program-check-form],
+  .program-check-form[data-space-check-form] {
+    grid-template-columns: 1fr;
+  }
+
+  .reservation-action {
+    justify-content: stretch;
+  }
+
+  .reservation-action button,
+  .contact-board-form[data-contact-form] > button[type="submit"] {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .contact-board-form[data-contact-form] > button[type="submit"] {
+    justify-self: stretch;
+  }
+
+  .privacy-consent {
+    padding: 13px 14px;
+    overflow-wrap: anywhere;
+    word-break: keep-all;
+  }
+
+  .space-application-card a {
+    align-self: stretch;
+    width: 100%;
+  }
+
+  .space-application-card p,
+  .space-detail-info dd,
+  .space-detail-guide li {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    word-break: keep-all;
+  }
+
+  .footer-contact,
+  .footer-meta {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    word-break: keep-all;
+  }
+}
+
+@media (max-width: 640px) {
+  .login-section {
+    min-height: calc(100svh - 70px);
+    align-items: start;
+    padding: 64px 0 76px;
+  }
+
+  .login-card {
+    width: 100%;
+    max-width: 100%;
+    padding: 24px 20px;
+  }
+
+  .login-layout,
+  .login-form {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .login-layout-single {
+    width: 100%;
+    max-width: 100%;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .admin-login-card {
+    min-width: 0;
+  }
+
+  .login-form button {
+    width: 100%;
+  }
+
+  .board-table-wrap,
+  .inquiry-table-wrap {
+    overflow: visible;
+  }
+
+  .board-table-no-file,
+  .inquiry-public-table {
+    display: block;
+    min-width: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  .board-table-no-file thead,
+  .inquiry-public-table thead {
+    display: none;
+  }
+
+  .board-table-no-file tbody,
+  .inquiry-public-table tbody {
+    display: grid;
+    gap: 12px;
+  }
+
+  .board-table-no-file tr,
+  .inquiry-public-table tr {
+    display: grid;
+    gap: 9px;
+    padding: 15px;
+    border: 1px solid rgba(31, 90, 67, 0.14);
+    border-radius: 8px;
+    background: #fff;
+  }
+
+  .board-table-no-file td,
+  .inquiry-public-table td {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+    width: 100% !important;
+    padding: 0;
+    border: 0;
+    color: #263830;
+    text-align: right;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .board-table-no-file td::before,
+  .inquiry-public-table td::before {
+    flex: 0 0 auto;
+    color: var(--forest);
+    font-size: 13px;
+    font-weight: 900;
+    text-align: left;
+  }
+
+  .board-table-no-file td:nth-child(1)::before {
+    content: "번호";
+  }
+
+  .board-table-no-file td:nth-child(2)::before {
+    content: "제목";
+  }
+
+  .board-table-no-file td:nth-child(3)::before {
+    content: "작성자";
+  }
+
+  .board-table-no-file td:nth-child(4)::before {
+    content: "작성일";
+  }
+
+  .board-table-no-file td:nth-child(5)::before {
+    content: "조회";
+  }
+
+  .board-table-no-file td.board-admin-actions-cell::before,
+  .board-table-no-file td:nth-child(6)::before {
+    content: "관리";
+  }
+
+  .inquiry-public-table td:nth-child(1)::before {
+    content: "문의번호";
+  }
+
+  .inquiry-public-table td:nth-child(2)::before {
+    content: "제목";
+  }
+
+  .inquiry-public-table td:nth-child(3)::before {
+    content: "작성자";
+  }
+
+  .inquiry-public-table td:nth-child(4)::before {
+    content: "작성일";
+  }
+
+  .inquiry-public-table td:nth-child(5)::before {
+    content: "처리상태";
+  }
+
+  .inquiry-public-table td:nth-child(6)::before {
+    content: "관리";
+  }
+
+  .board-table-no-file td[colspan],
+  .inquiry-public-table td[colspan] {
+    display: block;
+    text-align: center;
+  }
+
+  .board-table-no-file td[colspan]::before,
+  .inquiry-public-table td[colspan]::before {
+    content: "";
+    display: none;
+  }
+
+  .board-table-no-file .board-title-cell,
+  .inquiry-public-table td:nth-child(2) {
+    display: grid;
+    justify-content: stretch;
+    gap: 6px;
+    text-align: left;
+  }
+
+  .board-title-cell .board-title-button,
+  .board-title-button,
+  .gallery-detail-button strong {
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .board-status-chip {
+    width: fit-content;
+  }
+
+  .board-admin-actions-cell .board-admin-actions {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .inquiry-pagination,
+  .board-pagination {
+    flex-wrap: wrap;
+  }
+
+  .site-footer {
+    padding: 42px 0;
+  }
+
+  .footer-meta {
+    font-size: 12px;
+    line-height: 1.65;
+  }
+}
+
+@media (max-width: 420px) {
+  .header-inner,
+  .home-page .header-inner {
+    width: min(100% - 24px, 1480px);
+    gap: 10px;
+  }
+
+  .brand-symbol {
+    width: 40px;
+    height: 38px;
+  }
+
+  .brand strong {
+    font-size: 17px;
+  }
+
+  .nav-toggle {
+    width: 46px;
+    height: 46px;
+    grid-template-columns: 18px;
+    column-gap: 0;
+    justify-content: center;
+    padding: 0;
+  }
+
+  .nav-toggle::after {
+    display: none;
+  }
+
+  .primary-nav {
+    left: 12px;
+    right: 12px;
+  }
+}
+
+@media (max-width: 640px) {
+  .sub-hero h1,
+  .sub-hero h1 span {
+    white-space: normal !important;
+    word-break: break-all;
+    line-break: anywhere;
+  }
+
+  .sub-hero h1 {
+    width: calc(100vw - 72px) !important;
+    max-width: calc(100vw - 72px) !important;
+  }
+
+  .sub-hero h1 span {
+    display: block !important;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .mobile-hero-break {
+    display: block;
+  }
+
+  .board-table-no-file td,
+  .inquiry-public-table td {
+    display: grid;
+    grid-template-columns: 78px minmax(0, 1fr);
+    justify-content: stretch;
+    text-align: left;
+  }
+
+  .board-table-no-file .board-title-cell,
+  .inquiry-public-table td:nth-child(2) {
+    grid-template-columns: 78px minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .board-table-no-file td > *,
+  .inquiry-public-table td > * {
+    min-width: 0;
+  }
+
+  .board-title-button {
+    display: block;
+    width: 100%;
+  }
+
+  .footer-contact,
+  .footer-meta,
+  .program-check-list p,
+  .program-list-card h3,
+  .program-list-card p,
+  .program-list-card dd {
+    word-break: break-all;
+    overflow-wrap: anywhere;
+  }
 }
