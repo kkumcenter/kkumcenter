@@ -399,6 +399,18 @@
     let selectedInquiryNo = "";
     let isSuperAdmin = false;
     let currentSession = null;
+    const inquiryPageSize = 10;
+    let inquiryItems = [];
+    let inquiryCurrentPage = 1;
+    const inquiryPagination = (() => {
+      if (!publicList) return null;
+      const nav = document.createElement("nav");
+      nav.className = "board-pagination inquiry-pagination";
+      nav.setAttribute("aria-label", "문의 목록 페이지");
+      const wrap = publicList.closest(".inquiry-table-wrap");
+      if (wrap) wrap.insertAdjacentElement("afterend", nav);
+      return nav;
+    })();
 
     const maskExceptFirst = (value, fallback = "-") => {
       const text = String(value || "").trim();
@@ -430,8 +442,30 @@
       return data?.role === "admin" && data.admin_role === "super_admin";
     };
 
+    const renderInquiryPagination = () => {
+      if (!inquiryPagination) return;
+      const totalPages = Math.ceil(inquiryItems.length / inquiryPageSize);
+      inquiryPagination.hidden = totalPages <= 1;
+      if (totalPages <= 1) {
+        inquiryPagination.innerHTML = "";
+        return;
+      }
+      inquiryPagination.innerHTML = Array.from({ length: totalPages }, (_, index) => {
+        const page = index + 1;
+        return `<button class="${page === inquiryCurrentPage ? "is-active" : ""}" type="button" data-inquiry-page="${page}"${page === inquiryCurrentPage ? ' aria-current="page"' : ""}>${page}</button>`;
+      }).join("");
+    };
+
     const renderPublicInquiryList = (items) => {
       if (!publicList) return;
+      if (items !== inquiryItems) {
+        inquiryItems = (items || []).map(toPublicInquiryItem);
+        inquiryCurrentPage = 1;
+      }
+      const totalPages = Math.max(1, Math.ceil(inquiryItems.length / inquiryPageSize));
+      inquiryCurrentPage = Math.min(Math.max(1, inquiryCurrentPage), totalPages);
+      items = inquiryItems.slice((inquiryCurrentPage - 1) * inquiryPageSize, inquiryCurrentPage * inquiryPageSize);
+      renderInquiryPagination();
       publicList.innerHTML = items.length
         ? items
             .map(
@@ -551,6 +585,13 @@
     };
 
     loadPublicInquiryList();
+
+    inquiryPagination?.addEventListener("click", (event) => {
+      const pageButton = event.target.closest("[data-inquiry-page]");
+      if (!pageButton) return;
+      inquiryCurrentPage = Number(pageButton.dataset.inquiryPage || 1);
+      renderPublicInquiryList(inquiryItems);
+    });
 
     if (form) {
       form.addEventListener("submit", async (event) => {
