@@ -10888,7 +10888,7 @@ body.admin-page {
   grid-template-columns: minmax(220px, 0.32fr) minmax(0, 1fr);
   align-items: start;
   gap: 24px;
-  padding: 22px 0 20px;
+  padding: 16px 0 14px;
 }
 
 .admin-approval-title-block {
@@ -10955,7 +10955,8 @@ body.admin-page {
 .admin-pending-summary {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
+  align-self: end;
+  gap: 8px;
   min-width: 0;
   margin-top: 0;
 }
@@ -10965,9 +10966,9 @@ body.admin-page {
   overflow: hidden;
   display: flex;
   align-items: center;
-  gap: 12px;
-  min-height: 92px;
-  padding: 13px 16px;
+  gap: 8px;
+  min-height: 54px;
+  padding: 7px 10px;
   border: 2px solid rgba(31, 127, 214, 0.16);
   border-radius: 12px;
   background:
@@ -11006,8 +11007,8 @@ body.admin-page {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 50px;
-  height: 50px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   color: #1d76d3;
   background: rgba(45, 142, 239, 0.16);
@@ -11024,8 +11025,8 @@ body.admin-page {
 }
 
 .admin-pending-icon svg {
-  width: 26px;
-  height: 26px;
+  width: 20px;
+  height: 20px;
   fill: none;
   stroke: currentColor;
   stroke-width: 2.35;
@@ -11039,20 +11040,21 @@ body.admin-page {
   min-width: 0;
   display: grid;
   justify-items: start;
+  gap: 1px;
 }
 
 .admin-pending-copy > span {
   color: #17243a;
-  font-size: 15px;
+  font-size: 13px;
   line-height: 1.2;
   font-weight: 900;
 }
 
 .admin-pending-count {
   display: inline-flex;
-  align-items: baseline;
-  gap: 4px;
-  margin-top: 4px;
+  align-items: center;
+  gap: 3px;
+  margin-top: 0;
   padding: 0;
   border: 0;
   color: #111827;
@@ -11060,18 +11062,25 @@ body.admin-page {
   cursor: pointer;
   font: inherit;
   text-decoration: none;
+  white-space: nowrap;
+}
+
+.admin-pending-status {
+  color: #344154;
+  font-size: 13px;
+  font-weight: 900;
 }
 
 .admin-pending-count strong {
   color: inherit;
-  font-size: 32px;
+  font-size: 22px;
   line-height: 1;
   font-weight: 900;
 }
 
 .admin-pending-unit {
   color: #344154;
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 900;
 }
 
@@ -11083,17 +11092,9 @@ body.admin-page {
   text-underline-offset: 5px;
 }
 
-.admin-pending-copy em {
-  margin-top: 4px;
-  color: #6c7a8f;
-  font-size: 13px;
-  font-style: normal;
-  font-weight: 800;
-}
-
 .admin-pending-board,
 .admin-approval-tabs {
-  margin-top: 24px;
+  margin-top: 16px;
   padding: 24px;
   border: 1px solid rgba(15, 42, 77, 0.1);
   border-radius: 8px;
