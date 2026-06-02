@@ -12379,7 +12379,6 @@ body.admin-page {
 }
 
 .admin-program-card,
-.admin-program-form,
 .admin-program-manage-item {
   border: 1px solid rgba(15, 42, 77, 0.11);
   border-radius: 8px;
@@ -12478,10 +12477,22 @@ body.admin-page {
 
 .admin-program-selected-head h3 {
   margin: 0;
-  color: #17243a;
-  font-size: 22px;
+  color: #0d2f5c;
+  font-size: 25px;
   line-height: 1.25;
   font-weight: 900;
+}
+
+.admin-program-selected-head h3::before {
+  content: "[";
+  margin-right: 4px;
+  color: #0f6fe8;
+}
+
+.admin-program-selected-head h3::after {
+  content: "]";
+  margin-left: 4px;
+  color: #0f6fe8;
 }
 
 .admin-program-selected-head p {
@@ -12499,7 +12510,11 @@ body.admin-page {
 }
 
 .admin-program-form {
-  padding: 22px;
+  padding: 8px 0 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
 .admin-program-form-grid {
@@ -12720,7 +12735,7 @@ body.admin-page {
 .admin-program-applicants-panel {
   display: grid;
   gap: 12px;
-  margin-top: 16px;
+  margin-top: 12px;
 }
 
 .admin-program-applicants-panel .empty-state {
