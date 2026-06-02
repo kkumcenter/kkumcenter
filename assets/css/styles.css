@@ -11723,34 +11723,6 @@ body.admin-page {
   grid-column: 1 / -1;
 }
 
-.admin-program-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 18px;
-  margin-bottom: 18px;
-}
-
-.admin-program-head-actions-only {
-  justify-content: flex-end;
-  margin-bottom: 14px;
-}
-
-.admin-program-head h3 {
-  margin: 0;
-  color: #17243a;
-  font-size: 22px;
-  line-height: 1.25;
-  font-weight: 900;
-}
-
-.admin-program-head p {
-  margin: 6px 0 0;
-  color: #687689;
-  font-size: 14px;
-  font-weight: 700;
-}
-
 .admin-program-list-card {
   padding: 18px;
   border: 1px solid rgba(15, 42, 77, 0.11);
@@ -12378,7 +12350,6 @@ body.admin-page {
 }
 
 @media (max-width: 640px) {
-  .admin-program-head,
   .admin-program-selected-head,
   .admin-program-applicants-head,
   .admin-program-manage-item,

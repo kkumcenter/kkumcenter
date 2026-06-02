@@ -39,7 +39,6 @@
     spacePageInfo: dashboard.querySelector("[data-space-page-info]"),
     programPageInfo: dashboard.querySelector("[data-program-page-info]"),
     programStatusList: dashboard.querySelector("[data-program-status-list]"),
-    programStatusRefresh: dashboard.querySelector("[data-program-status-refresh]"),
     programManageForm: dashboard.querySelector("[data-program-manage-form]"),
     programFormReset: dashboard.querySelector("[data-program-form-reset]"),
     programManageStatus: dashboard.querySelector("[data-program-manage-status]"),
@@ -1145,11 +1144,6 @@
 
     const refreshButton = target.closest("[data-admin-refresh]");
     if (refreshButton instanceof HTMLElement) {
-      await load();
-      return;
-    }
-
-    if (target.closest("[data-program-status-refresh]")) {
       await load();
       return;
     }
