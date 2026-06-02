@@ -6324,6 +6324,7 @@ body.admin-page {
 
 .search-panel button,
 .notice-search button {
+  min-width: 112px;
   min-height: 44px;
   padding: 0 18px;
   border: 0;
@@ -11533,6 +11534,7 @@ body.admin-page {
 
 .admin-program-approval-search button {
   flex: 0 0 auto;
+  min-width: 86px;
 }
 
 .admin-program-approval-toolbar .admin-bulk-action-group {
