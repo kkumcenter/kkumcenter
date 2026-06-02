@@ -149,16 +149,14 @@
 
   const educationStatusLabel = (status) => {
     if (status === "open") return "접수중";
-    if (status === "closed") return "접수마감";
-    if (status === "finished") return "종료";
+    if (status === "closed" || status === "finished") return "접수마감";
     return "접수예정";
   };
 
   const educationStatusClass = (status) => {
     if (status === "open") return "admin-status-open";
     if (status === "scheduled") return "admin-status-scheduled";
-    if (status === "closed") return "admin-status-closed";
-    if (status === "finished") return "admin-status-finished";
+    if (status === "closed" || status === "finished") return "admin-status-closed";
     return "admin-status-unknown";
   };
 
@@ -397,7 +395,10 @@
       .filter((program) => {
         const hidden = program.is_active === false;
         const programYear = getProgramManageYear(program);
-        const matchesStatus = status === "all" || (!hidden && program.status === status);
+        const matchesStatus =
+          status === "all" ||
+          (!hidden && program.status === status) ||
+          (!hidden && status === "closed" && program.status === "finished");
         const matchesRunStatus = runStatus === "all" || educationRunStatusValue(program) === runStatus;
         const matchesTarget = target === "all" || program.target === target;
         const matchesYear = yearValue === "all" || programYear === (yearValue === "current" ? currentYear : Number(yearValue));
@@ -973,7 +974,7 @@
     form.elements.title.value = item.title || "";
     form.elements.target.value = item.target || "전체";
     form.elements.capacity.value = item.capacity || "";
-    form.elements.status.value = item.status || "scheduled";
+    form.elements.status.value = item.status === "finished" ? "closed" : item.status || "scheduled";
     form.elements.applyStartDate.value = item.apply_start_date || "";
     form.elements.applyEndDate.value = item.apply_end_date || "";
     form.elements.startDate.value = item.start_date || "";
