@@ -713,17 +713,17 @@
         const selected = String(state.selectedProgramId || "") === String(program.id);
         return `
           <tr class="${selected ? "is-selected" : ""}">
-            <td><span class="admin-status-badge ${educationStatusClass(programStatus)}">${escapeHtml(educationStatusLabel(programStatus))}</span></td>
+            <td><span class="admin-status-badge ${programOperationClass(operationStatus)}">${escapeHtml(programOperationLabel(operationStatus))}</span></td>
+            <td><span class="admin-status-badge ${programVisibilityClass(visibility)}">${escapeHtml(programVisibilityLabel(visibility))}</span></td>
             <td class="admin-program-title-cell">
               <button type="button" data-program-manage-select="${escapeHtml(program.id)}" aria-pressed="${selected ? "true" : "false"}">${escapeHtml(program.title)}</button>
               <span>${escapeHtml(displayValue(program.summary || program.content))}</span>
               ${operationStatus === "canceled" && program.cancel_reason ? `<em>${escapeHtml(program.cancel_reason)}</em>` : ""}
             </td>
+            <td><span class="admin-status-badge ${educationStatusClass(programStatus)}">${escapeHtml(educationStatusLabel(programStatus))}</span></td>
             <td>${escapeHtml(formatDateRange(program.apply_start_date, program.apply_end_date))}</td>
-            <td>${escapeHtml(formatDateRange(program.start_date, program.end_date))}</td>
             <td><span class="admin-status-badge ${educationRunStatusClass(program)}">${escapeHtml(educationRunStatusLabel(program))}</span></td>
-            <td><span class="admin-status-badge ${programVisibilityClass(visibility)}">${escapeHtml(programVisibilityLabel(visibility))}</span></td>
-            <td><span class="admin-status-badge ${programOperationClass(operationStatus)}">${escapeHtml(programOperationLabel(operationStatus))}</span></td>
+            <td>${escapeHtml(formatDateRange(program.start_date, program.end_date))}</td>
             <td>${escapeHtml(program.capacity)}</td>
             <td class="admin-program-stats-cell">
               <div class="admin-program-stats-row">
@@ -744,25 +744,25 @@
       <div class="admin-program-list-wrap">
         <table class="admin-program-list-table" aria-label="교육 관리 목록">
           <colgroup>
-            <col class="admin-program-col-status">
-            <col class="admin-program-col-title">
-            <col class="admin-program-col-apply">
-            <col class="admin-program-col-period">
-            <col class="admin-program-col-run">
-            <col class="admin-program-col-visibility">
             <col class="admin-program-col-operation">
+            <col class="admin-program-col-visibility">
+            <col class="admin-program-col-title">
+            <col class="admin-program-col-status">
+            <col class="admin-program-col-apply">
+            <col class="admin-program-col-run">
+            <col class="admin-program-col-period">
             <col class="admin-program-col-capacity">
             <col class="admin-program-col-stats">
           </colgroup>
           <thead>
             <tr>
-              <th scope="col">모집상태</th>
-              <th scope="col">교육명</th>
-              <th scope="col">모집기간</th>
-              <th scope="col">수업기간</th>
-              <th scope="col">수업상태</th>
-              <th scope="col">노출상태</th>
               <th scope="col">운영상태</th>
+              <th scope="col">노출상태</th>
+              <th scope="col">교육명</th>
+              <th scope="col">모집상태</th>
+              <th scope="col">모집기간</th>
+              <th scope="col">수업상태</th>
+              <th scope="col">수업기간</th>
               <th scope="col">정원</th>
               <th scope="col">신청현황</th>
             </tr>
