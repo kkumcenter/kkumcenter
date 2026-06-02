@@ -34,7 +34,7 @@
 
   const genderFormValue = (value) => (value === "female" || value === "male" ? value : "");
 
-  const activeName = (value) => (value ? "활성" : "제외");
+  const activeName = (value) => (value ? "활성" : "비활성");
   const activeClass = (value) => (value ? "admin-staff-active" : "admin-staff-inactive");
   const roleClass = (value) => (value === "super_admin" ? "admin-staff-role-admin" : "admin-staff-role-staff");
   const boolFormValue = (value) => (value === false || value === "false" ? "false" : "true");
