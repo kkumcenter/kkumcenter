@@ -11481,21 +11481,21 @@ body.admin-page {
 .admin-program-approval-toolbar {
   flex: 0 1 auto;
   flex-wrap: nowrap;
-  gap: 16px;
+  gap: 8px;
   min-width: 0;
 }
 
 .admin-approval-list-head .admin-program-approval-toolbar {
-  flex: 1 1 570px;
-  gap: 16px;
-  min-width: min(100%, 570px);
+  flex: 0 1 auto;
+  gap: 8px;
+  min-width: 0;
 }
 
 .admin-program-approval-search {
   display: flex;
   align-items: center;
   gap: 4px;
-  flex: 1 1 auto;
+  flex: 0 1 auto;
   min-width: 0;
 }
 
