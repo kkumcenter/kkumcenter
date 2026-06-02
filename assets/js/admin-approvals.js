@@ -30,6 +30,7 @@
     programSelectedCount: dashboard.querySelector("[data-program-selected-count]"),
     spaceBulkApprove: dashboard.querySelector("[data-space-bulk-approve]"),
     programBulkApprove: dashboard.querySelector("[data-program-bulk-approve]"),
+    programApprovalKeyword: dashboard.querySelector("[data-program-approval-keyword]"),
     spacePageSize: dashboard.querySelector("[data-space-page-size]"),
     programPageSize: dashboard.querySelector("[data-program-page-size]"),
     spacePagePrev: dashboard.querySelector("[data-space-page-prev]"),
@@ -77,6 +78,7 @@
     programPage: 1,
     spacePageSize: 10,
     programPageSize: 10,
+    programApprovalKeyword: "",
     programManagePage: 1,
     programManagePageSize: 10,
     appliedProgramFilters: { ...DEFAULT_PROGRAM_FILTERS },
@@ -348,7 +350,20 @@
 
   const getVisibleSpaces = () => getPagedItems(state.spaces, state.spacePage, state.spacePageSize);
 
-  const getVisiblePrograms = () => getPagedItems(state.programs, state.programPage, state.programPageSize);
+  const getFilteredPrograms = () => {
+    const keyword = state.programApprovalKeyword.trim().toLowerCase();
+    if (!keyword) return state.programs;
+
+    const keywordDigits = keyword.replace(/\D/g, "");
+    return state.programs.filter((item) => {
+      const programTitle = getRelationValue(item.programs, "title") || "";
+      const haystack = `${programTitle} ${item.applicant_name || ""} ${item.phone || ""}`.toLowerCase();
+      const phoneDigits = String(item.phone || "").replace(/\D/g, "");
+      return haystack.includes(keyword) || (keywordDigits && phoneDigits.includes(keywordDigits));
+    });
+  };
+
+  const getVisiblePrograms = () => getPagedItems(getFilteredPrograms(), state.programPage, state.programPageSize);
 
   const getProgramManageYear = (program) => {
     const source = program.apply_start_date || program.start_date || program.created_at;
@@ -415,8 +430,9 @@
   };
 
   const syncPageControls = () => {
+    const filteredPrograms = getFilteredPrograms();
     state.spacePage = clampPage(state.spacePage, state.spaces, state.spacePageSize);
-    state.programPage = clampPage(state.programPage, state.programs, state.programPageSize);
+    state.programPage = clampPage(state.programPage, filteredPrograms, state.programPageSize);
 
     const update = (items, page, pageSize, prevButton, nextButton, infoNode, selectNode) => {
       const totalPages = getTotalPages(items, pageSize);
@@ -427,7 +443,7 @@
     };
 
     update(state.spaces, state.spacePage, state.spacePageSize, nodes.spacePagePrev, nodes.spacePageNext, nodes.spacePageInfo, nodes.spacePageSize);
-    update(state.programs, state.programPage, state.programPageSize, nodes.programPagePrev, nodes.programPageNext, nodes.programPageInfo, nodes.programPageSize);
+    update(filteredPrograms, state.programPage, state.programPageSize, nodes.programPagePrev, nodes.programPageNext, nodes.programPageInfo, nodes.programPageSize);
   };
 
   const syncBulkControls = () => {
@@ -488,6 +504,12 @@
     if (!nodes.programList) return;
     if (!state.programs.length) {
       setTableMessage(nodes.programList, "승인 대기 중인 교육신청이 없습니다.");
+      return;
+    }
+
+    const filteredPrograms = getFilteredPrograms();
+    if (!filteredPrograms.length) {
+      setTableMessage(nodes.programList, "검색어에 맞는 교육신청이 없습니다.");
       return;
     }
 
@@ -1143,6 +1165,14 @@
       else state.selectedPrograms.delete(programId);
       syncBulkControls();
     }
+  });
+
+  dashboard.addEventListener("input", (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLInputElement) || !target.matches("[data-program-approval-keyword]")) return;
+    state.programApprovalKeyword = target.value.trim().toLowerCase();
+    state.programPage = 1;
+    renderAll();
   });
 
   dashboard.addEventListener("click", async (event) => {

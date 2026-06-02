@@ -10770,29 +10770,36 @@ body.admin-page {
 }
 
 .admin-settings-actions button {
-  min-height: 32px;
-  padding: 0 10px;
+  min-height: 38px;
+  padding: 0 12px;
   border: 0;
   border-radius: 8px;
-  background: #eef2f7;
-  color: #526177;
+  background: #0f6fe8;
+  color: #fff;
   cursor: pointer;
-  font-weight: 700;
+  font-weight: 900;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
 .admin-settings-actions button[data-staff-role-update] {
-  color: #0f6fe8;
-  background: #eef5ff;
+  color: #fff;
+  background: #0f6fe8;
 }
 
 .admin-settings-actions button[data-staff-edit] {
-  color: #0f4fb8;
-  background: #eef5ff;
+  color: #fff;
+  background: #0f6fe8;
 }
 
 .admin-settings-actions button[data-staff-reactivate] {
+  color: #fff;
+  background: #0f6fe8;
+}
+
+.admin-settings-actions button:hover,
+.admin-settings-actions button:focus-visible {
   color: #0f4fb8;
-  background: #eef5ff;
+  background: #dbeafe;
 }
 
 .inquiry-admin-meta span {
@@ -10951,6 +10958,8 @@ body.admin-page {
 .admin-approval-session a,
 .admin-refresh-button,
 .admin-pending-item a,
+.admin-bulk-toolbar button,
+.admin-program-filter-action button,
 .admin-approval-actions button {
   display: inline-flex;
   align-items: center;
@@ -10961,6 +10970,7 @@ body.admin-page {
   cursor: pointer;
   font: inherit;
   font-weight: 900;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
 .admin-approval-session a,
@@ -10971,24 +10981,44 @@ body.admin-page {
   background: #eef5ff;
 }
 
+.admin-refresh-button:hover,
+.admin-refresh-button:focus-visible {
+  color: #0f4fb8;
+  background: #dbeafe;
+}
+
 .admin-page .button.primary,
 .admin-page .admin-settings-submit {
-  min-height: 42px;
+  min-height: 38px;
   border: 0;
   border-radius: 8px;
   color: #fff;
   background: #0f6fe8;
+  cursor: pointer;
   font: inherit;
   font-weight: 900;
   box-shadow: none;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.admin-page .button.primary:disabled,
+.admin-page .button.primary:disabled:hover,
+.admin-page .button.primary:disabled:focus-visible,
+.admin-page .admin-settings-submit:disabled,
+.admin-page .admin-settings-submit:disabled:hover,
+.admin-page .admin-settings-submit:disabled:focus-visible {
+  color: #fff;
+  background: #0f6fe8;
+  cursor: default;
+  opacity: 1;
 }
 
 .admin-page .button.primary:hover,
 .admin-page .button.primary:focus-visible,
 .admin-page .admin-settings-submit:hover,
 .admin-page .admin-settings-submit:focus-visible {
-  color: #fff;
-  background: #0b5fc8;
+  color: #0f4fb8;
+  background: #dbeafe;
 }
 
 .admin-page .button.primary::after {
@@ -11361,6 +11391,42 @@ body.admin-page {
   font-weight: 800;
 }
 
+.admin-program-approval-toolbar {
+  gap: 16px;
+}
+
+.admin-program-approval-search {
+  min-width: min(380px, 100%);
+}
+
+.admin-program-approval-search label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #24324a;
+  font-size: 14px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.admin-program-approval-search input {
+  width: min(300px, 100%);
+  min-height: 38px;
+  padding: 0 12px;
+  border: 1px solid rgba(15, 42, 77, 0.16);
+  border-radius: 8px;
+  color: #24324a;
+  background: #fff;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.admin-program-approval-toolbar .admin-bulk-action-group {
+  padding-left: 16px;
+  border-left: 1px solid rgba(15, 42, 77, 0.13);
+}
+
 .admin-bulk-toolbar button {
   min-height: 38px;
   padding: 0 16px;
@@ -11376,7 +11442,7 @@ body.admin-page {
 
 .admin-bulk-toolbar button:disabled {
   cursor: default;
-  opacity: 0.45;
+  opacity: 1;
 }
 
 .admin-page-nav button {
@@ -11587,20 +11653,26 @@ body.admin-page {
 }
 
 .admin-approval-actions button {
-  min-height: 34px;
-  padding: 0 11px;
+  min-height: 38px;
+  padding: 0 12px;
   color: #fff;
   background: #0f6fe8;
 }
 
 .admin-approval-actions button:last-child {
-  background: #66758c;
+  background: #0f6fe8;
 }
 
 .admin-approval-actions button:disabled,
 .admin-refresh-button:disabled {
-  cursor: wait;
-  opacity: 0.62;
+  cursor: default;
+  opacity: 1;
+}
+
+.admin-refresh-button:disabled:hover,
+.admin-refresh-button:disabled:focus-visible {
+  color: #0f6fe8;
+  background: #eef5ff;
 }
 
 .admin-detail-modal {
@@ -11807,6 +11879,24 @@ body.admin-page {
     width: 100%;
   }
 
+  .admin-program-approval-search,
+  .admin-program-approval-search input {
+    width: 100%;
+  }
+
+  .admin-program-approval-search label {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .admin-program-approval-toolbar .admin-bulk-action-group {
+    padding-top: 10px;
+    padding-left: 0;
+    border-top: 1px solid rgba(15, 42, 77, 0.13);
+    border-left: 0;
+  }
+
   .admin-list-control-group,
   .admin-bulk-action-group {
     justify-content: space-between;
@@ -11965,7 +12055,7 @@ body.admin-page {
 
 .admin-program-filter-action button {
   width: 100%;
-  min-height: 42px;
+  min-height: 38px;
   border: 0;
   border-radius: 8px;
   color: #fff;
@@ -11982,12 +12072,14 @@ body.admin-page {
 .admin-bulk-toolbar button:focus-visible:not(:disabled),
 .admin-approval-actions button:hover:not(:disabled),
 .admin-approval-actions button:focus-visible:not(:disabled) {
-  background: #0b5fc8;
+  color: #0f4fb8;
+  background: #dbeafe;
 }
 
 .admin-approval-actions button:last-child:hover:not(:disabled),
 .admin-approval-actions button:last-child:focus-visible:not(:disabled) {
-  background: #55657c;
+  color: #0f4fb8;
+  background: #dbeafe;
 }
 
 .admin-program-page-nav {
