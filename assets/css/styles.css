@@ -11239,7 +11239,7 @@ body.admin-page {
 
 .admin-pending-summary {
   display: grid;
-  grid-template-columns: minmax(300px, 340px) repeat(3, minmax(176px, 196px));
+  grid-template-columns: minmax(270px, 300px) repeat(3, minmax(176px, 196px));
   align-self: end;
   justify-content: end;
   gap: 10px;
@@ -11393,7 +11393,18 @@ body.admin-page {
 .admin-pending-copy > .admin-pending-email {
   color: #344154;
   font-size: 13.5px;
+  text-align: right;
   font-weight: 700;
+}
+
+.admin-pending-admin .admin-pending-copy {
+  min-width: 0;
+}
+
+.admin-pending-admin .admin-pending-email {
+  width: 100%;
+  padding-right: 0;
+  text-align: right;
 }
 
 .admin-pending-status {
