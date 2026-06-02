@@ -10672,7 +10672,10 @@ body.admin-page {
 .admin-settings-form button[type="submit"] {
   grid-column: 4;
   grid-row: 3;
-  justify-self: stretch;
+  justify-self: end;
+  width: 50%;
+  min-width: 120px;
+  margin-top: 10px;
   min-height: 38px;
 }
 
@@ -11055,6 +11058,11 @@ body.admin-page {
   .admin-settings-form .form-status {
     grid-column: 1;
     grid-row: auto;
+  }
+
+  .admin-settings-form button[type="submit"] {
+    justify-self: stretch;
+    width: 100%;
   }
 
   .admin-settings-item {
