@@ -11121,10 +11121,10 @@ body.admin-page {
 
 .admin-pending-admin {
   min-width: 0;
-  border-color: rgba(15, 111, 232, 0.2);
+  border-color: rgba(100, 116, 139, 0.2);
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.72) 100%),
-    linear-gradient(135deg, #eef5ff 0%, #f8fbff 100%);
+    linear-gradient(135deg, #f1f5f9 0%, #fbfcfe 100%);
 }
 
 .admin-pending-card::after {
@@ -11137,9 +11137,9 @@ body.admin-page {
 }
 
 .admin-pending-logo {
-  border: 1px solid rgba(15, 111, 232, 0.14);
-  color: #073d92;
-  background: #eaf3ff;
+  border: 1px solid rgba(100, 116, 139, 0.16);
+  color: #475569;
+  background: #eef2f7;
 }
 
 .admin-pending-icon {
@@ -11219,7 +11219,7 @@ body.admin-page {
   max-width: 100%;
   color: #344154;
   font-size: 13.5px;
-  font-weight: 900;
+  font-weight: 700;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
