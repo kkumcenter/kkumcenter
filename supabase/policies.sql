@@ -298,8 +298,21 @@ using (
 );
 
 drop policy if exists "Authenticated users can upload kkumcenter files" on storage.objects;
+drop policy if exists "Admins can manage program images" on storage.objects;
 drop policy if exists "Admins can manage kkumcenter storage files" on storage.objects;
 drop policy if exists "Board admins can manage kkumcenter storage files" on storage.objects;
+create policy "Admins can manage program images"
+on storage.objects
+for all
+using (
+  public.is_super_admin()
+  and bucket_id in ('program-images')
+)
+with check (
+  public.is_super_admin()
+  and bucket_id in ('program-images')
+);
+
 create policy "Board admins can manage kkumcenter storage files"
 on storage.objects
 for all

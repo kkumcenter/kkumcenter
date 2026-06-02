@@ -101,6 +101,19 @@
     return text || "-";
   };
 
+  const safeFileName = (name) =>
+    String(name || "program-image")
+      .normalize("NFKD")
+      .replace(/[^\w.\-]+/g, "-")
+      .replace(/-+/g, "-")
+      .replace(/^-|-$/g, "")
+      .slice(0, 90) || "program-image";
+
+  const fileExt = (name, fallback = "jpg") => {
+    const match = String(name || "").toLowerCase().match(/\.([a-z0-9]+)$/);
+    return match ? match[1] : fallback;
+  };
+
   const formatDate = (value) => {
     if (!value) return "-";
     const text = String(value);
@@ -226,6 +239,35 @@
     if (!status) return;
     status.textContent = message || "";
     status.classList.toggle("is-error", Boolean(isError));
+  };
+
+  const renderProgramImagePreview = (form, url = "") => {
+    const preview = form?.querySelector("[data-program-image-preview]");
+    const clearButton = form?.querySelector("[data-program-image-clear]");
+    if (!preview) return;
+    const imageUrl = String(url || "").trim();
+    preview.innerHTML = imageUrl
+      ? `<img src="${escapeHtml(imageUrl)}" alt="대표 이미지 미리보기"><span>현재 대표 이미지</span>`
+      : "<span>이미지가 없으면 기본 교육 이미지가 자동으로 표시됩니다.</span>";
+    if (clearButton) clearButton.hidden = !imageUrl;
+  };
+
+  const uploadProgramImage = async (file, programId = "") => {
+    if (!client) throw new Error("이미지 업로드를 위한 Supabase 연결이 필요합니다.");
+    if (!file.type.startsWith("image/")) throw new Error("이미지 파일만 첨부할 수 있습니다.");
+    const ext = fileExt(file.name, file.type.includes("png") ? "png" : "jpg");
+    const rawName = safeFileName(file.name || `program-image.${ext}`);
+    const name = /\.[a-z0-9]+$/i.test(rawName) ? rawName : `${rawName}.${ext}`;
+    const folder = programId ? `program-${programId}` : "new";
+    const token = window.crypto?.randomUUID ? window.crypto.randomUUID() : Math.random().toString(36).slice(2);
+    const path = `${folder}/${Date.now()}-${token}-${name}`;
+    const { error } = await client.storage.from("program-images").upload(path, file, {
+      contentType: file.type || "image/jpeg",
+      upsert: false,
+    });
+    if (error) throw error;
+    const { data } = client.storage.from("program-images").getPublicUrl(path);
+    return data.publicUrl;
   };
 
   const showMessage = (message, isError = false) => {
@@ -978,7 +1020,10 @@
     state.selectedProgramApplicantPage = 1;
     nodes.programManageForm.reset();
     nodes.programManageForm.elements.id.value = "";
+    nodes.programManageForm.elements.imageUrl.value = "";
+    if (nodes.programManageForm.elements.imageFile) nodes.programManageForm.elements.imageFile.value = "";
     if (nodes.programManageForm.elements.isActive) nodes.programManageForm.elements.isActive.value = "true";
+    renderProgramImagePreview(nodes.programManageForm, "");
     setFormStatus(nodes.programManageForm, "");
     const submit = nodes.programManageForm.querySelector('button[type="submit"]');
     if (submit) submit.textContent = "저장하기";
@@ -1004,6 +1049,8 @@
     form.elements.place.value = item.place || "";
     form.elements.instructor.value = item.instructor || "";
     form.elements.imageUrl.value = item.image_url || "";
+    if (form.elements.imageFile) form.elements.imageFile.value = "";
+    renderProgramImagePreview(form, item.image_url || "");
     form.elements.summary.value = item.summary || "";
     form.elements.content.value = item.content || "";
     if (form.elements.isActive) form.elements.isActive.value = item.is_active === false ? "false" : "true";
@@ -1015,6 +1062,8 @@
   };
 
   const saveProgramFromForm = async (form) => {
+    let imageUrl = form.elements.imageUrl.value.trim();
+    const imageFile = form.elements.imageFile?.files?.[0] || null;
     const payload = {
       id: form.elements.id.value.trim(),
       title: form.elements.title.value.trim(),
@@ -1027,7 +1076,7 @@
       endDate: form.elements.endDate.value,
       place: form.elements.place.value.trim(),
       instructor: form.elements.instructor.value.trim(),
-      imageUrl: form.elements.imageUrl.value.trim(),
+      imageUrl,
       summary: form.elements.summary.value.trim(),
       content: form.elements.content.value.trim(),
       isActive: form.elements.isActive ? form.elements.isActive.value === "true" : true,
@@ -1040,6 +1089,14 @@
     const submit = form.querySelector('button[type="submit"]');
     submit.disabled = true;
     try {
+      if (imageFile) {
+        setFormStatus(form, "대표 이미지를 업로드하고 있습니다.");
+        imageUrl = await uploadProgramImage(imageFile, payload.id);
+        payload.imageUrl = imageUrl;
+        form.elements.imageUrl.value = imageUrl;
+        form.elements.imageFile.value = "";
+        renderProgramImagePreview(form, imageUrl);
+      }
       const result = await callPublicSubmitFunction("program-save", payload);
       state.selectedProgramId = String(result?.item?.id || payload.id || "");
       await load();
@@ -1175,6 +1232,21 @@
     renderAll();
   });
 
+  dashboard.addEventListener("change", (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLInputElement) || target.name !== "imageFile") return;
+    const form = target.closest("[data-program-manage-form]");
+    const file = target.files?.[0];
+    if (!(form instanceof HTMLFormElement) || !file) return;
+    if (!file.type.startsWith("image/")) {
+      target.value = "";
+      setFormStatus(form, "이미지 파일만 첨부할 수 있습니다.", true);
+      return;
+    }
+    const previewUrl = URL.createObjectURL(file);
+    renderProgramImagePreview(form, previewUrl);
+  });
+
   dashboard.addEventListener("click", async (event) => {
     const target = event.target;
     if (!(target instanceof HTMLElement)) return;
@@ -1276,6 +1348,18 @@
 
     if (target.closest("[data-program-form-reset]")) {
       resetProgramForm();
+      return;
+    }
+
+    const imageClear = target.closest("[data-program-image-clear]");
+    if (imageClear instanceof HTMLButtonElement) {
+      const form = imageClear.closest("[data-program-manage-form]");
+      if (form instanceof HTMLFormElement) {
+        form.elements.imageUrl.value = "";
+        if (form.elements.imageFile) form.elements.imageFile.value = "";
+        renderProgramImagePreview(form, "");
+        setFormStatus(form, "대표 이미지를 제거했습니다. 저장하면 기본 이미지로 표시됩니다.");
+      }
       return;
     }
 

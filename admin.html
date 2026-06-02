@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>관리자페이지 | 군북면 꿈키움센터</title>
     <meta name="description" content="군북면 꿈키움센터 관리자 승인 및 관리 페이지입니다.">
-    <link rel="stylesheet" href="assets/css/styles.css?v=20260602-8">
+    <link rel="stylesheet" href="assets/css/styles.css?v=20260602-9">
   </head>
   <body class="admin-page admin-approval-page">
     <a class="skip-link" href="#main">본문 바로가기</a>
@@ -279,7 +279,15 @@
                   <option value="false">숨김</option>
                 </select>
               </label>
-              <label class="admin-program-image">대표 이미지 주소<input name="imageUrl" type="url" placeholder="https://..."></label>
+              <div class="admin-program-image">
+                <span>대표 이미지</span>
+                <input name="imageUrl" type="hidden">
+                <label class="admin-program-image-picker">이미지 파일 선택<input name="imageFile" type="file" accept="image/*"></label>
+                <div class="admin-program-image-preview" data-program-image-preview>
+                  <span>이미지가 없으면 기본 교육 이미지가 자동으로 표시됩니다.</span>
+                </div>
+                <button type="button" data-program-image-clear hidden>이미지 제거</button>
+              </div>
               <label class="admin-program-summary-field">요약<input name="summary" type="text" placeholder="목록에 보이는 짧은 소개"></label>
               <label class="admin-program-content">상세내용<textarea name="content" rows="6" placeholder="교육 목표, 회차 구성, 준비물 등을 적어주세요." required></textarea></label>
             </div>
@@ -346,7 +354,7 @@
     <script src="assets/js/main.js?v=20260529-9"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/supabase-config.js?v=20260528-1"></script>
-    <script src="assets/js/admin-approvals.js?v=20260602-6"></script>
+    <script src="assets/js/admin-approvals.js?v=20260602-7"></script>
     <script src="assets/js/admin-settings.js?v=20260529-6"></script>
   </body>
 </html>
