@@ -11486,15 +11486,15 @@ body.admin-page {
 }
 
 .admin-approval-list-head .admin-program-approval-toolbar {
-  flex: 1 1 620px;
+  flex: 1 1 570px;
   gap: 16px;
-  min-width: min(100%, 620px);
+  min-width: min(100%, 570px);
 }
 
 .admin-program-approval-search {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
   flex: 1 1 auto;
   min-width: 0;
 }
@@ -12168,9 +12168,9 @@ body.admin-page {
 
 .admin-program-searchbar {
   display: grid;
-  grid-template-columns: minmax(240px, 1fr) 110px;
-  gap: 10px;
-  align-items: end;
+  grid-template-columns: minmax(240px, 1fr) 96px;
+  gap: 8px;
+  align-items: center;
   margin-bottom: 10px;
   padding: 14px;
   border: 1px solid rgba(15, 42, 77, 0.1);
@@ -12179,12 +12179,14 @@ body.admin-page {
 }
 
 .admin-program-searchbar label {
-  display: grid;
-  gap: 7px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   min-width: 0;
   color: #24324a;
   font-size: 14px;
   font-weight: 900;
+  white-space: nowrap;
 }
 
 .admin-program-filterbar label {
@@ -13057,6 +13059,12 @@ body.admin-page {
   .admin-program-searchbar,
   .admin-program-filterbar {
     grid-template-columns: 1fr;
+  }
+
+  .admin-program-searchbar label {
+    display: grid;
+    gap: 7px;
+    white-space: normal;
   }
 
   .admin-program-list-table {
