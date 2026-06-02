@@ -11503,7 +11503,7 @@ body.admin-page {
   display: flex;
   align-items: center;
   gap: 10px;
-  flex: 1 1 auto;
+  flex: 0 1 auto;
   min-width: 0;
   color: #24324a;
   font-size: 14px;
@@ -11512,8 +11512,8 @@ body.admin-page {
 }
 
 .admin-program-approval-search input {
-  width: 100%;
-  max-width: 280px;
+  width: clamp(210px, 22vw, 260px);
+  max-width: none;
   min-width: 0;
   min-height: 38px;
   padding: 0 12px;
