@@ -7141,12 +7141,12 @@ body.admin-page {
 .auth-user-panel {
   width: 100%;
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 14px;
-  margin-top: 16px;
-  padding: 16px;
-  border-radius: 8px;
-  background: rgba(31, 90, 67, 0.08);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(31, 90, 67, 0.16);
+  background: transparent;
 }
 
 .auth-user-panel[hidden] {
@@ -7154,9 +7154,33 @@ body.admin-page {
 }
 
 .auth-user-panel strong {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+  align-items: center;
   color: var(--forest);
   font-size: 15px;
+  font-weight: 700;
+  line-height: 1.5;
   overflow-wrap: anywhere;
+}
+
+.auth-login-text {
+  min-width: 0;
+}
+
+.auth-role-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 0 9px;
+  border-radius: 999px;
+  color: var(--forest);
+  background: rgba(31, 90, 67, 0.1);
+  font-size: 12px;
+  font-weight: 900;
+  white-space: nowrap;
 }
 
 .auth-user-panel button {
@@ -9489,6 +9513,7 @@ body.admin-page {
   background: var(--forest);
   color: #fff;
   font-weight: 700;
+  text-decoration: none;
 }
 
 .inquiry-board-layout {
@@ -13378,6 +13403,10 @@ body.admin-page {
 
   .login-form button {
     width: 100%;
+  }
+
+  .auth-user-panel {
+    grid-template-columns: 1fr;
   }
 
   .board-table-wrap,

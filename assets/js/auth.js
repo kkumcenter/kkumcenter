@@ -33,6 +33,14 @@
     statusBox.dataset.status = type;
   };
 
+  const escapeHtml = (value) =>
+    String(value ?? "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+
   const requireConfig = () => {
     if (hasConfig) return true;
     setStatus("로그인 설정을 확인해주세요.", "warning");
@@ -75,10 +83,11 @@
       const profile = await ensureAdminSession(session);
       if (userEmail) {
         const roleName = profile.admin_role === "super_admin" ? "관리자" : "스텝";
-        userEmail.textContent = `${session.user.email || "로그인 계정"} (${roleName})`;
+        const email = session.user.email || "로그인 계정";
+        userEmail.innerHTML = `<span class="auth-login-text">현재 ${escapeHtml(email)} 계정으로 로그인되어 있습니다.</span><span class="auth-role-badge">${escapeHtml(roleName)}</span>`;
       }
       userPanel.hidden = false;
-      setStatus("로그인 상태입니다.", "success");
+      setStatus("");
     } catch (error) {
       setStatus(error.message || "권한 확인 중 문제가 발생했습니다.", "error");
     }
