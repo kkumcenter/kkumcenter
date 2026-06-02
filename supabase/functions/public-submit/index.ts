@@ -521,7 +521,6 @@ Deno.serve(async (request) => {
     if (action === "program-save") {
       const admin = await requireSuperAdmin(request, supabase);
       const programId = String(data.id || "").trim();
-      const isActiveValue = typeof data.isActive === "boolean" ? data.isActive : String(data.isActive ?? "true") !== "false";
       const payload = {
         title: requireText(data, "title"),
         summary: optionalText(data, "summary"),
@@ -536,7 +535,7 @@ Deno.serve(async (request) => {
         start_date: requireDateValue(data, "startDate"),
         end_date: requireDateValue(data, "endDate"),
         status: requireProgramStatus(data),
-        is_active: isActiveValue,
+        is_active: true,
       };
 
       const { data: saved, error } = programId
@@ -570,7 +569,7 @@ Deno.serve(async (request) => {
       const isRestore = action === "program-restore";
       const { data: saved, error } = await supabase
         .from("programs")
-        .update({ is_active: isRestore })
+        .update(isRestore ? { is_active: true } : { status: "closed", is_active: true })
         .eq("id", id)
         .select("id, title, summary, content, image_url, place, instructor, target, capacity, start_date, end_date, apply_start_date, apply_end_date, status, is_active, created_at, updated_at")
         .single();
@@ -582,7 +581,7 @@ Deno.serve(async (request) => {
         isRestore ? "update" : "hide",
         "program",
         String(saved.id),
-        `${isRestore ? "교육 복구" : "교육 숨김"}: ${saved.title}`,
+        `${isRestore ? "교육 공개 유지" : "교육 접수마감 전환"}: ${saved.title}`,
       );
       return json({ ok: true, item: formatProgram(saved) });
     }

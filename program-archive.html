@@ -1,10 +1,10 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="ko">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>신청확인 | 군북면 꿈키움센터</title>
-    <meta name="description" content="군북면 꿈키움센터 프로그램 신청확인 페이지입니다.">
+    <title>지난 교육 | 군북면 꿈키움센터</title>
+    <meta name="description" content="군북면 꿈키움센터에서 진행한 지난 교육 프로그램 기록입니다.">
     <link rel="stylesheet" href="assets/css/styles.css?v=20260601-13">
   </head>
   <body>
@@ -27,30 +27,62 @@
 
     <main id="main">
       <section class="sub-hero"><img src="assets/images/subpage-hero-center-soft.png" alt="군북면 꿈키움센터를 내려다본 반투명 배경 이미지"><div class="sub-hero-content"><p class="eyebrow">PROGRAMS</p><h1><span>배움이 운영으로<br class="mobile-hero-break">이어지는</span><span>주민참여 프로그램</span></h1></div></section>
-      <nav class="breadcrumb" aria-label="현재 위치"><div class="container breadcrumb-inner"><a class="breadcrumb-home" href="index.html" aria-label="홈"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5v8.7a.8.8 0 0 1-.8.8h-5.1v-5.4H9.9V20H4.8a.8.8 0 0 1-.8-.8v-8.7Z"></path></svg><span>홈</span></a><span class="breadcrumb-separator" aria-hidden="true">›</span><a class="breadcrumb-link" href="programs.html">프로그램</a><span class="breadcrumb-separator" aria-hidden="true">›</span><a class="breadcrumb-current" href="program-check.html" aria-current="page">신청확인</a></div></nav>
-      <nav class="subnav" aria-label="프로그램 하위 메뉴"><a href="programs.html">교육신청</a><a class="is-active" href="program-check.html">신청확인</a><a href="program-archive.html">지난 교육</a></nav>
 
-      <section class="section">
-        <div class="container section-heading news-page-heading">
-          <p class="eyebrow">Application Check</p>
-          <h2>신청확인</h2>
+      <nav class="breadcrumb" aria-label="현재 위치">
+        <div class="container breadcrumb-inner">
+          <a class="breadcrumb-home" href="index.html" aria-label="홈"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5v8.7a.8.8 0 0 1-.8.8h-5.1v-5.4H9.9V20H4.8a.8.8 0 0 1-.8-.8v-8.7Z"></path></svg><span>홈</span></a>
+          <span class="breadcrumb-separator" aria-hidden="true">›</span>
+          <a class="breadcrumb-link" href="programs.html">프로그램</a>
+          <span class="breadcrumb-separator" aria-hidden="true">›</span>
+          <a class="breadcrumb-current" href="program-archive.html" aria-current="page">지난 교육</a>
+        </div>
+      </nav>
+
+
+      <nav class="subnav" aria-label="프로그램 하위 메뉴">
+        <a href="programs.html">교육신청</a>
+        <a href="program-check.html">신청확인</a>
+        <a class="is-active" href="program-archive.html">지난 교육</a>
+      </nav>
+
+      <section class="section" id="archive">
+        <div class="container program-search">
+          <div>
+            <p class="eyebrow">Education Archive</p>
+            <h2>지난 교육</h2>
+          </div>
+          <form class="search-panel" aria-label="지난 교육 검색" data-program-filter-form>
+            <span class="search-inline-label">연도</span>
+            <select name="year" aria-label="수업연도"><option value="all">전체</option></select>
+            <span class="search-inline-label">대상</span>
+            <select name="target" aria-label="대상"><option value="all">전체</option><option value="성인">성인</option><option value="아동청소년">아동청소년</option></select>
+            <span class="search-inline-label">검색어</span>
+            <input class="program-keyword-input" name="keyword" type="search" aria-label="프로그램명" placeholder="프로그램명">
+            <button type="submit">검색</button>
+          </form>
         </div>
         <div class="container news-page-rule" aria-hidden="true"></div>
-        <div class="container program-check-layout">
-          <form class="program-check-form" autocomplete="off" aria-label="프로그램 신청확인 검색" data-program-check-form>
-            <label>신청자명<input name="applicantName" type="text" autocomplete="off" placeholder="이름을 입력하세요" required></label>
-            <label>연락처<input name="phone" type="tel" autocomplete="off" placeholder="010-0000-0000" required></label>
-            <label>비밀번호<input name="lookupPassword" type="password" autocomplete="new-password" placeholder="조회용 비밀번호" required></label>
-            <button type="submit">조회하기</button>
-          </form>
-          <div class="program-check-list" aria-label="신청 프로그램 목록" data-program-application-list>
-            <article><span class="status open">접수완료</span><strong>베이킹 교육과정</strong><p>2026.04.28 - 2026.06.04 · 1층 공유주방</p></article>
-          </div>
+        <div class="container program-list" data-program-list="archive">
+          <article class="program-list-card">
+            <img src="assets/images/hero-center.png" alt="바리스타 양성과정 이미지">
+            <div><span class="status closed">종료</span><h3>바리스타 양성과정 2급</h3><p>커뮤니티 쉼터 운영 인력 양성을 위한 주민 자격과정입니다.</p><dl><div><dt>진행기간</dt><dd>2026.03.17 - 2026.04.23</dd></div><div><dt>장소</dt><dd>센터 교육실</dd></div><div><dt>참여</dt><dd>주민 17인</dd></div></dl></div>
+            <span class="program-apply-disabled">지난 교육</span>
+          </article>
         </div>
       </section>
+
     </main>
 
-    <footer class="site-footer"><div class="container footer-grid footer-simple"><div><strong>군북면 꿈키움센터</strong><p class="footer-contact">주소: 충청남도 금산군 군북면 두두리 371, 373-3 일원</p><p class="footer-contact">연락처: 추후 안내</p></div></div><div class="container footer-meta">COPYRIGHT © GUNBUK KKUM CENTER. ALL RIGHTS RESERVED.</div></footer>
+    <footer class="site-footer">
+      <div class="container footer-grid footer-simple">
+        <div>
+          <strong>군북면 꿈키움센터</strong>
+          <p class="footer-contact">주소: 충청남도 금산군 군북면 두두리 371, 373-3 일원</p>
+          <p class="footer-contact">연락처: 추후 안내</p>
+        </div>
+      </div>
+      <div class="container footer-meta">COPYRIGHT © GUNBUK KKUM CENTER. ALL RIGHTS RESERVED.</div>
+    </footer>
     <script src="assets/js/main.js?v=20260529-9"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/supabase-config.js?v=20260528-1"></script>

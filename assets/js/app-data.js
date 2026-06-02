@@ -124,6 +124,35 @@
     return "접수예정";
   };
 
+  const getProgramRunStatus = (program) => {
+    const now = new Date();
+    const start = program.startDate ? new Date(`${program.startDate}T00:00:00`) : null;
+    const end = program.endDate ? new Date(`${program.endDate}T23:59:59`) : null;
+    if (end && now > end) return "finished";
+    if (start && now < start) return "upcoming";
+    return "ongoing";
+  };
+
+  const getProgramRunStatusLabel = (program) => {
+    const value = getProgramRunStatus(program);
+    if (value === "finished") return "종료";
+    if (value === "ongoing") return "진행중";
+    return "진행예정";
+  };
+
+  const isCurrentProgram = (program) => {
+    if (program.status === "open" || program.status === "scheduled") return true;
+    return program.status === "closed" && getProgramRunStatus(program) !== "finished";
+  };
+
+  const isArchiveProgram = (program) => program.status === "finished" || getProgramRunStatus(program) === "finished";
+
+  const getProgramYear = (program) => {
+    const source = program.startDate || program.applyStartDate || "";
+    const year = Number(String(source).slice(0, 4));
+    return Number.isInteger(year) ? year : null;
+  };
+
   const programStatusClass = (value) => {
     if (value === "open") return "ongoing";
     if (value === "scheduled") return "open";
@@ -845,6 +874,7 @@
     if (!list) return;
 
     const form = document.querySelector("[data-program-filter-form]");
+    const mode = list.getAttribute("data-program-list") === "archive" ? "archive" : "current";
     let programs = [];
     const INITIAL_PROGRAM_LIMIT = 6;
     let visibleLimit = INITIAL_PROGRAM_LIMIT;
@@ -856,31 +886,48 @@
 
     const programSortRank = (program) => ({ open: 0, scheduled: 1, closed: 2, finished: 3 }[program.status] ?? 4);
     const programDateValue = (program) => Date.parse(program.applyStartDate || program.startDate || "") || 0;
+    const archiveDateValue = (program) => Date.parse(program.endDate || program.startDate || "") || 0;
+
+    const syncArchiveYearOptions = () => {
+      const yearSelect = form?.elements.year;
+      if (!yearSelect) return;
+      const currentValue = yearSelect.value || "all";
+      const years = [...new Set(programs.filter(isArchiveProgram).map(getProgramYear).filter(Boolean))].sort((a, b) => b - a);
+      yearSelect.innerHTML = `<option value="all">전체</option>${years.map((year) => `<option value="${year}">${year}년</option>`).join("")}`;
+      yearSelect.value = years.includes(Number(currentValue)) ? currentValue : "all";
+    };
 
     const renderPrograms = ({ resetLimit = false } = {}) => {
       if (resetLimit) visibleLimit = INITIAL_PROGRAM_LIMIT;
       const status = form?.elements.status?.value || "all";
       const target = form?.elements.target?.value || "all";
+      const year = form?.elements.year?.value || "all";
       const keyword = (form?.elements.keyword?.value || "").trim().toLowerCase();
       const filtered = programs
         .filter((program) => {
-          const matchesStatus = status === "all" ? ["open", "scheduled"].includes(program.status) : program.status === status;
+          const matchesMode = mode === "archive" ? isArchiveProgram(program) : isCurrentProgram(program);
+          const matchesStatus = mode === "archive" || status === "all" ? true : program.status === status;
+          const matchesYear = year === "all" || getProgramYear(program) === Number(year);
           const matchesTarget = target === "all" || program.target === target;
           const haystack = `${program.title} ${program.summary} ${program.content} ${program.place} ${program.instructor}`.toLowerCase();
-          return matchesStatus && matchesTarget && (!keyword || haystack.includes(keyword));
+          return matchesMode && matchesStatus && matchesYear && matchesTarget && (!keyword || haystack.includes(keyword));
         })
-        .sort((a, b) => programSortRank(a) - programSortRank(b) || programDateValue(b) - programDateValue(a));
+        .sort((a, b) => mode === "archive"
+          ? archiveDateValue(b) - archiveDateValue(a)
+          : programSortRank(a) - programSortRank(b) || programDateValue(b) - programDateValue(a));
       const visiblePrograms = filtered.slice(0, visibleLimit);
 
       list.innerHTML = visiblePrograms.length
         ? visiblePrograms
             .map((program) => {
-              const canApply = program.status === "open";
+              const canApply = mode === "current" && program.status === "open";
+              const badgeText = mode === "archive" ? getProgramRunStatusLabel(program) : getProgramStatusLabel(program.status);
+              const badgeClass = mode === "archive" ? "closed" : programStatusClass(program.status);
               return `
                 <article class="program-list-card">
                   <img src="${escapeHtml(program.imageUrl)}" alt="${escapeHtml(program.title)} 이미지">
                   <div>
-                    <span class="status ${programStatusClass(program.status)}">${escapeHtml(getProgramStatusLabel(program.status))}</span>
+                    <span class="status ${badgeClass}">${escapeHtml(badgeText)}</span>
                     <h3>${escapeHtml(program.title)}</h3>
                     <p>${escapeHtml(program.summary || program.content || "교육 상세내용을 확인해주세요.")}</p>
                     <dl>
@@ -894,13 +941,15 @@
                   ${
                     canApply
                       ? `<a href="program-apply.html?program=${encodeURIComponent(program.title)}">신청하기</a>`
-                      : `<span class="program-apply-disabled">${escapeHtml(getProgramStatusLabel(program.status))}</span>`
+                      : `<span class="program-apply-disabled">${escapeHtml(mode === "archive" ? "지난 교육" : getProgramStatusLabel(program.status))}</span>`
                   }
                 </article>
               `;
             })
             .join("")
-        : `<article class="empty-state program-list-empty"><strong>조건에 맞는 교육이 없습니다.</strong><p>검색 조건을 바꾸거나 다음 모집을 기다려주세요.</p></article>`;
+        : mode === "archive"
+          ? `<article class="empty-state program-list-empty"><strong>조건에 맞는 지난 교육이 없습니다.</strong><p>연도, 대상, 검색어를 다시 확인해주세요.</p></article>`
+          : `<article class="empty-state program-list-empty"><strong>조건에 맞는 교육이 없습니다.</strong><p>검색 조건을 바꾸거나 다음 모집을 기다려주세요.</p></article>`;
 
       if (moreButton) {
         moreButton.hidden = visiblePrograms.length >= filtered.length;
@@ -911,6 +960,7 @@
       const loadedPrograms = await fetchSupabasePrograms();
       if (!loadedPrograms) return;
       programs = loadedPrograms;
+      syncArchiveYearOptions();
       renderPrograms();
       form?.addEventListener("submit", (event) => {
         event.preventDefault();

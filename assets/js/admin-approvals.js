@@ -177,30 +177,29 @@
     return "admin-status-unknown";
   };
 
+  const normalizedEducationStatus = (program) => (program?.is_active === false ? "closed" : program?.status || "scheduled");
+
   const educationRunStatusValue = (program) => {
     const today = new Date();
     const start = program.start_date ? new Date(`${program.start_date}T00:00:00`) : null;
     const end = program.end_date ? new Date(`${program.end_date}T23:59:59`) : null;
-    if (start && today < start) return "upcoming";
-    if (start && end && today >= start && today <= end) return "ongoing";
     if (end && today > end) return "finished";
-    return "unknown";
+    if (start && today < start) return "upcoming";
+    return "ongoing";
   };
 
   const educationRunStatusLabel = (program) => {
     const value = educationRunStatusValue(program);
     if (value === "upcoming") return "진행예정";
     if (value === "ongoing") return "진행중";
-    if (value === "finished") return "종료";
-    return "일정확인";
+    return "종료";
   };
 
   const educationRunStatusClass = (program) => {
     const value = educationRunStatusValue(program);
     if (value === "upcoming") return "admin-run-upcoming";
     if (value === "ongoing") return "admin-run-ongoing";
-    if (value === "finished") return "admin-run-finished";
-    return "admin-run-unknown";
+    return "admin-run-finished";
   };
 
   const formatDateRange = (start, end) => {
@@ -465,12 +464,12 @@
 
     return state.programCatalog
       .filter((program) => {
-        const hidden = program.is_active === false;
+        const programStatus = normalizedEducationStatus(program);
         const programYear = getProgramManageYear(program);
         const matchesStatus =
           status === "all" ||
-          (!hidden && program.status === status) ||
-          (!hidden && status === "closed" && program.status === "finished");
+          programStatus === status ||
+          (status === "closed" && programStatus === "finished");
         const matchesRunStatus = runStatus === "all" || educationRunStatusValue(program) === runStatus;
         const matchesTarget = target === "all" || program.target === target;
         const matchesYear = yearValue === "all" || programYear === (yearValue === "current" ? currentYear : Number(yearValue));
@@ -478,9 +477,7 @@
         return matchesStatus && matchesRunStatus && matchesTarget && matchesYear && (!keyword || haystack.includes(keyword));
       })
       .sort((a, b) => {
-        const hiddenDiff = Number(a.is_active === false) - Number(b.is_active === false);
-        if (hiddenDiff) return hiddenDiff;
-        const statusDiff = (statusRank[a.status] ?? 4) - (statusRank[b.status] ?? 4);
+        const statusDiff = (statusRank[normalizedEducationStatus(a)] ?? 4) - (statusRank[normalizedEducationStatus(b)] ?? 4);
         if (statusDiff) return statusDiff;
         return String(b.apply_start_date || b.start_date || b.created_at || "").localeCompare(String(a.apply_start_date || a.start_date || a.created_at || ""));
       });
@@ -650,11 +647,11 @@
     const rows = visiblePrograms
       .map((program) => {
         const stats = getProgramStats(program.id);
-        const hidden = program.is_active === false;
+        const programStatus = normalizedEducationStatus(program);
         const selected = String(state.selectedProgramId || "") === String(program.id);
         return `
-          <tr class="${hidden ? "is-hidden" : ""}${selected ? " is-selected" : ""}">
-            <td><span class="admin-status-badge ${hidden ? "admin-status-hidden" : educationStatusClass(program.status)}">${escapeHtml(hidden ? "숨김" : educationStatusLabel(program.status))}</span></td>
+          <tr class="${selected ? "is-selected" : ""}">
+            <td><span class="admin-status-badge ${educationStatusClass(programStatus)}">${escapeHtml(educationStatusLabel(programStatus))}</span></td>
             <td class="admin-program-title-cell">
               <button type="button" data-program-manage-select="${escapeHtml(program.id)}" aria-pressed="${selected ? "true" : "false"}">${escapeHtml(program.title)}</button>
               <span>${escapeHtml(displayValue(program.summary || program.content))}</span>
@@ -974,7 +971,7 @@
       { label: "연락처", value: item.phone },
       { label: "출생연도", value: item.birth_year },
       { label: "주소", value: item.region },
-      { label: "접수상태", value: programStatusLabel(item.status) },
+      { label: "신청상태", value: programStatusLabel(item.status) },
       { label: "접수일", value: formatDateTime(item.created_at) },
     ]);
     modalNodes.approve.textContent = "승인";
@@ -1044,7 +1041,6 @@
     nodes.programManageForm.elements.id.value = "";
     nodes.programManageForm.elements.imageUrl.value = "";
     if (nodes.programManageForm.elements.imageFile) nodes.programManageForm.elements.imageFile.value = "";
-    if (nodes.programManageForm.elements.isActive) nodes.programManageForm.elements.isActive.value = "true";
     renderProgramImagePreview(nodes.programManageForm, "");
     setFormStatus(nodes.programManageForm, "");
     const submit = nodes.programManageForm.querySelector('button[type="submit"]');
@@ -1075,7 +1071,6 @@
     renderProgramImagePreview(form, item.image_url || "");
     form.elements.summary.value = item.summary || "";
     form.elements.content.value = item.content || "";
-    if (form.elements.isActive) form.elements.isActive.value = item.is_active === false ? "false" : "true";
     setFormStatus(form, "수정할 교육을 불러왔습니다.");
     const submit = form.querySelector('button[type="submit"]');
     if (submit) submit.textContent = "수정 저장";
@@ -1101,7 +1096,6 @@
       imageUrl,
       summary: form.elements.summary.value.trim(),
       content: form.elements.content.value.trim(),
-      isActive: form.elements.isActive ? form.elements.isActive.value === "true" : true,
     };
     if (!payload.title || !payload.capacity || !payload.applyStartDate || !payload.applyEndDate || !payload.startDate || !payload.endDate || !payload.place || !payload.content) {
       setFormStatus(form, "프로그램명, 정원, 날짜, 장소, 상세내용을 입력해주세요.", true);
@@ -1135,7 +1129,7 @@
   const hideOrRestoreProgram = async (programId, shouldRestore = false) => {
     const item = state.programCatalog.find((entry) => String(entry.id) === String(programId));
     if (!item) return;
-    const message = shouldRestore ? "이 교육을 다시 공개할까요?" : "이 교육을 숨김 처리할까요?";
+    const message = shouldRestore ? "이 교육을 공개 상태로 유지할까요?" : "이 교육을 접수마감으로 전환할까요?";
     if (!window.confirm(message)) return;
     await callPublicSubmitFunction(shouldRestore ? "program-restore" : "program-hide", { id: programId });
     await load();
