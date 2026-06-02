@@ -83,7 +83,7 @@ begin
     join pg_namespace n on n.oid = t.typnamespace
     where t.typname = 'program_visibility' and n.nspname = 'public'
   ) then
-    create type public.program_visibility as enum ('private', 'public', 'archive');
+    create type public.program_visibility as enum ('private', 'public');
   end if;
 end $$;
 

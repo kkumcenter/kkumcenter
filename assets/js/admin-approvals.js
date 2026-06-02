@@ -182,18 +182,20 @@
   };
 
   const normalizedEducationStatus = (program) => (program?.status === "finished" ? "closed" : program?.status || "scheduled");
-  const programVisibilityValue = (program) => program?.visibility || (program?.is_active === false ? "private" : "public");
+  const normalizeProgramVisibility = (value, isActive = true) => {
+    if (value === "private" || isActive === false) return "private";
+    return "public";
+  };
+  const programVisibilityValue = (program) => normalizeProgramVisibility(program?.visibility, program?.is_active);
   const programOperationValue = (program) => program?.operation_status || "normal";
 
   const programVisibilityLabel = (value) => {
     if (value === "private") return "비공개";
-    if (value === "archive") return "지난교육";
     return "공개";
   };
 
   const programVisibilityClass = (value) => {
     if (value === "private") return "admin-visibility-private";
-    if (value === "archive") return "admin-visibility-archive";
     return "admin-visibility-public";
   };
 

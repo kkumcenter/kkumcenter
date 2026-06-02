@@ -100,7 +100,7 @@ for select
 using (
   is_active = true
   and operation_status = 'normal'
-  and visibility in ('public', 'archive')
+  and visibility = 'public'
 );
 
 drop policy if exists "Admins can manage programs" on public.programs;

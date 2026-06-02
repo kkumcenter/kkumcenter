@@ -9,7 +9,7 @@ begin
     join pg_namespace n on n.oid = t.typnamespace
     where t.typname = 'program_visibility' and n.nspname = 'public'
   ) then
-    create type public.program_visibility as enum ('private', 'public', 'archive');
+    create type public.program_visibility as enum ('private', 'public');
   end if;
 end $$;
 
@@ -35,6 +35,21 @@ update public.programs
 set visibility = 'private'
 where is_active = false;
 
+do $$
+begin
+  if exists (
+    select 1
+    from pg_enum e
+    join pg_type t on t.oid = e.enumtypid
+    join pg_namespace n on n.oid = t.typnamespace
+    where n.nspname = 'public'
+      and t.typname = 'program_visibility'
+      and e.enumlabel = 'archive'
+  ) then
+    execute 'update public.programs set visibility = ''public'' where visibility = ''archive''';
+  end if;
+end $$;
+
 update public.programs
 set
   status = 'closed',
@@ -54,5 +69,5 @@ for select
 using (
   is_active = true
   and operation_status = 'normal'
-  and visibility in ('public', 'archive')
+  and visibility = 'public'
 );

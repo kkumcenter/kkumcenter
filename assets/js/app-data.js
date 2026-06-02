@@ -147,11 +147,10 @@
     return program.status === "closed" && getProgramRunStatus(program) !== "finished";
   };
 
-  const isArchiveProgram = (program) => {
-    if (program.operationStatus === "canceled") return false;
-    if (program.visibility === "archive") return true;
-    return program.visibility === "public" && (program.status === "finished" || getProgramRunStatus(program) === "finished");
-  };
+  const isArchiveProgram = (program) =>
+    program.operationStatus !== "canceled" &&
+    program.visibility === "public" &&
+    getProgramRunStatus(program) === "finished";
 
   const getProgramYear = (program) => {
     const source = program.startDate || program.applyStartDate || "";
@@ -335,7 +334,7 @@
     applyStartDate: item.apply_start_date,
     applyEndDate: item.apply_end_date,
     status: item.status || "scheduled",
-    visibility: item.visibility || (item.is_active === false ? "private" : "public"),
+    visibility: item.visibility === "private" || item.is_active === false ? "private" : "public",
     operationStatus: item.operation_status || "normal",
     cancelReason: item.cancel_reason || "",
     canceledAt: item.canceled_at || "",
@@ -354,7 +353,7 @@
       .order("apply_start_date", { ascending: false });
 
     if (openOnly) query = query.eq("status", "open").eq("visibility", "public");
-    else query = query.in("visibility", ["public", "archive"]);
+    else query = query.eq("visibility", "public");
 
     const { data, error } = await query;
     if (error) throw error;

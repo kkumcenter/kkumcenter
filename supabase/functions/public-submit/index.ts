@@ -122,7 +122,7 @@ const reservationStatusLabel = (status: string) => {
 };
 
 const programStatusValues = new Set(["scheduled", "open", "closed", "finished"]);
-const programVisibilityValues = new Set(["private", "public", "archive"]);
+const programVisibilityValues = new Set(["private", "public"]);
 const programOperationStatusValues = new Set(["normal", "canceled"]);
 
 const programStatusLabel = (status: string) => {
@@ -157,7 +157,8 @@ const requireProgramStatus = (payload: Record<string, unknown>) => {
 };
 
 const requireProgramVisibility = (payload: Record<string, unknown>) => {
-  const value = String(payload.visibility || "private").trim();
+  const rawValue = String(payload.visibility || "private").trim();
+  const value = rawValue === "archive" ? "public" : rawValue;
   if (!programVisibilityValues.has(value)) {
     throw new Error("교육 노출상태를 정확히 선택해주세요.");
   }
@@ -193,7 +194,7 @@ const formatProgram = (item: Record<string, unknown>) => ({
   applyEndDate: item.apply_end_date,
   status: item.status,
   statusLabel: programStatusLabel(String(item.status || "")),
-  visibility: item.visibility || (item.is_active === false ? "private" : "public"),
+  visibility: item.visibility === "private" || item.is_active === false ? "private" : "public",
   operationStatus: item.operation_status || "normal",
   cancelReason: item.cancel_reason,
   canceledAt: item.canceled_at,
@@ -502,7 +503,7 @@ Deno.serve(async (request) => {
         .order("apply_start_date", { ascending: false });
 
       if (onlyOpen) query = query.eq("status", "open").eq("visibility", "public");
-      else query = query.in("visibility", ["public", "archive"]);
+      else query = query.eq("visibility", "public");
 
       const { data: items, error } = await query;
       if (error) throw error;
