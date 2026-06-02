@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>관리자페이지 | 군북면 꿈키움센터</title>
     <meta name="description" content="군북면 꿈키움센터 관리자 승인 및 관리 페이지입니다.">
-    <link rel="stylesheet" href="assets/css/styles.css?v=20260602-3">
+    <link rel="stylesheet" href="assets/css/styles.css?v=20260602-4">
   </head>
   <body class="admin-page admin-approval-page">
     <a class="skip-link" href="#main">본문 바로가기</a>
@@ -99,11 +99,6 @@
                   <option value="50">50줄보기</option>
                 </select>
               </label>
-              <div class="admin-page-nav" aria-label="공간예약 목록 페이지 이동">
-                <button type="button" data-space-page-prev>이전</button>
-                <span data-space-page-info>1 / 1</span>
-                <button type="button" data-space-page-next>다음</button>
-              </div>
             </div>
             <div class="admin-bulk-action-group">
               <span data-space-selected-count>0건 선택</span>
@@ -128,6 +123,11 @@
               </tbody>
             </table>
           </div>
+          <div class="admin-page-nav admin-page-nav-bottom" aria-label="공간예약 목록 페이지 이동">
+            <button type="button" data-space-page-prev>이전</button>
+            <span data-space-page-info>1 / 1</span>
+            <button type="button" data-space-page-next>다음</button>
+          </div>
         </section>
 
         <section class="admin-tab-panel" role="tabpanel" id="panel-program" aria-labelledby="tab-program" data-admin-panel="program" hidden>
@@ -140,11 +140,6 @@
                   <option value="50">50줄보기</option>
                 </select>
               </label>
-              <div class="admin-page-nav" aria-label="교육신청 목록 페이지 이동">
-                <button type="button" data-program-page-prev>이전</button>
-                <span data-program-page-info>1 / 1</span>
-                <button type="button" data-program-page-next>다음</button>
-              </div>
             </div>
             <div class="admin-bulk-action-group">
               <span data-program-selected-count>0건 선택</span>
@@ -168,6 +163,11 @@
                 <tr><td colspan="6">교육신청 목록을 불러오고 있습니다.</td></tr>
               </tbody>
             </table>
+          </div>
+          <div class="admin-page-nav admin-page-nav-bottom" aria-label="교육신청 목록 페이지 이동">
+            <button type="button" data-program-page-prev>이전</button>
+            <span data-program-page-info>1 / 1</span>
+            <button type="button" data-program-page-next>다음</button>
           </div>
         </section>
 
