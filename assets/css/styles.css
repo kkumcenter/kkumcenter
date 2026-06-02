@@ -12297,6 +12297,18 @@ body.admin-page {
   white-space: nowrap;
 }
 
+.admin-approval-table thead th,
+.admin-program-list-table thead th {
+  height: 54px;
+  padding: 16px 13px;
+  color: #fff;
+  background: #073d92;
+  font-size: 15px;
+  line-height: 1.35;
+  font-weight: 900;
+  vertical-align: middle;
+}
+
 .admin-program-list-table tbody tr:last-child td {
   border-bottom: 0;
 }
