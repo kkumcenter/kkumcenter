@@ -25,11 +25,12 @@
   const roleName = (value) => (value === "super_admin" ? "관리자" : "스텝");
 
   const genderName = (value) => {
-    if (value === "female") return "여성";
-    if (value === "male") return "남성";
-    if (value === "other") return "기타";
-    return "응답 안 함";
+    if (value === "female") return "여";
+    if (value === "male") return "남";
+    return "-";
   };
+
+  const genderFormValue = (value) => (value === "female" || value === "male" ? value : "");
 
   const activeName = (value) => (value ? "활성" : "제외");
   const activeClass = (value) => (value ? "admin-staff-active" : "admin-staff-inactive");
@@ -107,7 +108,7 @@
                     data-staff-name="${escapeHtml(item.fullName || "")}"
                     data-staff-display-name="${escapeHtml(item.displayName || item.fullName || "")}"
                     data-staff-birth-date="${escapeHtml(item.birthDate || "")}"
-                    data-staff-gender="${escapeHtml(item.gender || "undisclosed")}"
+                    data-staff-gender="${escapeHtml(genderFormValue(item.gender))}"
                     data-staff-role="${escapeHtml(item.adminRole || "board_admin")}"
                   >
                     <td><span class="admin-status-badge ${activeClass(item.isActive)}">${escapeHtml(activeName(item.isActive))}</span></td>
@@ -196,7 +197,7 @@
         form.elements.fullName.value = item.dataset.staffName || "";
         form.elements.displayName.value = item.dataset.staffDisplayName || "";
         form.elements.birthDate.value = item.dataset.staffBirthDate || "";
-        form.elements.gender.value = item.dataset.staffGender || "undisclosed";
+        form.elements.gender.value = genderFormValue(item.dataset.staffGender);
         form.elements.email.value = email;
         form.elements.adminRole.value = item.dataset.staffRole || selectedRole || "board_admin";
         setStatus("수정할 내용을 확인한 뒤 등록 / 수정을 눌러주세요.");
