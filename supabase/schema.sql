@@ -81,6 +81,30 @@ begin
     select 1
     from pg_type t
     join pg_namespace n on n.oid = t.typnamespace
+    where t.typname = 'program_visibility' and n.nspname = 'public'
+  ) then
+    create type public.program_visibility as enum ('private', 'public', 'archive');
+  end if;
+end $$;
+
+do $$
+begin
+  if not exists (
+    select 1
+    from pg_type t
+    join pg_namespace n on n.oid = t.typnamespace
+    where t.typname = 'program_operation_status' and n.nspname = 'public'
+  ) then
+    create type public.program_operation_status as enum ('normal', 'canceled');
+  end if;
+end $$;
+
+do $$
+begin
+  if not exists (
+    select 1
+    from pg_type t
+    join pg_namespace n on n.oid = t.typnamespace
     where t.typname = 'program_application_status' and n.nspname = 'public'
   ) then
     create type public.program_application_status as enum ('completed', 'waiting', 'approved', 'canceled');
@@ -398,6 +422,10 @@ create table if not exists public.programs (
   apply_start_date date not null,
   apply_end_date date not null,
   status public.program_status not null default 'scheduled',
+  visibility public.program_visibility not null default 'public',
+  operation_status public.program_operation_status not null default 'normal',
+  cancel_reason text,
+  canceled_at timestamptz,
   is_active boolean not null default true,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
@@ -407,10 +435,18 @@ create table if not exists public.programs (
 );
 
 alter table public.programs
-  add column if not exists is_active boolean not null default true;
+  add column if not exists is_active boolean not null default true,
+  add column if not exists visibility public.program_visibility not null default 'public',
+  add column if not exists operation_status public.program_operation_status not null default 'normal',
+  add column if not exists cancel_reason text,
+  add column if not exists canceled_at timestamptz;
 
 create index if not exists programs_status_idx on public.programs (status);
 create index if not exists programs_active_status_idx on public.programs (is_active, status);
+create index if not exists programs_visibility_idx on public.programs (visibility);
+create index if not exists programs_operation_status_idx on public.programs (operation_status);
+create index if not exists programs_public_lookup_idx on public.programs (visibility, operation_status, status, start_date, end_date)
+where is_active = true;
 create index if not exists programs_apply_period_idx on public.programs (apply_start_date, apply_end_date);
 create index if not exists programs_created_at_idx on public.programs (created_at desc);
 create unique index if not exists programs_active_title_period_uidx

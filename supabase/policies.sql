@@ -97,7 +97,11 @@ drop policy if exists "Anyone can read programs" on public.programs;
 create policy "Anyone can read programs"
 on public.programs
 for select
-using (is_active = true);
+using (
+  is_active = true
+  and operation_status = 'normal'
+  and visibility in ('public', 'archive')
+);
 
 drop policy if exists "Admins can manage programs" on public.programs;
 drop policy if exists "Super admins can manage programs" on public.programs;

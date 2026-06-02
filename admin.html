@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>관리자페이지 | 군북면 꿈키움센터</title>
     <meta name="description" content="군북면 꿈키움센터 관리자 승인 및 관리 페이지입니다.">
-    <link rel="stylesheet" href="assets/css/styles.css?v=20260602-21">
+    <link rel="stylesheet" href="assets/css/styles.css?v=20260602-22">
   </head>
   <body class="admin-page admin-approval-page">
     <a class="skip-link" href="#main">본문 바로가기</a>
@@ -277,6 +277,22 @@
                   <option value="closed">접수마감</option>
                 </select>
               </label>
+              <label>노출상태
+                <select name="visibility" required>
+                  <option value="private">비공개</option>
+                  <option value="public">공개</option>
+                  <option value="archive">지난교육</option>
+                </select>
+              </label>
+              <label>운영상태
+                <select name="operationStatus" required>
+                  <option value="normal">정상</option>
+                  <option value="canceled">취소</option>
+                </select>
+              </label>
+              <label class="admin-program-cancel-reason" hidden>취소사유
+                <input name="cancelReason" type="text" placeholder="예: 모집인원 미달, 강사 사정">
+              </label>
               <div class="admin-program-image">
                 <span>대표 이미지</span>
                 <input name="imageUrl" type="hidden">
@@ -352,7 +368,7 @@
     <script src="assets/js/main.js?v=20260529-9"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/supabase-config.js?v=20260528-1"></script>
-    <script src="assets/js/admin-approvals.js?v=20260602-9"></script>
+    <script src="assets/js/admin-approvals.js?v=20260602-10"></script>
     <script src="assets/js/admin-settings.js?v=20260529-6"></script>
   </body>
 </html>

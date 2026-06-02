@@ -141,11 +141,17 @@
   };
 
   const isCurrentProgram = (program) => {
+    if (program.operationStatus === "canceled" || program.visibility !== "public") return false;
+    if (getProgramRunStatus(program) === "finished") return false;
     if (program.status === "open" || program.status === "scheduled") return true;
     return program.status === "closed" && getProgramRunStatus(program) !== "finished";
   };
 
-  const isArchiveProgram = (program) => program.status === "finished" || getProgramRunStatus(program) === "finished";
+  const isArchiveProgram = (program) => {
+    if (program.operationStatus === "canceled") return false;
+    if (program.visibility === "archive") return true;
+    return program.visibility === "public" && (program.status === "finished" || getProgramRunStatus(program) === "finished");
+  };
 
   const getProgramYear = (program) => {
     const source = program.startDate || program.applyStartDate || "";
@@ -329,6 +335,10 @@
     applyStartDate: item.apply_start_date,
     applyEndDate: item.apply_end_date,
     status: item.status || "scheduled",
+    visibility: item.visibility || (item.is_active === false ? "private" : "public"),
+    operationStatus: item.operation_status || "normal",
+    cancelReason: item.cancel_reason || "",
+    canceledAt: item.canceled_at || "",
     isActive: item.is_active !== false,
   });
 
@@ -338,11 +348,13 @@
 
     let query = client
       .from("programs")
-      .select("id, title, summary, content, image_url, place, instructor, target, capacity, start_date, end_date, apply_start_date, apply_end_date, status, is_active")
+      .select("id, title, summary, content, image_url, place, instructor, target, capacity, start_date, end_date, apply_start_date, apply_end_date, status, visibility, operation_status, cancel_reason, canceled_at, is_active")
       .eq("is_active", true)
+      .eq("operation_status", "normal")
       .order("apply_start_date", { ascending: false });
 
-    if (openOnly) query = query.eq("status", "open");
+    if (openOnly) query = query.eq("status", "open").eq("visibility", "public");
+    else query = query.in("visibility", ["public", "archive"]);
 
     const { data, error } = await query;
     if (error) throw error;
@@ -920,7 +932,7 @@
       list.innerHTML = visiblePrograms.length
         ? visiblePrograms
             .map((program) => {
-              const canApply = mode === "current" && program.status === "open";
+              const canApply = mode === "current" && program.visibility === "public" && program.operationStatus === "normal" && program.status === "open";
               const badgeText = mode === "archive" ? getProgramRunStatusLabel(program) : getProgramStatusLabel(program.status);
               const badgeClass = mode === "archive" ? "closed" : programStatusClass(program.status);
               return `

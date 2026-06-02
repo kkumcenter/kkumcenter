@@ -12249,7 +12249,7 @@ body.admin-page {
 
 .admin-program-list-table {
   width: 100%;
-  min-width: 1020px;
+  min-width: 1220px;
   border-collapse: collapse;
   table-layout: fixed;
 }
@@ -12269,6 +12269,11 @@ body.admin-page {
 
 .admin-program-col-run {
   width: 96px;
+}
+
+.admin-program-col-visibility,
+.admin-program-col-operation {
+  width: 92px;
 }
 
 .admin-program-col-capacity {
@@ -12372,6 +12377,19 @@ body.admin-page {
   white-space: nowrap;
 }
 
+.admin-program-title-cell em {
+  display: block;
+  overflow: hidden;
+  max-width: 340px;
+  margin-top: 5px;
+  color: #a42f2f;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .admin-status-badge,
 .admin-program-run-state {
   display: inline-flex;
@@ -12410,6 +12428,31 @@ body.admin-page {
 .admin-status-hidden {
   color: #384152;
   background: #e2e8f0;
+}
+
+.admin-visibility-private {
+  color: #5b6474;
+  background: #eef2f7;
+}
+
+.admin-visibility-public {
+  color: #0f5fa8;
+  background: #e7f2ff;
+}
+
+.admin-visibility-archive {
+  color: #735216;
+  background: #fff4d6;
+}
+
+.admin-operation-normal {
+  color: #116149;
+  background: #e9f8f1;
+}
+
+.admin-operation-canceled {
+  color: #a42f2f;
+  background: #ffe8e8;
 }
 
 .admin-status-unknown,
@@ -12630,6 +12673,7 @@ body.admin-page {
 
 .admin-program-title,
 .admin-program-summary-field,
+.admin-program-cancel-reason,
 .admin-program-image {
   grid-column: span 2;
 }

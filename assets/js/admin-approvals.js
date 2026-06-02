@@ -177,7 +177,24 @@
     return "admin-status-unknown";
   };
 
-  const normalizedEducationStatus = (program) => (program?.is_active === false ? "closed" : program?.status || "scheduled");
+  const normalizedEducationStatus = (program) => (program?.status === "finished" ? "closed" : program?.status || "scheduled");
+  const programVisibilityValue = (program) => program?.visibility || (program?.is_active === false ? "private" : "public");
+  const programOperationValue = (program) => program?.operation_status || "normal";
+
+  const programVisibilityLabel = (value) => {
+    if (value === "private") return "비공개";
+    if (value === "archive") return "지난교육";
+    return "공개";
+  };
+
+  const programVisibilityClass = (value) => {
+    if (value === "private") return "admin-visibility-private";
+    if (value === "archive") return "admin-visibility-archive";
+    return "admin-visibility-public";
+  };
+
+  const programOperationLabel = (value) => (value === "canceled" ? "취소" : "정상");
+  const programOperationClass = (value) => (value === "canceled" ? "admin-operation-canceled" : "admin-operation-normal");
 
   const educationRunStatusValue = (program) => {
     const today = new Date();
@@ -341,7 +358,7 @@
   const fetchProgramCatalog = async () => {
     const { data, error } = await client
       .from("programs")
-      .select("id, title, summary, content, image_url, place, instructor, target, capacity, start_date, end_date, apply_start_date, apply_end_date, status, is_active, created_at, updated_at")
+      .select("id, title, summary, content, image_url, place, instructor, target, capacity, start_date, end_date, apply_start_date, apply_end_date, status, visibility, operation_status, cancel_reason, canceled_at, is_active, created_at, updated_at")
       .order("created_at", { ascending: false });
 
     if (error) throw error;
@@ -648,6 +665,8 @@
       .map((program) => {
         const stats = getProgramStats(program.id);
         const programStatus = normalizedEducationStatus(program);
+        const visibility = programVisibilityValue(program);
+        const operationStatus = programOperationValue(program);
         const selected = String(state.selectedProgramId || "") === String(program.id);
         return `
           <tr class="${selected ? "is-selected" : ""}">
@@ -655,10 +674,13 @@
             <td class="admin-program-title-cell">
               <button type="button" data-program-manage-select="${escapeHtml(program.id)}" aria-pressed="${selected ? "true" : "false"}">${escapeHtml(program.title)}</button>
               <span>${escapeHtml(displayValue(program.summary || program.content))}</span>
+              ${operationStatus === "canceled" && program.cancel_reason ? `<em>${escapeHtml(program.cancel_reason)}</em>` : ""}
             </td>
             <td>${escapeHtml(formatDateRange(program.apply_start_date, program.apply_end_date))}</td>
             <td>${escapeHtml(formatDateRange(program.start_date, program.end_date))}</td>
             <td><span class="admin-status-badge ${educationRunStatusClass(program)}">${escapeHtml(educationRunStatusLabel(program))}</span></td>
+            <td><span class="admin-status-badge ${programVisibilityClass(visibility)}">${escapeHtml(programVisibilityLabel(visibility))}</span></td>
+            <td><span class="admin-status-badge ${programOperationClass(operationStatus)}">${escapeHtml(programOperationLabel(operationStatus))}</span></td>
             <td>${escapeHtml(program.capacity)}</td>
             <td class="admin-program-stats-cell">
               <div class="admin-program-stats-row">
@@ -684,6 +706,8 @@
             <col class="admin-program-col-apply">
             <col class="admin-program-col-period">
             <col class="admin-program-col-run">
+            <col class="admin-program-col-visibility">
+            <col class="admin-program-col-operation">
             <col class="admin-program-col-capacity">
             <col class="admin-program-col-stats">
           </colgroup>
@@ -694,6 +718,8 @@
               <th scope="col">모집기간</th>
               <th scope="col">수업기간</th>
               <th scope="col">수업상태</th>
+              <th scope="col">노출상태</th>
+              <th scope="col">운영상태</th>
               <th scope="col">정원</th>
               <th scope="col">신청현황</th>
             </tr>
@@ -1033,6 +1059,21 @@
     }
   };
 
+  const syncProgramCancelReason = (form) => {
+    const wrap = form?.querySelector(".admin-program-cancel-reason");
+    if (!wrap || !form?.elements.operationStatus) return;
+    const isCanceled = form.elements.operationStatus.value === "canceled";
+    wrap.hidden = !isCanceled;
+    if (isCanceled) {
+      if (form.elements.status) form.elements.status.value = "closed";
+      if (form.elements.visibility) form.elements.visibility.value = "private";
+    }
+    if (form.elements.cancelReason) {
+      form.elements.cancelReason.required = isCanceled;
+      if (!isCanceled) form.elements.cancelReason.value = "";
+    }
+  };
+
   const resetProgramForm = (options = {}) => {
     if (!nodes.programManageForm) return;
     state.selectedProgramId = null;
@@ -1041,6 +1082,9 @@
     nodes.programManageForm.elements.id.value = "";
     nodes.programManageForm.elements.imageUrl.value = "";
     if (nodes.programManageForm.elements.imageFile) nodes.programManageForm.elements.imageFile.value = "";
+    if (nodes.programManageForm.elements.visibility) nodes.programManageForm.elements.visibility.value = "private";
+    if (nodes.programManageForm.elements.operationStatus) nodes.programManageForm.elements.operationStatus.value = "normal";
+    syncProgramCancelReason(nodes.programManageForm);
     renderProgramImagePreview(nodes.programManageForm, "");
     setFormStatus(nodes.programManageForm, "");
     const submit = nodes.programManageForm.querySelector('button[type="submit"]');
@@ -1060,6 +1104,10 @@
     form.elements.target.value = item.target || "전체";
     form.elements.capacity.value = item.capacity || "";
     form.elements.status.value = item.status === "finished" ? "closed" : item.status || "scheduled";
+    if (form.elements.visibility) form.elements.visibility.value = programVisibilityValue(item);
+    if (form.elements.operationStatus) form.elements.operationStatus.value = programOperationValue(item);
+    if (form.elements.cancelReason) form.elements.cancelReason.value = item.cancel_reason || "";
+    syncProgramCancelReason(form);
     form.elements.applyStartDate.value = item.apply_start_date || "";
     form.elements.applyEndDate.value = item.apply_end_date || "";
     form.elements.startDate.value = item.start_date || "";
@@ -1087,6 +1135,9 @@
       target: form.elements.target.value,
       capacity: Number(form.elements.capacity.value),
       status: form.elements.status.value,
+      visibility: form.elements.visibility ? form.elements.visibility.value : "private",
+      operationStatus: form.elements.operationStatus ? form.elements.operationStatus.value : "normal",
+      cancelReason: form.elements.cancelReason ? form.elements.cancelReason.value.trim() : "",
       applyStartDate: form.elements.applyStartDate.value,
       applyEndDate: form.elements.applyEndDate.value,
       startDate: form.elements.startDate.value,
@@ -1099,6 +1150,10 @@
     };
     if (!payload.title || !payload.capacity || !payload.applyStartDate || !payload.applyEndDate || !payload.startDate || !payload.endDate || !payload.place || !payload.content) {
       setFormStatus(form, "프로그램명, 정원, 날짜, 장소, 상세내용을 입력해주세요.", true);
+      return;
+    }
+    if (payload.operationStatus === "canceled" && !payload.cancelReason) {
+      setFormStatus(form, "취소된 교육은 취소사유를 입력해주세요.", true);
       return;
     }
 
@@ -1129,7 +1184,7 @@
   const hideOrRestoreProgram = async (programId, shouldRestore = false) => {
     const item = state.programCatalog.find((entry) => String(entry.id) === String(programId));
     if (!item) return;
-    const message = shouldRestore ? "이 교육을 공개 상태로 유지할까요?" : "이 교육을 접수마감으로 전환할까요?";
+    const message = shouldRestore ? "이 교육을 공개로 전환할까요?" : "이 교육을 비공개로 전환할까요?";
     if (!window.confirm(message)) return;
     await callPublicSubmitFunction(shouldRestore ? "program-restore" : "program-hide", { id: programId });
     await load();
@@ -1197,6 +1252,11 @@
       state.selectedProgramApplicantPageSize = APPLICANT_PAGE_SIZE_OPTIONS.includes(nextPageSize) ? nextPageSize : 10;
       state.selectedProgramApplicantPage = 1;
       renderSelectedProgramApplicants();
+      return;
+    }
+
+    if (target instanceof HTMLSelectElement && target.name === "operationStatus") {
+      syncProgramCancelReason(target.closest("[data-program-manage-form]"));
       return;
     }
 

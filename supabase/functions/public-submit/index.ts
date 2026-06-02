@@ -122,6 +122,8 @@ const reservationStatusLabel = (status: string) => {
 };
 
 const programStatusValues = new Set(["scheduled", "open", "closed", "finished"]);
+const programVisibilityValues = new Set(["private", "public", "archive"]);
+const programOperationStatusValues = new Set(["normal", "canceled"]);
 
 const programStatusLabel = (status: string) => {
   if (status === "open") return "접수중";
@@ -151,7 +153,23 @@ const requireProgramStatus = (payload: Record<string, unknown>) => {
   if (!programStatusValues.has(status)) {
     throw new Error("교육 상태를 정확히 선택해주세요.");
   }
-  return status;
+  return status === "finished" ? "closed" : status;
+};
+
+const requireProgramVisibility = (payload: Record<string, unknown>) => {
+  const value = String(payload.visibility || "private").trim();
+  if (!programVisibilityValues.has(value)) {
+    throw new Error("교육 노출상태를 정확히 선택해주세요.");
+  }
+  return value;
+};
+
+const requireProgramOperationStatus = (payload: Record<string, unknown>) => {
+  const value = String(payload.operationStatus || payload.operation_status || "normal").trim();
+  if (!programOperationStatusValues.has(value)) {
+    throw new Error("교육 운영상태를 정확히 선택해주세요.");
+  }
+  return value;
 };
 
 const optionalText = (payload: Record<string, unknown>, key: string) => {
@@ -175,6 +193,10 @@ const formatProgram = (item: Record<string, unknown>) => ({
   applyEndDate: item.apply_end_date,
   status: item.status,
   statusLabel: programStatusLabel(String(item.status || "")),
+  visibility: item.visibility || (item.is_active === false ? "private" : "public"),
+  operationStatus: item.operation_status || "normal",
+  cancelReason: item.cancel_reason,
+  canceledAt: item.canceled_at,
   isActive: item.is_active,
   createdAt: item.created_at,
   updatedAt: item.updated_at,
@@ -347,8 +369,9 @@ Deno.serve(async (request) => {
 
   try {
     const supabase = createServiceClient();
-    const { action, payload = {} } = await request.json();
-    const data = payload as Record<string, unknown>;
+    const body = await request.json();
+    const { action, payload } = body;
+    const data = (payload ?? body) as Record<string, unknown>;
 
     if (action === "space-reservation") {
       const spaceName = requireText(data, "spaceName");
@@ -430,10 +453,12 @@ Deno.serve(async (request) => {
       const programName = requireText(data, "programName");
       const { data: program, error: programError } = await supabase
         .from("programs")
-        .select("id, capacity, status, is_active")
+        .select("id, capacity, status, visibility, operation_status, is_active")
         .eq("title", programName)
         .eq("is_active", true)
         .eq("status", "open")
+        .eq("visibility", "public")
+        .eq("operation_status", "normal")
         .maybeSingle();
 
       if (programError) throw programError;
@@ -471,11 +496,13 @@ Deno.serve(async (request) => {
       const onlyOpen = Boolean(data.onlyOpen);
       let query = supabase
         .from("programs")
-        .select("id, title, summary, content, image_url, place, instructor, target, capacity, start_date, end_date, apply_start_date, apply_end_date, status, is_active, created_at, updated_at")
+        .select("id, title, summary, content, image_url, place, instructor, target, capacity, start_date, end_date, apply_start_date, apply_end_date, status, visibility, operation_status, cancel_reason, canceled_at, is_active, created_at, updated_at")
         .eq("is_active", true)
+        .eq("operation_status", "normal")
         .order("apply_start_date", { ascending: false });
 
-      if (onlyOpen) query = query.eq("status", "open");
+      if (onlyOpen) query = query.eq("status", "open").eq("visibility", "public");
+      else query = query.in("visibility", ["public", "archive"]);
 
       const { data: items, error } = await query;
       if (error) throw error;
@@ -521,7 +548,11 @@ Deno.serve(async (request) => {
     if (action === "program-save") {
       const admin = await requireSuperAdmin(request, supabase);
       const programId = String(data.id || "").trim();
-      const payload = {
+      const operationStatus = requireProgramOperationStatus(data);
+      const status = operationStatus === "canceled" ? "closed" : requireProgramStatus(data);
+      const visibility = operationStatus === "canceled" ? "private" : requireProgramVisibility(data);
+      const cancelReason = operationStatus === "canceled" ? requireText(data, "cancelReason") : optionalText(data, "cancelReason");
+      const payload: Record<string, unknown> = {
         title: requireText(data, "title"),
         summary: optionalText(data, "summary"),
         content: requireText(data, "content"),
@@ -534,21 +565,25 @@ Deno.serve(async (request) => {
         apply_end_date: requireDateValue(data, "applyEndDate"),
         start_date: requireDateValue(data, "startDate"),
         end_date: requireDateValue(data, "endDate"),
-        status: requireProgramStatus(data),
-        is_active: true,
+        status,
+        visibility,
+        operation_status: operationStatus,
+        cancel_reason: operationStatus === "canceled" ? cancelReason : null,
+        canceled_at: operationStatus === "canceled" ? new Date().toISOString() : null,
       };
+      if (!programId || visibility !== "private") payload.is_active = true;
 
       const { data: saved, error } = programId
         ? await supabase
             .from("programs")
             .update(payload)
             .eq("id", programId)
-            .select("id, title, summary, content, image_url, place, instructor, target, capacity, start_date, end_date, apply_start_date, apply_end_date, status, is_active, created_at, updated_at")
+            .select("id, title, summary, content, image_url, place, instructor, target, capacity, start_date, end_date, apply_start_date, apply_end_date, status, visibility, operation_status, cancel_reason, canceled_at, is_active, created_at, updated_at")
             .single()
         : await supabase
             .from("programs")
             .insert(payload)
-            .select("id, title, summary, content, image_url, place, instructor, target, capacity, start_date, end_date, apply_start_date, apply_end_date, status, is_active, created_at, updated_at")
+            .select("id, title, summary, content, image_url, place, instructor, target, capacity, start_date, end_date, apply_start_date, apply_end_date, status, visibility, operation_status, cancel_reason, canceled_at, is_active, created_at, updated_at")
             .single();
 
       if (error) throw error;
@@ -569,9 +604,13 @@ Deno.serve(async (request) => {
       const isRestore = action === "program-restore";
       const { data: saved, error } = await supabase
         .from("programs")
-        .update(isRestore ? { is_active: true } : { status: "closed", is_active: true })
+        .update(
+          isRestore
+            ? { visibility: "public", operation_status: "normal", cancel_reason: null, canceled_at: null, is_active: true }
+            : { visibility: "private" },
+        )
         .eq("id", id)
-        .select("id, title, summary, content, image_url, place, instructor, target, capacity, start_date, end_date, apply_start_date, apply_end_date, status, is_active, created_at, updated_at")
+        .select("id, title, summary, content, image_url, place, instructor, target, capacity, start_date, end_date, apply_start_date, apply_end_date, status, visibility, operation_status, cancel_reason, canceled_at, is_active, created_at, updated_at")
         .single();
 
       if (error) throw error;
@@ -581,7 +620,7 @@ Deno.serve(async (request) => {
         isRestore ? "update" : "hide",
         "program",
         String(saved.id),
-        `${isRestore ? "교육 공개 유지" : "교육 접수마감 전환"}: ${saved.title}`,
+        `${isRestore ? "교육 공개 전환" : "교육 비공개 전환"}: ${saved.title}`,
       );
       return json({ ok: true, item: formatProgram(saved) });
     }
