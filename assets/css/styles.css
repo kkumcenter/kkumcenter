@@ -6946,8 +6946,8 @@ body.admin-page {
 .login-section {
   min-height: calc(100vh - 82px);
   display: grid;
-  align-items: center;
-  padding: 72px 0 96px;
+  align-items: start;
+  padding: 48px 0 120px;
   background: transparent;
 }
 
@@ -7945,10 +7945,10 @@ body.admin-page {
 
 .map-buttons a:hover,
 .map-buttons a:focus-visible {
-  color: var(--forest);
-  border-color: #e39835;
-  background: linear-gradient(135deg, #f4b84a 0%, #e39835 100%);
-  box-shadow: 0 14px 28px rgba(194, 132, 36, 0.24);
+  color: #fff;
+  border-color: var(--forest);
+  background: var(--forest);
+  box-shadow: 0 14px 28px rgba(18, 59, 43, 0.24);
   transform: translateY(-4px);
 }
 
@@ -13351,7 +13351,7 @@ body.admin-page {
   .login-section {
     min-height: calc(100svh - 70px);
     align-items: start;
-    padding: 64px 0 76px;
+    padding: 36px 0 76px;
   }
 
   .login-card {
