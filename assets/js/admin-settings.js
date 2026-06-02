@@ -32,6 +32,8 @@
   };
 
   const activeName = (value) => (value ? "활성" : "제외");
+  const activeClass = (value) => (value ? "admin-staff-active" : "admin-staff-inactive");
+  const roleClass = (value) => (value === "super_admin" ? "admin-staff-role-admin" : "admin-staff-role-staff");
 
   const setStatus = (message, isError = false) => {
     const status = form?.querySelector("[data-form-status]");
@@ -65,42 +67,79 @@
 
   const renderList = (items) => {
     if (!list) return;
-    list.innerHTML = items.length
-      ? items
-          .map(
-            (item) => `
-              <article
-                class="admin-settings-item ${item.isActive ? "" : "is-inactive"}"
-                data-staff-email="${escapeHtml(item.email)}"
-                data-staff-name="${escapeHtml(item.fullName || "")}"
-                data-staff-display-name="${escapeHtml(item.displayName || item.fullName || "")}"
-                data-staff-birth-date="${escapeHtml(item.birthDate || "")}"
-                data-staff-gender="${escapeHtml(item.gender || "undisclosed")}"
-                data-staff-role="${escapeHtml(item.adminRole || "board_admin")}"
-              >
-                <div class="admin-settings-person">
-                  <strong>${escapeHtml(item.displayName || item.fullName || "표시명 미입력")}</strong>
-                  <span>${escapeHtml(item.email)}</span>
-                  <small>${escapeHtml(roleName(item.adminRole))} · ${escapeHtml(activeName(item.isActive))} · 이름 ${escapeHtml(item.fullName || "-")} · ${escapeHtml(item.birthDate || "생년월일 미입력")} · ${escapeHtml(genderName(item.gender))}</small>
-                </div>
-                <div class="admin-settings-actions">
-                  <button type="button" data-staff-edit>정보 수정</button>
-                  <select aria-label="${escapeHtml(item.email)} 권한 변경" data-staff-role-select>
-                    <option value="super_admin"${item.adminRole === "super_admin" ? " selected" : ""}>관리자</option>
-                    <option value="board_admin"${item.adminRole === "board_admin" ? " selected" : ""}>스텝</option>
-                  </select>
-                  <button type="button" data-staff-role-update>권한 변경</button>
-                  ${
-                    item.isActive
-                      ? `<button type="button" data-staff-deactivate>제외</button>`
-                      : `<button type="button" data-staff-reactivate>복구</button>`
-                  }
-                </div>
-              </article>
-            `,
-          )
-          .join("")
-      : '<article class="empty-state"><strong>등록된 관리자·스텝이 없습니다.</strong></article>';
+    if (!items.length) {
+      list.innerHTML = '<article class="empty-state"><strong>등록된 관리자·스텝이 없습니다.</strong></article>';
+      return;
+    }
+
+    list.innerHTML = `
+      <div class="admin-settings-table-wrap">
+        <table class="admin-settings-table" aria-label="관리자·스텝 목록">
+          <colgroup>
+            <col class="admin-settings-col-active">
+            <col class="admin-settings-col-role">
+            <col class="admin-settings-col-display">
+            <col class="admin-settings-col-name">
+            <col class="admin-settings-col-email">
+            <col class="admin-settings-col-birth">
+            <col class="admin-settings-col-gender">
+            <col class="admin-settings-col-actions">
+          </colgroup>
+          <thead>
+            <tr>
+              <th>상태</th>
+              <th>권한</th>
+              <th>표시명</th>
+              <th>이름</th>
+              <th>이메일</th>
+              <th>생년월일</th>
+              <th>성별</th>
+              <th>관리</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${items
+              .map(
+                (item) => `
+                  <tr
+                    class="${item.isActive ? "" : "is-inactive"}"
+                    data-staff-email="${escapeHtml(item.email)}"
+                    data-staff-name="${escapeHtml(item.fullName || "")}"
+                    data-staff-display-name="${escapeHtml(item.displayName || item.fullName || "")}"
+                    data-staff-birth-date="${escapeHtml(item.birthDate || "")}"
+                    data-staff-gender="${escapeHtml(item.gender || "undisclosed")}"
+                    data-staff-role="${escapeHtml(item.adminRole || "board_admin")}"
+                  >
+                    <td><span class="admin-status-badge ${activeClass(item.isActive)}">${escapeHtml(activeName(item.isActive))}</span></td>
+                    <td><span class="admin-status-badge ${roleClass(item.adminRole)}">${escapeHtml(roleName(item.adminRole))}</span></td>
+                    <td class="admin-settings-text-strong">${escapeHtml(item.displayName || item.fullName || "표시명 미입력")}</td>
+                    <td>${escapeHtml(item.fullName || "-")}</td>
+                    <td class="admin-settings-email-cell" title="${escapeHtml(item.email)}">${escapeHtml(item.email)}</td>
+                    <td>${escapeHtml(item.birthDate || "-")}</td>
+                    <td>${escapeHtml(genderName(item.gender))}</td>
+                    <td class="admin-settings-actions-cell">
+                      <div class="admin-settings-actions">
+                        <button type="button" data-staff-edit>정보 수정</button>
+                        <select aria-label="${escapeHtml(item.email)} 권한 변경" data-staff-role-select>
+                          <option value="super_admin"${item.adminRole === "super_admin" ? " selected" : ""}>관리자</option>
+                          <option value="board_admin"${item.adminRole === "board_admin" ? " selected" : ""}>스텝</option>
+                        </select>
+                        <button type="button" data-staff-role-update>권한 변경</button>
+                        ${
+                          item.isActive
+                            ? `<button type="button" data-staff-deactivate>제외</button>`
+                            : `<button type="button" data-staff-reactivate>복구</button>`
+                        }
+                      </div>
+                    </td>
+                  </tr>
+                `,
+              )
+              .join("")}
+          </tbody>
+        </table>
+      </div>
+    `;
   };
 
   const init = async () => {

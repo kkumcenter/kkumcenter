@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>관리자페이지 | 군북면 꿈키움센터</title>
     <meta name="description" content="군북면 꿈키움센터 관리자 승인 및 관리 페이지입니다.">
-    <link rel="stylesheet" href="assets/css/styles.css?v=20260602-38">
+    <link rel="stylesheet" href="assets/css/styles.css?v=20260602-40">
   </head>
   <body class="admin-page admin-approval-page">
     <a class="skip-link" href="#main">본문 바로가기</a>
@@ -356,12 +356,20 @@
 
         <section class="admin-tab-panel" role="tabpanel" id="panel-settings" aria-labelledby="tab-settings" data-admin-panel="settings" hidden>
           <div class="admin-settings-grid">
-            <article class="admin-panel admin-settings-card">
-              <div class="admin-panel-heading">
-                <div>
-                  <h2>관리자·스텝 등록</h2>
-                  <p>이름과 표시명을 함께 등록합니다. 스텝 표시명은 게시글 작성자명으로 사용됩니다. 현재 권한: <strong data-admin-settings-role>권한 확인 중</strong></p>
-                </div>
+            <section class="admin-settings-section">
+              <div class="admin-settings-section-head">
+                <h3 class="admin-settings-section-title">관리자·스텝 목록</h3>
+                <p>관리자와 스텝 권한을 확인합니다.</p>
+              </div>
+              <div class="admin-settings-list" data-admin-allowlist>
+                <article class="empty-state"><strong>관리자·스텝 목록을 불러오고 있습니다.</strong></article>
+              </div>
+            </section>
+
+            <section class="admin-settings-section">
+              <div class="admin-settings-section-head">
+                <h3 class="admin-settings-section-title">관리자·스텝 등록</h3>
+                <p>이름과 표시명을 함께 등록합니다. 스텝 표시명은 게시글 작성자명으로 사용됩니다. 현재 권한: <strong data-admin-settings-role>권한 확인 중</strong></p>
               </div>
               <form class="admin-settings-form" data-admin-register-form>
                 <label class="admin-settings-name">이름<input name="fullName" type="text" placeholder="실명" autocomplete="off" required></label>
@@ -386,19 +394,7 @@
                 <p class="form-status" data-form-status aria-live="polite"></p>
                 <button class="button primary admin-settings-submit" type="submit">등록 / 수정</button>
               </form>
-            </article>
-
-            <article class="admin-panel admin-settings-card">
-              <div class="admin-panel-heading">
-                <div>
-                  <h2>관리자·스텝 목록</h2>
-                  <p>관리자와 스텝 권한을 확인합니다.</p>
-                </div>
-              </div>
-              <div class="admin-settings-list" data-admin-allowlist>
-                <article class="empty-state"><strong>관리자·스텝 목록을 불러오고 있습니다.</strong></article>
-              </div>
-            </article>
+            </section>
           </div>
         </section>
       </section>
@@ -408,6 +404,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/supabase-config.js?v=20260528-1"></script>
     <script src="assets/js/admin-approvals.js?v=20260602-18"></script>
-    <script src="assets/js/admin-settings.js?v=20260529-6"></script>
+    <script src="assets/js/admin-settings.js?v=20260602-1"></script>
   </body>
 </html>

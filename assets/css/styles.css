@@ -10741,7 +10741,50 @@ body.admin-page {
 .admin-settings-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 24px;
+  gap: 34px;
+}
+
+.admin-settings-section {
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.admin-settings-section-head {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.admin-settings-section-head p {
+  margin: 0;
+  color: #526177;
+  font-size: 14px;
+  line-height: 1.55;
+  font-weight: 700;
+}
+
+.admin-settings-section-title {
+  margin: 0;
+  color: #17243a;
+  font-size: 24px;
+  line-height: 1.25;
+  font-weight: 900;
+}
+
+.admin-settings-section-title::before {
+  content: "[";
+  margin-right: 4px;
+  color: #0f6fe8;
+}
+
+.admin-settings-section-title::after {
+  content: "]";
+  margin-left: 4px;
+  color: #0f6fe8;
 }
 
 .admin-settings-list,
@@ -10749,6 +10792,123 @@ body.admin-page {
   display: grid;
   gap: 12px;
   padding: 24px;
+}
+
+.admin-settings-list {
+  display: block;
+  padding: 0;
+}
+
+.admin-settings-table-wrap {
+  overflow-x: auto;
+}
+
+.admin-settings-table {
+  width: 100%;
+  min-width: 1020px;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.admin-settings-table th,
+.admin-settings-table td {
+  box-sizing: border-box;
+  padding: 13px 8px;
+  border-bottom: 1px solid rgba(15, 42, 77, 0.08);
+  color: #24324a;
+  text-align: left;
+  vertical-align: middle;
+  font-size: 14px;
+  font-weight: 800;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-settings-table thead tr {
+  height: 58px;
+}
+
+.admin-settings-table thead th {
+  height: 58px;
+  min-height: 58px;
+  padding: 0 9px;
+  color: #fff;
+  background: #0f6fe8;
+  font-size: 15px;
+  line-height: 1.25;
+  font-weight: 900;
+}
+
+.admin-settings-table tbody tr:hover td {
+  background: #f8fbff;
+}
+
+.admin-settings-table tr.is-inactive td {
+  color: #667085;
+  background: #f7f9fc;
+}
+
+.admin-settings-col-active {
+  width: 68px;
+}
+
+.admin-settings-col-role {
+  width: 76px;
+}
+
+.admin-settings-col-display {
+  width: 120px;
+}
+
+.admin-settings-col-name {
+  width: 100px;
+}
+
+.admin-settings-col-email {
+  width: 190px;
+}
+
+.admin-settings-col-birth {
+  width: 102px;
+}
+
+.admin-settings-col-gender {
+  width: 76px;
+}
+
+.admin-settings-col-actions {
+  width: 320px;
+}
+
+.admin-settings-text-strong {
+  color: #17243a;
+  font-weight: 900;
+}
+
+.admin-settings-email-cell {
+  color: #526177;
+}
+
+.admin-settings-actions-cell {
+  overflow: visible;
+  white-space: normal;
+}
+
+.admin-staff-active,
+.admin-staff-role-admin {
+  color: #0f5fa8;
+  background: #e7f2ff;
+}
+
+.admin-staff-inactive {
+  color: #5b6474;
+  background: #eef2f7;
+}
+
+.admin-staff-role-staff {
+  color: #116149;
+  background: #e9f8f1;
 }
 
 .admin-settings-item,
@@ -10798,14 +10958,14 @@ body.admin-page {
   flex-wrap: wrap;
   align-items: center;
   justify-content: flex-end;
-  gap: 10px;
+  gap: 8px;
 }
 
 .admin-settings-actions select {
   min-height: 38px;
   border: 1px solid rgba(15, 42, 77, 0.16);
   border-radius: 8px;
-  padding: 0 13px;
+  padding: 0 10px;
   background: #f9fbfe;
   color: #24324a;
   font: inherit;
@@ -10815,7 +10975,7 @@ body.admin-page {
 
 .admin-settings-actions button {
   min-height: 38px;
-  padding: 0 12px;
+  padding: 0 10px;
   border: 0;
   border-radius: 8px;
   background: #073d92;
@@ -10823,6 +10983,10 @@ body.admin-page {
   cursor: pointer;
   font-weight: 900;
   transition: background 0.2s ease, color 0.2s ease;
+}
+
+.admin-settings-section .admin-settings-form {
+  padding: 0;
 }
 
 .admin-settings-actions button[data-staff-role-update] {
@@ -10895,9 +11059,13 @@ body.admin-page {
 @media (max-width: 640px) {
   .board-editor-dialog form,
   .admin-settings-form,
-  .admin-settings-list,
   .inquiry-admin-list {
     padding: 18px;
+  }
+
+  .admin-settings-form,
+  .admin-settings-list {
+    padding: 0;
   }
 
   .admin-settings-form {
