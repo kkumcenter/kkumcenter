@@ -10803,7 +10803,7 @@ body.admin-page {
   padding: 0 12px;
   border: 0;
   border-radius: 8px;
-  background: #0f6fe8;
+  background: #073d92;
   color: #fff;
   cursor: pointer;
   font-weight: 900;
@@ -10812,23 +10812,23 @@ body.admin-page {
 
 .admin-settings-actions button[data-staff-role-update] {
   color: #fff;
-  background: #0f6fe8;
+  background: #073d92;
 }
 
 .admin-settings-actions button[data-staff-edit] {
   color: #fff;
-  background: #0f6fe8;
+  background: #073d92;
 }
 
 .admin-settings-actions button[data-staff-reactivate] {
   color: #fff;
-  background: #0f6fe8;
+  background: #073d92;
 }
 
 .admin-settings-actions button:hover,
 .admin-settings-actions button:focus-visible {
   color: #fff;
-  background: #073d92;
+  background: #0f6fe8;
 }
 
 .inquiry-admin-meta span {
@@ -10915,14 +10915,14 @@ body.admin-page {
   padding: 0 16px;
   border-radius: 8px;
   color: #fff;
-  background: #0f6fe8;
+  background: #073d92;
   font-weight: 900;
 }
 
 .nav-admin-page-link:hover,
 .nav-admin-page-link:focus-visible {
   color: #fff;
-  background: #075bc3;
+  background: #0f6fe8;
 }
 
 .admin-approval-page {
@@ -11006,8 +11006,8 @@ body.admin-page {
 .admin-refresh-button,
 .admin-pending-item a {
   padding: 0 14px;
-  color: #0f6fe8;
-  background: #eef5ff;
+  color: #fff;
+  background: #073d92;
 }
 
 .admin-approval-session a:hover,
@@ -11015,13 +11015,13 @@ body.admin-page {
 .admin-pending-item a:hover,
 .admin-pending-item a:focus-visible {
   color: #fff;
-  background: #073d92;
+  background: #0f6fe8;
 }
 
 .admin-refresh-button:hover,
 .admin-refresh-button:focus-visible {
   color: #fff;
-  background: #073d92;
+  background: #0f6fe8;
 }
 
 .admin-page .button.primary,
@@ -11030,7 +11030,7 @@ body.admin-page {
   border: 0;
   border-radius: 8px;
   color: #fff;
-  background: #0f6fe8;
+  background: #073d92;
   cursor: pointer;
   font: inherit;
   font-weight: 900;
@@ -11045,7 +11045,7 @@ body.admin-page {
 .admin-page .admin-settings-submit:disabled:hover,
 .admin-page .admin-settings-submit:disabled:focus-visible {
   color: #fff;
-  background: #0f6fe8;
+  background: #073d92;
   cursor: default;
   opacity: 1;
 }
@@ -11055,7 +11055,7 @@ body.admin-page {
 .admin-page .admin-settings-submit:hover,
 .admin-page .admin-settings-submit:focus-visible {
   color: #fff;
-  background: #073d92;
+  background: #0f6fe8;
 }
 
 .admin-refresh-button:focus-visible,
@@ -11075,7 +11075,7 @@ body.admin-page {
 
 .admin-pending-summary {
   display: grid;
-  grid-template-columns: repeat(3, minmax(132px, 148px));
+  grid-template-columns: repeat(3, minmax(172px, 192px));
   align-self: end;
   justify-content: end;
   gap: 10px;
@@ -11088,9 +11088,9 @@ body.admin-page {
   overflow: hidden;
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 10px;
   min-height: 74px;
-  padding: 7px 8px;
+  padding: 7px 10px;
   border: 2px solid rgba(31, 127, 214, 0.16);
   border-radius: 12px;
   background:
@@ -11160,10 +11160,11 @@ body.admin-page {
   position: relative;
   z-index: 1;
   min-width: 0;
-  display: grid;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   flex: 1 1 auto;
-  justify-items: stretch;
-  gap: 3px;
+  gap: 10px;
 }
 
 .admin-pending-copy > span {
@@ -11505,7 +11506,7 @@ body.admin-page {
   border: 0;
   border-radius: 8px;
   color: #fff;
-  background: #0f6fe8;
+  background: #073d92;
   font: inherit;
   font-size: 14px;
   font-weight: 900;
@@ -11528,8 +11529,8 @@ body.admin-page {
 .admin-page-nav button:hover:not(:disabled),
 .admin-page-nav button:focus-visible:not(:disabled) {
   color: #fff;
-  border-color: #073d92;
-  background: #073d92;
+  border-color: #0f6fe8;
+  background: #0f6fe8;
 }
 
 .admin-page-nav span {
@@ -11573,8 +11574,8 @@ body.admin-page {
 .admin-list-page-controls button:hover:not(:disabled),
 .admin-list-page-controls button:focus-visible:not(:disabled) {
   color: #fff;
-  border-color: #073d92;
-  background: #073d92;
+  border-color: #0f6fe8;
+  background: #0f6fe8;
 }
 
 .admin-list-page-controls button:disabled {
@@ -11648,7 +11649,7 @@ body.admin-page {
 .admin-approval-table th,
 .admin-program-list-table th {
   color: #fff;
-  background: #073d92;
+  background: #0f6fe8;
   font-size: 15px;
   line-height: 1.35;
   font-weight: 900;
@@ -11737,11 +11738,11 @@ body.admin-page {
   min-height: 38px;
   padding: 0 12px;
   color: #fff;
-  background: #0f6fe8;
+  background: #073d92;
 }
 
 .admin-approval-actions button:last-child {
-  background: #0f6fe8;
+  background: #073d92;
 }
 
 .admin-approval-actions button:disabled,
@@ -12161,7 +12162,7 @@ body.admin-page {
   border: 0;
   border-radius: 8px;
   color: #fff;
-  background: #0f6fe8;
+  background: #073d92;
   cursor: pointer;
   font: inherit;
   font-size: 14px;
@@ -12175,13 +12176,13 @@ body.admin-page {
 .admin-approval-actions button:hover:not(:disabled),
 .admin-approval-actions button:focus-visible:not(:disabled) {
   color: #fff;
-  background: #073d92;
+  background: #0f6fe8;
 }
 
 .admin-approval-actions button:last-child:hover:not(:disabled),
 .admin-approval-actions button:last-child:focus-visible:not(:disabled) {
   color: #fff;
-  background: #073d92;
+  background: #0f6fe8;
 }
 
 .admin-program-page-nav {
@@ -12210,8 +12211,8 @@ body.admin-page {
 .admin-program-page-nav button:hover:not(:disabled),
 .admin-program-page-nav button:focus-visible:not(:disabled) {
   color: #fff;
-  border-color: #073d92;
-  background: #073d92;
+  border-color: #0f6fe8;
+  background: #0f6fe8;
 }
 
 .admin-program-page-nav button:disabled {
@@ -12302,7 +12303,7 @@ body.admin-page {
   height: 54px;
   padding: 16px 13px;
   color: #fff;
-  background: #073d92;
+  background: #0f6fe8;
   font-size: 15px;
   line-height: 1.35;
   font-weight: 900;
@@ -12570,14 +12571,14 @@ body.admin-page {
 .admin-program-selected-head .admin-refresh-button {
   min-width: 132px;
   color: #fff;
-  background: #0f6fe8;
+  background: #073d92;
   cursor: pointer;
 }
 
 .admin-program-selected-head .admin-refresh-button:hover,
 .admin-program-selected-head .admin-refresh-button:focus-visible {
   color: #fff;
-  background: #073d92;
+  background: #0f6fe8;
 }
 
 .admin-program-form {
@@ -12657,7 +12658,7 @@ body.admin-page {
   padding: 0 14px;
   border-radius: 8px;
   color: #fff;
-  background: #0f6fe8;
+  background: #073d92;
   cursor: pointer;
   font-size: 14px;
   font-weight: 900;
@@ -12672,7 +12673,7 @@ body.admin-page {
 
 .admin-program-image-picker:hover,
 .admin-program-image-picker:focus-within {
-  background: #073d92;
+  background: #0f6fe8;
 }
 
 .admin-program-form .admin-program-image-picker input[type="file"] {
@@ -12713,7 +12714,7 @@ body.admin-page {
   border: 0;
   border-radius: 8px;
   color: #fff;
-  background: #0f6fe8;
+  background: #073d92;
   cursor: pointer;
   font: inherit;
   font-size: 14px;
@@ -12724,7 +12725,7 @@ body.admin-page {
 .admin-program-image button[data-program-image-clear]:hover,
 .admin-program-image button[data-program-image-clear]:focus-visible {
   color: #fff;
-  background: #073d92;
+  background: #0f6fe8;
 }
 
 .admin-program-place {
@@ -12793,7 +12794,7 @@ body.admin-page {
   border: 0;
   border-radius: 8px;
   color: #fff;
-  background: #0f6fe8;
+  background: #073d92;
   cursor: pointer;
   font: inherit;
   font-size: 13px;
@@ -12801,17 +12802,17 @@ body.admin-page {
 }
 
 .admin-program-manage-actions button:last-child {
-  background: #0f6fe8;
+  background: #073d92;
 }
 
 .admin-program-manage-actions button[data-program-restore] {
-  background: #0f6fe8;
+  background: #073d92;
 }
 
 .admin-program-manage-actions button:hover,
 .admin-program-manage-actions button:focus-visible {
   color: #fff;
-  background: #073d92;
+  background: #0f6fe8;
 }
 
 .admin-program-applicants-panel {
