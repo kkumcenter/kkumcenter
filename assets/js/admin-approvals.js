@@ -1131,7 +1131,7 @@
     renderProgramImagePreview(nodes.programManageForm, "");
     setFormStatus(nodes.programManageForm, "");
     const submit = nodes.programManageForm.querySelector('button[type="submit"]');
-    if (submit) submit.textContent = "저장하기";
+    if (submit) submit.textContent = "수정하기";
     if (options.render !== false) renderProgramManagement();
   };
 
@@ -1164,7 +1164,7 @@
     form.elements.content.value = item.content || "";
     setFormStatus(form, "수정할 교육을 불러왔습니다.");
     const submit = form.querySelector('button[type="submit"]');
-    if (submit) submit.textContent = "수정 저장";
+    if (submit) submit.textContent = "수정하기";
     if (options.render !== false) renderProgramManagement();
     if (options.scroll !== false) form.scrollIntoView({ behavior: "smooth", block: "start" });
   };
