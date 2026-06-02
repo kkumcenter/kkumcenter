@@ -7945,7 +7945,7 @@ body.admin-page {
 
 .map-buttons a:hover,
 .map-buttons a:focus-visible {
-  color: #fff;
+  color: var(--forest);
   border-color: #e39835;
   background: linear-gradient(135deg, #f4b84a 0%, #e39835 100%);
   box-shadow: 0 14px 28px rgba(194, 132, 36, 0.24);
