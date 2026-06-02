@@ -11394,13 +11394,13 @@ body.admin-page {
 .admin-program-approval-toolbar {
   flex: 0 1 auto;
   flex-wrap: nowrap;
-  gap: 14px;
+  gap: 16px;
   min-width: 0;
 }
 
 .admin-approval-list-head .admin-program-approval-toolbar {
   flex: 0 1 auto;
-  gap: 14px;
+  gap: 16px;
   min-width: 0;
 }
 
@@ -11420,7 +11420,7 @@ body.admin-page {
 }
 
 .admin-program-approval-search input {
-  width: 190px;
+  width: 215px;
   min-width: 0;
   min-height: 38px;
   padding: 0 12px;
@@ -11436,7 +11436,7 @@ body.admin-page {
 .admin-program-approval-toolbar .admin-bulk-action-group {
   flex: 0 0 auto;
   flex-wrap: nowrap;
-  padding-left: 16px;
+  padding-left: 18px;
   border-left: 1px solid rgba(15, 42, 77, 0.13);
 }
 
