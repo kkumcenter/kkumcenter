@@ -546,6 +546,19 @@
     renderProgramManagement();
   };
 
+  const resetProgramManageFilters = () => {
+    if (nodes.programManageKeyword) nodes.programManageKeyword.value = DEFAULT_PROGRAM_FILTERS.keyword;
+    if (nodes.programManageStatus) nodes.programManageStatus.value = DEFAULT_PROGRAM_FILTERS.status;
+    if (nodes.programManageRunStatus) nodes.programManageRunStatus.value = DEFAULT_PROGRAM_FILTERS.runStatus;
+    if (nodes.programManageTarget) nodes.programManageTarget.value = DEFAULT_PROGRAM_FILTERS.target;
+    if (nodes.programManageYear) nodes.programManageYear.value = DEFAULT_PROGRAM_FILTERS.yearValue;
+    if (nodes.programManageVisibility) nodes.programManageVisibility.value = DEFAULT_PROGRAM_FILTERS.visibility;
+    if (nodes.programManageOperation) nodes.programManageOperation.value = DEFAULT_PROGRAM_FILTERS.operation;
+    state.appliedProgramFilters = { ...DEFAULT_PROGRAM_FILTERS };
+    state.programManagePage = 1;
+    renderProgramManagement();
+  };
+
   const syncBulkControls = () => {
     const update = (visibleItems, selected, selectAll, countNode, approveButton) => {
       const visibleIds = visibleItems.map((item) => String(item.id));
@@ -1433,8 +1446,13 @@
       return;
     }
 
-    if (target.closest("[data-program-filter-apply]") || target.closest("[data-program-filter-search]")) {
+    if (target.closest("[data-program-filter-apply]")) {
       applyProgramManageFilters();
+      return;
+    }
+
+    if (target.closest("[data-program-filter-reset]")) {
+      resetProgramManageFilters();
       return;
     }
 

@@ -12165,7 +12165,7 @@ body.admin-page {
 
 .admin-program-filterbar {
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr)) minmax(96px, 0.7fr);
+  grid-template-columns: minmax(180px, 1.5fr) repeat(6, minmax(88px, 1fr)) minmax(174px, 1.35fr);
   gap: 10px;
   align-items: end;
   margin-bottom: 14px;
@@ -12173,32 +12173,6 @@ body.admin-page {
   border: 1px solid rgba(15, 42, 77, 0.1);
   border-radius: 8px;
   background: #f3f7ff;
-}
-
-.admin-program-searchbar {
-  display: grid;
-  grid-template-columns: minmax(150px, 1fr) 82px;
-  gap: 6px;
-  align-items: center;
-  flex: 0 1 420px;
-  width: min(34vw, 420px);
-  max-width: 420px;
-  margin-bottom: 0;
-  padding: 10px;
-  border: 1px solid rgba(15, 42, 77, 0.1);
-  border-radius: 8px;
-  background: #f3f7ff;
-}
-
-.admin-program-searchbar label {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-width: 0;
-  color: #24324a;
-  font-size: 14px;
-  font-weight: 900;
-  white-space: nowrap;
 }
 
 .admin-program-filterbar label {
@@ -12210,9 +12184,12 @@ body.admin-page {
   font-weight: 900;
 }
 
+.admin-program-filter-keyword {
+  min-width: 0;
+}
+
 .admin-program-filterbar select,
-.admin-program-filterbar input,
-.admin-program-searchbar input {
+.admin-program-filterbar input {
   width: 100%;
   min-height: 38px;
   border: 1px solid rgba(15, 42, 77, 0.13);
@@ -12228,8 +12205,7 @@ body.admin-page {
   padding: 0 10px;
 }
 
-.admin-program-filterbar input,
-.admin-program-searchbar input {
+.admin-program-filterbar input {
   padding: 0 12px;
 }
 
@@ -12243,7 +12219,9 @@ body.admin-page {
 }
 
 .admin-program-filter-action {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
   align-items: end;
   min-width: 0;
 }
@@ -12261,22 +12239,14 @@ body.admin-page {
   font-weight: 900;
 }
 
-.admin-program-searchbar button {
-  min-height: 38px;
-  border: 0;
-  border-radius: 8px;
-  color: #fff;
-  background: #073d92;
-  cursor: pointer;
-  font: inherit;
-  font-size: 14px;
-  font-weight: 900;
+.admin-program-filter-action button.is-secondary {
+  border: 1px solid rgba(7, 61, 146, 0.22);
+  color: #073d92;
+  background: #fff;
 }
 
 .admin-program-filter-action button:hover,
 .admin-program-filter-action button:focus-visible,
-.admin-program-searchbar button:hover,
-.admin-program-searchbar button:focus-visible,
 .admin-bulk-toolbar button:hover:not(:disabled),
 .admin-bulk-toolbar button:focus-visible:not(:disabled),
 .admin-approval-actions button:hover:not(:disabled),
@@ -13068,7 +13038,6 @@ body.admin-page {
 }
 
 @media (max-width: 900px) {
-  .admin-program-searchbar,
   .admin-program-filterbar {
     grid-template-columns: 1fr;
   }
@@ -13076,17 +13045,6 @@ body.admin-page {
   .admin-program-list-head {
     display: grid;
     gap: 10px;
-  }
-
-  .admin-program-searchbar {
-    width: 100%;
-    max-width: none;
-  }
-
-  .admin-program-searchbar label {
-    display: grid;
-    gap: 7px;
-    white-space: normal;
   }
 
   .admin-program-list-table {

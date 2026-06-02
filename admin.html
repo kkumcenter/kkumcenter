@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>관리자페이지 | 군북면 꿈키움센터</title>
     <meta name="description" content="군북면 꿈키움센터 관리자 승인 및 관리 페이지입니다.">
-    <link rel="stylesheet" href="assets/css/styles.css?v=20260602-30">
+    <link rel="stylesheet" href="assets/css/styles.css?v=20260602-31">
   </head>
   <body class="admin-page admin-approval-page">
     <a class="skip-link" href="#main">본문 바로가기</a>
@@ -201,14 +201,11 @@
           <div class="admin-program-list-card">
             <div class="admin-program-list-head">
               <h3 class="admin-program-list-title">교육 관리 목록</h3>
-              <div class="admin-program-searchbar" aria-label="교육 관리 목록 검색어">
-                <label>검색어
-                  <input type="search" placeholder="교육명, 장소, 강사" data-program-manage-keyword>
-                </label>
-                <button type="button" data-program-filter-search>검색</button>
-              </div>
             </div>
             <div class="admin-program-filterbar" aria-label="교육 관리 목록 검색">
+              <label class="admin-program-filter-keyword">검색어
+                <input type="search" placeholder="교육명, 장소, 강사" data-program-manage-keyword>
+              </label>
               <label>모집상태
                 <select data-program-manage-status>
                   <option value="all">전체</option>
@@ -255,7 +252,8 @@
                 </select>
               </label>
               <div class="admin-program-filter-action">
-                <button type="button" data-program-filter-apply>선택보기</button>
+                <button type="button" data-program-filter-apply>검색하기</button>
+                <button class="is-secondary" type="button" data-program-filter-reset>전체보기</button>
               </div>
               <p class="admin-program-filter-result" data-program-manage-result>교육 목록을 불러오고 있습니다.</p>
             </div>
@@ -400,7 +398,7 @@
     <script src="assets/js/main.js?v=20260602-1"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/supabase-config.js?v=20260528-1"></script>
-    <script src="assets/js/admin-approvals.js?v=20260602-12"></script>
+    <script src="assets/js/admin-approvals.js?v=20260602-13"></script>
     <script src="assets/js/admin-settings.js?v=20260529-6"></script>
   </body>
 </html>
