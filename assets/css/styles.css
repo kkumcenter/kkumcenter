@@ -12559,6 +12559,13 @@ body.admin-page {
   min-width: 132px;
   color: #fff;
   background: #0f6fe8;
+  cursor: pointer;
+}
+
+.admin-program-selected-head .admin-refresh-button:hover,
+.admin-program-selected-head .admin-refresh-button:focus-visible {
+  color: #fff;
+  background: #073d92;
 }
 
 .admin-program-form {
@@ -12645,9 +12652,14 @@ body.admin-page {
   transition: background 0.2s ease, color 0.2s ease;
 }
 
+.admin-program-form .admin-program-image-picker,
 .admin-program-image-picker:hover,
 .admin-program-image-picker:focus-within {
   color: #fff;
+}
+
+.admin-program-image-picker:hover,
+.admin-program-image-picker:focus-within {
   background: #073d92;
 }
 
