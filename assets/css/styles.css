@@ -12134,8 +12134,17 @@ body.admin-page {
   box-shadow: none;
 }
 
+.admin-program-list-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 14px;
+}
+
 .admin-program-list-title {
-  margin: 0 0 14px;
+  flex: 0 0 auto;
+  margin: 0;
   color: #17243a;
   font-size: 24px;
   line-height: 1.25;
@@ -12168,11 +12177,14 @@ body.admin-page {
 
 .admin-program-searchbar {
   display: grid;
-  grid-template-columns: minmax(240px, 1fr) 96px;
-  gap: 8px;
+  grid-template-columns: minmax(150px, 1fr) 82px;
+  gap: 6px;
   align-items: center;
-  margin-bottom: 10px;
-  padding: 14px;
+  flex: 0 1 420px;
+  width: min(34vw, 420px);
+  max-width: 420px;
+  margin-bottom: 0;
+  padding: 10px;
   border: 1px solid rgba(15, 42, 77, 0.1);
   border-radius: 8px;
   background: #f3f7ff;
@@ -13059,6 +13071,16 @@ body.admin-page {
   .admin-program-searchbar,
   .admin-program-filterbar {
     grid-template-columns: 1fr;
+  }
+
+  .admin-program-list-head {
+    display: grid;
+    gap: 10px;
+  }
+
+  .admin-program-searchbar {
+    width: 100%;
+    max-width: none;
   }
 
   .admin-program-searchbar label {
