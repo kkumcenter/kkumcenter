@@ -11085,9 +11085,7 @@ body.admin-page {
 }
 
 .nav-admin-page-link:hover,
-.nav-admin-page-link:focus-visible,
-.nav-group:hover .nav-link.nav-admin-page-link,
-.nav-group:focus-within .nav-link.nav-admin-page-link {
+.nav-admin-page-link:focus-visible {
   color: #fff;
   background: #0f6fe8;
 }
