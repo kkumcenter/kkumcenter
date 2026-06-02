@@ -326,7 +326,7 @@
 
     if (nodes.role) {
       const name = profile?.email || state.session.user.email || "관리자";
-      nodes.role.textContent = `${name} · 관리자`;
+      nodes.role.textContent = name;
     }
     return true;
   };

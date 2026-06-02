@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>관리자페이지 | 군북면 꿈키움센터</title>
     <meta name="description" content="군북면 꿈키움센터 관리자 승인 및 관리 페이지입니다.">
-    <link rel="stylesheet" href="assets/css/styles.css?v=20260602-23">
+    <link rel="stylesheet" href="assets/css/styles.css?v=20260602-24">
   </head>
   <body class="admin-page admin-approval-page">
     <a class="skip-link" href="#main">본문 바로가기</a>
@@ -32,12 +32,18 @@
         <div class="container admin-approval-hero-inner">
           <div class="admin-approval-title-block">
             <h1>관리자페이지</h1>
-            <div class="admin-approval-session">
-              <span data-admin-approval-role>권한 확인 중</span>
-            </div>
           </div>
 
           <div class="admin-pending-summary" aria-label="미처리 현황">
+            <article class="admin-pending-card admin-pending-admin">
+              <span class="admin-pending-icon admin-pending-logo" aria-hidden="true">
+                <img src="assets/images/kkoom-logo-symbol.png" alt="">
+              </span>
+              <div class="admin-pending-copy">
+                <span>관리자</span>
+                <span class="admin-pending-email" data-admin-approval-role>권한 확인 중</span>
+              </div>
+            </article>
             <article class="admin-pending-card admin-pending-space">
               <span class="admin-pending-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" focusable="false"><path d="M4 10.2 12 4l8 6.2V20a1 1 0 0 1-1 1h-5.2v-6.2H10.2V21H5a1 1 0 0 1-1-1v-9.8Z"></path></svg>
@@ -368,7 +374,7 @@
     <script src="assets/js/main.js?v=20260602-1"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/supabase-config.js?v=20260528-1"></script>
-    <script src="assets/js/admin-approvals.js?v=20260602-10"></script>
+    <script src="assets/js/admin-approvals.js?v=20260602-11"></script>
     <script src="assets/js/admin-settings.js?v=20260529-6"></script>
   </body>
 </html>

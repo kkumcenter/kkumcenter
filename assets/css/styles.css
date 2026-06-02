@@ -10934,22 +10934,22 @@ body.admin-page {
 }
 
 .admin-approval-hero {
-  border-bottom: 1px solid rgba(15, 42, 77, 0.08);
+  border-bottom: 2px solid rgba(7, 61, 146, 0.12);
   background: linear-gradient(180deg, #ffffff 0%, #f4f8fd 100%);
 }
 
 .admin-approval-hero-inner {
   display: grid;
-  grid-template-columns: minmax(220px, 0.32fr) minmax(0, 1fr);
-  align-items: start;
-  gap: 24px;
-  padding: 16px 0 14px;
+  grid-template-columns: minmax(210px, 0.24fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 18px;
+  padding: 14px 0 12px;
 }
 
 .admin-approval-title-block {
   display: grid;
-  gap: 12px;
-  align-content: start;
+  align-content: center;
+  min-height: 74px;
 }
 
 .admin-approval-hero h1 {
@@ -11075,10 +11075,10 @@ body.admin-page {
 
 .admin-pending-summary {
   display: grid;
-  grid-template-columns: repeat(3, minmax(214px, 244px));
+  grid-template-columns: repeat(4, minmax(166px, 206px));
   align-self: end;
   justify-content: end;
-  gap: 10px;
+  gap: 9px;
   min-width: 0;
   margin-top: 0;
 }
@@ -11113,6 +11113,13 @@ body.admin-page {
     linear-gradient(135deg, #fff7e9 0%, #fffcf5 100%);
 }
 
+.admin-pending-admin {
+  border-color: rgba(15, 111, 232, 0.2);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.72) 100%),
+    linear-gradient(135deg, #eef5ff 0%, #f8fbff 100%);
+}
+
 .admin-pending-card::after {
   content: "";
   position: absolute;
@@ -11120,6 +11127,18 @@ body.admin-page {
   width: 42%;
   background: linear-gradient(110deg, transparent 0%, rgba(255, 255, 255, 0.7) 100%);
   pointer-events: none;
+}
+
+.admin-pending-logo {
+  overflow: hidden;
+  border: 1px solid rgba(15, 111, 232, 0.14);
+  background: #fff;
+}
+
+.admin-pending-logo img {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
 }
 
 .admin-pending-icon {
@@ -11170,7 +11189,7 @@ body.admin-page {
 
 .admin-pending-copy > span {
   color: #17243a;
-  font-size: 17px;
+  font-size: 19px;
   line-height: 1.2;
   font-weight: 900;
   white-space: nowrap;
@@ -11179,7 +11198,7 @@ body.admin-page {
 .admin-pending-count {
   display: inline-flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: flex-start;
   align-self: stretch;
   gap: 3px;
   margin-top: 0;
@@ -11190,6 +11209,17 @@ body.admin-page {
   cursor: pointer;
   font: inherit;
   text-decoration: none;
+  white-space: nowrap;
+}
+
+.admin-pending-email {
+  display: block;
+  overflow: hidden;
+  max-width: 100%;
+  color: #344154;
+  font-size: 13px;
+  font-weight: 900;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
@@ -11227,7 +11257,7 @@ body.admin-page {
 
 .admin-pending-board,
 .admin-approval-tabs {
-  margin-top: 16px;
+  margin-top: 14px;
   padding: 24px;
   border: 1px solid rgba(15, 42, 77, 0.1);
   border-radius: 8px;
@@ -11867,7 +11897,12 @@ body.admin-page {
   }
 
   .admin-pending-summary {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    justify-content: stretch;
+  }
+
+  .admin-approval-title-block {
+    min-height: auto;
   }
 
   .admin-pending-item {
@@ -12008,6 +12043,12 @@ body.admin-page {
   }
 
   .admin-detail-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .admin-pending-summary {
     grid-template-columns: 1fr;
   }
 }
