@@ -562,8 +562,7 @@
 
     nodes.programStatusList.innerHTML = `
       <div class="admin-program-list-wrap">
-        <table class="admin-program-list-table">
-          <caption>교육 관리 목록</caption>
+        <table class="admin-program-list-table" aria-label="교육 관리 목록">
           <colgroup>
             <col class="admin-program-col-status">
             <col class="admin-program-col-title">

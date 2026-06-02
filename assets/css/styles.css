@@ -11751,6 +11751,34 @@ body.admin-page {
   font-weight: 700;
 }
 
+.admin-program-list-card {
+  padding: 18px;
+  border: 1px solid rgba(15, 42, 77, 0.11);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 12px 30px rgba(25, 44, 72, 0.06);
+}
+
+.admin-program-list-title {
+  margin: 0 0 14px;
+  color: #17243a;
+  font-size: 22px;
+  line-height: 1.25;
+  font-weight: 900;
+}
+
+.admin-program-list-title::before {
+  content: "[";
+  margin-right: 4px;
+  color: #0f6fe8;
+}
+
+.admin-program-list-title::after {
+  content: "]";
+  margin-left: 4px;
+  color: #0f6fe8;
+}
+
 .admin-program-filterbar {
   display: grid;
   grid-template-columns: minmax(110px, 0.85fr) minmax(120px, 0.9fr) minmax(110px, 0.85fr) minmax(120px, 0.9fr) minmax(180px, 1.45fr) minmax(110px, 0.8fr);
@@ -11846,7 +11874,6 @@ body.admin-page {
   border: 1px solid rgba(15, 42, 77, 0.11);
   border-radius: 8px;
   background: #fff;
-  box-shadow: 0 12px 30px rgba(25, 44, 72, 0.06);
 }
 
 .admin-program-list-table {
