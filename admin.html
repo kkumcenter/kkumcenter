@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>관리자페이지 | 군북면 꿈키움센터</title>
     <meta name="description" content="군북면 꿈키움센터 관리자 승인 및 관리 페이지입니다.">
-    <link rel="stylesheet" href="assets/css/styles.css?v=20260602-5">
+    <link rel="stylesheet" href="assets/css/styles.css?v=20260602-6">
   </head>
   <body class="admin-page admin-approval-page">
     <a class="skip-link" href="#main">본문 바로가기</a>
@@ -93,15 +93,6 @@
           <div class="admin-approval-list-head">
             <h3 class="admin-approval-list-title">공간예약 승인 대기 목록</h3>
             <div class="admin-bulk-toolbar" aria-label="공간예약 목록 및 일괄 처리">
-              <div class="admin-list-control-group">
-                <label class="admin-page-size-control">목록
-                  <select data-space-page-size aria-label="공간예약 목록 줄 수 선택">
-                    <option value="10">10줄보기</option>
-                    <option value="30">30줄보기</option>
-                    <option value="50">50줄보기</option>
-                  </select>
-                </label>
-              </div>
               <div class="admin-bulk-action-group">
                 <span data-space-selected-count>0건 선택</span>
                 <button type="button" data-space-bulk-approve disabled>선택 승인</button>
@@ -125,10 +116,19 @@
               </tbody>
             </table>
           </div>
-          <div class="admin-page-nav admin-page-nav-bottom" aria-label="공간예약 목록 페이지 이동">
-            <button type="button" data-space-page-prev>이전</button>
-            <span data-space-page-info>1 / 1</span>
-            <button type="button" data-space-page-next>다음</button>
+          <div class="admin-list-page-footer" aria-label="공간예약 목록 페이지 이동">
+            <div class="admin-list-page-controls">
+              <button type="button" data-space-page-prev>이전</button>
+              <span data-space-page-info>1 / 1</span>
+              <button type="button" data-space-page-next>다음</button>
+            </div>
+            <label class="admin-page-size-control admin-page-size-control-footer">목록
+              <select data-space-page-size aria-label="공간예약 목록 줄 수 선택">
+                <option value="10">10줄보기</option>
+                <option value="30">30줄보기</option>
+                <option value="50">50줄보기</option>
+              </select>
+            </label>
           </div>
         </section>
 
@@ -136,15 +136,6 @@
           <div class="admin-approval-list-head">
             <h3 class="admin-approval-list-title">교육신청 승인 대기 목록</h3>
             <div class="admin-bulk-toolbar" aria-label="교육신청 목록 및 일괄 처리">
-              <div class="admin-list-control-group">
-                <label class="admin-page-size-control">목록
-                  <select data-program-page-size aria-label="교육신청 목록 줄 수 선택">
-                    <option value="10">10줄보기</option>
-                    <option value="30">30줄보기</option>
-                    <option value="50">50줄보기</option>
-                  </select>
-                </label>
-              </div>
               <div class="admin-bulk-action-group">
                 <span data-program-selected-count>0건 선택</span>
                 <button type="button" data-program-bulk-approve disabled>선택 승인</button>
@@ -168,10 +159,19 @@
               </tbody>
             </table>
           </div>
-          <div class="admin-page-nav admin-page-nav-bottom" aria-label="교육신청 목록 페이지 이동">
-            <button type="button" data-program-page-prev>이전</button>
-            <span data-program-page-info>1 / 1</span>
-            <button type="button" data-program-page-next>다음</button>
+          <div class="admin-list-page-footer" aria-label="교육신청 목록 페이지 이동">
+            <div class="admin-list-page-controls">
+              <button type="button" data-program-page-prev>이전</button>
+              <span data-program-page-info>1 / 1</span>
+              <button type="button" data-program-page-next>다음</button>
+            </div>
+            <label class="admin-page-size-control admin-page-size-control-footer">목록
+              <select data-program-page-size aria-label="교육신청 목록 줄 수 선택">
+                <option value="10">10줄보기</option>
+                <option value="30">30줄보기</option>
+                <option value="50">50줄보기</option>
+              </select>
+            </label>
           </div>
         </section>
 
@@ -181,33 +181,33 @@
             <div class="admin-program-filterbar" aria-label="교육 관리 목록 검색">
               <label>모집상태
                 <select data-program-manage-status>
-                  <option value="all">전체 모집상태</option>
+                  <option value="all">전체</option>
                   <option value="scheduled">접수예정</option>
                   <option value="open">접수중</option>
                   <option value="closed">접수마감</option>
                   <option value="finished">종료</option>
                 </select>
               </label>
-              <label>접수상태
-                <select data-program-manage-application-status>
-                  <option value="all">전체 접수상태</option>
-                  <option value="completed">접수완료</option>
-                  <option value="waiting">대기</option>
-                  <option value="approved">승인완료</option>
-                  <option value="canceled">취소</option>
+              <label>수업상태
+                <select data-program-manage-run-status>
+                  <option value="all">전체</option>
+                  <option value="upcoming">진행예정</option>
+                  <option value="ongoing">진행중</option>
+                  <option value="finished">종료</option>
+                  <option value="unknown">일정확인</option>
                 </select>
               </label>
               <label>대상
                 <select data-program-manage-target>
-                  <option value="all">전체 대상</option>
-                  <option value="전체">전체</option>
+                  <option value="all">전체</option>
+                  <option value="전체">전 연령</option>
                   <option value="성인">성인</option>
                   <option value="아동청소년">아동청소년</option>
                 </select>
               </label>
               <label>수업연도
                 <select data-program-manage-year>
-                  <option value="all">전체 수업연도</option>
+                  <option value="all">전체</option>
                   <option value="current">올해</option>
                 </select>
               </label>
@@ -222,10 +222,19 @@
             <div class="admin-program-status-list" data-program-status-list>
               <article class="empty-state"><strong>교육 목록을 불러오고 있습니다.</strong></article>
             </div>
-            <div class="admin-program-page-nav" aria-label="교육 관리 목록 페이지 이동">
-              <button type="button" data-program-manage-page-prev>이전</button>
-              <span data-program-manage-page-info>1 / 1</span>
-              <button type="button" data-program-manage-page-next>다음</button>
+            <div class="admin-list-page-footer" aria-label="교육 관리 목록 페이지 이동">
+              <div class="admin-list-page-controls">
+                <button type="button" data-program-manage-page-prev>이전</button>
+                <span data-program-manage-page-info>1 / 1</span>
+                <button type="button" data-program-manage-page-next>다음</button>
+              </div>
+              <label class="admin-page-size-control admin-page-size-control-footer">목록
+                <select data-program-manage-page-size aria-label="교육 관리 목록 줄 수 선택">
+                  <option value="10">10줄보기</option>
+                  <option value="30">30줄보기</option>
+                  <option value="50">50줄보기</option>
+                </select>
+              </label>
             </div>
           </div>
           <div class="admin-program-selected-head">
@@ -334,7 +343,7 @@
     <script src="assets/js/main.js?v=20260529-9"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/supabase-config.js?v=20260528-1"></script>
-    <script src="assets/js/admin-approvals.js?v=20260602-3"></script>
+    <script src="assets/js/admin-approvals.js?v=20260602-4"></script>
     <script src="assets/js/admin-settings.js?v=20260529-6"></script>
   </body>
 </html>

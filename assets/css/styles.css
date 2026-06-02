@@ -10774,8 +10774,8 @@ body.admin-page {
   padding: 0 10px;
   border: 0;
   border-radius: 8px;
-  background: #fff3f0;
-  color: #c23a2b;
+  background: #eef2f7;
+  color: #526177;
   cursor: pointer;
   font-weight: 700;
 }
@@ -10786,13 +10786,13 @@ body.admin-page {
 }
 
 .admin-settings-actions button[data-staff-edit] {
-  color: #31523f;
-  background: #eff7f1;
+  color: #0f4fb8;
+  background: #eef5ff;
 }
 
 .admin-settings-actions button[data-staff-reactivate] {
-  color: #208044;
-  background: #eaf8ef;
+  color: #0f4fb8;
+  background: #eef5ff;
 }
 
 .inquiry-admin-meta span {
@@ -10971,6 +10971,30 @@ body.admin-page {
   background: #eef5ff;
 }
 
+.admin-page .button.primary,
+.admin-page .admin-settings-submit {
+  min-height: 42px;
+  border: 0;
+  border-radius: 8px;
+  color: #fff;
+  background: #0f6fe8;
+  font: inherit;
+  font-weight: 900;
+  box-shadow: none;
+}
+
+.admin-page .button.primary:hover,
+.admin-page .button.primary:focus-visible,
+.admin-page .admin-settings-submit:hover,
+.admin-page .admin-settings-submit:focus-visible {
+  color: #fff;
+  background: #0b5fc8;
+}
+
+.admin-page .button.primary::after {
+  display: none;
+}
+
 .admin-pending-summary {
   display: grid;
   grid-template-columns: repeat(3, minmax(132px, 148px));
@@ -10998,17 +11022,17 @@ body.admin-page {
 }
 
 .admin-pending-program {
-  border-color: rgba(38, 114, 224, 0.18);
+  border-color: rgba(28, 174, 126, 0.2);
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.72) 100%),
-    linear-gradient(135deg, #eef5ff 0%, #f8fbff 100%);
+    linear-gradient(135deg, #eefcf5 0%, #f7fffb 100%);
 }
 
 .admin-pending-inquiry {
-  border-color: rgba(77, 147, 236, 0.2);
+  border-color: rgba(234, 151, 34, 0.24);
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.72) 100%),
-    linear-gradient(135deg, #f0f7ff 0%, #fbfdff 100%);
+    linear-gradient(135deg, #fff7e9 0%, #fffcf5 100%);
 }
 
 .admin-pending-card::after {
@@ -11035,13 +11059,13 @@ body.admin-page {
 }
 
 .admin-pending-program .admin-pending-icon {
-  color: #2672e0;
-  background: rgba(38, 114, 224, 0.16);
+  color: #1cae7e;
+  background: rgba(28, 174, 126, 0.17);
 }
 
 .admin-pending-inquiry .admin-pending-icon {
-  color: #4d93ec;
-  background: rgba(77, 147, 236, 0.17);
+  color: #ef941e;
+  background: rgba(239, 148, 30, 0.18);
 }
 
 .admin-pending-icon svg {
@@ -11367,6 +11391,64 @@ body.admin-page {
   min-width: 48px;
   color: #526177;
   text-align: center;
+}
+
+.admin-list-page-footer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 42px;
+  margin-top: 14px;
+}
+
+.admin-list-page-controls {
+  grid-column: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 42px;
+}
+
+.admin-list-page-controls button {
+  min-height: 36px;
+  padding: 0 12px;
+  border: 1px solid rgba(15, 42, 77, 0.12);
+  border-radius: 8px;
+  color: #24324a;
+  background: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.admin-list-page-controls button:hover:not(:disabled),
+.admin-list-page-controls button:focus-visible:not(:disabled) {
+  color: #0f4fb8;
+  border-color: rgba(15, 111, 232, 0.24);
+  background: #eef5ff;
+}
+
+.admin-list-page-controls button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.admin-list-page-controls span {
+  min-width: 48px;
+  color: #526177;
+  font-size: 13px;
+  font-weight: 900;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.admin-page-size-control-footer {
+  grid-column: 3;
+  justify-self: end;
 }
 
 .admin-approval-table-wrap {
@@ -12074,17 +12156,50 @@ body.admin-page {
   white-space: nowrap;
 }
 
+.admin-status-badge,
 .admin-program-run-state {
   display: inline-flex;
   align-items: center;
   min-height: 28px;
   padding: 0 10px;
   border-radius: 999px;
-  color: #0f4fb8;
-  background: rgba(15, 111, 232, 0.12);
   font-size: 12px;
   font-weight: 900;
   white-space: nowrap;
+}
+
+.admin-status-scheduled,
+.admin-run-upcoming {
+  color: #0f4fb8;
+  background: rgba(15, 111, 232, 0.14);
+}
+
+.admin-status-open,
+.admin-run-ongoing {
+  color: #14784b;
+  background: rgba(33, 188, 120, 0.16);
+}
+
+.admin-status-closed {
+  color: #905d05;
+  background: rgba(255, 159, 36, 0.2);
+}
+
+.admin-status-finished,
+.admin-run-finished {
+  color: #56657a;
+  background: #eef2f7;
+}
+
+.admin-status-hidden {
+  color: #384152;
+  background: #e2e8f0;
+}
+
+.admin-status-unknown,
+.admin-run-unknown {
+  color: #7147b8;
+  background: rgba(166, 93, 232, 0.14);
 }
 
 .admin-program-stats-cell {
@@ -12465,6 +12580,24 @@ body.admin-page {
 }
 
 @media (max-width: 640px) {
+  .admin-list-page-footer {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-list-page-controls,
+  .admin-page-size-control-footer {
+    grid-column: 1;
+    justify-self: stretch;
+  }
+
+  .admin-list-page-controls {
+    justify-content: center;
+  }
+
+  .admin-page-size-control-footer {
+    justify-content: space-between;
+  }
+
   .admin-program-selected-head,
   .admin-program-applicants-head,
   .admin-program-manage-item,

@@ -42,10 +42,11 @@
     programManageForm: dashboard.querySelector("[data-program-manage-form]"),
     programFormReset: dashboard.querySelector("[data-program-form-reset]"),
     programManageStatus: dashboard.querySelector("[data-program-manage-status]"),
-    programManageApplicationStatus: dashboard.querySelector("[data-program-manage-application-status]"),
+    programManageRunStatus: dashboard.querySelector("[data-program-manage-run-status]"),
     programManageTarget: dashboard.querySelector("[data-program-manage-target]"),
     programManageYear: dashboard.querySelector("[data-program-manage-year]"),
     programManageKeyword: dashboard.querySelector("[data-program-manage-keyword]"),
+    programManagePageSize: dashboard.querySelector("[data-program-manage-page-size]"),
     programManagePagePrev: dashboard.querySelector("[data-program-manage-page-prev]"),
     programManagePageNext: dashboard.querySelector("[data-program-manage-page-next]"),
     programManagePageInfo: dashboard.querySelector("[data-program-manage-page-info]"),
@@ -56,7 +57,7 @@
 
   const DEFAULT_PROGRAM_FILTERS = {
     status: "all",
-    applicationStatus: "all",
+    runStatus: "all",
     target: "all",
     yearValue: "all",
     keyword: "",
@@ -154,19 +155,37 @@
   };
 
   const educationStatusClass = (status) => {
-    if (status === "open") return "open";
-    if (status === "scheduled") return "ongoing";
-    return "closed";
+    if (status === "open") return "admin-status-open";
+    if (status === "scheduled") return "admin-status-scheduled";
+    if (status === "closed") return "admin-status-closed";
+    if (status === "finished") return "admin-status-finished";
+    return "admin-status-unknown";
   };
 
-  const educationRunStatusLabel = (program) => {
+  const educationRunStatusValue = (program) => {
     const today = new Date();
     const start = program.start_date ? new Date(`${program.start_date}T00:00:00`) : null;
     const end = program.end_date ? new Date(`${program.end_date}T23:59:59`) : null;
-    if (start && today < start) return "진행예정";
-    if (start && end && today >= start && today <= end) return "진행중";
-    if (end && today > end) return "종료";
+    if (start && today < start) return "upcoming";
+    if (start && end && today >= start && today <= end) return "ongoing";
+    if (end && today > end) return "finished";
+    return "unknown";
+  };
+
+  const educationRunStatusLabel = (program) => {
+    const value = educationRunStatusValue(program);
+    if (value === "upcoming") return "진행예정";
+    if (value === "ongoing") return "진행중";
+    if (value === "finished") return "종료";
     return "일정확인";
+  };
+
+  const educationRunStatusClass = (program) => {
+    const value = educationRunStatusValue(program);
+    if (value === "upcoming") return "admin-run-upcoming";
+    if (value === "ongoing") return "admin-run-ongoing";
+    if (value === "finished") return "admin-run-finished";
+    return "admin-run-unknown";
   };
 
   const formatDateRange = (start, end) => {
@@ -347,7 +366,7 @@
     const currentValue = nodes.programManageYear.value || "all";
     const years = getProgramManageYears();
     nodes.programManageYear.innerHTML = `
-      <option value="all">전체 수업연도</option>
+      <option value="all">전체</option>
       <option value="current">올해</option>
       ${years.map((year) => `<option value="${year}">${year}년</option>`).join("")}
     `;
@@ -358,7 +377,7 @@
 
   const readProgramManageFilters = () => ({
     status: nodes.programManageStatus?.value || DEFAULT_PROGRAM_FILTERS.status,
-    applicationStatus: nodes.programManageApplicationStatus?.value || DEFAULT_PROGRAM_FILTERS.applicationStatus,
+    runStatus: nodes.programManageRunStatus?.value || DEFAULT_PROGRAM_FILTERS.runStatus,
     target: nodes.programManageTarget?.value || DEFAULT_PROGRAM_FILTERS.target,
     yearValue: nodes.programManageYear?.value || DEFAULT_PROGRAM_FILTERS.yearValue,
     keyword: (nodes.programManageKeyword?.value || "").trim().toLowerCase(),
@@ -367,7 +386,7 @@
   const getFilteredProgramCatalog = () => {
     const filters = state.appliedProgramFilters || DEFAULT_PROGRAM_FILTERS;
     const status = filters.status || "all";
-    const applicationStatus = filters.applicationStatus || "all";
+    const runStatus = filters.runStatus || "all";
     const target = filters.target || "all";
     const yearValue = filters.yearValue || "all";
     const keyword = (filters.keyword || "").trim().toLowerCase();
@@ -379,15 +398,11 @@
         const hidden = program.is_active === false;
         const programYear = getProgramManageYear(program);
         const matchesStatus = status === "all" || (!hidden && program.status === status);
-        const matchesApplicationStatus =
-          applicationStatus === "all" ||
-          state.allProgramApplications.some(
-            (application) => String(application.program_id) === String(program.id) && application.status === applicationStatus,
-          );
+        const matchesRunStatus = runStatus === "all" || educationRunStatusValue(program) === runStatus;
         const matchesTarget = target === "all" || program.target === target;
         const matchesYear = yearValue === "all" || programYear === (yearValue === "current" ? currentYear : Number(yearValue));
         const haystack = `${program.title} ${program.summary} ${program.content} ${program.place} ${program.instructor}`.toLowerCase();
-        return matchesStatus && matchesApplicationStatus && matchesTarget && matchesYear && (!keyword || haystack.includes(keyword));
+        return matchesStatus && matchesRunStatus && matchesTarget && matchesYear && (!keyword || haystack.includes(keyword));
       })
       .sort((a, b) => {
         const hiddenDiff = Number(a.is_active === false) - Number(b.is_active === false);
@@ -533,6 +548,7 @@
     if (nodes.programManagePageInfo) nodes.programManagePageInfo.textContent = `${state.programManagePage} / ${totalPages}`;
     if (nodes.programManagePagePrev) nodes.programManagePagePrev.disabled = state.programManagePage <= 1;
     if (nodes.programManagePageNext) nodes.programManagePageNext.disabled = state.programManagePage >= totalPages;
+    if (nodes.programManagePageSize) nodes.programManagePageSize.value = String(state.programManagePageSize);
     if (nodes.programManageResult) {
       nodes.programManageResult.textContent = filteredPrograms.length
         ? `총 ${filteredPrograms.length}개 교육 중 ${visiblePrograms.length}개를 보여드립니다.`
@@ -540,7 +556,7 @@
     }
 
     if (!filteredPrograms.length) {
-      nodes.programStatusList.innerHTML = '<article class="empty-state"><strong>조건에 맞는 교육이 없습니다.</strong><p>모집상태, 접수상태, 대상, 수업연도, 검색어를 다시 확인해주세요.</p></article>';
+      nodes.programStatusList.innerHTML = '<article class="empty-state"><strong>조건에 맞는 교육이 없습니다.</strong><p>모집상태, 수업상태, 대상, 수업연도, 검색어를 다시 확인해주세요.</p></article>';
       return;
     }
 
@@ -551,14 +567,14 @@
         const selected = String(state.selectedProgramId || "") === String(program.id);
         return `
           <tr class="${hidden ? "is-hidden" : ""}${selected ? " is-selected" : ""}">
-            <td><span class="status ${hidden ? "closed" : educationStatusClass(program.status)}">${escapeHtml(hidden ? "숨김" : educationStatusLabel(program.status))}</span></td>
+            <td><span class="admin-status-badge ${hidden ? "admin-status-hidden" : educationStatusClass(program.status)}">${escapeHtml(hidden ? "숨김" : educationStatusLabel(program.status))}</span></td>
             <td class="admin-program-title-cell">
               <button type="button" data-program-manage-select="${escapeHtml(program.id)}" aria-pressed="${selected ? "true" : "false"}">${escapeHtml(program.title)}</button>
               <span>${escapeHtml(displayValue(program.summary || program.content))}</span>
             </td>
             <td>${escapeHtml(formatDateRange(program.apply_start_date, program.apply_end_date))}</td>
             <td>${escapeHtml(formatDateRange(program.start_date, program.end_date))}</td>
-            <td><span class="admin-program-run-state">${escapeHtml(educationRunStatusLabel(program))}</span></td>
+            <td><span class="admin-status-badge ${educationRunStatusClass(program)}">${escapeHtml(educationRunStatusLabel(program))}</span></td>
             <td>${escapeHtml(program.capacity)}</td>
             <td class="admin-program-stats-cell">
               <div class="admin-program-stats-row">
@@ -1069,6 +1085,14 @@
       state.programPageSize = PAGE_SIZE_OPTIONS.includes(nextPageSize) ? nextPageSize : 10;
       state.programPage = 1;
       renderAll();
+      return;
+    }
+
+    if (target instanceof HTMLSelectElement && target.matches("[data-program-manage-page-size]")) {
+      const nextPageSize = Number(target.value);
+      state.programManagePageSize = PAGE_SIZE_OPTIONS.includes(nextPageSize) ? nextPageSize : 10;
+      state.programManagePage = 1;
+      renderProgramManagement();
       return;
     }
 
