@@ -7935,7 +7935,7 @@ body.admin-page {
   font-size: 22px;
   font-weight: 700;
   text-decoration: none;
-  transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .map-buttons a.is-primary {
@@ -7948,6 +7948,8 @@ body.admin-page {
   color: #fff;
   border-color: var(--forest);
   background: var(--forest);
+  box-shadow: 0 14px 28px rgba(31, 90, 67, 0.22);
+  transform: translateY(-4px);
 }
 
 .map-buttons span {
