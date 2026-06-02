@@ -10827,8 +10827,8 @@ body.admin-page {
 
 .admin-settings-actions button:hover,
 .admin-settings-actions button:focus-visible {
-  color: #0f4fb8;
-  background: #dbeafe;
+  color: #fff;
+  background: #0b5fc8;
 }
 
 .inquiry-admin-meta span {
@@ -11012,8 +11012,8 @@ body.admin-page {
 
 .admin-refresh-button:hover,
 .admin-refresh-button:focus-visible {
-  color: #0f4fb8;
-  background: #dbeafe;
+  color: #fff;
+  background: #0b5fc8;
 }
 
 .admin-page .button.primary,
@@ -11046,8 +11046,19 @@ body.admin-page {
 .admin-page .button.primary:focus-visible,
 .admin-page .admin-settings-submit:hover,
 .admin-page .admin-settings-submit:focus-visible {
-  color: #0f4fb8;
-  background: #dbeafe;
+  color: #fff;
+  background: #0b5fc8;
+}
+
+.admin-refresh-button:focus-visible,
+.admin-bulk-toolbar button:focus-visible,
+.admin-program-filter-action button:focus-visible,
+.admin-approval-actions button:focus-visible,
+.admin-settings-actions button:focus-visible,
+.admin-page .button.primary:focus-visible,
+.admin-page .admin-settings-submit:focus-visible {
+  outline: 3px solid rgba(15, 111, 232, 0.24);
+  outline-offset: 2px;
 }
 
 .admin-page .button.primary::after {
@@ -11301,8 +11312,8 @@ body.admin-page {
 
 .admin-approval-list-title {
   margin: 0;
-  color: #17243a;
-  font-size: 24px;
+  color: #0d2f5c;
+  font-size: 25px;
   line-height: 1.25;
   font-weight: 900;
   white-space: nowrap;
@@ -11609,9 +11620,9 @@ body.admin-page {
 }
 
 .admin-approval-table th {
-  color: #526177;
-  background: #f6f9fc;
-  font-size: 14px;
+  color: #0d2f5c;
+  background: #eef5ff;
+  font-size: 15px;
   font-weight: 900;
 }
 
@@ -12126,14 +12137,14 @@ body.admin-page {
 .admin-bulk-toolbar button:focus-visible:not(:disabled),
 .admin-approval-actions button:hover:not(:disabled),
 .admin-approval-actions button:focus-visible:not(:disabled) {
-  color: #0f4fb8;
-  background: #dbeafe;
+  color: #fff;
+  background: #0b5fc8;
 }
 
 .admin-approval-actions button:last-child:hover:not(:disabled),
 .admin-approval-actions button:last-child:focus-visible:not(:disabled) {
-  color: #0f4fb8;
-  background: #dbeafe;
+  color: #fff;
+  background: #0b5fc8;
 }
 
 .admin-program-page-nav {
@@ -12239,9 +12250,9 @@ body.admin-page {
 }
 
 .admin-program-list-table th {
-  color: #526177;
-  background: #f5f9f7;
-  font-size: 14px;
+  color: #0d2f5c;
+  background: #eef5ff;
+  font-size: 15px;
   font-weight: 900;
   white-space: nowrap;
 }
@@ -12479,6 +12490,12 @@ body.admin-page {
   font-size: 14px;
   line-height: 1.5;
   font-weight: 700;
+}
+
+.admin-program-selected-head .admin-refresh-button {
+  min-width: 132px;
+  color: #fff;
+  background: #0f6fe8;
 }
 
 .admin-program-form {
