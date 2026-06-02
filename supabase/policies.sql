@@ -201,11 +201,27 @@ drop policy if exists "Members can create village posts" on public.posts;
 drop policy if exists "Members can update own village posts" on public.posts;
 drop policy if exists "Admins can manage posts" on public.posts;
 drop policy if exists "Board admins can manage posts" on public.posts;
-create policy "Board admins can manage posts"
+drop policy if exists "Board admins can read posts" on public.posts;
+drop policy if exists "Board admins can create posts" on public.posts;
+drop policy if exists "Board admins can update posts" on public.posts;
+drop policy if exists "Super admins can delete posts" on public.posts;
+create policy "Board admins can read posts"
 on public.posts
-for all
+for select
+using (public.can_manage_board());
+create policy "Board admins can create posts"
+on public.posts
+for insert
+with check (public.can_manage_board());
+create policy "Board admins can update posts"
+on public.posts
+for update
 using (public.can_manage_board())
 with check (public.can_manage_board());
+create policy "Super admins can delete posts"
+on public.posts
+for delete
+using (public.is_super_admin());
 
 -- attachments
 drop policy if exists "Anyone can read attachments" on public.attachments;
@@ -217,11 +233,22 @@ using (true);
 drop policy if exists "Authenticated users can upload attachments" on public.attachments;
 drop policy if exists "Admins can manage attachments" on public.attachments;
 drop policy if exists "Board admins can manage attachments" on public.attachments;
-create policy "Board admins can manage attachments"
+drop policy if exists "Board admins can create attachments" on public.attachments;
+drop policy if exists "Board admins can update attachments" on public.attachments;
+drop policy if exists "Super admins can delete attachments" on public.attachments;
+create policy "Board admins can create attachments"
 on public.attachments
-for all
+for insert
+with check (public.can_manage_board());
+create policy "Board admins can update attachments"
+on public.attachments
+for update
 using (public.can_manage_board())
 with check (public.can_manage_board());
+create policy "Super admins can delete attachments"
+on public.attachments
+for delete
+using (public.is_super_admin());
 
 -- galleries
 drop policy if exists "Anyone can read public galleries" on public.galleries;
@@ -234,11 +261,27 @@ drop policy if exists "Members can create galleries" on public.galleries;
 drop policy if exists "Members can update own galleries" on public.galleries;
 drop policy if exists "Admins can manage galleries" on public.galleries;
 drop policy if exists "Board admins can manage galleries" on public.galleries;
-create policy "Board admins can manage galleries"
+drop policy if exists "Board admins can read galleries" on public.galleries;
+drop policy if exists "Board admins can create galleries" on public.galleries;
+drop policy if exists "Board admins can update galleries" on public.galleries;
+drop policy if exists "Super admins can delete galleries" on public.galleries;
+create policy "Board admins can read galleries"
 on public.galleries
-for all
+for select
+using (public.can_manage_board());
+create policy "Board admins can create galleries"
+on public.galleries
+for insert
+with check (public.can_manage_board());
+create policy "Board admins can update galleries"
+on public.galleries
+for update
 using (public.can_manage_board())
 with check (public.can_manage_board());
+create policy "Super admins can delete galleries"
+on public.galleries
+for delete
+using (public.is_super_admin());
 
 -- gallery images
 drop policy if exists "Anyone can read public gallery images" on public.gallery_images;
@@ -257,11 +300,27 @@ using (
 drop policy if exists "Members can create gallery images" on public.gallery_images;
 drop policy if exists "Admins can manage gallery images" on public.gallery_images;
 drop policy if exists "Board admins can manage gallery images" on public.gallery_images;
-create policy "Board admins can manage gallery images"
+drop policy if exists "Board admins can create gallery images" on public.gallery_images;
+drop policy if exists "Board admins can read gallery images" on public.gallery_images;
+drop policy if exists "Board admins can update gallery images" on public.gallery_images;
+drop policy if exists "Super admins can delete gallery images" on public.gallery_images;
+create policy "Board admins can read gallery images"
 on public.gallery_images
-for all
+for select
+using (public.can_manage_board());
+create policy "Board admins can create gallery images"
+on public.gallery_images
+for insert
+with check (public.can_manage_board());
+create policy "Board admins can update gallery images"
+on public.gallery_images
+for update
 using (public.can_manage_board())
 with check (public.can_manage_board());
+create policy "Super admins can delete gallery images"
+on public.gallery_images
+for delete
+using (public.is_super_admin());
 
 -- admin logs
 drop policy if exists "Admins can read admin logs" on public.admin_logs;

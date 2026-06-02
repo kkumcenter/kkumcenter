@@ -10145,7 +10145,7 @@ body.admin-page {
 
 .board-table-no-file th[data-board-action-head],
 .board-table-no-file td.board-admin-actions-cell {
-  width: 108px;
+  width: 176px;
   padding-right: 8px;
   padding-left: 8px;
 }
@@ -10578,6 +10578,11 @@ body.admin-page {
 .board-admin-actions .board-restore-button {
   background: #eaf8ef;
   color: #24733f;
+}
+
+.board-admin-actions .board-delete-button {
+  background: #ffe7e3;
+  color: #b42318;
 }
 
 .board-status-chip {

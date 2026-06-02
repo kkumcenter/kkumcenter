@@ -216,6 +216,9 @@
   const canManageBoard = (profile) =>
     profile?.role === "admin" && ["super_admin", "board_admin"].includes(profile.admin_role);
 
+  const canDeleteBoard = (profile) =>
+    profile?.role === "admin" && profile.admin_role === "super_admin";
+
   const fetchItems = async (canManage) => {
     if (!client) return staticItems;
 
@@ -291,7 +294,9 @@
           <a href="${escapeHtml(boardWriteUrl(item.id))}">수정</a>
           ${
             item.status === "hidden"
-              ? `<button class="board-restore-button" type="button" data-board-restore="${escapeHtml(item.id)}">복구</button>`
+              ? `<button class="board-restore-button" type="button" data-board-restore="${escapeHtml(item.id)}">복구</button>${
+                  canDeleteBoard(currentProfile) ? `<button class="board-delete-button" type="button" data-board-delete="${escapeHtml(item.id)}">완전삭제</button>` : ""
+                }`
               : `<button type="button" data-board-hide="${escapeHtml(item.id)}">숨김</button>`
           }
         </div>`
@@ -444,6 +449,21 @@
     if (error) throw error;
   };
 
+  const deleteItem = async (id) => {
+    if (!client || String(id).startsWith("static-")) throw new Error("저장된 게시글만 완전삭제할 수 있습니다.");
+    const item = currentItems.find((entry) => String(entry.id) === String(id));
+    if (!canDeleteBoard(currentProfile)) throw new Error("관리자만 완전삭제할 수 있습니다.");
+    if (!item || item.status !== "hidden") throw new Error("숨김 처리된 글만 완전삭제할 수 있습니다.");
+
+    const { error } = await client.from(tableName).delete().eq("id", id).eq("status", "hidden");
+    if (error) throw error;
+
+    if (boardKind !== "gallery") {
+      const { error: attachmentError } = await client.from("attachments").delete().eq("target_type", "post").eq("target_id", id);
+      if (attachmentError) throw attachmentError;
+    }
+  };
+
   const reload = async () => {
     const canManage = canManageBoard(currentProfile);
     currentItems = await fetchItems(canManage);
@@ -509,6 +529,30 @@
           window.alert(error.message || "복구 중 문제가 발생했습니다.");
         } finally {
           restoreTarget.removeAttribute("disabled");
+        }
+      }
+      return;
+    }
+
+    const deleteTarget = target.closest("[data-board-delete]");
+    if (deleteTarget instanceof HTMLElement) {
+      const deleteId = deleteTarget.dataset.boardDelete;
+      const item = currentItems.find((entry) => String(entry.id) === String(deleteId));
+      if (
+        deleteId &&
+        item &&
+        window.confirm("완전삭제하면 복구할 수 없습니다. 삭제할까요?") &&
+        window.confirm(`"${item.title}" 글을 정말 완전삭제할까요?`)
+      ) {
+        deleteTarget.setAttribute("disabled", "true");
+        try {
+          await deleteItem(deleteId);
+          if (selectedItemId === deleteId) selectedItemId = null;
+          await reload();
+        } catch (error) {
+          window.alert(error.message || "완전삭제 중 문제가 발생했습니다.");
+        } finally {
+          deleteTarget.removeAttribute("disabled");
         }
       }
       return;
