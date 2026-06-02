@@ -15,6 +15,14 @@
   const TABLE_COLSPAN = 6;
   const PAGE_SIZE_OPTIONS = [10, 30, 50];
   const APPLICANT_PAGE_SIZE_OPTIONS = [10, 30];
+  const PROGRAM_PLACE_OPTIONS = [
+    "1층 공유주방",
+    "1층 대회의실",
+    "2층 강의실",
+    "2층 소회의실",
+    "2층 청소년활동실",
+    "2층 미디어스튜디오",
+  ];
 
   const nodes = {
     role: dashboard.querySelector("[data-admin-approval-role]"),
@@ -1117,6 +1125,21 @@
     }
   };
 
+  const syncProgramPlaceOptions = (form, value = "") => {
+    const select = form?.elements.place;
+    if (!(select instanceof HTMLSelectElement)) return;
+    select.querySelectorAll("option[data-legacy-place]").forEach((option) => option.remove());
+    const text = String(value || "").trim();
+    if (text && !PROGRAM_PLACE_OPTIONS.includes(text)) {
+      const option = document.createElement("option");
+      option.value = text;
+      option.textContent = `현재 저장된 장소: ${text}`;
+      option.dataset.legacyPlace = "true";
+      select.appendChild(option);
+    }
+    select.value = text;
+  };
+
   const resetProgramForm = (options = {}) => {
     if (!nodes.programManageForm) return;
     state.selectedProgramId = null;
@@ -1127,6 +1150,7 @@
     if (nodes.programManageForm.elements.imageFile) nodes.programManageForm.elements.imageFile.value = "";
     if (nodes.programManageForm.elements.visibility) nodes.programManageForm.elements.visibility.value = "private";
     if (nodes.programManageForm.elements.operationStatus) nodes.programManageForm.elements.operationStatus.value = "normal";
+    syncProgramPlaceOptions(nodes.programManageForm, "");
     syncProgramCancelReason(nodes.programManageForm);
     renderProgramImagePreview(nodes.programManageForm, "");
     setFormStatus(nodes.programManageForm, "");
@@ -1155,7 +1179,7 @@
     form.elements.applyEndDate.value = item.apply_end_date || "";
     form.elements.startDate.value = item.start_date || "";
     form.elements.endDate.value = item.end_date || "";
-    form.elements.place.value = item.place || "";
+    syncProgramPlaceOptions(form, item.place || "");
     form.elements.instructor.value = item.instructor || "";
     if (form.elements.instructorPhone) form.elements.instructorPhone.value = item.instructor_phone || "";
     form.elements.imageUrl.value = item.image_url || "";

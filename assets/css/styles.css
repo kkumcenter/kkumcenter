@@ -12875,10 +12875,6 @@ body.admin-page {
   background: #0f6fe8;
 }
 
-.admin-program-place {
-  grid-column: span 2;
-}
-
 .admin-program-content {
   grid-column: 1 / -1;
 }
