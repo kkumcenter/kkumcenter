@@ -11230,6 +11230,12 @@ body.admin-page {
   white-space: nowrap;
 }
 
+.admin-pending-copy > .admin-pending-email {
+  color: #344154;
+  font-size: 13.5px;
+  font-weight: 700;
+}
+
 .admin-pending-status {
   color: #344154;
   font-size: 13px;
