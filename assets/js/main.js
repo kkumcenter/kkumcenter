@@ -28,6 +28,7 @@ const allMenuItems = [
     links: [
       ["교육신청", "programs.html"],
       ["신청확인", "program-check.html"],
+      ["지난 교육", "program-archive.html"],
     ],
   },
   {
@@ -92,6 +93,16 @@ const createAllMenuPanel = () => {
     </div>
   `;
   return panel;
+};
+
+const addAllMenuAdminLink = () => {
+  const allMenuList = document.querySelector(".all-menu-list");
+  if (!allMenuList || allMenuList.querySelector("[data-all-menu-admin-link]")) return;
+
+  const adminRow = document.createElement("section");
+  adminRow.className = "all-menu-row all-menu-admin-row";
+  adminRow.innerHTML = '<a class="all-menu-title" href="admin.html" data-all-menu-admin-link>관리자</a>';
+  allMenuList.appendChild(adminRow);
 };
 
 const setupAllMenu = () => {
@@ -476,6 +487,8 @@ const setupSuperAdminHeaderLink = async () => {
         primaryNav.appendChild(group);
       }
     }
+
+    addAllMenuAdminLink();
   } catch (error) {
     console.warn("Admin header link skipped:", error);
   }
