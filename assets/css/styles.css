@@ -10659,15 +10659,19 @@ body.admin-page {
   grid-column: span 1;
 }
 
+.admin-settings-active {
+  grid-column: span 1;
+}
+
 .admin-settings-form .form-status {
-  grid-column: 1 / -1;
+  grid-column: 1 / 4;
   grid-row: 3;
   min-height: 22px;
 }
 
 .admin-settings-form button[type="submit"] {
   grid-column: 4;
-  grid-row: 2;
+  grid-row: 3;
   justify-self: stretch;
   min-height: 38px;
 }
@@ -10807,7 +10811,7 @@ body.admin-page {
 
 .admin-settings-table {
   width: 100%;
-  min-width: 1020px;
+  min-width: 860px;
   border-collapse: collapse;
   table-layout: fixed;
 }
@@ -10846,6 +10850,15 @@ body.admin-page {
   background: #f8fbff;
 }
 
+.admin-settings-table tr.is-selected td {
+  background: #eef5ff;
+  box-shadow: inset 0 1px 0 rgba(15, 111, 232, 0.14), inset 0 -1px 0 rgba(15, 111, 232, 0.14);
+}
+
+.admin-settings-table tr.is-selected td:first-child {
+  box-shadow: inset 3px 0 0 #0f6fe8, inset 0 1px 0 rgba(15, 111, 232, 0.14), inset 0 -1px 0 rgba(15, 111, 232, 0.14);
+}
+
 .admin-settings-table tr.is-inactive td {
   color: #667085;
   background: #f7f9fc;
@@ -10860,15 +10873,15 @@ body.admin-page {
 }
 
 .admin-settings-col-display {
-  width: 120px;
+  width: 150px;
 }
 
 .admin-settings-col-name {
-  width: 100px;
+  width: 120px;
 }
 
 .admin-settings-col-email {
-  width: 190px;
+  width: 240px;
 }
 
 .admin-settings-col-birth {
@@ -10879,22 +10892,35 @@ body.admin-page {
   width: 76px;
 }
 
-.admin-settings-col-actions {
-  width: 320px;
-}
-
 .admin-settings-text-strong {
   color: #17243a;
   font-weight: 900;
 }
 
-.admin-settings-email-cell {
-  color: #526177;
+.admin-settings-name-cell button {
+  display: inline-block;
+  max-width: 100%;
+  padding: 0;
+  border: 0;
+  color: #17243a;
+  background: transparent;
+  font: inherit;
+  font-weight: 900;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
 }
 
-.admin-settings-actions-cell {
-  overflow: visible;
-  white-space: normal;
+.admin-settings-name-cell button:hover,
+.admin-settings-name-cell button:focus-visible {
+  color: #0f6fe8;
+  text-decoration: underline;
+}
+
+.admin-settings-email-cell {
+  color: #526177;
 }
 
 .admin-staff-active,
@@ -10955,61 +10981,8 @@ body.admin-page {
   font-weight: 700;
 }
 
-.admin-settings-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 8px;
-}
-
-.admin-settings-actions select {
-  min-height: 38px;
-  border: 1px solid rgba(15, 42, 77, 0.16);
-  border-radius: 8px;
-  padding: 0 10px;
-  background: #f9fbfe;
-  color: #24324a;
-  font: inherit;
-  font-size: 14px;
-  font-weight: 800;
-}
-
-.admin-settings-actions button {
-  min-height: 38px;
-  padding: 0 10px;
-  border: 0;
-  border-radius: 8px;
-  background: #073d92;
-  color: #fff;
-  cursor: pointer;
-  font-weight: 900;
-  transition: background 0.2s ease, color 0.2s ease;
-}
-
 .admin-settings-section .admin-settings-form {
   padding: 0;
-}
-
-.admin-settings-actions button[data-staff-role-update] {
-  color: #fff;
-  background: #073d92;
-}
-
-.admin-settings-actions button[data-staff-edit] {
-  color: #fff;
-  background: #073d92;
-}
-
-.admin-settings-actions button[data-staff-reactivate] {
-  color: #fff;
-  background: #073d92;
-}
-
-.admin-settings-actions button:hover,
-.admin-settings-actions button:focus-visible {
-  color: #fff;
-  background: #0f6fe8;
 }
 
 .inquiry-admin-meta span {
@@ -11047,6 +11020,7 @@ body.admin-page {
 
   .admin-settings-display-name,
   .admin-settings-role,
+  .admin-settings-active,
   .admin-settings-form button[type="submit"],
   .admin-settings-form .form-status {
     grid-column: auto;
@@ -11076,6 +11050,7 @@ body.admin-page {
 
   .admin-settings-display-name,
   .admin-settings-role,
+  .admin-settings-active,
   .admin-settings-form button[type="submit"],
   .admin-settings-form .form-status {
     grid-column: 1;
@@ -11090,9 +11065,6 @@ body.admin-page {
     padding: 22px 18px 24px;
   }
 
-  .admin-settings-actions {
-    justify-content: flex-start;
-  }
 }
 
 .nav-admin-page-link {
@@ -11247,7 +11219,6 @@ body.admin-page {
 .admin-bulk-toolbar button:focus-visible,
 .admin-program-filter-action button:focus-visible,
 .admin-approval-actions button:focus-visible,
-.admin-settings-actions button:focus-visible,
 .admin-page .button.primary:focus-visible,
 .admin-page .admin-settings-submit:focus-visible {
   outline: 3px solid rgba(15, 111, 232, 0.24);

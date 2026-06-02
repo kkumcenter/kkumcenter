@@ -3,6 +3,8 @@
   const form = document.querySelector("[data-admin-register-form]");
   const list = document.querySelector("[data-admin-allowlist]");
   const roleLabel = document.querySelector("[data-admin-settings-role]");
+  let staffItems = [];
+  let selectedStaffEmail = "";
 
   const getClient = () => {
     if (!window.supabase || !config.url || !config.anonKey) return null;
@@ -35,6 +37,7 @@
   const activeName = (value) => (value ? "활성" : "제외");
   const activeClass = (value) => (value ? "admin-staff-active" : "admin-staff-inactive");
   const roleClass = (value) => (value === "super_admin" ? "admin-staff-role-admin" : "admin-staff-role-staff");
+  const boolFormValue = (value) => (value === false || value === "false" ? "false" : "true");
 
   const setStatus = (message, isError = false) => {
     const status = form?.querySelector("[data-form-status]");
@@ -84,7 +87,6 @@
             <col class="admin-settings-col-email">
             <col class="admin-settings-col-birth">
             <col class="admin-settings-col-gender">
-            <col class="admin-settings-col-actions">
           </colgroup>
           <thead>
             <tr>
@@ -95,46 +97,40 @@
               <th>이메일</th>
               <th>생년월일</th>
               <th>성별</th>
-              <th>관리</th>
             </tr>
           </thead>
           <tbody>
             ${items
               .map(
-                (item) => `
+                (item) => {
+                  const email = String(item.email || "");
+                  const isSelected = email.toLowerCase() === selectedStaffEmail.toLowerCase();
+                  const rowClasses = [item.isActive ? "" : "is-inactive", isSelected ? "is-selected" : ""].filter(Boolean).join(" ");
+                  return `
                   <tr
-                    class="${item.isActive ? "" : "is-inactive"}"
-                    data-staff-email="${escapeHtml(item.email)}"
+                    class="${rowClasses}"
+                    data-staff-email="${escapeHtml(email)}"
                     data-staff-name="${escapeHtml(item.fullName || "")}"
                     data-staff-display-name="${escapeHtml(item.displayName || item.fullName || "")}"
                     data-staff-birth-date="${escapeHtml(item.birthDate || "")}"
                     data-staff-gender="${escapeHtml(genderFormValue(item.gender))}"
                     data-staff-role="${escapeHtml(item.adminRole || "board_admin")}"
+                    data-staff-active="${escapeHtml(boolFormValue(item.isActive))}"
                   >
                     <td><span class="admin-status-badge ${activeClass(item.isActive)}">${escapeHtml(activeName(item.isActive))}</span></td>
                     <td><span class="admin-status-badge ${roleClass(item.adminRole)}">${escapeHtml(roleName(item.adminRole))}</span></td>
-                    <td class="admin-settings-text-strong">${escapeHtml(item.displayName || item.fullName || "표시명 미입력")}</td>
-                    <td>${escapeHtml(item.fullName || "-")}</td>
-                    <td class="admin-settings-email-cell" title="${escapeHtml(item.email)}">${escapeHtml(item.email)}</td>
+                    <td class="admin-settings-text-strong admin-settings-name-cell">
+                      <button type="button" data-staff-edit title="${escapeHtml(item.displayName || item.fullName || "표시명 미입력")}">${escapeHtml(item.displayName || item.fullName || "표시명 미입력")}</button>
+                    </td>
+                    <td class="admin-settings-name-cell">
+                      <button type="button" data-staff-edit title="${escapeHtml(item.fullName || "-")}">${escapeHtml(item.fullName || "-")}</button>
+                    </td>
+                    <td class="admin-settings-email-cell" title="${escapeHtml(email)}">${escapeHtml(email)}</td>
                     <td>${escapeHtml(item.birthDate || "-")}</td>
                     <td>${escapeHtml(genderName(item.gender))}</td>
-                    <td class="admin-settings-actions-cell">
-                      <div class="admin-settings-actions">
-                        <button type="button" data-staff-edit>정보 수정</button>
-                        <select aria-label="${escapeHtml(item.email)} 권한 변경" data-staff-role-select>
-                          <option value="super_admin"${item.adminRole === "super_admin" ? " selected" : ""}>관리자</option>
-                          <option value="board_admin"${item.adminRole === "board_admin" ? " selected" : ""}>스텝</option>
-                        </select>
-                        <button type="button" data-staff-role-update>권한 변경</button>
-                        ${
-                          item.isActive
-                            ? `<button type="button" data-staff-deactivate>제외</button>`
-                            : `<button type="button" data-staff-reactivate>복구</button>`
-                        }
-                      </div>
-                    </td>
                   </tr>
-                `,
+                `;
+                },
               )
               .join("")}
           </tbody>
@@ -174,7 +170,8 @@
 
     const loadStaff = async () => {
       const result = await callStaffAction(session, "staff-list");
-      renderList(result.items || []);
+      staffItems = result.items || [];
+      renderList(staffItems);
     };
 
     await loadStaff();
@@ -188,45 +185,20 @@
       const email = item.dataset.staffEmail;
       if (!email) return;
 
-      const roleSelect = item.querySelector("[data-staff-role-select]");
-      const selectedRole = roleSelect instanceof HTMLSelectElement ? roleSelect.value : "";
-      const actionButton = target.closest("button");
-      if (!(actionButton instanceof HTMLButtonElement)) return;
+      if (!target.closest("[data-staff-edit]")) return;
 
-      if (actionButton.matches("[data-staff-edit]")) {
-        form.elements.fullName.value = item.dataset.staffName || "";
-        form.elements.displayName.value = item.dataset.staffDisplayName || "";
-        form.elements.birthDate.value = item.dataset.staffBirthDate || "";
-        form.elements.gender.value = genderFormValue(item.dataset.staffGender);
-        form.elements.email.value = email;
-        form.elements.adminRole.value = item.dataset.staffRole || selectedRole || "board_admin";
-        setStatus("수정할 내용을 확인한 뒤 등록 / 수정을 눌러주세요.");
-        form.scrollIntoView({ behavior: "smooth", block: "start" });
-        form.elements.fullName.focus();
-        return;
-      }
-
-      actionButton.disabled = true;
-      try {
-        if (actionButton.matches("[data-staff-role-update]")) {
-          await callStaffAction(session, "staff-role-update", { email, adminRole: selectedRole });
-          setStatus("권한이 변경되었습니다.");
-        } else if (actionButton.matches("[data-staff-deactivate]")) {
-          if (!window.confirm(`${email} 계정을 제외할까요?`)) return;
-          await callStaffAction(session, "staff-deactivate", { email });
-          setStatus("관리자·스텝이 제외되었습니다.");
-        } else if (actionButton.matches("[data-staff-reactivate]")) {
-          await callStaffAction(session, "staff-reactivate", { email });
-          setStatus("관리자·스텝이 복구되었습니다.");
-        } else {
-          return;
-        }
-        await loadStaff();
-      } catch (error) {
-        setStatus(error.message || "관리자·스텝 처리 중 문제가 발생했습니다.", true);
-      } finally {
-        actionButton.disabled = false;
-      }
+      selectedStaffEmail = email;
+      renderList(staffItems);
+      form.elements.fullName.value = item.dataset.staffName || "";
+      form.elements.displayName.value = item.dataset.staffDisplayName || "";
+      form.elements.birthDate.value = item.dataset.staffBirthDate || "";
+      form.elements.gender.value = genderFormValue(item.dataset.staffGender);
+      form.elements.email.value = email;
+      form.elements.adminRole.value = item.dataset.staffRole || "board_admin";
+      if (form.elements.isActive) form.elements.isActive.value = boolFormValue(item.dataset.staffActive);
+      setStatus(`수정 중: ${email}`);
+      form.scrollIntoView({ behavior: "smooth", block: "start" });
+      form.elements.fullName.focus();
     });
 
     form.addEventListener("submit", async (event) => {
@@ -239,6 +211,7 @@
         gender: form.elements.gender.value,
         email: form.elements.email.value.trim(),
         adminRole: form.elements.adminRole.value,
+        isActive: form.elements.isActive ? form.elements.isActive.value === "true" : true,
       };
 
       if (!payload.fullName || !payload.displayName || !payload.birthDate || !payload.gender || !payload.email) {
@@ -251,7 +224,9 @@
       try {
         const result = await callStaffAction(session, "staff-save", payload);
         setStatus(result.warning ? `저장은 완료되었지만 초대 메일 발송 확인이 필요합니다: ${result.warning}` : "관리자·스텝 정보가 저장되었습니다.");
+        selectedStaffEmail = "";
         form.reset();
+        if (form.elements.isActive) form.elements.isActive.value = "true";
         await loadStaff();
       } catch (error) {
         setStatus(error.message || "관리자·스텝 저장 중 문제가 발생했습니다.", true);

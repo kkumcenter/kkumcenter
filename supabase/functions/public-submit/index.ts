@@ -793,16 +793,17 @@ Deno.serve(async (request) => {
       const birthDate = action === "admin-register" && !data.birthDate ? null : requireBirthDate(data);
       const gender = action === "admin-register" && !data.gender ? "undisclosed" : requireStaffGender(data);
       const adminRole = action === "admin-register" && !data.adminRole ? "board_admin" : requireAdminRole(data);
+      const isActive = data.isActive !== false && data.isActive !== "false";
 
       const existingStaff = await findStaffByEmail(supabase, email);
       if (
         existingStaff?.admin_role === "super_admin" &&
-        adminRole !== "super_admin" &&
+        (adminRole !== "super_admin" || !isActive) &&
         String(existingStaff.email).toLowerCase() === String(admin.email || "").toLowerCase()
       ) {
-        throw new Error("현재 로그인한 관리자의 권한은 직접 낮출 수 없습니다.");
+        throw new Error("현재 로그인한 관리자의 권한이나 상태는 직접 낮출 수 없습니다.");
       }
-      if (existingStaff?.admin_role === "super_admin" && adminRole !== "super_admin") {
+      if (existingStaff?.admin_role === "super_admin" && (adminRole !== "super_admin" || !isActive)) {
         await ensureAnotherActiveAdmin(supabase, email);
       }
 
@@ -813,8 +814,8 @@ Deno.serve(async (request) => {
         birth_date: birthDate,
         gender,
         admin_role: adminRole,
-        is_active: true,
-        deactivated_at: null,
+        is_active: isActive,
+        deactivated_at: isActive ? null : new Date().toISOString(),
         updated_by: admin.id,
       };
 
@@ -835,7 +836,7 @@ Deno.serve(async (request) => {
         displayName,
         birthDate,
         adminRole,
-        isActive: true,
+        isActive,
       });
 
       return json({ ok: true, email, adminRole, ...syncResult });
