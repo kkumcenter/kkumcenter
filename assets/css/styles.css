@@ -11639,16 +11639,18 @@ body.admin-page {
 
 .admin-approval-table th,
 .admin-approval-table td {
-  padding: 16px 13px;
+  padding: 15px 11px;
   border-bottom: 1px solid rgba(15, 42, 77, 0.08);
   text-align: left;
   vertical-align: middle;
 }
 
-.admin-approval-table th {
-  color: #0d2f5c;
-  background: #eef5ff;
+.admin-approval-table th,
+.admin-program-list-table th {
+  color: #fff;
+  background: #073d92;
   font-size: 15px;
+  line-height: 1.35;
   font-weight: 900;
 }
 
@@ -12292,10 +12294,6 @@ body.admin-page {
 }
 
 .admin-program-list-table th {
-  color: #0d2f5c;
-  background: #eef5ff;
-  font-size: 15px;
-  font-weight: 900;
   white-space: nowrap;
 }
 
