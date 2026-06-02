@@ -290,7 +290,7 @@
     title: item.title,
     summary: item.summary || "",
     content: item.content || "",
-    imageUrl: item.image_url || "assets/images/program-workshop.png",
+    imageUrl: item.image_url || "assets/images/program-default.png",
     place: item.place || "-",
     instructor: item.instructor || "",
     target: item.target || "전체",
