@@ -10652,7 +10652,7 @@ body.admin-page {
   grid-column: 4;
   grid-row: 2;
   justify-self: stretch;
-  min-height: 50px;
+  min-height: 38px;
 }
 
 .board-editor-head,
@@ -10715,12 +10715,12 @@ body.admin-page {
 
 .admin-settings-form input,
 .admin-settings-form select {
-  min-height: 46px;
+  min-height: 38px;
   padding: 0 13px;
   background: #f9fbfe;
   color: #24324a;
-  font-size: 15px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 800;
 }
 
 .admin-settings-grid {
@@ -10828,7 +10828,7 @@ body.admin-page {
 .admin-settings-actions button:hover,
 .admin-settings-actions button:focus-visible {
   color: #fff;
-  background: #0b5fc8;
+  background: #073d92;
 }
 
 .inquiry-admin-meta span {
@@ -11010,10 +11010,18 @@ body.admin-page {
   background: #eef5ff;
 }
 
+.admin-approval-session a:hover,
+.admin-approval-session a:focus-visible,
+.admin-pending-item a:hover,
+.admin-pending-item a:focus-visible {
+  color: #fff;
+  background: #073d92;
+}
+
 .admin-refresh-button:hover,
 .admin-refresh-button:focus-visible {
   color: #fff;
-  background: #0b5fc8;
+  background: #073d92;
 }
 
 .admin-page .button.primary,
@@ -11047,7 +11055,7 @@ body.admin-page {
 .admin-page .admin-settings-submit:hover,
 .admin-page .admin-settings-submit:focus-visible {
   color: #fff;
-  background: #0b5fc8;
+  background: #073d92;
 }
 
 .admin-refresh-button:focus-visible,
@@ -11201,9 +11209,14 @@ body.admin-page {
   font-weight: 900;
 }
 
+.admin-pending-count:hover,
+.admin-pending-count:focus-visible {
+  color: #073d92;
+}
+
 .admin-pending-count:hover strong,
 .admin-pending-count:focus-visible strong {
-  color: #0f6fe8;
+  color: #073d92;
   text-decoration: underline;
   text-decoration-thickness: 2px;
   text-underline-offset: 5px;
@@ -11296,6 +11309,12 @@ body.admin-page {
 .admin-tab-list button.is-active {
   color: #0f6fe8;
   border-bottom-color: #0f6fe8;
+}
+
+.admin-tab-list button:hover,
+.admin-tab-list button:focus-visible {
+  color: #073d92;
+  border-bottom-color: #073d92;
 }
 
 .admin-tab-panel[hidden] {
@@ -11506,6 +11525,13 @@ body.admin-page {
   background: #fff;
 }
 
+.admin-page-nav button:hover:not(:disabled),
+.admin-page-nav button:focus-visible:not(:disabled) {
+  color: #fff;
+  border-color: #073d92;
+  background: #073d92;
+}
+
 .admin-page-nav span {
   min-width: 48px;
   color: #526177;
@@ -11546,9 +11572,9 @@ body.admin-page {
 
 .admin-list-page-controls button:hover:not(:disabled),
 .admin-list-page-controls button:focus-visible:not(:disabled) {
-  color: #0f4fb8;
-  border-color: rgba(15, 111, 232, 0.24);
-  background: #eef5ff;
+  color: #fff;
+  border-color: #073d92;
+  background: #073d92;
 }
 
 .admin-list-page-controls button:disabled {
@@ -12086,15 +12112,15 @@ body.admin-page {
   display: grid;
   gap: 7px;
   min-width: 0;
-  color: #526177;
-  font-size: 13px;
+  color: #24324a;
+  font-size: 14px;
   font-weight: 900;
 }
 
 .admin-program-filterbar select,
 .admin-program-filterbar input {
   width: 100%;
-  min-height: 42px;
+  min-height: 38px;
   border: 1px solid rgba(15, 42, 77, 0.13);
   border-radius: 8px;
   background: #fff;
@@ -12110,6 +12136,15 @@ body.admin-page {
 
 .admin-program-filterbar input {
   padding: 0 12px;
+}
+
+.admin-program-approval-search input::placeholder,
+.admin-program-filterbar input::placeholder,
+.admin-program-form input::placeholder,
+.admin-program-form textarea::placeholder,
+.admin-settings-form input::placeholder {
+  color: #8a95a5;
+  opacity: 1;
 }
 
 .admin-program-filter-action {
@@ -12138,13 +12173,13 @@ body.admin-page {
 .admin-approval-actions button:hover:not(:disabled),
 .admin-approval-actions button:focus-visible:not(:disabled) {
   color: #fff;
-  background: #0b5fc8;
+  background: #073d92;
 }
 
 .admin-approval-actions button:last-child:hover:not(:disabled),
 .admin-approval-actions button:last-child:focus-visible:not(:disabled) {
   color: #fff;
-  background: #0b5fc8;
+  background: #073d92;
 }
 
 .admin-program-page-nav {
@@ -12168,6 +12203,13 @@ body.admin-page {
   font: inherit;
   font-size: 13px;
   font-weight: 900;
+}
+
+.admin-program-page-nav button:hover:not(:disabled),
+.admin-program-page-nav button:focus-visible:not(:disabled) {
+  color: #fff;
+  border-color: #073d92;
+  background: #073d92;
 }
 
 .admin-program-page-nav button:disabled {
@@ -12301,6 +12343,12 @@ body.admin-page {
   white-space: nowrap;
 }
 
+.admin-program-title-cell button:hover,
+.admin-program-title-cell button:focus-visible {
+  color: #073d92;
+  text-decoration-thickness: 2px;
+}
+
 .admin-program-title-cell > span {
   display: block;
   overflow: hidden;
@@ -12425,6 +12473,12 @@ body.admin-page {
   white-space: nowrap;
 }
 
+.admin-program-card-head button:hover,
+.admin-program-card-head button:focus-visible {
+  color: #073d92;
+  text-decoration-thickness: 2px;
+}
+
 .admin-program-card p {
   margin: 12px 0;
   color: #526177;
@@ -12540,13 +12594,13 @@ body.admin-page {
   background: #f9fbfe;
   color: #24324a;
   font: inherit;
-  font-size: 15px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 800;
 }
 
 .admin-program-form input,
 .admin-program-form select {
-  min-height: 46px;
+  min-height: 38px;
   padding: 0 13px;
 }
 
@@ -12595,8 +12649,8 @@ body.admin-page {
 
 .admin-program-image-picker:hover,
 .admin-program-image-picker:focus-within {
-  color: #0f4fb8;
-  background: #dbeafe;
+  color: #fff;
+  background: #073d92;
 }
 
 .admin-program-form .admin-program-image-picker input[type="file"] {
@@ -12647,8 +12701,8 @@ body.admin-page {
 
 .admin-program-image button[data-program-image-clear]:hover,
 .admin-program-image button[data-program-image-clear]:focus-visible {
-  color: #0f4fb8;
-  background: #dbeafe;
+  color: #fff;
+  background: #073d92;
 }
 
 .admin-program-place {
@@ -12725,11 +12779,17 @@ body.admin-page {
 }
 
 .admin-program-manage-actions button:last-child {
-  background: #e9573f;
+  background: #0f6fe8;
 }
 
 .admin-program-manage-actions button[data-program-restore] {
-  background: #147a55;
+  background: #0f6fe8;
+}
+
+.admin-program-manage-actions button:hover,
+.admin-program-manage-actions button:focus-visible {
+  color: #fff;
+  background: #073d92;
 }
 
 .admin-program-applicants-panel {
