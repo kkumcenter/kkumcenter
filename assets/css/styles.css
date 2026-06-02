@@ -7946,9 +7946,9 @@ body.admin-page {
 .map-buttons a:hover,
 .map-buttons a:focus-visible {
   color: #fff;
-  border-color: var(--forest);
-  background: var(--forest);
-  box-shadow: 0 14px 28px rgba(31, 90, 67, 0.22);
+  border-color: #e39835;
+  background: linear-gradient(135deg, #f4b84a 0%, #e39835 100%);
+  box-shadow: 0 14px 28px rgba(194, 132, 36, 0.24);
   transform: translateY(-4px);
 }
 
