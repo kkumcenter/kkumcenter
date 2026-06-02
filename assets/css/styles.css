@@ -11166,6 +11166,12 @@ body.admin-page {
   background: rgba(239, 148, 30, 0.18);
 }
 
+.admin-pending-admin .admin-pending-logo {
+  border-color: rgba(100, 116, 139, 0.16);
+  color: #475569;
+  background: #eef2f7;
+}
+
 .admin-pending-icon svg {
   width: 27px;
   height: 27px;
