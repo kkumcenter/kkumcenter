@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>관리자페이지 | 군북면 꿈키움센터</title>
     <meta name="description" content="군북면 꿈키움센터 관리자 승인 및 관리 페이지입니다.">
-    <link rel="stylesheet" href="assets/css/styles.css?v=20260602-4">
+    <link rel="stylesheet" href="assets/css/styles.css?v=20260602-5">
   </head>
   <body class="admin-page admin-approval-page">
     <a class="skip-link" href="#main">본문 바로가기</a>
@@ -90,24 +90,26 @@
         </div>
 
         <section class="admin-tab-panel is-active" role="tabpanel" id="panel-space" aria-labelledby="tab-space" data-admin-panel="space">
-          <div class="admin-bulk-toolbar" aria-label="공간예약 목록 및 일괄 처리">
-            <div class="admin-list-control-group">
-              <label class="admin-page-size-control">목록
-                <select data-space-page-size aria-label="공간예약 목록 줄 수 선택">
-                  <option value="10">10줄보기</option>
-                  <option value="30">30줄보기</option>
-                  <option value="50">50줄보기</option>
-                </select>
-              </label>
-            </div>
-            <div class="admin-bulk-action-group">
-              <span data-space-selected-count>0건 선택</span>
-              <button type="button" data-space-bulk-approve disabled>선택 승인</button>
+          <div class="admin-approval-list-head">
+            <h3 class="admin-approval-list-title">공간예약 승인 대기 목록</h3>
+            <div class="admin-bulk-toolbar" aria-label="공간예약 목록 및 일괄 처리">
+              <div class="admin-list-control-group">
+                <label class="admin-page-size-control">목록
+                  <select data-space-page-size aria-label="공간예약 목록 줄 수 선택">
+                    <option value="10">10줄보기</option>
+                    <option value="30">30줄보기</option>
+                    <option value="50">50줄보기</option>
+                  </select>
+                </label>
+              </div>
+              <div class="admin-bulk-action-group">
+                <span data-space-selected-count>0건 선택</span>
+                <button type="button" data-space-bulk-approve disabled>선택 승인</button>
+              </div>
             </div>
           </div>
           <div class="admin-approval-table-wrap">
-            <table class="admin-approval-table">
-              <caption>공간예약 승인 대기 목록</caption>
+            <table class="admin-approval-table" aria-label="공간예약 승인 대기 목록">
               <thead>
                 <tr>
                   <th scope="col" class="admin-select-cell"><input class="admin-row-check" type="checkbox" aria-label="공간예약 현재 페이지 전체선택" data-space-select-all></th>
@@ -131,24 +133,26 @@
         </section>
 
         <section class="admin-tab-panel" role="tabpanel" id="panel-program" aria-labelledby="tab-program" data-admin-panel="program" hidden>
-          <div class="admin-bulk-toolbar" aria-label="교육신청 목록 및 일괄 처리">
-            <div class="admin-list-control-group">
-              <label class="admin-page-size-control">목록
-                <select data-program-page-size aria-label="교육신청 목록 줄 수 선택">
-                  <option value="10">10줄보기</option>
-                  <option value="30">30줄보기</option>
-                  <option value="50">50줄보기</option>
-                </select>
-              </label>
-            </div>
-            <div class="admin-bulk-action-group">
-              <span data-program-selected-count>0건 선택</span>
-              <button type="button" data-program-bulk-approve disabled>선택 승인</button>
+          <div class="admin-approval-list-head">
+            <h3 class="admin-approval-list-title">교육신청 승인 대기 목록</h3>
+            <div class="admin-bulk-toolbar" aria-label="교육신청 목록 및 일괄 처리">
+              <div class="admin-list-control-group">
+                <label class="admin-page-size-control">목록
+                  <select data-program-page-size aria-label="교육신청 목록 줄 수 선택">
+                    <option value="10">10줄보기</option>
+                    <option value="30">30줄보기</option>
+                    <option value="50">50줄보기</option>
+                  </select>
+                </label>
+              </div>
+              <div class="admin-bulk-action-group">
+                <span data-program-selected-count>0건 선택</span>
+                <button type="button" data-program-bulk-approve disabled>선택 승인</button>
+              </div>
             </div>
           </div>
           <div class="admin-approval-table-wrap">
-            <table class="admin-approval-table">
-              <caption>교육신청 승인 대기 목록</caption>
+            <table class="admin-approval-table" aria-label="교육신청 승인 대기 목록">
               <thead>
                 <tr>
                   <th scope="col" class="admin-select-cell"><input class="admin-row-check" type="checkbox" aria-label="교육신청 현재 페이지 전체선택" data-program-select-all></th>
@@ -182,7 +186,6 @@
                   <option value="open">접수중</option>
                   <option value="closed">접수마감</option>
                   <option value="finished">종료</option>
-                  <option value="hidden">숨김</option>
                 </select>
               </label>
               <label>접수상태
@@ -204,20 +207,16 @@
               </label>
               <label>수업연도
                 <select data-program-manage-year>
-                  <option value="current">올해</option>
                   <option value="all">전체 수업연도</option>
+                  <option value="current">올해</option>
                 </select>
               </label>
               <label class="admin-program-filter-keyword">검색어
                 <input type="search" placeholder="교육명, 장소, 강사" data-program-manage-keyword>
               </label>
-              <label>목록
-                <select data-program-manage-page-size>
-                  <option value="10">10줄보기</option>
-                  <option value="30">30줄보기</option>
-                  <option value="50">50줄보기</option>
-                </select>
-              </label>
+              <div class="admin-program-filter-action">
+                <button type="button" data-program-filter-apply>선택보기</button>
+              </div>
               <p class="admin-program-filter-result" data-program-manage-result>교육 목록을 불러오고 있습니다.</p>
             </div>
             <div class="admin-program-status-list" data-program-status-list>
@@ -335,7 +334,7 @@
     <script src="assets/js/main.js?v=20260529-9"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/supabase-config.js?v=20260528-1"></script>
-    <script src="assets/js/admin-approvals.js?v=20260602-2"></script>
+    <script src="assets/js/admin-approvals.js?v=20260602-3"></script>
     <script src="assets/js/admin-settings.js?v=20260529-6"></script>
   </body>
 </html>

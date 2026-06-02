@@ -5532,7 +5532,7 @@ body.admin-page {
 .admin-nav a:focus-visible,
 .admin-nav a.is-active {
   color: #fff;
-  background: linear-gradient(90deg, #22bd8b 0%, #1687ff 100%);
+  background: linear-gradient(90deg, #0f6fe8 0%, #1a9bff 100%);
 }
 
 .admin-nav-icon {
@@ -6537,6 +6537,21 @@ body.admin-page {
 .status.closed {
   color: #65736d;
   background: #eef1ef;
+}
+
+.admin-page .status.open {
+  color: #0b4c9c;
+  background: rgba(15, 111, 232, 0.14);
+}
+
+.admin-page .status.ongoing {
+  color: #0f4fb8;
+  background: rgba(47, 140, 255, 0.14);
+}
+
+.admin-page .status.closed {
+  color: #56657a;
+  background: #eef2f7;
 }
 
 .notice-tools {
@@ -10983,17 +10998,17 @@ body.admin-page {
 }
 
 .admin-pending-program {
-  border-color: rgba(28, 174, 126, 0.2);
+  border-color: rgba(38, 114, 224, 0.18);
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.72) 100%),
-    linear-gradient(135deg, #eefcf5 0%, #f7fffb 100%);
+    linear-gradient(135deg, #eef5ff 0%, #f8fbff 100%);
 }
 
 .admin-pending-inquiry {
-  border-color: rgba(234, 151, 34, 0.24);
+  border-color: rgba(77, 147, 236, 0.2);
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.72) 100%),
-    linear-gradient(135deg, #fff7e9 0%, #fffcf5 100%);
+    linear-gradient(135deg, #f0f7ff 0%, #fbfdff 100%);
 }
 
 .admin-pending-card::after {
@@ -11020,13 +11035,13 @@ body.admin-page {
 }
 
 .admin-pending-program .admin-pending-icon {
-  color: #1cae7e;
-  background: rgba(28, 174, 126, 0.17);
+  color: #2672e0;
+  background: rgba(38, 114, 224, 0.16);
 }
 
 .admin-pending-inquiry .admin-pending-icon {
-  color: #ef941e;
-  background: rgba(239, 148, 30, 0.18);
+  color: #4d93ec;
+  background: rgba(77, 147, 236, 0.17);
 }
 
 .admin-pending-icon svg {
@@ -11193,6 +11208,35 @@ body.admin-page {
   display: none;
 }
 
+.admin-approval-list-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 14px;
+}
+
+.admin-approval-list-title {
+  margin: 0;
+  color: #17243a;
+  font-size: 24px;
+  line-height: 1.25;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.admin-approval-list-title::before {
+  content: "[";
+  margin-right: 4px;
+  color: #0f6fe8;
+}
+
+.admin-approval-list-title::after {
+  content: "]";
+  margin-left: 4px;
+  color: #0f6fe8;
+}
+
 .admin-bulk-toolbar {
   display: flex;
   flex-wrap: wrap;
@@ -11204,7 +11248,20 @@ body.admin-page {
   padding: 14px;
   border: 1px solid rgba(15, 42, 77, 0.1);
   border-radius: 8px;
-  background: #f7faf8;
+  background: #f3f7ff;
+}
+
+.admin-approval-list-head .admin-bulk-toolbar {
+  flex: 0 1 auto;
+  justify-content: flex-end;
+  gap: 8px;
+  margin: 0 0 0 auto;
+  padding: 10px 12px;
+}
+
+.admin-approval-list-head .admin-list-control-group,
+.admin-approval-list-head .admin-bulk-action-group {
+  gap: 6px;
 }
 
 .admin-list-control-group,
@@ -11455,7 +11512,7 @@ body.admin-page {
 }
 
 .admin-approval-actions button:last-child {
-  background: #e9573f;
+  background: #66758c;
 }
 
 .admin-approval-actions button:disabled,
@@ -11647,6 +11704,20 @@ body.admin-page {
     min-width: 700px;
   }
 
+  .admin-approval-list-head {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .admin-approval-list-title {
+    white-space: normal;
+  }
+
+  .admin-approval-list-head .admin-bulk-toolbar {
+    margin-left: 0;
+  }
+
   .admin-bulk-toolbar,
   .admin-list-control-group,
   .admin-bulk-action-group {
@@ -11771,7 +11842,7 @@ body.admin-page {
   padding: 14px;
   border: 1px solid rgba(15, 42, 77, 0.1);
   border-radius: 8px;
-  background: #f7faf8;
+  background: #f3f7ff;
 }
 
 .admin-program-filterbar label {
@@ -11802,6 +11873,39 @@ body.admin-page {
 
 .admin-program-filterbar input {
   padding: 0 12px;
+}
+
+.admin-program-filter-action {
+  display: flex;
+  align-items: end;
+  min-width: 0;
+}
+
+.admin-program-filter-action button {
+  width: 100%;
+  min-height: 42px;
+  border: 0;
+  border-radius: 8px;
+  color: #fff;
+  background: #0f6fe8;
+  cursor: pointer;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.admin-program-filter-action button:hover,
+.admin-program-filter-action button:focus-visible,
+.admin-bulk-toolbar button:hover:not(:disabled),
+.admin-bulk-toolbar button:focus-visible:not(:disabled),
+.admin-approval-actions button:hover:not(:disabled),
+.admin-approval-actions button:focus-visible:not(:disabled) {
+  background: #0b5fc8;
+}
+
+.admin-approval-actions button:last-child:hover:not(:disabled),
+.admin-approval-actions button:last-child:focus-visible:not(:disabled) {
+  background: #55657c;
 }
 
 .admin-program-page-nav {
@@ -11923,12 +12027,12 @@ body.admin-page {
 }
 
 .admin-program-list-table tr.is-selected td {
-  background: #eef8f2;
-  box-shadow: inset 0 1px 0 rgba(31, 90, 67, 0.12), inset 0 -1px 0 rgba(31, 90, 67, 0.12);
+  background: #eef5ff;
+  box-shadow: inset 0 1px 0 rgba(15, 111, 232, 0.14), inset 0 -1px 0 rgba(15, 111, 232, 0.14);
 }
 
 .admin-program-list-table tr.is-selected td:first-child {
-  box-shadow: inset 3px 0 0 #21bc78, inset 0 1px 0 rgba(31, 90, 67, 0.12), inset 0 -1px 0 rgba(31, 90, 67, 0.12);
+  box-shadow: inset 3px 0 0 #0f6fe8, inset 0 1px 0 rgba(15, 111, 232, 0.14), inset 0 -1px 0 rgba(15, 111, 232, 0.14);
 }
 
 .admin-program-list-table tr.is-hidden .admin-program-title-cell button {
@@ -11976,8 +12080,8 @@ body.admin-page {
   min-height: 28px;
   padding: 0 10px;
   border-radius: 999px;
-  color: #295843;
-  background: rgba(79, 138, 91, 0.14);
+  color: #0f4fb8;
+  background: rgba(15, 111, 232, 0.12);
   font-size: 12px;
   font-weight: 900;
   white-space: nowrap;

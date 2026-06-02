@@ -46,13 +46,20 @@
     programManageTarget: dashboard.querySelector("[data-program-manage-target]"),
     programManageYear: dashboard.querySelector("[data-program-manage-year]"),
     programManageKeyword: dashboard.querySelector("[data-program-manage-keyword]"),
-    programManagePageSize: dashboard.querySelector("[data-program-manage-page-size]"),
     programManagePagePrev: dashboard.querySelector("[data-program-manage-page-prev]"),
     programManagePageNext: dashboard.querySelector("[data-program-manage-page-next]"),
     programManagePageInfo: dashboard.querySelector("[data-program-manage-page-info]"),
     programManageResult: dashboard.querySelector("[data-program-manage-result]"),
     programSelectedGuide: dashboard.querySelector("[data-program-selected-guide]"),
     programSelectedApplicants: dashboard.querySelector("[data-program-selected-applicants]"),
+  };
+
+  const DEFAULT_PROGRAM_FILTERS = {
+    status: "all",
+    applicationStatus: "all",
+    target: "all",
+    yearValue: "all",
+    keyword: "",
   };
 
   const state = {
@@ -71,6 +78,7 @@
     programPageSize: 10,
     programManagePage: 1,
     programManagePageSize: 10,
+    appliedProgramFilters: { ...DEFAULT_PROGRAM_FILTERS },
     selectedProgramId: null,
     selectedProgramApplicantPage: 1,
     selectedProgramApplicantPageSize: 10,
@@ -336,24 +344,33 @@
 
   const syncProgramManageYearOptions = () => {
     if (!nodes.programManageYear) return;
-    const currentValue = nodes.programManageYear.value || "current";
+    const currentValue = nodes.programManageYear.value || "all";
     const years = getProgramManageYears();
     nodes.programManageYear.innerHTML = `
-      <option value="current">올해</option>
       <option value="all">전체 수업연도</option>
+      <option value="current">올해</option>
       ${years.map((year) => `<option value="${year}">${year}년</option>`).join("")}
     `;
     nodes.programManageYear.value = [...nodes.programManageYear.options].some((option) => option.value === currentValue)
       ? currentValue
-      : "current";
+      : "all";
   };
 
+  const readProgramManageFilters = () => ({
+    status: nodes.programManageStatus?.value || DEFAULT_PROGRAM_FILTERS.status,
+    applicationStatus: nodes.programManageApplicationStatus?.value || DEFAULT_PROGRAM_FILTERS.applicationStatus,
+    target: nodes.programManageTarget?.value || DEFAULT_PROGRAM_FILTERS.target,
+    yearValue: nodes.programManageYear?.value || DEFAULT_PROGRAM_FILTERS.yearValue,
+    keyword: (nodes.programManageKeyword?.value || "").trim().toLowerCase(),
+  });
+
   const getFilteredProgramCatalog = () => {
-    const status = nodes.programManageStatus?.value || "all";
-    const applicationStatus = nodes.programManageApplicationStatus?.value || "all";
-    const target = nodes.programManageTarget?.value || "all";
-    const yearValue = nodes.programManageYear?.value || "current";
-    const keyword = (nodes.programManageKeyword?.value || "").trim().toLowerCase();
+    const filters = state.appliedProgramFilters || DEFAULT_PROGRAM_FILTERS;
+    const status = filters.status || "all";
+    const applicationStatus = filters.applicationStatus || "all";
+    const target = filters.target || "all";
+    const yearValue = filters.yearValue || "all";
+    const keyword = (filters.keyword || "").trim().toLowerCase();
     const currentYear = new Date().getFullYear();
     const statusRank = { open: 0, scheduled: 1, closed: 2, finished: 3 };
 
@@ -361,7 +378,7 @@
       .filter((program) => {
         const hidden = program.is_active === false;
         const programYear = getProgramManageYear(program);
-        const matchesStatus = status === "all" || (status === "hidden" ? hidden : !hidden && program.status === status);
+        const matchesStatus = status === "all" || (!hidden && program.status === status);
         const matchesApplicationStatus =
           applicationStatus === "all" ||
           state.allProgramApplications.some(
@@ -516,7 +533,6 @@
     if (nodes.programManagePageInfo) nodes.programManagePageInfo.textContent = `${state.programManagePage} / ${totalPages}`;
     if (nodes.programManagePagePrev) nodes.programManagePagePrev.disabled = state.programManagePage <= 1;
     if (nodes.programManagePageNext) nodes.programManagePageNext.disabled = state.programManagePage >= totalPages;
-    if (nodes.programManagePageSize) nodes.programManagePageSize.value = String(state.programManagePageSize);
     if (nodes.programManageResult) {
       nodes.programManageResult.textContent = filteredPrograms.length
         ? `총 ${filteredPrograms.length}개 교육 중 ${visiblePrograms.length}개를 보여드립니다.`
@@ -1056,14 +1072,6 @@
       return;
     }
 
-    if (target instanceof HTMLSelectElement && target.matches("[data-program-manage-page-size]")) {
-      const nextPageSize = Number(target.value);
-      state.programManagePageSize = PAGE_SIZE_OPTIONS.includes(nextPageSize) ? nextPageSize : 10;
-      state.programManagePage = 1;
-      renderProgramManagement();
-      return;
-    }
-
     if (target instanceof HTMLSelectElement && target.matches("[data-selected-program-applicant-page-size]")) {
       const nextPageSize = Number(target.value);
       state.selectedProgramApplicantPageSize = APPLICANT_PAGE_SIZE_OPTIONS.includes(nextPageSize) ? nextPageSize : 10;
@@ -1072,19 +1080,7 @@
       return;
     }
 
-    if (target instanceof HTMLSelectElement && target.matches("[data-program-manage-status], [data-program-manage-application-status], [data-program-manage-target], [data-program-manage-year]")) {
-      state.programManagePage = 1;
-      renderProgramManagement();
-      return;
-    }
-
     if (!(target instanceof HTMLInputElement)) return;
-
-    if (target.matches("[data-program-manage-keyword]")) {
-      state.programManagePage = 1;
-      renderProgramManagement();
-      return;
-    }
 
     if (target.matches("[data-space-select-all]")) {
       const visibleIds = getVisibleSpaces().map((item) => String(item.id));
@@ -1169,6 +1165,13 @@
     if (target.closest("[data-program-page-next]")) {
       state.programPage = clampPage(state.programPage + 1, state.programs, state.programPageSize);
       renderAll();
+      return;
+    }
+
+    if (target.closest("[data-program-filter-apply]")) {
+      state.appliedProgramFilters = readProgramManageFilters();
+      state.programManagePage = 1;
+      renderProgramManagement();
       return;
     }
 
@@ -1275,13 +1278,6 @@
         await load();
       }
     });
-  });
-
-  dashboard.addEventListener("input", (event) => {
-    const target = event.target;
-    if (!(target instanceof HTMLInputElement) || !target.matches("[data-program-manage-keyword]")) return;
-    state.programManagePage = 1;
-    renderProgramManagement();
   });
 
   dashboard.addEventListener("submit", async (event) => {
