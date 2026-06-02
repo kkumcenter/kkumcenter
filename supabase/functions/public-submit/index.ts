@@ -186,6 +186,7 @@ const formatProgram = (item: Record<string, unknown>) => ({
   imageUrl: item.image_url,
   place: item.place,
   instructor: item.instructor,
+  instructorPhone: item.instructor_phone,
   target: item.target,
   capacity: item.capacity,
   startDate: item.start_date,
@@ -201,6 +202,26 @@ const formatProgram = (item: Record<string, unknown>) => ({
   isActive: item.is_active,
   createdAt: item.created_at,
   updatedAt: item.updated_at,
+});
+
+const formatPublicProgram = (item: Record<string, unknown>) => ({
+  id: item.id,
+  title: item.title,
+  summary: item.summary,
+  content: item.content,
+  imageUrl: item.image_url,
+  place: item.place,
+  target: item.target,
+  capacity: item.capacity,
+  startDate: item.start_date,
+  endDate: item.end_date,
+  applyStartDate: item.apply_start_date,
+  applyEndDate: item.apply_end_date,
+  status: item.status,
+  statusLabel: programStatusLabel(String(item.status || "")),
+  visibility: item.visibility === "private" || item.is_active === false ? "private" : "public",
+  operationStatus: item.operation_status || "normal",
+  isActive: item.is_active,
 });
 
 const maskName = (value: string) => {
@@ -497,7 +518,7 @@ Deno.serve(async (request) => {
       const onlyOpen = Boolean(data.onlyOpen);
       let query = supabase
         .from("programs")
-        .select("id, title, summary, content, image_url, place, instructor, target, capacity, start_date, end_date, apply_start_date, apply_end_date, status, visibility, operation_status, cancel_reason, canceled_at, is_active, created_at, updated_at")
+        .select("id, title, summary, content, image_url, place, target, capacity, start_date, end_date, apply_start_date, apply_end_date, status, visibility, operation_status, is_active")
         .eq("is_active", true)
         .eq("operation_status", "normal")
         .order("apply_start_date", { ascending: false });
@@ -507,7 +528,7 @@ Deno.serve(async (request) => {
 
       const { data: items, error } = await query;
       if (error) throw error;
-      return json({ ok: true, items: (items || []).map(formatProgram) });
+      return json({ ok: true, items: (items || []).map(formatPublicProgram) });
     }
 
     if (action === "program-lookup") {
@@ -560,6 +581,7 @@ Deno.serve(async (request) => {
         image_url: optionalText(data, "imageUrl"),
         place: requireText(data, "place"),
         instructor: optionalText(data, "instructor"),
+        instructor_phone: optionalText(data, "instructorPhone"),
         target: optionalText(data, "target"),
         capacity: requirePositiveInteger(data, "capacity"),
         apply_start_date: requireDateValue(data, "applyStartDate"),
@@ -579,12 +601,12 @@ Deno.serve(async (request) => {
             .from("programs")
             .update(payload)
             .eq("id", programId)
-            .select("id, title, summary, content, image_url, place, instructor, target, capacity, start_date, end_date, apply_start_date, apply_end_date, status, visibility, operation_status, cancel_reason, canceled_at, is_active, created_at, updated_at")
+            .select("id, title, summary, content, image_url, place, instructor, instructor_phone, target, capacity, start_date, end_date, apply_start_date, apply_end_date, status, visibility, operation_status, cancel_reason, canceled_at, is_active, created_at, updated_at")
             .single()
         : await supabase
             .from("programs")
             .insert(payload)
-            .select("id, title, summary, content, image_url, place, instructor, target, capacity, start_date, end_date, apply_start_date, apply_end_date, status, visibility, operation_status, cancel_reason, canceled_at, is_active, created_at, updated_at")
+            .select("id, title, summary, content, image_url, place, instructor, instructor_phone, target, capacity, start_date, end_date, apply_start_date, apply_end_date, status, visibility, operation_status, cancel_reason, canceled_at, is_active, created_at, updated_at")
             .single();
 
       if (error) throw error;
@@ -611,7 +633,7 @@ Deno.serve(async (request) => {
             : { visibility: "private" },
         )
         .eq("id", id)
-        .select("id, title, summary, content, image_url, place, instructor, target, capacity, start_date, end_date, apply_start_date, apply_end_date, status, visibility, operation_status, cancel_reason, canceled_at, is_active, created_at, updated_at")
+        .select("id, title, summary, content, image_url, place, instructor, instructor_phone, target, capacity, start_date, end_date, apply_start_date, apply_end_date, status, visibility, operation_status, cancel_reason, canceled_at, is_active, created_at, updated_at")
         .single();
 
       if (error) throw error;

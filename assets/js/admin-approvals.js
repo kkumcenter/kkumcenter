@@ -364,7 +364,7 @@
   const fetchProgramCatalog = async () => {
     const { data, error } = await client
       .from("programs")
-      .select("id, title, summary, content, image_url, place, instructor, target, capacity, start_date, end_date, apply_start_date, apply_end_date, status, visibility, operation_status, cancel_reason, canceled_at, is_active, created_at, updated_at")
+      .select("id, title, summary, content, image_url, place, instructor, instructor_phone, target, capacity, start_date, end_date, apply_start_date, apply_end_date, status, visibility, operation_status, cancel_reason, canceled_at, is_active, created_at, updated_at")
       .order("created_at", { ascending: false });
 
     if (error) throw error;
@@ -502,7 +502,7 @@
         const matchesYear = yearValue === "all" || programYear === (yearValue === "current" ? currentYear : Number(yearValue));
         const matchesVisibility = visibility === "all" || programVisibilityValue(program) === visibility;
         const matchesOperation = operation === "all" || programOperationValue(program) === operation;
-        const haystack = `${program.title} ${program.summary} ${program.content} ${program.place} ${program.instructor}`.toLowerCase();
+        const haystack = `${program.title} ${program.summary} ${program.content} ${program.place} ${program.instructor} ${program.instructor_phone}`.toLowerCase();
         return matchesStatus && matchesRunStatus && matchesTarget && matchesYear && matchesVisibility && matchesOperation && (!keyword || haystack.includes(keyword));
       })
       .sort((a, b) => {
@@ -1157,6 +1157,7 @@
     form.elements.endDate.value = item.end_date || "";
     form.elements.place.value = item.place || "";
     form.elements.instructor.value = item.instructor || "";
+    if (form.elements.instructorPhone) form.elements.instructorPhone.value = item.instructor_phone || "";
     form.elements.imageUrl.value = item.image_url || "";
     if (form.elements.imageFile) form.elements.imageFile.value = "";
     renderProgramImagePreview(form, item.image_url || "");
@@ -1187,6 +1188,7 @@
       endDate: form.elements.endDate.value,
       place: form.elements.place.value.trim(),
       instructor: form.elements.instructor.value.trim(),
+      instructorPhone: form.elements.instructorPhone ? form.elements.instructorPhone.value.trim() : "",
       imageUrl,
       summary: form.elements.summary.value.trim(),
       content: form.elements.content.value.trim(),

@@ -298,7 +298,8 @@
               <label>수업 시작일<input name="startDate" type="date" required></label>
               <label>수업 종료일<input name="endDate" type="date" required></label>
               <label class="admin-program-place">장소<input name="place" type="text" placeholder="예: 1층 공유주방" required></label>
-              <label>강사<input name="instructor" type="text" placeholder="강사명"></label>
+              <label>강사명(내부관리용)<input name="instructor" type="text" placeholder="강사명"></label>
+              <label>강사 연락처(내부관리용)<input name="instructorPhone" type="tel" autocomplete="off" placeholder="010-0000-0000"></label>
               <label>모집상태
                 <select name="status" required>
                   <option value="scheduled">접수예정</option>
@@ -396,7 +397,7 @@
     <script src="assets/js/main.js?v=20260602-1"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/supabase-config.js?v=20260528-1"></script>
-    <script src="assets/js/admin-approvals.js?v=20260602-16"></script>
+    <script src="assets/js/admin-approvals.js?v=20260602-17"></script>
     <script src="assets/js/admin-settings.js?v=20260529-6"></script>
   </body>
 </html>

@@ -415,6 +415,7 @@ create table if not exists public.programs (
   image_url text,
   place text not null,
   instructor text,
+  instructor_phone text,
   target text,
   capacity integer not null,
   start_date date not null,
@@ -438,6 +439,7 @@ alter table public.programs
   add column if not exists is_active boolean not null default true,
   add column if not exists visibility public.program_visibility not null default 'public',
   add column if not exists operation_status public.program_operation_status not null default 'normal',
+  add column if not exists instructor_phone text,
   add column if not exists cancel_reason text,
   add column if not exists canceled_at timestamptz;
 

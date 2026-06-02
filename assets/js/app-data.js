@@ -324,40 +324,26 @@
     title: item.title,
     summary: item.summary || "",
     content: item.content || "",
-    imageUrl: item.image_url || "assets/images/program-default.png",
+    imageUrl: item.imageUrl || item.image_url || "assets/images/program-default.png",
     place: item.place || "-",
-    instructor: item.instructor || "",
     target: item.target || "전체",
     capacity: item.capacity || 0,
-    startDate: item.start_date,
-    endDate: item.end_date,
-    applyStartDate: item.apply_start_date,
-    applyEndDate: item.apply_end_date,
+    startDate: item.startDate || item.start_date,
+    endDate: item.endDate || item.end_date,
+    applyStartDate: item.applyStartDate || item.apply_start_date,
+    applyEndDate: item.applyEndDate || item.apply_end_date,
     status: item.status || "scheduled",
     visibility: item.visibility === "private" || item.is_active === false ? "private" : "public",
-    operationStatus: item.operation_status || "normal",
-    cancelReason: item.cancel_reason || "",
-    canceledAt: item.canceled_at || "",
-    isActive: item.is_active !== false,
+    operationStatus: item.operationStatus || item.operation_status || "normal",
+    cancelReason: item.cancelReason || item.cancel_reason || "",
+    canceledAt: item.canceledAt || item.canceled_at || "",
+    isActive: item.isActive ?? item.is_active !== false,
   });
 
   const fetchSupabasePrograms = async ({ openOnly = false } = {}) => {
-    const client = getSupabaseClient();
-    if (!client) return null;
-
-    let query = client
-      .from("programs")
-      .select("id, title, summary, content, image_url, place, instructor, target, capacity, start_date, end_date, apply_start_date, apply_end_date, status, visibility, operation_status, cancel_reason, canceled_at, is_active")
-      .eq("is_active", true)
-      .eq("operation_status", "normal")
-      .order("apply_start_date", { ascending: false });
-
-    if (openOnly) query = query.eq("status", "open").eq("visibility", "public");
-    else query = query.eq("visibility", "public");
-
-    const { data, error } = await query;
-    if (error) throw error;
-    return (data || []).map(normalizeProgram);
+    const result = await callPublicSubmitFunction("program-list", { onlyOpen });
+    if (!result) return null;
+    return (result.items || []).map(normalizeProgram);
   };
 
   const lookupSupabaseProgramApplication = async (lookup) => {
@@ -920,7 +906,7 @@
           const matchesStatus = mode === "archive" || status === "all" ? true : program.status === status;
           const matchesYear = year === "all" || getProgramYear(program) === Number(year);
           const matchesTarget = target === "all" || program.target === target;
-          const haystack = `${program.title} ${program.summary} ${program.content} ${program.place} ${program.instructor}`.toLowerCase();
+          const haystack = `${program.title} ${program.summary} ${program.content} ${program.place}`.toLowerCase();
           return matchesMode && matchesStatus && matchesYear && matchesTarget && (!keyword || haystack.includes(keyword));
         })
         .sort((a, b) => mode === "archive"

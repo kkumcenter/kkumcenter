@@ -28,6 +28,7 @@ end $$;
 alter table public.programs
   add column if not exists visibility public.program_visibility not null default 'public',
   add column if not exists operation_status public.program_operation_status not null default 'normal',
+  add column if not exists instructor_phone text,
   add column if not exists cancel_reason text,
   add column if not exists canceled_at timestamptz;
 
@@ -63,11 +64,3 @@ on public.programs (visibility, operation_status, status, start_date, end_date)
 where is_active = true;
 
 drop policy if exists "Anyone can read programs" on public.programs;
-create policy "Anyone can read programs"
-on public.programs
-for select
-using (
-  is_active = true
-  and operation_status = 'normal'
-  and visibility = 'public'
-);
