@@ -11231,10 +11231,10 @@ body.admin-page {
 
 .admin-pending-summary {
   display: grid;
-  grid-template-columns: minmax(260px, 330px) repeat(3, minmax(150px, 188px));
+  grid-template-columns: minmax(300px, 340px) repeat(3, minmax(176px, 196px));
   align-self: end;
   justify-content: end;
-  gap: 9px;
+  gap: 10px;
   min-width: 0;
   margin-top: 0;
 }
@@ -11244,9 +11244,9 @@ body.admin-page {
   overflow: hidden;
   display: flex;
   align-items: center;
-  gap: 10px;
-  min-height: 74px;
-  padding: 7px 10px;
+  gap: 12px;
+  min-height: 86px;
+  padding: 9px 12px;
   border: 2px solid rgba(31, 127, 214, 0.16);
   border-radius: 12px;
   background:
@@ -11299,8 +11299,8 @@ body.admin-page {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   color: #1d76d3;
   background: rgba(45, 142, 239, 0.16);
@@ -11323,11 +11323,11 @@ body.admin-page {
 }
 
 .admin-pending-icon svg {
-  width: 27px;
-  height: 27px;
+  width: 35px;
+  height: 35px;
   fill: none;
   stroke: currentColor;
-  stroke-width: 2.35;
+  stroke-width: 2.25;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
@@ -11341,21 +11341,22 @@ body.admin-page {
   align-items: stretch;
   justify-content: space-between;
   flex: 1 1 auto;
-  gap: 8px;
+  gap: 10px;
 }
 
 .admin-pending-copy > span {
   color: #17243a;
-  font-size: 19px;
+  font-size: 20px;
   line-height: 1.2;
   font-weight: 900;
+  text-align: left;
   white-space: nowrap;
 }
 
 .admin-pending-count {
   display: inline-flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: flex-end;
   align-self: stretch;
   gap: 3px;
   margin-top: 0;
@@ -11376,6 +11377,7 @@ body.admin-page {
   color: #344154;
   font-size: 13.5px;
   font-weight: 700;
+  text-align: right;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
