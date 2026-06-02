@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>관리자페이지 | 군북면 꿈키움센터</title>
     <meta name="description" content="군북면 꿈키움센터 관리자 승인 및 관리 페이지입니다.">
-    <link rel="stylesheet" href="assets/css/styles.css?v=20260602-25">
+    <link rel="stylesheet" href="assets/css/styles.css?v=20260602-26">
   </head>
   <body class="admin-page admin-approval-page">
     <a class="skip-link" href="#main">본문 바로가기</a>
@@ -107,6 +107,7 @@
                 <label>검색어
                   <input type="search" placeholder="공간, 신청자명, 연락처" data-space-approval-keyword>
                 </label>
+                <button type="button" data-space-approval-search>검색</button>
               </div>
               <div class="admin-bulk-action-group">
                 <span data-space-selected-count>0건 선택</span>
@@ -155,6 +156,7 @@
                 <label>검색어
                   <input type="search" placeholder="프로그램명, 신청자명, 연락처" data-program-approval-keyword>
                 </label>
+                <button type="button" data-program-approval-search>검색</button>
               </div>
               <div class="admin-bulk-action-group">
                 <span data-program-selected-count>0건 선택</span>
@@ -198,6 +200,12 @@
         <section class="admin-tab-panel is-active" role="tabpanel" id="panel-program-manage" aria-labelledby="tab-program-manage" data-admin-panel="program-manage">
           <div class="admin-program-list-card">
             <h3 class="admin-program-list-title">교육 관리 목록</h3>
+            <div class="admin-program-searchbar" aria-label="교육 관리 목록 검색어">
+              <label>검색어
+                <input type="search" placeholder="교육명, 장소, 강사" data-program-manage-keyword>
+              </label>
+              <button type="button" data-program-filter-search>검색</button>
+            </div>
             <div class="admin-program-filterbar" aria-label="교육 관리 목록 검색">
               <label>모집상태
                 <select data-program-manage-status>
@@ -229,8 +237,20 @@
                   <option value="current">올해</option>
                 </select>
               </label>
-              <label class="admin-program-filter-keyword">검색어
-                <input type="search" placeholder="교육명, 장소, 강사" data-program-manage-keyword>
+              <label>노출상태
+                <select data-program-manage-visibility>
+                  <option value="all">전체</option>
+                  <option value="private">비공개</option>
+                  <option value="public">공개</option>
+                  <option value="archive">지난교육</option>
+                </select>
+              </label>
+              <label>운영상태
+                <select data-program-manage-operation>
+                  <option value="all">전체</option>
+                  <option value="normal">정상</option>
+                  <option value="canceled">취소</option>
+                </select>
               </label>
               <div class="admin-program-filter-action">
                 <button type="button" data-program-filter-apply>선택보기</button>
@@ -378,7 +398,7 @@
     <script src="assets/js/main.js?v=20260602-1"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/supabase-config.js?v=20260528-1"></script>
-    <script src="assets/js/admin-approvals.js?v=20260602-11"></script>
+    <script src="assets/js/admin-approvals.js?v=20260602-12"></script>
     <script src="assets/js/admin-settings.js?v=20260529-6"></script>
   </body>
 </html>

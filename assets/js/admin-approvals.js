@@ -47,6 +47,8 @@
     programManageRunStatus: dashboard.querySelector("[data-program-manage-run-status]"),
     programManageTarget: dashboard.querySelector("[data-program-manage-target]"),
     programManageYear: dashboard.querySelector("[data-program-manage-year]"),
+    programManageVisibility: dashboard.querySelector("[data-program-manage-visibility]"),
+    programManageOperation: dashboard.querySelector("[data-program-manage-operation]"),
     programManageKeyword: dashboard.querySelector("[data-program-manage-keyword]"),
     programManagePageSize: dashboard.querySelector("[data-program-manage-page-size]"),
     programManagePagePrev: dashboard.querySelector("[data-program-manage-page-prev]"),
@@ -62,6 +64,8 @@
     runStatus: "all",
     target: "all",
     yearValue: "all",
+    visibility: "all",
+    operation: "all",
     keyword: "",
   };
 
@@ -466,6 +470,8 @@
     runStatus: nodes.programManageRunStatus?.value || DEFAULT_PROGRAM_FILTERS.runStatus,
     target: nodes.programManageTarget?.value || DEFAULT_PROGRAM_FILTERS.target,
     yearValue: nodes.programManageYear?.value || DEFAULT_PROGRAM_FILTERS.yearValue,
+    visibility: nodes.programManageVisibility?.value || DEFAULT_PROGRAM_FILTERS.visibility,
+    operation: nodes.programManageOperation?.value || DEFAULT_PROGRAM_FILTERS.operation,
     keyword: (nodes.programManageKeyword?.value || "").trim().toLowerCase(),
   });
 
@@ -475,6 +481,8 @@
     const runStatus = filters.runStatus || "all";
     const target = filters.target || "all";
     const yearValue = filters.yearValue || "all";
+    const visibility = filters.visibility || "all";
+    const operation = filters.operation || "all";
     const keyword = (filters.keyword || "").trim().toLowerCase();
     const currentYear = new Date().getFullYear();
     const statusRank = { open: 0, scheduled: 1, closed: 2, finished: 3 };
@@ -490,8 +498,10 @@
         const matchesRunStatus = runStatus === "all" || educationRunStatusValue(program) === runStatus;
         const matchesTarget = target === "all" || program.target === target;
         const matchesYear = yearValue === "all" || programYear === (yearValue === "current" ? currentYear : Number(yearValue));
+        const matchesVisibility = visibility === "all" || programVisibilityValue(program) === visibility;
+        const matchesOperation = operation === "all" || programOperationValue(program) === operation;
         const haystack = `${program.title} ${program.summary} ${program.content} ${program.place} ${program.instructor}`.toLowerCase();
-        return matchesStatus && matchesRunStatus && matchesTarget && matchesYear && (!keyword || haystack.includes(keyword));
+        return matchesStatus && matchesRunStatus && matchesTarget && matchesYear && matchesVisibility && matchesOperation && (!keyword || haystack.includes(keyword));
       })
       .sort((a, b) => {
         const statusDiff = (statusRank[normalizedEducationStatus(a)] ?? 4) - (statusRank[normalizedEducationStatus(b)] ?? 4);
@@ -516,6 +526,24 @@
 
     update(filteredSpaces, state.spacePage, state.spacePageSize, nodes.spacePagePrev, nodes.spacePageNext, nodes.spacePageInfo, nodes.spacePageSize);
     update(filteredPrograms, state.programPage, state.programPageSize, nodes.programPagePrev, nodes.programPageNext, nodes.programPageInfo, nodes.programPageSize);
+  };
+
+  const applySpaceApprovalSearch = () => {
+    state.spaceApprovalKeyword = (nodes.spaceApprovalKeyword?.value || "").trim().toLowerCase();
+    state.spacePage = 1;
+    renderAll();
+  };
+
+  const applyProgramApprovalSearch = () => {
+    state.programApprovalKeyword = (nodes.programApprovalKeyword?.value || "").trim().toLowerCase();
+    state.programPage = 1;
+    renderAll();
+  };
+
+  const applyProgramManageFilters = () => {
+    state.appliedProgramFilters = readProgramManageFilters();
+    state.programManagePage = 1;
+    renderProgramManagement();
   };
 
   const syncBulkControls = () => {
@@ -1304,15 +1332,31 @@
     const target = event.target;
     if (!(target instanceof HTMLInputElement)) return;
     if (target.matches("[data-space-approval-keyword]")) {
-      state.spaceApprovalKeyword = target.value.trim().toLowerCase();
-      state.spacePage = 1;
-      renderAll();
+      applySpaceApprovalSearch();
       return;
     }
     if (target.matches("[data-program-approval-keyword]")) {
-      state.programApprovalKeyword = target.value.trim().toLowerCase();
-      state.programPage = 1;
-      renderAll();
+      applyProgramApprovalSearch();
+    }
+  });
+
+  dashboard.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter") return;
+    const target = event.target;
+    if (!(target instanceof HTMLInputElement)) return;
+    if (target.matches("[data-space-approval-keyword]")) {
+      event.preventDefault();
+      applySpaceApprovalSearch();
+      return;
+    }
+    if (target.matches("[data-program-approval-keyword]")) {
+      event.preventDefault();
+      applyProgramApprovalSearch();
+      return;
+    }
+    if (target.matches("[data-program-manage-keyword]")) {
+      event.preventDefault();
+      applyProgramManageFilters();
     }
   });
 
@@ -1379,10 +1423,18 @@
       return;
     }
 
-    if (target.closest("[data-program-filter-apply]")) {
-      state.appliedProgramFilters = readProgramManageFilters();
-      state.programManagePage = 1;
-      renderProgramManagement();
+    if (target.closest("[data-space-approval-search]")) {
+      applySpaceApprovalSearch();
+      return;
+    }
+
+    if (target.closest("[data-program-approval-search]")) {
+      applyProgramApprovalSearch();
+      return;
+    }
+
+    if (target.closest("[data-program-filter-apply]") || target.closest("[data-program-filter-search]")) {
+      applyProgramManageFilters();
       return;
     }
 
