@@ -11392,21 +11392,21 @@ body.admin-page {
 }
 
 .admin-program-approval-toolbar {
-  flex: 1 1 min(760px, 100%);
+  flex: 0 1 min(640px, 100%);
   flex-wrap: nowrap;
   gap: 16px;
-  min-width: min(760px, 100%);
+  min-width: min(640px, 100%);
 }
 
 .admin-approval-list-head .admin-program-approval-toolbar {
-  flex: 1 1 min(760px, 100%);
+  flex: 0 1 min(640px, 100%);
   gap: 16px;
-  min-width: min(760px, 100%);
+  min-width: min(640px, 100%);
 }
 
 .admin-program-approval-search {
-  flex: 1 1 430px;
-  min-width: 320px;
+  flex: 0 1 286px;
+  min-width: 220px;
 }
 
 .admin-program-approval-search label {
@@ -11421,7 +11421,7 @@ body.admin-page {
 
 .admin-program-approval-search input {
   width: 100%;
-  min-width: 240px;
+  min-width: 180px;
   min-height: 38px;
   padding: 0 12px;
   border: 1px solid rgba(15, 42, 77, 0.16);

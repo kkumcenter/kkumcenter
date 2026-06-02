@@ -30,6 +30,7 @@
     programSelectedCount: dashboard.querySelector("[data-program-selected-count]"),
     spaceBulkApprove: dashboard.querySelector("[data-space-bulk-approve]"),
     programBulkApprove: dashboard.querySelector("[data-program-bulk-approve]"),
+    spaceApprovalKeyword: dashboard.querySelector("[data-space-approval-keyword]"),
     programApprovalKeyword: dashboard.querySelector("[data-program-approval-keyword]"),
     spacePageSize: dashboard.querySelector("[data-space-page-size]"),
     programPageSize: dashboard.querySelector("[data-program-page-size]"),
@@ -78,6 +79,7 @@
     programPage: 1,
     spacePageSize: 10,
     programPageSize: 10,
+    spaceApprovalKeyword: "",
     programApprovalKeyword: "",
     programManagePage: 1,
     programManagePageSize: 10,
@@ -390,7 +392,20 @@
     return items.slice(start, start + pageSize);
   };
 
-  const getVisibleSpaces = () => getPagedItems(state.spaces, state.spacePage, state.spacePageSize);
+  const getFilteredSpaces = () => {
+    const keyword = state.spaceApprovalKeyword.trim().toLowerCase();
+    if (!keyword) return state.spaces;
+
+    const keywordDigits = keyword.replace(/\D/g, "");
+    return state.spaces.filter((item) => {
+      const spaceName = getRelationValue(item.spaces, "name") || "";
+      const haystack = `${spaceName} ${item.applicant_name || ""} ${item.phone || ""}`.toLowerCase();
+      const phoneDigits = String(item.phone || "").replace(/\D/g, "");
+      return haystack.includes(keyword) || (keywordDigits && phoneDigits.includes(keywordDigits));
+    });
+  };
+
+  const getVisibleSpaces = () => getPagedItems(getFilteredSpaces(), state.spacePage, state.spacePageSize);
 
   const getFilteredPrograms = () => {
     const keyword = state.programApprovalKeyword.trim().toLowerCase();
@@ -472,8 +487,9 @@
   };
 
   const syncPageControls = () => {
+    const filteredSpaces = getFilteredSpaces();
     const filteredPrograms = getFilteredPrograms();
-    state.spacePage = clampPage(state.spacePage, state.spaces, state.spacePageSize);
+    state.spacePage = clampPage(state.spacePage, filteredSpaces, state.spacePageSize);
     state.programPage = clampPage(state.programPage, filteredPrograms, state.programPageSize);
 
     const update = (items, page, pageSize, prevButton, nextButton, infoNode, selectNode) => {
@@ -484,7 +500,7 @@
       if (selectNode) selectNode.value = String(pageSize);
     };
 
-    update(state.spaces, state.spacePage, state.spacePageSize, nodes.spacePagePrev, nodes.spacePageNext, nodes.spacePageInfo, nodes.spacePageSize);
+    update(filteredSpaces, state.spacePage, state.spacePageSize, nodes.spacePagePrev, nodes.spacePageNext, nodes.spacePageInfo, nodes.spacePageSize);
     update(filteredPrograms, state.programPage, state.programPageSize, nodes.programPagePrev, nodes.programPageNext, nodes.programPageInfo, nodes.programPageSize);
   };
 
@@ -509,8 +525,14 @@
 
   const renderSpaces = () => {
     if (!nodes.spaceList) return;
+    const filteredSpaces = getFilteredSpaces();
     if (!state.spaces.length) {
       setTableMessage(nodes.spaceList, "승인 대기 중인 공간예약이 없습니다.");
+      return;
+    }
+
+    if (!filteredSpaces.length) {
+      setTableMessage(nodes.spaceList, "검색어에 맞는 공간예약이 없습니다.");
       return;
     }
 
@@ -1226,10 +1248,18 @@
 
   dashboard.addEventListener("input", (event) => {
     const target = event.target;
-    if (!(target instanceof HTMLInputElement) || !target.matches("[data-program-approval-keyword]")) return;
-    state.programApprovalKeyword = target.value.trim().toLowerCase();
-    state.programPage = 1;
-    renderAll();
+    if (!(target instanceof HTMLInputElement)) return;
+    if (target.matches("[data-space-approval-keyword]")) {
+      state.spaceApprovalKeyword = target.value.trim().toLowerCase();
+      state.spacePage = 1;
+      renderAll();
+      return;
+    }
+    if (target.matches("[data-program-approval-keyword]")) {
+      state.programApprovalKeyword = target.value.trim().toLowerCase();
+      state.programPage = 1;
+      renderAll();
+    }
   });
 
   dashboard.addEventListener("change", (event) => {
@@ -1272,25 +1302,25 @@
     }
 
     if (target.closest("[data-space-page-prev]")) {
-      state.spacePage = clampPage(state.spacePage - 1, state.spaces, state.spacePageSize);
+      state.spacePage = clampPage(state.spacePage - 1, getFilteredSpaces(), state.spacePageSize);
       renderAll();
       return;
     }
 
     if (target.closest("[data-space-page-next]")) {
-      state.spacePage = clampPage(state.spacePage + 1, state.spaces, state.spacePageSize);
+      state.spacePage = clampPage(state.spacePage + 1, getFilteredSpaces(), state.spacePageSize);
       renderAll();
       return;
     }
 
     if (target.closest("[data-program-page-prev]")) {
-      state.programPage = clampPage(state.programPage - 1, state.programs, state.programPageSize);
+      state.programPage = clampPage(state.programPage - 1, getFilteredPrograms(), state.programPageSize);
       renderAll();
       return;
     }
 
     if (target.closest("[data-program-page-next]")) {
-      state.programPage = clampPage(state.programPage + 1, state.programs, state.programPageSize);
+      state.programPage = clampPage(state.programPage + 1, getFilteredPrograms(), state.programPageSize);
       renderAll();
       return;
     }

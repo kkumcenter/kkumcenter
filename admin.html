@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>관리자페이지 | 군북면 꿈키움센터</title>
     <meta name="description" content="군북면 꿈키움센터 관리자 승인 및 관리 페이지입니다.">
-    <link rel="stylesheet" href="assets/css/styles.css?v=20260602-10">
+    <link rel="stylesheet" href="assets/css/styles.css?v=20260602-11">
   </head>
   <body class="admin-page admin-approval-page">
     <a class="skip-link" href="#main">본문 바로가기</a>
@@ -83,16 +83,21 @@
         </div>
 
         <div class="admin-tab-list" role="tablist" aria-label="승인 및 관리 탭">
-          <button class="is-active" type="button" role="tab" id="tab-space" aria-selected="true" aria-controls="panel-space" data-admin-tab="space">공간예약 승인</button>
+          <button class="is-active" type="button" role="tab" id="tab-program-manage" aria-selected="true" aria-controls="panel-program-manage" data-admin-tab="program-manage">교육 관리</button>
           <button type="button" role="tab" id="tab-program" aria-selected="false" aria-controls="panel-program" data-admin-tab="program">교육신청 승인</button>
-          <button type="button" role="tab" id="tab-program-manage" aria-selected="false" aria-controls="panel-program-manage" data-admin-tab="program-manage">교육 관리</button>
+          <button type="button" role="tab" id="tab-space" aria-selected="false" aria-controls="panel-space" data-admin-tab="space">공간예약 승인</button>
           <button type="button" role="tab" id="tab-settings" aria-selected="false" aria-controls="panel-settings" data-admin-tab="settings">관리자·스텝 설정</button>
         </div>
 
-        <section class="admin-tab-panel is-active" role="tabpanel" id="panel-space" aria-labelledby="tab-space" data-admin-panel="space">
+        <section class="admin-tab-panel" role="tabpanel" id="panel-space" aria-labelledby="tab-space" data-admin-panel="space" hidden>
           <div class="admin-approval-list-head">
             <h3 class="admin-approval-list-title">공간예약 승인 대기 목록</h3>
-            <div class="admin-bulk-toolbar" aria-label="공간예약 목록 및 일괄 처리">
+            <div class="admin-bulk-toolbar admin-program-approval-toolbar" aria-label="공간예약 목록 검색 및 일괄 처리">
+              <div class="admin-program-approval-search">
+                <label>검색어
+                  <input type="search" placeholder="공간, 신청자명, 연락처" data-space-approval-keyword>
+                </label>
+              </div>
               <div class="admin-bulk-action-group">
                 <span data-space-selected-count>0건 선택</span>
                 <button type="button" data-space-bulk-approve disabled>선택 승인</button>
@@ -180,7 +185,7 @@
           </div>
         </section>
 
-        <section class="admin-tab-panel" role="tabpanel" id="panel-program-manage" aria-labelledby="tab-program-manage" data-admin-panel="program-manage" hidden>
+        <section class="admin-tab-panel is-active" role="tabpanel" id="panel-program-manage" aria-labelledby="tab-program-manage" data-admin-panel="program-manage">
           <div class="admin-program-list-card">
             <h3 class="admin-program-list-title">교육 관리 목록</h3>
             <div class="admin-program-filterbar" aria-label="교육 관리 목록 검색">
@@ -354,7 +359,7 @@
     <script src="assets/js/main.js?v=20260529-9"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/supabase-config.js?v=20260528-1"></script>
-    <script src="assets/js/admin-approvals.js?v=20260602-7"></script>
+    <script src="assets/js/admin-approvals.js?v=20260602-8"></script>
     <script src="assets/js/admin-settings.js?v=20260529-6"></script>
   </body>
 </html>
