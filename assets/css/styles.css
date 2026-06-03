@@ -5433,6 +5433,58 @@ h2,
   box-shadow: 0 14px 32px rgba(23, 42, 31, 0.06);
 }
 
+.program-check-list .program-check-detail-card {
+  grid-template-columns: 1fr;
+  align-items: stretch;
+  gap: 18px;
+}
+
+.check-detail-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.check-detail-head strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.check-detail-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 18px;
+  margin: 0;
+}
+
+.check-detail-list div {
+  min-width: 0;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: rgba(244, 249, 245, 0.82);
+}
+
+.check-detail-list .is-wide {
+  grid-column: 1 / -1;
+}
+
+.check-detail-list dt {
+  margin: 0 0 4px;
+  color: var(--forest);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.check-detail-list dd {
+  margin: 0;
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
 .program-check-list strong {
   color: var(--ink);
   font-size: 21px;
@@ -9476,6 +9528,15 @@ body.admin-page {
     grid-column: 1;
   }
 
+  .check-detail-head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .check-detail-list {
+    grid-template-columns: 1fr;
+  }
+
   .admin-item {
     grid-template-columns: 1fr;
   }
@@ -10186,6 +10247,11 @@ body.admin-page {
   font-weight: 900;
   line-height: 50px;
   text-align: center;
+}
+
+[data-managed-board]:not(.is-board-ready) [data-board-list],
+[data-managed-board]:not(.is-board-ready) [data-board-pagination] {
+  visibility: hidden;
 }
 
 .contact-board-form[data-contact-form] > button[type="submit"] {
@@ -12411,6 +12477,27 @@ body.admin-page {
   accent-color: var(--green);
 }
 
+.contact-board-form .privacy-consent {
+  align-items: flex-start;
+  height: auto;
+  min-height: 0;
+  margin: 2px 0 8px;
+  padding: 12px 14px 13px;
+  overflow: visible;
+}
+
+.contact-board-form .privacy-consent input {
+  margin-top: 2px;
+}
+
+.contact-board-form .privacy-consent span {
+  flex: 1 1 auto;
+  min-width: 0;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+  word-break: keep-all;
+}
+
 .program-apply-disabled {
   display: inline-flex;
   align-items: center;
@@ -13448,6 +13535,15 @@ body.admin-page {
     border-color: rgba(31, 90, 67, 0.2);
     overflow-wrap: anywhere;
     word-break: keep-all;
+  }
+
+  .contact-board-form .privacy-consent {
+    margin-bottom: 10px;
+    padding: 12px 12px 14px;
+  }
+
+  .contact-board-form .privacy-consent span {
+    line-height: 1.6;
   }
 
   .space-application-card a {

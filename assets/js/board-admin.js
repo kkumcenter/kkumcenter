@@ -220,7 +220,7 @@
     profile?.role === "admin" && profile.admin_role === "super_admin";
 
   const fetchItems = async (canManage) => {
-    if (!client) return staticItems;
+    if (!client) return [];
 
     if (boardKind === "gallery") {
       let query = client
@@ -587,7 +587,11 @@
       }
 
       await reload();
+      root.classList.add("is-board-ready");
     } catch (error) {
+      currentItems = [];
+      renderItems(currentItems, false);
+      root.classList.add("is-board-ready");
       console.warn("Board data fallback:", error);
     }
   };

@@ -380,6 +380,7 @@ create table if not exists public.space_reservations (
   region text,
   lookup_password_hash text,
   reservation_date date not null,
+  reservation_end_date date,
   start_time time not null,
   end_time time not null,
   purpose text not null,
@@ -399,7 +400,8 @@ create table if not exists public.space_reservations (
 
 alter table public.space_reservations
   add column if not exists birth_year integer,
-  add column if not exists region text;
+  add column if not exists region text,
+  add column if not exists reservation_end_date date;
 
 create index if not exists space_reservations_space_date_idx on public.space_reservations (space_id, reservation_date);
 create index if not exists space_reservations_status_idx on public.space_reservations (status);

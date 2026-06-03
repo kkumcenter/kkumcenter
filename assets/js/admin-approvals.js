@@ -348,7 +348,7 @@
   const fetchSpaces = async () => {
     const { data, error } = await client
       .from("space_reservations")
-      .select("id, reservation_no, applicant_name, phone, birth_year, region, reservation_date, start_time, end_time, purpose, note, status, created_at, spaces(name)")
+      .select("id, reservation_no, applicant_name, phone, birth_year, region, reservation_date, reservation_end_date, start_time, end_time, purpose, headcount, note, status, created_at, spaces(name)")
       .eq("status", "received")
       .order("created_at", { ascending: false })
       .limit(100);
@@ -1018,8 +1018,9 @@
       { label: "연락처", value: item.phone },
       { label: "출생연도", value: item.birth_year },
       { label: "주소", value: item.region },
-      { label: "예약일", value: formatDate(item.reservation_date) },
+      { label: "예약기간", value: formatDateRange(item.reservation_date, item.reservation_end_date || item.reservation_date) },
       { label: "시간", value: formatTimeRange(item.start_time, item.end_time) },
+      { label: "이용 인원", value: item.headcount },
       { label: "이용목적", value: item.purpose, wide: true },
       { label: "기타 메모", value: item.note, wide: true },
       { label: "접수일", value: formatDateTime(item.created_at) },

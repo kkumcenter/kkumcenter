@@ -178,11 +178,30 @@
     return `${startText} - ${endText}`;
   };
 
+  const formatTime = (value) => {
+    if (!value) return "-";
+    const text = String(value);
+    return /^\d{2}:\d{2}/.test(text) ? text.slice(0, 5) : text;
+  };
+
+  const formatTimeRange = (start, end) => {
+    const startText = formatTime(start);
+    const endText = formatTime(end);
+    if (startText === "-" && endText === "-") return "-";
+    if (startText === endText) return startText;
+    return `${startText} - ${endText}`;
+  };
+
   const formatAdminDate = (value) => {
     if (!value) return "-";
     const text = String(value);
     if (/^\d{4}-\d{2}-\d{2}/.test(text)) return text.slice(5, 10).replace("-", ".");
     return text;
+  };
+
+  const displayValue = (value) => {
+    const text = String(value ?? "").trim();
+    return text || "-";
   };
 
   const fieldValue = (form, name) => form.elements[name]?.value?.trim() || "";
@@ -270,7 +289,7 @@
 
     const { data, error } = await client
       .from("space_reservations")
-      .select("id, reservation_no, applicant_name, phone, reservation_date, purpose, note, status, created_at, spaces(name)")
+      .select("id, reservation_no, applicant_name, phone, birth_year, region, reservation_date, reservation_end_date, start_time, end_time, purpose, headcount, note, status, created_at, spaces(name)")
       .order("created_at", { ascending: false })
       .limit(50);
 
@@ -281,9 +300,14 @@
       spaceName: item.spaces?.name || "공간",
       applicant: item.applicant_name,
       phone: item.phone,
+      birthYear: item.birth_year,
+      region: item.region,
       startDate: item.reservation_date,
-      endDate: item.reservation_date,
+      endDate: item.reservation_end_date || item.reservation_date,
+      startTime: item.start_time,
+      endTime: item.end_time,
       purpose: item.purpose,
+      headcount: item.headcount,
       memo: item.note || "",
       status: getStatusLabel("space", item.status),
       statusValue: item.status,
@@ -300,7 +324,7 @@
 
     const { data, error } = await client
       .from("program_applications")
-      .select("id, application_no, applicant_name, phone, region, status, created_at, programs(title)")
+      .select("id, application_no, applicant_name, phone, birth_year, region, status, created_at, programs(title, place, start_date, end_date)")
       .order("created_at", { ascending: false })
       .limit(50);
 
@@ -311,7 +335,12 @@
       programName: item.programs?.title || "프로그램",
       applicant: item.applicant_name,
       phone: item.phone,
+      birthYear: item.birth_year,
       group: item.region || "참여자",
+      region: item.region || "",
+      place: item.programs?.place || "",
+      startDate: item.programs?.start_date || "",
+      endDate: item.programs?.end_date || "",
       status: getStatusLabel("program", item.status),
       statusValue: item.status,
       createdAt: item.created_at,
@@ -652,7 +681,7 @@
 
         try {
           await insertSupabaseInquiry(inquiry);
-          setFormStatus(form, `문의가 접수되었습니다. 상세 조회 시 문의번호 ${inquiry.id}를 함께 입력해주세요.`);
+          setFormStatus(form, "문의가 접수되었습니다. 답변은 위의 문의목록에서 해당 문의를 선택한 뒤 비밀번호를 입력해 확인해주세요.");
           form.reset();
           loadPublicInquiryList();
         } catch (error) {
@@ -1024,7 +1053,6 @@
         region: fieldValue(form, "programRegion") || fieldValue(form, "region"),
         lookupPassword: fieldValue(form, "programPassword") || fieldValue(form, "lookupPassword"),
         group: fieldValue(form, "programRegion") || fieldValue(form, "region") || "참여자",
-        memo: fieldValue(form, "memo"),
         status: "접수완료",
         createdAt: new Date().toISOString(),
         source: "local",
@@ -1060,6 +1088,18 @@
     });
   };
 
+  const renderCheckDetailRows = (rows) =>
+    `<dl class="check-detail-list">${rows
+      .map(
+        (row) => `
+          <div class="${row.wide ? "is-wide" : ""}">
+            <dt>${escapeHtml(row.label)}</dt>
+            <dd>${escapeHtml(displayValue(row.value))}</dd>
+          </div>
+        `,
+      )
+      .join("")}</dl>`;
+
   const renderList = (container, items, type) => {
     if (!container) return;
     const emptyText = type === "space" ? "아직 저장된 공간 예약이 없습니다." : "아직 저장된 교육 신청이 없습니다.";
@@ -1067,11 +1107,43 @@
       ? items
       .map((item) => {
         const title = type === "space" ? item.spaceName : item.programName;
-        const meta =
+        const rows =
           type === "space"
-            ? `${item.startDate || "-"}${item.endDate && item.endDate !== item.startDate ? ` - ${item.endDate}` : ""} · ${item.applicant || "-"}`
-            : `${item.group || "참여자"} · ${item.applicant || "-"}`;
-        return `<article><span class="status ${statusClass(item.status)}">${escapeHtml(item.status)}</span><strong>${escapeHtml(title)}</strong><p>${escapeHtml(meta)}</p></article>`;
+            ? [
+                { label: "예약번호", value: item.id },
+                { label: "접수상태", value: item.status },
+                { label: "공간명", value: title },
+                { label: "신청자명", value: item.applicant },
+                { label: "연락처", value: item.phone },
+                { label: "출생연도", value: item.birthYear },
+                { label: "주소", value: item.region },
+                { label: "예약기간", value: formatDateRange(item.startDate, item.endDate) },
+                { label: "이용시간", value: formatTimeRange(item.startTime, item.endTime) },
+                { label: "이용목적", value: item.purpose, wide: true },
+                { label: "기타 메모", value: item.memo || item.note, wide: true },
+                { label: "접수일", value: formatDate(item.createdAt) },
+              ]
+            : [
+                { label: "신청번호", value: item.id },
+                { label: "접수상태", value: item.status },
+                { label: "프로그램명", value: title },
+                { label: "신청자명", value: item.applicant },
+                { label: "연락처", value: item.phone },
+                { label: "출생연도", value: item.birthYear },
+                { label: "주소", value: item.region || item.group },
+                { label: "장소", value: item.place },
+                { label: "수업기간", value: formatDateRange(item.startDate, item.endDate) },
+                { label: "접수일", value: formatDate(item.createdAt) },
+              ];
+        return `
+          <article class="program-check-detail-card">
+            <div class="check-detail-head">
+              <span class="status ${statusClass(item.status)}">${escapeHtml(item.status)}</span>
+              <strong>${escapeHtml(title)}</strong>
+            </div>
+            ${renderCheckDetailRows(rows)}
+          </article>
+        `;
       })
           .join("")
       : `<article class="empty-state"><strong>${emptyText}</strong><p>신청을 완료하면 이곳에 목록이 표시됩니다.</p></article>`;
@@ -1108,8 +1180,16 @@
                 id: item.id,
                 spaceName: item.spaceName,
                 applicant: item.applicant,
+                phone: item.phone,
+                birthYear: item.birthYear,
+                region: item.region,
                 startDate: item.reservationDate,
-                endDate: item.reservationDate,
+                endDate: item.reservationEndDate || item.reservationDate,
+                startTime: item.startTime,
+                endTime: item.endTime,
+                purpose: item.purpose,
+                headcount: item.headcount,
+                memo: item.note,
                 status: item.statusLabel,
                 createdAt: item.createdAt,
               })),
@@ -1164,7 +1244,13 @@
                 id: item.id,
                 programName: item.programName,
                 applicant: item.applicant,
+                phone: item.phone,
+                birthYear: item.birthYear,
                 group: item.region,
+                region: item.region,
+                place: item.place,
+                startDate: item.startDate,
+                endDate: item.endDate,
                 status: item.statusLabel,
                 createdAt: item.createdAt,
               })),

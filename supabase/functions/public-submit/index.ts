@@ -408,6 +408,7 @@ Deno.serve(async (request) => {
 
       const reservationNo = String(data.reservationNo || createNo("R"));
       const reservationDate = requireText(data, "reservationDate");
+      const reservationEndDate = data.endDate ? String(data.endDate) : reservationDate;
       const lookupPassword = requireText(data, "lookupPassword");
 
       const { error } = await supabase.from("space_reservations").insert({
@@ -421,6 +422,7 @@ Deno.serve(async (request) => {
         region: requireText(data, "region"),
         lookup_password_hash: await hashLookupPassword(lookupPassword),
         reservation_date: reservationDate,
+        reservation_end_date: reservationEndDate,
         start_time: String(data.startTime || "09:00"),
         end_time: String(data.endTime || "18:00"),
         purpose: requireText(data, "purpose"),
@@ -437,7 +439,7 @@ Deno.serve(async (request) => {
       const lookupPassword = requireText(data, "lookupPassword");
       const { data: items, error } = await supabase
         .from("space_reservations")
-        .select("reservation_no, applicant_name, phone, birth_year, region, reservation_date, start_time, end_time, purpose, note, status, created_at, spaces(name)")
+        .select("reservation_no, applicant_name, phone, birth_year, region, reservation_date, reservation_end_date, start_time, end_time, purpose, headcount, note, status, created_at, spaces(name)")
         .eq("applicant_name", requireText(data, "applicantName"))
         .eq("phone", requireText(data, "phone"))
         .eq("lookup_password_hash", await hashLookupPassword(lookupPassword))
@@ -455,9 +457,11 @@ Deno.serve(async (request) => {
           birthYear: item.birth_year,
           region: item.region,
           reservationDate: item.reservation_date,
+          reservationEndDate: item.reservation_end_date || item.reservation_date,
           startTime: item.start_time,
           endTime: item.end_time,
           purpose: item.purpose,
+          headcount: item.headcount,
           note: item.note,
           status: item.status,
           statusLabel: reservationStatusLabel(item.status),
