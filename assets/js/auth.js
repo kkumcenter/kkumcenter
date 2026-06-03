@@ -84,7 +84,14 @@
       if (userEmail) {
         const roleName = profile.admin_role === "super_admin" ? "관리자" : "스텝";
         const email = session.user.email || "로그인 계정";
-        userEmail.innerHTML = `<span class="auth-login-text">현재 ${escapeHtml(email)} 계정으로 로그인되어 있습니다.</span><span class="auth-role-badge">${escapeHtml(roleName)}</span>`;
+        userEmail.innerHTML = `
+          <span class="auth-account-icon" aria-hidden="true"></span>
+          <span class="auth-account-copy">
+            <span class="auth-account-label">로그인된 계정</span>
+            <span class="auth-login-text">${escapeHtml(email)}</span>
+          </span>
+          <span class="auth-role-badge">${escapeHtml(roleName)}</span>
+        `;
       }
       userPanel.hidden = false;
       setStatus("");
