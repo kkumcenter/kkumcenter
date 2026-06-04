@@ -13205,21 +13205,21 @@ body.admin-page {
 
 .admin-space-detail-sections {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: 1fr;
   gap: 18px;
-  align-items: start;
 }
 
 .admin-space-detail-section {
   display: grid;
   gap: 14px;
-  padding: 16px;
-  border: 1px solid rgba(15, 42, 77, 0.12);
-  border-radius: 10px;
-  background: #f8fbff;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
 }
 
-.admin-space-detail-section h4 {
+.admin-space-detail-section h4,
+.admin-space-usage-form h4 {
   margin: 0;
   color: #0d2f5c;
   font-size: 17px;
@@ -13229,7 +13229,16 @@ body.admin-page {
 
 .admin-space-detail-form {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.admin-space-applicant-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.admin-space-request-note {
+  display: grid;
   gap: 14px;
 }
 
@@ -13260,13 +13269,14 @@ body.admin-page {
 }
 
 .admin-space-detail-form textarea {
-  min-height: 86px;
+  min-height: 112px;
   padding: 13px;
   resize: none;
 }
 
-.admin-space-detail-wide {
-  grid-column: span 2;
+.admin-space-detail-wide,
+.admin-space-request-note .admin-space-detail-wide {
+  grid-column: 1 / -1;
 }
 
 .admin-space-usage-form {
@@ -13274,7 +13284,12 @@ body.admin-page {
   grid-template-columns: minmax(150px, 0.45fr) minmax(300px, 1.55fr);
   gap: 14px;
   align-items: end;
-  padding-top: 2px;
+  padding-top: 18px;
+  border-top: 3px solid #0f6fe8;
+}
+
+.admin-space-usage-form h4 {
+  grid-column: 1 / -1;
 }
 
 .admin-space-usage-form label {

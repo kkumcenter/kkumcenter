@@ -958,9 +958,9 @@
     nodes.spaceSelectedPanel.innerHTML = `
       <div class="admin-space-selected-grid">
         <div class="admin-space-detail-sections" aria-label="선택한 공간예약 상세">
-          <section class="admin-space-detail-section">
-            <h4>예약정보</h4>
-            <div class="admin-space-detail-form">
+          <section class="admin-space-detail-section admin-space-summary-section">
+            <h4>예약 요약</h4>
+            <div class="admin-space-detail-form admin-space-summary-grid">
               ${renderReadonlySpaceField("예약번호", item.reservation_no)}
               ${renderReadonlySpaceField("접수일", formatDateTime(item.created_at))}
               ${renderReadonlySpaceField("공간", spaceName)}
@@ -969,18 +969,24 @@
               ${renderReadonlySpaceField("시간", formatTimeRange(item.start_time, item.end_time))}
             </div>
           </section>
-          <section class="admin-space-detail-section">
+          <section class="admin-space-detail-section admin-space-applicant-section">
             <h4>신청자 정보</h4>
-            <div class="admin-space-detail-form">
+            <div class="admin-space-detail-form admin-space-applicant-grid">
               ${renderReadonlySpaceField("신청자", item.applicant_name)}
               ${renderReadonlySpaceField("연락처", item.phone)}
               ${renderReadonlySpaceField("출생연도", item.birth_year)}
               ${renderReadonlySpaceField("주소", item.region)}
+            </div>
+          </section>
+          <section class="admin-space-detail-section admin-space-request-section">
+            <h4>이용 요청 내용</h4>
+            <div class="admin-space-request-note">
               ${renderReadonlySpaceField("이용목적 및 신청메모", combinedSpacePurposeMemo(item.purpose, item.note), { wide: true, multiline: true })}
             </div>
           </section>
         </div>
         <form class="admin-space-usage-form" autocomplete="off" data-space-usage-form>
+          <h4>관리자 이용 기록</h4>
           <input type="hidden" name="reservationId" value="${escapeHtml(item.id)}">
           <label>실제 이용 여부
             <select name="actualUsed">
