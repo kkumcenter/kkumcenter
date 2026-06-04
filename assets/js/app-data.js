@@ -152,12 +152,6 @@
     program.visibility === "public" &&
     getProgramRunStatus(program) === "finished";
 
-  const getProgramYear = (program) => {
-    const source = program.startDate || program.applyStartDate || "";
-    const year = Number(String(source).slice(0, 4));
-    return Number.isInteger(year) ? year : null;
-  };
-
   const programStatusClass = (value) => {
     if (value === "open") return "ongoing";
     if (value === "scheduled") return "open";
@@ -914,29 +908,16 @@
     const programDateValue = (program) => Date.parse(program.applyStartDate || program.startDate || "") || 0;
     const archiveDateValue = (program) => Date.parse(program.endDate || program.startDate || "") || 0;
 
-    const syncArchiveYearOptions = () => {
-      const yearSelect = form?.elements.year;
-      if (!yearSelect) return;
-      const currentValue = yearSelect.value || "all";
-      const years = [...new Set(programs.filter(isArchiveProgram).map(getProgramYear).filter(Boolean))].sort((a, b) => b - a);
-      yearSelect.innerHTML = `<option value="all">전체</option>${years.map((year) => `<option value="${year}">${year}년</option>`).join("")}`;
-      yearSelect.value = years.includes(Number(currentValue)) ? currentValue : "all";
-    };
-
     const renderPrograms = ({ resetLimit = false } = {}) => {
       if (resetLimit) visibleLimit = INITIAL_PROGRAM_LIMIT;
-      const status = form?.elements.status?.value || "all";
       const target = form?.elements.target?.value || "all";
-      const year = form?.elements.year?.value || "all";
       const keyword = (form?.elements.keyword?.value || "").trim().toLowerCase();
       const filtered = programs
         .filter((program) => {
           const matchesMode = mode === "archive" ? isArchiveProgram(program) : isCurrentProgram(program);
-          const matchesStatus = mode === "archive" || status === "all" ? true : program.status === status;
-          const matchesYear = year === "all" || getProgramYear(program) === Number(year);
           const matchesTarget = target === "all" || program.target === target;
           const haystack = `${program.title} ${program.summary} ${program.content} ${program.place}`.toLowerCase();
-          return matchesMode && matchesStatus && matchesYear && matchesTarget && (!keyword || haystack.includes(keyword));
+          return matchesMode && matchesTarget && (!keyword || haystack.includes(keyword));
         })
         .sort((a, b) => mode === "archive"
           ? archiveDateValue(b) - archiveDateValue(a)
@@ -974,7 +955,7 @@
             })
             .join("")
         : mode === "archive"
-          ? `<article class="empty-state program-list-empty"><strong>조건에 맞는 지난 교육이 없습니다.</strong><p>연도, 대상, 검색어를 다시 확인해주세요.</p></article>`
+          ? `<article class="empty-state program-list-empty"><strong>조건에 맞는 지난 교육이 없습니다.</strong><p>대상, 검색어를 다시 확인해주세요.</p></article>`
           : `<article class="empty-state program-list-empty"><strong>조건에 맞는 교육이 없습니다.</strong><p>검색 조건을 바꾸거나 다음 모집을 기다려주세요.</p></article>`;
 
       if (moreButton) {
@@ -986,7 +967,6 @@
       const loadedPrograms = await fetchSupabasePrograms();
       if (!loadedPrograms) return;
       programs = loadedPrograms;
-      syncArchiveYearOptions();
       renderPrograms();
       form?.addEventListener("submit", (event) => {
         event.preventDefault();

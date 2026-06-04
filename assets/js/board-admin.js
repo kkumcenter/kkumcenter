@@ -9,7 +9,7 @@
   const pagination = root.querySelector("[data-board-pagination]");
   const config = window.KKOOM_SUPABASE || {};
   const tableName = boardKind === "gallery" ? "galleries" : "posts";
-  const PAGE_SIZE = 10;
+  const PAGE_SIZE = boardKind === "gallery" ? 12 : 10;
 
   if (!list) return;
 
@@ -57,6 +57,14 @@
 
   const listShell = list.closest(".board-table-wrap, .gallery-board-wrap");
   listShell?.classList.add("board-list-shell");
+  const loadingState = document.createElement("div");
+  loadingState.className = "container board-loading-state";
+  loadingState.textContent = "게시글을 불러오는 중입니다.";
+  if (listShell) {
+    listShell.insertAdjacentElement("beforebegin", loadingState);
+  } else {
+    root.insertAdjacentElement("afterbegin", loadingState);
+  }
 
   const escapeHtml = (value) =>
     String(value ?? "")
@@ -416,6 +424,7 @@
   };
 
   const renderItems = (items, canManage) => {
+    loadingState.remove();
     const totalPages = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
     currentPage = Math.min(Math.max(currentPage, 1), totalPages);
     const offset = (currentPage - 1) * PAGE_SIZE;

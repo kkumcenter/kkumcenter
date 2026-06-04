@@ -10254,6 +10254,17 @@ body.admin-page {
   visibility: hidden;
 }
 
+.board-loading-state {
+  margin-top: 22px;
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: var(--muted-ink);
+  background: #fff;
+  text-align: center;
+  font-weight: 800;
+}
+
 .contact-board-form[data-contact-form] > button[type="submit"] {
   justify-self: end;
   width: 112px;
@@ -12567,6 +12578,10 @@ body.admin-page {
   background: #f3f7ff;
 }
 
+.admin-space-filterbar {
+  grid-template-columns: minmax(190px, 1.5fr) repeat(4, minmax(92px, 1fr)) minmax(174px, 1.25fr);
+}
+
 .admin-program-filterbar label {
   display: grid;
   gap: 7px;
@@ -12756,6 +12771,39 @@ body.admin-page {
   width: 104px;
 }
 
+.admin-space-col-status,
+.admin-space-col-usage {
+  width: 82px;
+}
+
+.admin-space-col-name {
+  width: 17%;
+}
+
+.admin-space-col-applicant {
+  width: 84px;
+}
+
+.admin-space-col-phone {
+  width: 118px;
+}
+
+.admin-space-col-period {
+  width: 124px;
+}
+
+.admin-space-col-time {
+  width: 88px;
+}
+
+.admin-space-col-headcount {
+  width: 82px;
+}
+
+.admin-space-col-actions {
+  width: 70px;
+}
+
 .admin-program-list-table th,
 .admin-program-list-table td {
   padding: 13px 7px;
@@ -12856,6 +12904,27 @@ body.admin-page {
   font-weight: 700;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.admin-table-action-button {
+  min-height: 34px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 8px;
+  color: #fff;
+  background: #073d92;
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 900;
+  white-space: nowrap;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.admin-table-action-button:hover,
+.admin-table-action-button:focus-visible {
+  color: #fff;
+  background: #0f6fe8;
 }
 
 .admin-program-title-cell em {
@@ -13106,6 +13175,76 @@ body.admin-page {
   border-radius: 0;
   background: transparent;
   box-shadow: none;
+}
+
+.admin-space-selected-panel {
+  display: grid;
+  gap: 16px;
+  padding-top: 4px;
+}
+
+.admin-space-selected-grid {
+  display: grid;
+  gap: 18px;
+}
+
+.admin-space-usage-form {
+  display: grid;
+  grid-template-columns: minmax(150px, 0.6fr) minmax(150px, 0.6fr) minmax(260px, 1.8fr) auto;
+  gap: 12px;
+  align-items: end;
+  padding-top: 4px;
+}
+
+.admin-space-usage-form label {
+  display: grid;
+  gap: 8px;
+  color: #24324a;
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.admin-space-usage-form input,
+.admin-space-usage-form select,
+.admin-space-usage-form textarea {
+  width: 100%;
+  border: 1px solid rgba(15, 42, 77, 0.14);
+  border-radius: 8px;
+  background: #f9fbfe;
+  color: #24324a;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.admin-space-usage-form input,
+.admin-space-usage-form select {
+  min-height: 38px;
+  padding: 0 13px;
+}
+
+.admin-space-usage-form textarea {
+  min-height: 86px;
+  padding: 13px;
+  resize: vertical;
+}
+
+.admin-space-usage-note {
+  min-width: 0;
+}
+
+.admin-space-usage-form .form-status {
+  grid-column: 1 / -2;
+  margin: 0;
+}
+
+.admin-space-usage-form .form-status:empty {
+  display: none;
+}
+
+.admin-space-usage-form button {
+  min-width: 132px;
+  min-height: 38px;
 }
 
 .admin-program-form-grid {
@@ -13443,6 +13582,14 @@ body.admin-page {
     grid-template-columns: 1fr;
   }
 
+  .admin-space-usage-form {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-space-usage-form .form-status {
+    grid-column: 1;
+  }
+
   .admin-program-form-grid > * {
     grid-column: 1 / -1;
   }
@@ -13486,6 +13633,10 @@ body.admin-page {
   }
 
   .admin-program-form-actions button {
+    width: 100%;
+  }
+
+  .admin-space-usage-form button {
     width: 100%;
   }
 

@@ -65,6 +65,32 @@
     programManageResult: dashboard.querySelector("[data-program-manage-result]"),
     programSelectedGuide: dashboard.querySelector("[data-program-selected-guide]"),
     programSelectedApplicants: dashboard.querySelector("[data-program-selected-applicants]"),
+    spaceManageList: dashboard.querySelector("[data-space-manage-list]"),
+    spaceManageKeyword: dashboard.querySelector("[data-space-manage-keyword]"),
+    spaceManageSpace: dashboard.querySelector("[data-space-manage-space]"),
+    spaceManageStatus: dashboard.querySelector("[data-space-manage-status]"),
+    spaceManageUsage: dashboard.querySelector("[data-space-manage-usage]"),
+    spaceManageYear: dashboard.querySelector("[data-space-manage-year]"),
+    spaceManagePageSize: dashboard.querySelector("[data-space-manage-page-size]"),
+    spaceManagePagePrev: dashboard.querySelector("[data-space-manage-page-prev]"),
+    spaceManagePageNext: dashboard.querySelector("[data-space-manage-page-next]"),
+    spaceManagePageInfo: dashboard.querySelector("[data-space-manage-page-info]"),
+    spaceManageResult: dashboard.querySelector("[data-space-manage-result]"),
+    spaceSelectedGuide: dashboard.querySelector("[data-space-selected-guide]"),
+    spaceSelectedPanel: dashboard.querySelector("[data-space-selected-panel]"),
+  };
+
+  const DEFAULT_SPACE_FILTERS = {
+    keyword: "",
+    space: "all",
+    status: "all",
+    usage: "all",
+    yearValue: "all",
+  };
+
+  const INITIAL_SPACE_FILTERS = {
+    ...DEFAULT_SPACE_FILTERS,
+    status: "approved",
   };
 
   const DEFAULT_PROGRAM_FILTERS = {
@@ -81,6 +107,7 @@
     session: null,
     profile: null,
     spaces: [],
+    spaceReservations: [],
     programs: [],
     programCatalog: [],
     allProgramApplications: [],
@@ -99,6 +126,10 @@
     selectedProgramId: null,
     selectedProgramApplicantPage: 1,
     selectedProgramApplicantPageSize: 10,
+    spaceManagePage: 1,
+    spaceManagePageSize: 10,
+    appliedSpaceFilters: { ...INITIAL_SPACE_FILTERS },
+    selectedSpaceReservationId: null,
     detail: null,
   };
 
@@ -174,6 +205,45 @@
     if (text.includes("승인") || text.includes("접수")) return "ongoing";
     if (text.includes("대기")) return "open";
     return "closed";
+  };
+
+  const reservationStatusLabel = (status) => {
+    if (status === "approved") return "승인";
+    if (status === "rejected") return "반려";
+    if (status === "canceled") return "취소";
+    return "접수대기";
+  };
+
+  const reservationStatusClass = (status) => {
+    if (status === "approved") return "admin-operation-normal";
+    if (status === "received") return "admin-status-scheduled";
+    if (status === "rejected" || status === "canceled") return "admin-operation-canceled";
+    return "admin-status-unknown";
+  };
+
+  const normalizeUsageLogs = (item) => {
+    const logs = Array.isArray(item?.space_usage_logs) ? item.space_usage_logs : [];
+    return [...logs].sort((a, b) => String(b.recorded_at || b.created_at || "").localeCompare(String(a.recorded_at || a.created_at || "")));
+  };
+
+  const latestUsageLog = (item) => normalizeUsageLogs(item)[0] || null;
+
+  const usageStatusValue = (item) => {
+    const log = latestUsageLog(item);
+    if (!log) return "unrecorded";
+    return log.actual_used === false ? "unused" : "used";
+  };
+
+  const usageStatusLabel = (value) => {
+    if (value === "used") return "이용완료";
+    if (value === "unused") return "미이용";
+    return "미기록";
+  };
+
+  const usageStatusClass = (value) => {
+    if (value === "used") return "admin-operation-normal";
+    if (value === "unused") return "admin-operation-canceled";
+    return "admin-visibility-private";
   };
 
   const educationStatusLabel = (status) => {
@@ -305,6 +375,9 @@
   const showMessage = (message, isError = false) => {
     setTableMessage(nodes.spaceList, message, isError);
     setTableMessage(nodes.programList, message, isError);
+    if (nodes.spaceManageList) {
+      nodes.spaceManageList.innerHTML = `<article class="empty-state ${isError ? "is-error" : ""}"><strong>${escapeHtml(message)}</strong></article>`;
+    }
   };
 
   const friendlyErrorMessage = (error, fallback) => {
@@ -352,6 +425,17 @@
       .eq("status", "received")
       .order("created_at", { ascending: false })
       .limit(100);
+
+    if (error) throw error;
+    return data || [];
+  };
+
+  const fetchSpaceReservations = async () => {
+    const { data, error } = await client
+      .from("space_reservations")
+      .select("id, reservation_no, applicant_name, phone, birth_year, region, reservation_date, reservation_end_date, start_time, end_time, purpose, headcount, note, status, admin_note, approved_at, canceled_at, created_at, spaces(name), space_usage_logs(id, actual_used, actual_headcount, admin_note, recorded_by, recorded_at, created_at)")
+      .order("created_at", { ascending: false })
+      .limit(1000);
 
     if (error) throw error;
     return data || [];
@@ -436,6 +520,73 @@
   };
 
   const getVisibleSpaces = () => getPagedItems(getFilteredSpaces(), state.spacePage, state.spacePageSize);
+
+  const getSpaceReservationYear = (item) => {
+    const source = item.reservation_date || item.created_at;
+    const match = String(source || "").match(/^\d{4}/);
+    return match ? Number(match[0]) : null;
+  };
+
+  const getSpaceReservationYears = () =>
+    [...new Set(state.spaceReservations.map(getSpaceReservationYear).filter(Boolean))].sort((a, b) => b - a);
+
+  const syncSpaceManageOptions = () => {
+    if (nodes.spaceManageSpace) {
+      const currentValue = nodes.spaceManageSpace.value || "all";
+      const spaces = [...new Set(state.spaceReservations.map((item) => getRelationValue(item.spaces, "name")).filter(Boolean))].sort((a, b) =>
+        String(a).localeCompare(String(b), "ko"),
+      );
+      nodes.spaceManageSpace.innerHTML = `
+        <option value="all">전체</option>
+        ${spaces.map((name) => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join("")}
+      `;
+      nodes.spaceManageSpace.value = [...nodes.spaceManageSpace.options].some((option) => option.value === currentValue) ? currentValue : "all";
+    }
+
+    if (nodes.spaceManageYear) {
+      const currentValue = nodes.spaceManageYear.value || "all";
+      const years = getSpaceReservationYears();
+      nodes.spaceManageYear.innerHTML = `
+        <option value="all">전체</option>
+        <option value="current">올해</option>
+        ${years.map((year) => `<option value="${year}">${year}년</option>`).join("")}
+      `;
+      nodes.spaceManageYear.value = [...nodes.spaceManageYear.options].some((option) => option.value === currentValue) ? currentValue : "all";
+    }
+  };
+
+  const readSpaceManageFilters = () => ({
+    keyword: (nodes.spaceManageKeyword?.value || "").trim().toLowerCase(),
+    space: nodes.spaceManageSpace?.value || DEFAULT_SPACE_FILTERS.space,
+    status: nodes.spaceManageStatus?.value || DEFAULT_SPACE_FILTERS.status,
+    usage: nodes.spaceManageUsage?.value || DEFAULT_SPACE_FILTERS.usage,
+    yearValue: nodes.spaceManageYear?.value || DEFAULT_SPACE_FILTERS.yearValue,
+  });
+
+  const getFilteredSpaceReservations = () => {
+    const filters = state.appliedSpaceFilters || DEFAULT_SPACE_FILTERS;
+    const keyword = (filters.keyword || "").trim().toLowerCase();
+    const keywordDigits = keyword.replace(/\D/g, "");
+    const currentYear = new Date().getFullYear();
+
+    return state.spaceReservations
+      .filter((item) => {
+        const spaceName = getRelationValue(item.spaces, "name") || "";
+        const reservationYear = getSpaceReservationYear(item);
+        const usageValue = usageStatusValue(item);
+        const haystack = `${spaceName} ${item.applicant_name || ""} ${item.phone || ""} ${item.purpose || ""} ${item.note || ""}`.toLowerCase();
+        const phoneDigits = String(item.phone || "").replace(/\D/g, "");
+        const matchesKeyword = !keyword || haystack.includes(keyword) || (keywordDigits && phoneDigits.includes(keywordDigits));
+        const matchesSpace = filters.space === "all" || spaceName === filters.space;
+        const matchesStatus = filters.status === "all" || item.status === filters.status;
+        const matchesUsage = filters.usage === "all" || usageValue === filters.usage;
+        const matchesYear = filters.yearValue === "all" || reservationYear === (filters.yearValue === "current" ? currentYear : Number(filters.yearValue));
+        return matchesKeyword && matchesSpace && matchesStatus && matchesUsage && matchesYear;
+      })
+      .sort((a, b) => String(b.reservation_date || b.created_at || "").localeCompare(String(a.reservation_date || a.created_at || "")));
+  };
+
+  const getVisibleSpaceReservations = () => getPagedItems(getFilteredSpaceReservations(), state.spaceManagePage, state.spaceManagePageSize);
 
   const getFilteredPrograms = () => {
     const keyword = state.programApprovalKeyword.trim().toLowerCase();
@@ -523,8 +674,10 @@
   const syncPageControls = () => {
     const filteredSpaces = getFilteredSpaces();
     const filteredPrograms = getFilteredPrograms();
+    const filteredSpaceReservations = getFilteredSpaceReservations();
     state.spacePage = clampPage(state.spacePage, filteredSpaces, state.spacePageSize);
     state.programPage = clampPage(state.programPage, filteredPrograms, state.programPageSize);
+    state.spaceManagePage = clampPage(state.spaceManagePage, filteredSpaceReservations, state.spaceManagePageSize);
 
     const update = (items, page, pageSize, prevButton, nextButton, infoNode, selectNode) => {
       const totalPages = getTotalPages(items, pageSize);
@@ -536,6 +689,7 @@
 
     update(filteredSpaces, state.spacePage, state.spacePageSize, nodes.spacePagePrev, nodes.spacePageNext, nodes.spacePageInfo, nodes.spacePageSize);
     update(filteredPrograms, state.programPage, state.programPageSize, nodes.programPagePrev, nodes.programPageNext, nodes.programPageInfo, nodes.programPageSize);
+    update(filteredSpaceReservations, state.spaceManagePage, state.spaceManagePageSize, nodes.spaceManagePagePrev, nodes.spaceManagePageNext, nodes.spaceManagePageInfo, nodes.spaceManagePageSize);
   };
 
   const applySpaceApprovalSearch = () => {
@@ -556,6 +710,12 @@
     renderProgramManagement();
   };
 
+  const applySpaceManageFilters = () => {
+    state.appliedSpaceFilters = readSpaceManageFilters();
+    state.spaceManagePage = 1;
+    renderSpaceManagement();
+  };
+
   const resetProgramManageFilters = () => {
     if (nodes.programManageKeyword) nodes.programManageKeyword.value = DEFAULT_PROGRAM_FILTERS.keyword;
     if (nodes.programManageStatus) nodes.programManageStatus.value = DEFAULT_PROGRAM_FILTERS.status;
@@ -567,6 +727,17 @@
     state.appliedProgramFilters = { ...DEFAULT_PROGRAM_FILTERS };
     state.programManagePage = 1;
     renderProgramManagement();
+  };
+
+  const resetSpaceManageFilters = () => {
+    if (nodes.spaceManageKeyword) nodes.spaceManageKeyword.value = DEFAULT_SPACE_FILTERS.keyword;
+    if (nodes.spaceManageSpace) nodes.spaceManageSpace.value = DEFAULT_SPACE_FILTERS.space;
+    if (nodes.spaceManageStatus) nodes.spaceManageStatus.value = DEFAULT_SPACE_FILTERS.status;
+    if (nodes.spaceManageUsage) nodes.spaceManageUsage.value = DEFAULT_SPACE_FILTERS.usage;
+    if (nodes.spaceManageYear) nodes.spaceManageYear.value = DEFAULT_SPACE_FILTERS.yearValue;
+    state.appliedSpaceFilters = { ...DEFAULT_SPACE_FILTERS };
+    state.spaceManagePage = 1;
+    renderSpaceManagement();
   };
 
   const syncBulkControls = () => {
@@ -667,6 +838,158 @@
         `;
       })
       .join("");
+  };
+
+  const renderSpaceManageList = () => {
+    if (!nodes.spaceManageList) return;
+    syncSpaceManageOptions();
+
+    if (!state.spaceReservations.length) {
+      nodes.spaceManageList.innerHTML = '<article class="empty-state"><strong>등록된 공간예약이 없습니다.</strong></article>';
+      if (nodes.spaceManageResult) nodes.spaceManageResult.textContent = "등록된 공간예약이 없습니다.";
+      return;
+    }
+
+    const filteredReservations = getFilteredSpaceReservations();
+    state.spaceManagePage = clampPage(state.spaceManagePage, filteredReservations, state.spaceManagePageSize);
+    const visibleReservations = getPagedItems(filteredReservations, state.spaceManagePage, state.spaceManagePageSize);
+    const totalPages = getTotalPages(filteredReservations, state.spaceManagePageSize);
+
+    if (nodes.spaceManagePageInfo) nodes.spaceManagePageInfo.textContent = `${state.spaceManagePage} / ${totalPages}`;
+    if (nodes.spaceManagePagePrev) nodes.spaceManagePagePrev.disabled = state.spaceManagePage <= 1;
+    if (nodes.spaceManagePageNext) nodes.spaceManagePageNext.disabled = state.spaceManagePage >= totalPages;
+    if (nodes.spaceManagePageSize) nodes.spaceManagePageSize.value = String(state.spaceManagePageSize);
+    if (nodes.spaceManageResult) {
+      nodes.spaceManageResult.textContent = filteredReservations.length
+        ? `총 ${filteredReservations.length}개 예약 중 ${visibleReservations.length}개를 보여드립니다.`
+        : "조건에 맞는 공간예약이 없습니다.";
+    }
+
+    if (!filteredReservations.length) {
+      nodes.spaceManageList.innerHTML = '<article class="empty-state"><strong>조건에 맞는 공간예약이 없습니다.</strong><p>검색어, 공간, 예약상태, 이용상태, 예약연도를 다시 확인해주세요.</p></article>';
+      return;
+    }
+
+    const rows = visibleReservations
+      .map((item) => {
+        const id = String(item.id);
+        const spaceName = displayValue(getRelationValue(item.spaces, "name") || "공간");
+        const usageValue = usageStatusValue(item);
+        const usageLog = latestUsageLog(item);
+        const selected = String(state.selectedSpaceReservationId || "") === id;
+        const usageHeadcount = usageLog ? displayValue(usageLog.actual_headcount) : `신청 ${displayValue(item.headcount)}`;
+        return `
+          <tr class="${selected ? "is-selected" : ""}">
+            <td><span class="admin-status-badge ${reservationStatusClass(item.status)}">${escapeHtml(reservationStatusLabel(item.status))}</span></td>
+            <td><span class="admin-status-badge ${usageStatusClass(usageValue)}">${escapeHtml(usageStatusLabel(usageValue))}</span></td>
+            <td class="admin-program-title-cell">
+              <button type="button" data-space-manage-select="${escapeHtml(id)}" aria-pressed="${selected ? "true" : "false"}">${escapeHtml(spaceName)}</button>
+              <span>${escapeHtml(displayValue(item.purpose))}</span>
+            </td>
+            <td>${escapeHtml(displayValue(item.applicant_name))}</td>
+            <td>${escapeHtml(displayValue(item.phone))}</td>
+            <td>${escapeHtml(formatDateRange(item.reservation_date, item.reservation_end_date || item.reservation_date))}</td>
+            <td>${escapeHtml(formatTimeRange(item.start_time, item.end_time))}</td>
+            <td>${escapeHtml(usageHeadcount)}</td>
+            <td><button class="admin-table-action-button" type="button" data-space-manage-select="${escapeHtml(id)}">기록</button></td>
+          </tr>
+        `;
+      })
+      .join("");
+
+    nodes.spaceManageList.innerHTML = `
+      <div class="admin-program-list-wrap">
+        <table class="admin-program-list-table admin-space-list-table" aria-label="공간 관리 목록">
+          <colgroup>
+            <col class="admin-space-col-status">
+            <col class="admin-space-col-usage">
+            <col class="admin-space-col-name">
+            <col class="admin-space-col-applicant">
+            <col class="admin-space-col-phone">
+            <col class="admin-space-col-period">
+            <col class="admin-space-col-time">
+            <col class="admin-space-col-headcount">
+            <col class="admin-space-col-actions">
+          </colgroup>
+          <thead>
+            <tr>
+              <th scope="col">예약상태</th>
+              <th scope="col">이용상태</th>
+              <th scope="col">공간명</th>
+              <th scope="col">신청자</th>
+              <th scope="col">연락처</th>
+              <th scope="col">예약기간</th>
+              <th scope="col">이용시간</th>
+              <th scope="col">이용인원</th>
+              <th scope="col">관리</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+    `;
+  };
+
+  const renderSelectedSpaceReservation = () => {
+    if (!nodes.spaceSelectedPanel) return;
+    const item = state.spaceReservations.find((entry) => String(entry.id) === String(state.selectedSpaceReservationId));
+    if (!state.selectedSpaceReservationId || !item) {
+      if (nodes.spaceSelectedGuide) {
+        nodes.spaceSelectedGuide.textContent = "공간명을 클릭하면 예약 상세와 실제 이용 기록을 확인할 수 있습니다.";
+      }
+      nodes.spaceSelectedPanel.innerHTML = '<article class="empty-state"><strong>공간예약을 선택해주세요.</strong><p>공간명을 클릭하면 신청 내용과 실제 이용 기록 입력란이 여기에 표시됩니다.</p></article>';
+      return;
+    }
+
+    const spaceName = displayValue(getRelationValue(item.spaces, "name") || "공간");
+    const usageLog = latestUsageLog(item);
+    const usageValue = usageStatusValue(item);
+    if (nodes.spaceSelectedGuide) {
+      nodes.spaceSelectedGuide.textContent = `${spaceName} · ${reservationStatusLabel(item.status)} · ${usageStatusLabel(usageValue)}`;
+    }
+
+    nodes.spaceSelectedPanel.innerHTML = `
+      <div class="admin-space-selected-grid">
+        ${renderDetailRows([
+          { label: "예약번호", value: item.reservation_no },
+          { label: "예약상태", value: reservationStatusLabel(item.status) },
+          { label: "공간", value: spaceName },
+          { label: "신청자", value: item.applicant_name },
+          { label: "연락처", value: item.phone },
+          { label: "출생연도", value: item.birth_year },
+          { label: "주소", value: item.region },
+          { label: "예약기간", value: formatDateRange(item.reservation_date, item.reservation_end_date || item.reservation_date) },
+          { label: "시간", value: formatTimeRange(item.start_time, item.end_time) },
+          { label: "신청 인원", value: item.headcount },
+          { label: "이용목적", value: item.purpose, wide: true },
+          { label: "신청 메모", value: item.note, wide: true },
+          { label: "접수일", value: formatDateTime(item.created_at) },
+          { label: "최근 기록일", value: usageLog ? formatDateTime(usageLog.recorded_at || usageLog.created_at) : "미기록" },
+        ])}
+        <form class="admin-space-usage-form" autocomplete="off" data-space-usage-form>
+          <input type="hidden" name="reservationId" value="${escapeHtml(item.id)}">
+          <label>실제 이용 여부
+            <select name="actualUsed">
+              <option value="true"${usageValue !== "unused" ? " selected" : ""}>이용완료</option>
+              <option value="false"${usageValue === "unused" ? " selected" : ""}>미이용</option>
+            </select>
+          </label>
+          <label>실제 이용 인원
+            <input name="actualHeadcount" type="number" min="0" inputmode="numeric" placeholder="예: ${escapeHtml(displayValue(item.headcount))}" value="${escapeHtml(usageLog?.actual_headcount ?? "")}">
+          </label>
+          <label class="admin-space-usage-note">관리자 메모
+            <textarea name="adminNote" rows="4" placeholder="실제 이용 내용, 특이사항, 미이용 사유 등을 적어주세요.">${escapeHtml(usageLog?.admin_note || "")}</textarea>
+          </label>
+          <p class="form-status" data-form-status aria-live="polite"></p>
+          <button class="button primary" type="submit">이용 기록 저장</button>
+        </form>
+      </div>
+    `;
+  };
+
+  const renderSpaceManagement = () => {
+    renderSpaceManageList();
+    renderSelectedSpaceReservation();
   };
 
   const getProgramStats = (programId) => {
@@ -880,6 +1203,7 @@
     syncPageControls();
     renderSpaces();
     renderPrograms();
+    renderSpaceManagement();
     renderProgramManagement();
     syncBulkControls();
   };
@@ -887,8 +1211,9 @@
   const load = async () => {
     if (nodes.refresh) nodes.refresh.disabled = true;
     try {
-      [state.spaces, state.programs, state.inquiryCount, state.programCatalog, state.allProgramApplications] = await Promise.all([
+      [state.spaces, state.spaceReservations, state.programs, state.inquiryCount, state.programCatalog, state.allProgramApplications] = await Promise.all([
         fetchSpaces(),
+        fetchSpaceReservations(),
         fetchPrograms(),
         fetchInquiryCount(),
         fetchProgramCatalog(),
@@ -1141,6 +1466,17 @@
     select.value = text;
   };
 
+  const syncProgramFormMode = (form, options = {}) => {
+    if (!form) return;
+    const isEditing = Boolean(form.elements.id?.value?.trim());
+    const submit = form.querySelector('button[type="submit"]');
+    if (submit) submit.textContent = isEditing ? "수정하기" : "등록하기";
+    if (nodes.programFormReset) nodes.programFormReset.hidden = !isEditing;
+    if (!isEditing && nodes.programSelectedGuide && options.updateGuide !== false) {
+      nodes.programSelectedGuide.textContent = "새 교육 정보를 입력해 등록할 수 있습니다.";
+    }
+  };
+
   const resetProgramForm = (options = {}) => {
     if (!nodes.programManageForm) return;
     state.selectedProgramId = null;
@@ -1154,10 +1490,10 @@
     syncProgramPlaceOptions(nodes.programManageForm, "");
     syncProgramCancelReason(nodes.programManageForm);
     renderProgramImagePreview(nodes.programManageForm, "");
-    setFormStatus(nodes.programManageForm, "");
-    const submit = nodes.programManageForm.querySelector('button[type="submit"]');
-    if (submit) submit.textContent = "수정하기";
+    setFormStatus(nodes.programManageForm, "새 교육 정보를 입력해 등록할 수 있습니다.");
+    syncProgramFormMode(nodes.programManageForm, { updateGuide: false });
     if (options.render !== false) renderProgramManagement();
+    syncProgramFormMode(nodes.programManageForm);
   };
 
   const fillProgramForm = (programId, options = {}) => {
@@ -1189,13 +1525,13 @@
     form.elements.summary.value = item.summary || "";
     form.elements.content.value = item.content || "";
     setFormStatus(form, "수정할 교육을 불러왔습니다.");
-    const submit = form.querySelector('button[type="submit"]');
-    if (submit) submit.textContent = "수정하기";
+    syncProgramFormMode(form, { updateGuide: false });
     if (options.render !== false) renderProgramManagement();
     if (options.scroll !== false) form.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   const saveProgramFromForm = async (form) => {
+    const isNewProgram = !form.elements.id.value.trim();
     let imageUrl = form.elements.imageUrl.value.trim();
     const imageFile = form.elements.imageFile?.files?.[0] || null;
     const payload = {
@@ -1243,7 +1579,8 @@
       await load();
       if (state.selectedProgramId) fillProgramForm(state.selectedProgramId, { scroll: false, render: false });
       renderProgramManagement();
-      setFormStatus(form, "교육 정보를 저장했습니다.");
+      syncProgramFormMode(form, { updateGuide: false });
+      setFormStatus(form, isNewProgram ? "교육을 등록했습니다." : "교육 정보를 수정했습니다.");
     } catch (error) {
       setFormStatus(form, friendlyErrorMessage(error, "교육 정보를 저장하지 못했습니다."), true);
     } finally {
@@ -1258,6 +1595,50 @@
     if (!window.confirm(message)) return;
     await callPublicSubmitFunction(shouldRestore ? "program-restore" : "program-hide", { id: programId });
     await load();
+  };
+
+  const saveSpaceUsageFromForm = async (form) => {
+    const reservationId = form.elements.reservationId.value;
+    const item = state.spaceReservations.find((entry) => String(entry.id) === String(reservationId));
+    if (!item) {
+      setFormStatus(form, "선택한 공간예약을 찾을 수 없습니다.", true);
+      return;
+    }
+
+    const actualHeadcountValue = form.elements.actualHeadcount.value.trim();
+    const payload = {
+      reservation_id: reservationId,
+      actual_used: form.elements.actualUsed.value === "true",
+      actual_headcount: actualHeadcountValue ? Number(actualHeadcountValue) : null,
+      admin_note: form.elements.adminNote.value.trim() || null,
+      recorded_by: state.session.user.id,
+      recorded_at: new Date().toISOString(),
+    };
+
+    if (payload.actual_headcount !== null && (!Number.isFinite(payload.actual_headcount) || payload.actual_headcount < 0)) {
+      setFormStatus(form, "실제 이용 인원은 0명 이상으로 입력해주세요.", true);
+      return;
+    }
+
+    const submit = form.querySelector('button[type="submit"]');
+    submit.disabled = true;
+    try {
+      const currentLog = latestUsageLog(item);
+      if (currentLog?.id) {
+        const { error } = await client.from("space_usage_logs").update(payload).eq("id", currentLog.id);
+        if (error) throw error;
+      } else {
+        const { error } = await client.from("space_usage_logs").insert(payload);
+        if (error) throw error;
+      }
+      await logAdminAction("update", "space_usage_log", reservationId, "공간 실제 이용 기록 저장");
+      await load();
+      setFormStatus(nodes.spaceSelectedPanel?.querySelector("[data-space-usage-form]"), "공간 이용 기록을 저장했습니다.");
+    } catch (error) {
+      setFormStatus(form, friendlyErrorMessage(error, "공간 이용 기록을 저장하지 못했습니다."), true);
+    } finally {
+      submit.disabled = false;
+    }
   };
 
   const approveSelectedSpaces = async () => {
@@ -1314,6 +1695,14 @@
       state.programManagePageSize = PAGE_SIZE_OPTIONS.includes(nextPageSize) ? nextPageSize : 10;
       state.programManagePage = 1;
       renderProgramManagement();
+      return;
+    }
+
+    if (target instanceof HTMLSelectElement && target.matches("[data-space-manage-page-size]")) {
+      const nextPageSize = Number(target.value);
+      state.spaceManagePageSize = PAGE_SIZE_OPTIONS.includes(nextPageSize) ? nextPageSize : 10;
+      state.spaceManagePage = 1;
+      renderSpaceManagement();
       return;
     }
 
@@ -1399,6 +1788,11 @@
     if (target.matches("[data-program-manage-keyword]")) {
       event.preventDefault();
       applyProgramManageFilters();
+      return;
+    }
+    if (target.matches("[data-space-manage-keyword]")) {
+      event.preventDefault();
+      applySpaceManageFilters();
     }
   });
 
@@ -1485,6 +1879,16 @@
       return;
     }
 
+    if (target.closest("[data-space-filter-apply]")) {
+      applySpaceManageFilters();
+      return;
+    }
+
+    if (target.closest("[data-space-filter-reset]")) {
+      resetSpaceManageFilters();
+      return;
+    }
+
     if (target.closest("[data-program-manage-page-prev]")) {
       const filteredPrograms = getFilteredProgramCatalog();
       state.programManagePage = clampPage(state.programManagePage - 1, filteredPrograms, state.programManagePageSize);
@@ -1496,6 +1900,20 @@
       const filteredPrograms = getFilteredProgramCatalog();
       state.programManagePage = clampPage(state.programManagePage + 1, filteredPrograms, state.programManagePageSize);
       renderProgramManagement();
+      return;
+    }
+
+    if (target.closest("[data-space-manage-page-prev]")) {
+      const filteredReservations = getFilteredSpaceReservations();
+      state.spaceManagePage = clampPage(state.spaceManagePage - 1, filteredReservations, state.spaceManagePageSize);
+      renderSpaceManagement();
+      return;
+    }
+
+    if (target.closest("[data-space-manage-page-next]")) {
+      const filteredReservations = getFilteredSpaceReservations();
+      state.spaceManagePage = clampPage(state.spaceManagePage + 1, filteredReservations, state.spaceManagePageSize);
+      renderSpaceManagement();
       return;
     }
 
@@ -1514,6 +1932,14 @@
     const programSelect = target.closest("[data-program-manage-select]");
     if (programSelect instanceof HTMLElement) {
       fillProgramForm(programSelect.dataset.programManageSelect);
+      return;
+    }
+
+    const spaceManageSelect = target.closest("[data-space-manage-select]");
+    if (spaceManageSelect instanceof HTMLElement) {
+      state.selectedSpaceReservationId = String(spaceManageSelect.dataset.spaceManageSelect || "");
+      renderSpaceManagement();
+      nodes.spaceSelectedPanel?.scrollIntoView({ behavior: "smooth", block: "start" });
       return;
     }
 
@@ -1604,7 +2030,13 @@
 
   dashboard.addEventListener("submit", async (event) => {
     const target = event.target;
-    if (!(target instanceof HTMLFormElement) || !target.matches("[data-program-manage-form]")) return;
+    if (!(target instanceof HTMLFormElement)) return;
+    if (target.matches("[data-space-usage-form]")) {
+      event.preventDefault();
+      await saveSpaceUsageFromForm(target);
+      return;
+    }
+    if (!target.matches("[data-program-manage-form]")) return;
     event.preventDefault();
     await saveProgramFromForm(target);
   });

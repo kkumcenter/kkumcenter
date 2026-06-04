@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>관리자페이지 | 군북면 꿈키움센터</title>
     <meta name="description" content="군북면 꿈키움센터 관리자 승인 및 관리 페이지입니다.">
-    <link rel="stylesheet" href="assets/css/styles.css?v=20260603-11">
+    <link rel="stylesheet" href="assets/css/styles.css?v=20260604-3">
   </head>
   <body class="admin-page admin-approval-page">
     <a class="skip-link" href="#main">본문 바로가기</a>
@@ -95,6 +95,7 @@
         <div class="admin-tab-list" role="tablist" aria-label="승인 및 관리 탭">
           <button class="is-active" type="button" role="tab" id="tab-program-manage" aria-selected="true" aria-controls="panel-program-manage" data-admin-tab="program-manage">교육 관리</button>
           <button type="button" role="tab" id="tab-program" aria-selected="false" aria-controls="panel-program" data-admin-tab="program">교육신청 승인</button>
+          <button type="button" role="tab" id="tab-space-manage" aria-selected="false" aria-controls="panel-space-manage" data-admin-tab="space-manage">공간 관리</button>
           <button type="button" role="tab" id="tab-space" aria-selected="false" aria-controls="panel-space" data-admin-tab="space">공간예약 승인</button>
           <button type="button" role="tab" id="tab-settings" aria-selected="false" aria-controls="panel-settings" data-admin-tab="settings">관리자·스텝 설정</button>
         </div>
@@ -197,6 +198,79 @@
           </div>
         </section>
 
+        <section class="admin-tab-panel" role="tabpanel" id="panel-space-manage" aria-labelledby="tab-space-manage" data-admin-panel="space-manage" hidden>
+          <div class="admin-program-list-card admin-space-manage-card">
+            <div class="admin-program-list-head">
+              <h3 class="admin-program-list-title">공간 관리 목록</h3>
+            </div>
+            <div class="admin-program-filterbar admin-space-filterbar" aria-label="공간 관리 목록 검색">
+              <label class="admin-program-filter-keyword">검색어
+                <input type="search" placeholder="공간, 신청자명, 연락처, 목적" data-space-manage-keyword>
+              </label>
+              <label>공간
+                <select data-space-manage-space>
+                  <option value="all">전체</option>
+                </select>
+              </label>
+              <label>예약상태
+                <select data-space-manage-status>
+                  <option value="approved">승인</option>
+                  <option value="all">전체</option>
+                  <option value="received">접수대기</option>
+                  <option value="rejected">반려</option>
+                  <option value="canceled">취소</option>
+                </select>
+              </label>
+              <label>이용상태
+                <select data-space-manage-usage>
+                  <option value="all">전체</option>
+                  <option value="used">이용완료</option>
+                  <option value="unused">미이용</option>
+                  <option value="unrecorded">미기록</option>
+                </select>
+              </label>
+              <label>예약연도
+                <select data-space-manage-year>
+                  <option value="all">전체</option>
+                  <option value="current">올해</option>
+                </select>
+              </label>
+              <div class="admin-program-filter-action">
+                <button type="button" data-space-filter-apply>검색하기</button>
+                <button class="is-secondary" type="button" data-space-filter-reset>전체보기</button>
+              </div>
+              <p class="admin-program-filter-result" data-space-manage-result>공간예약 목록을 불러오고 있습니다.</p>
+            </div>
+            <div class="admin-program-status-list" data-space-manage-list>
+              <article class="empty-state"><strong>공간예약 목록을 불러오고 있습니다.</strong></article>
+            </div>
+            <div class="admin-list-page-footer" aria-label="공간 관리 목록 페이지 이동">
+              <div class="admin-list-page-controls">
+                <button type="button" data-space-manage-page-prev>이전</button>
+                <span data-space-manage-page-info>1 / 1</span>
+                <button type="button" data-space-manage-page-next>다음</button>
+              </div>
+              <label class="admin-page-size-control admin-page-size-control-footer">목록
+                <select data-space-manage-page-size aria-label="공간 관리 목록 줄 수 선택">
+                  <option value="10">10줄보기</option>
+                  <option value="30">30줄보기</option>
+                  <option value="50">50줄보기</option>
+                </select>
+              </label>
+            </div>
+          </div>
+
+          <div class="admin-program-selected-head admin-space-selected-head">
+            <div>
+              <h3>선택한 공간예약 관리</h3>
+              <p data-space-selected-guide>공간명을 클릭하면 예약 상세와 실제 이용 기록을 확인할 수 있습니다.</p>
+            </div>
+          </div>
+          <section class="admin-space-selected-panel" data-space-selected-panel>
+            <article class="empty-state"><strong>공간예약을 선택해주세요.</strong><p>공간명을 클릭하면 신청 내용과 실제 이용 기록 입력란이 여기에 표시됩니다.</p></article>
+          </section>
+        </section>
+
         <section class="admin-tab-panel is-active" role="tabpanel" id="panel-program-manage" aria-labelledby="tab-program-manage" data-admin-panel="program-manage">
           <div class="admin-program-list-card">
             <div class="admin-program-list-head">
@@ -279,7 +353,7 @@
               <h3>선택한 교육 관리</h3>
               <p data-program-selected-guide>교육명을 클릭하면 교육 수정과 교육생 모집현황을 함께 확인할 수 있습니다.</p>
             </div>
-            <button class="admin-refresh-button" type="button" data-program-form-reset>신규 교육 등록</button>
+            <button class="admin-refresh-button" type="button" data-program-form-reset hidden>신규 교육 작성</button>
           </div>
           <form class="admin-program-form" autocomplete="off" data-program-manage-form>
             <input type="hidden" name="id">
@@ -346,7 +420,7 @@
             </div>
             <div class="admin-program-form-actions">
               <p class="form-status" data-form-status aria-live="polite"></p>
-              <button class="button primary" type="submit">수정하기</button>
+              <button class="button primary" type="submit">등록하기</button>
             </div>
           </form>
           <section class="admin-program-applicants-panel" data-program-selected-applicants>
@@ -407,7 +481,7 @@
     <script src="assets/js/main.js?v=20260602-1"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/supabase-config.js?v=20260528-1"></script>
-    <script src="assets/js/admin-approvals.js?v=20260603-1"></script>
+    <script src="assets/js/admin-approvals.js?v=20260604-2"></script>
     <script src="assets/js/admin-settings.js?v=20260602-4"></script>
   </body>
 </html>
