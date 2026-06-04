@@ -98,7 +98,7 @@
 
   const INITIAL_SPACE_FILTERS = {
     ...DEFAULT_SPACE_FILTERS,
-    status: "approved",
+    status: "all",
   };
 
   const DEFAULT_PROGRAM_FILTERS = {
@@ -903,7 +903,6 @@
             <td>${escapeHtml(formatDateRange(item.reservation_date, item.reservation_end_date || item.reservation_date))}</td>
             <td>${escapeHtml(formatTimeRange(item.start_time, item.end_time))}</td>
             <td>${escapeHtml(usageHeadcount)}</td>
-            <td><button class="admin-table-action-button" type="button" data-space-manage-select="${escapeHtml(id)}">기록</button></td>
           </tr>
         `;
       })
@@ -921,7 +920,6 @@
             <col class="admin-space-col-period">
             <col class="admin-space-col-time">
             <col class="admin-space-col-headcount">
-            <col class="admin-space-col-actions">
           </colgroup>
           <thead>
             <tr>
@@ -933,7 +931,6 @@
               <th scope="col">예약기간</th>
               <th scope="col">이용시간</th>
               <th scope="col">이용인원</th>
-              <th scope="col">관리</th>
             </tr>
           </thead>
           <tbody>${rows}</tbody>
