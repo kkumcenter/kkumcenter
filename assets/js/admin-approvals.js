@@ -336,11 +336,12 @@
     node.innerHTML = `<tr><td colspan="${TABLE_COLSPAN}" class="${isError ? "is-error" : ""}">${escapeHtml(message)}</td></tr>`;
   };
 
-  const setFormStatus = (form, message, isError = false) => {
+  const setFormStatus = (form, message, isError = false, variant = "") => {
     const status = form?.querySelector("[data-form-status]");
     if (!status) return;
     status.textContent = message || "";
     status.classList.toggle("is-error", Boolean(isError));
+    status.classList.toggle("is-success", !isError && variant === "success" && Boolean(message));
   };
 
   const renderProgramImagePreview = (form, url = "") => {
@@ -1580,7 +1581,7 @@
       if (state.selectedProgramId) fillProgramForm(state.selectedProgramId, { scroll: false, render: false });
       renderProgramManagement();
       syncProgramFormMode(form, { updateGuide: false });
-      setFormStatus(form, isNewProgram ? "교육을 등록했습니다." : "교육 정보를 수정했습니다.");
+      setFormStatus(form, isNewProgram ? "교육을 등록했습니다." : "교육 정보를 수정했습니다.", false, "success");
     } catch (error) {
       setFormStatus(form, friendlyErrorMessage(error, "교육 정보를 저장하지 못했습니다."), true);
     } finally {
