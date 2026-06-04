@@ -972,9 +972,9 @@
               ${renderReadonlySpaceField("예약번호", item.reservation_no)}
               ${renderReadonlySpaceField("접수일", formatDateTime(item.created_at))}
               ${renderReadonlySpaceField("공간", spaceName)}
-              ${renderReadonlySpaceField("신청인원", item.headcount)}
               ${renderReadonlySpaceField("예약기간", formatDateRange(item.reservation_date, item.reservation_end_date || item.reservation_date))}
               ${renderReadonlySpaceField("시간", formatTimeRange(item.start_time, item.end_time))}
+              ${renderReadonlySpaceField("신청인원", item.headcount)}
             </div>
           </section>
           <section class="admin-space-detail-section admin-space-applicant-section">
