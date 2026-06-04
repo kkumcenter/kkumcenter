@@ -5408,7 +5408,7 @@ h2,
 
 .program-check-form[data-program-check-form],
 .program-check-form[data-space-check-form] {
-  grid-template-columns: minmax(160px, 1fr) minmax(140px, 0.8fr) minmax(150px, 0.9fr) minmax(150px, 0.9fr) 180px;
+  grid-template-columns: minmax(170px, 1fr) minmax(150px, 0.9fr) minmax(160px, 0.95fr) 180px;
 }
 
 .program-check-list {
