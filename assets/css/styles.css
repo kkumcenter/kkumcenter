@@ -12478,12 +12478,15 @@ body.admin-page {
 }
 
 .contact-board-form .privacy-consent {
-  align-items: flex-start;
+  display: grid !important;
+  grid-template-columns: 18px minmax(0, 1fr) !important;
+  align-items: flex-start !important;
+  column-gap: 10px !important;
   height: auto;
   min-height: 0;
-  margin: 2px 0 8px;
-  padding: 12px 14px 13px;
-  overflow: visible;
+  margin: 4px 0 12px;
+  padding: 14px 14px 16px;
+  overflow: visible !important;
 }
 
 .contact-board-form .privacy-consent input {
@@ -12493,7 +12496,7 @@ body.admin-page {
 .contact-board-form .privacy-consent span {
   flex: 1 1 auto;
   min-width: 0;
-  line-height: 1.55;
+  line-height: 1.62;
   overflow-wrap: anywhere;
   word-break: keep-all;
 }
@@ -13538,12 +13541,12 @@ body.admin-page {
   }
 
   .contact-board-form .privacy-consent {
-    margin-bottom: 10px;
-    padding: 12px 12px 14px;
+    margin-bottom: 12px;
+    padding: 14px 12px 17px;
   }
 
   .contact-board-form .privacy-consent span {
-    line-height: 1.6;
+    line-height: 1.65;
   }
 
   .space-application-card a {
