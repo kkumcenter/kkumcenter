@@ -13149,6 +13149,10 @@ body.admin-page {
   border-top: 3px solid rgba(7, 61, 146, 0.55);
 }
 
+.admin-education-selected-head {
+  border-top-width: 15px;
+}
+
 .admin-program-selected-head h3 {
   margin: 0;
   color: #0d2f5c;
