@@ -13303,7 +13303,7 @@ body.admin-page {
 
 .admin-space-usage-form {
   display: grid;
-  grid-template-columns: minmax(150px, 0.45fr) minmax(300px, 1.55fr);
+  grid-template-columns: 1fr;
   gap: 14px;
   align-items: end;
   padding-top: 18px;
@@ -13349,6 +13349,7 @@ body.admin-page {
 
 .admin-space-usage-note {
   min-width: 0;
+  grid-column: 1 / -1;
 }
 
 .admin-space-usage-form .form-status {
