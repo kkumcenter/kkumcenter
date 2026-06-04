@@ -952,7 +952,7 @@
     const usageLog = latestUsageLog(item);
     const usageValue = usageStatusValue(item);
     if (nodes.spaceSelectedGuide) {
-      nodes.spaceSelectedGuide.textContent = `${spaceName} · ${reservationStatusLabel(item.status)} · ${usageStatusLabel(usageValue)}`;
+      nodes.spaceSelectedGuide.textContent = "";
     }
 
     nodes.spaceSelectedPanel.innerHTML = `
