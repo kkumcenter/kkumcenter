@@ -5099,14 +5099,14 @@ h2,
 }
 
 .space-reservation-form:not(.program-apply-form) .reservation-basic-fields {
-  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-columns: repeat(15, minmax(0, 1fr));
 }
 
-.space-reservation-form:not(.program-apply-form) .reservation-basic-fields > label:nth-child(-n + 3) {
-  grid-column: span 4;
+.space-reservation-form:not(.program-apply-form) .reservation-basic-fields > label:nth-child(-n + 5) {
+  grid-column: span 3;
 }
 
-.space-reservation-form:not(.program-apply-form) .reservation-basic-fields > label:nth-child(n + 4) {
+.space-reservation-form:not(.program-apply-form) .reservation-basic-fields > label:nth-child(n + 6) {
   grid-column: span 3;
 }
 
@@ -9472,8 +9472,8 @@ body.admin-page {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .space-reservation-form:not(.program-apply-form) .reservation-basic-fields > label:nth-child(-n + 3),
-  .space-reservation-form:not(.program-apply-form) .reservation-basic-fields > label:nth-child(n + 4),
+  .space-reservation-form:not(.program-apply-form) .reservation-basic-fields > label:nth-child(-n + 5),
+  .space-reservation-form:not(.program-apply-form) .reservation-basic-fields > label:nth-child(n + 6),
   .program-apply-form .reservation-basic-fields > label:nth-child(-n + 2),
   .program-apply-form .reservation-basic-fields > label:nth-child(n + 3) {
     grid-column: auto;

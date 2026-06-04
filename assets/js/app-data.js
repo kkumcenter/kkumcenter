@@ -235,6 +235,8 @@
       lookupPassword: reservation.lookupPassword,
       reservationDate: reservation.startDate,
       endDate: reservation.endDate,
+      startTime: reservation.startTime,
+      endTime: reservation.endTime,
       purpose: reservation.purpose || "공간 이용",
       headcount: Number(reservation.headcount || 1),
       note: reservation.memo || null,
@@ -826,6 +828,8 @@
           lookupPassword: fieldValue(form, "spacePassword") || fieldValue(form, "lookupPassword"),
           startDate: fieldValue(form, "startDate"),
           endDate: fieldValue(form, "endDate"),
+          startTime: fieldValue(form, "startTime"),
+          endTime: fieldValue(form, "endTime"),
           purpose: fieldValue(form, "purpose"),
           memo: fieldValue(form, "memo"),
           status: "승인대기",
@@ -838,8 +842,13 @@
           return;
         }
 
-        if (!reservation.applicant || !reservation.phone || !reservation.birthYear || !reservation.region || !reservation.lookupPassword || !reservation.startDate || !reservation.endDate) {
-          setFormStatus(form, "이름, 연락처, 출생연도, 주소, 비밀번호, 예약일을 모두 입력해주세요.", true);
+        if (!reservation.applicant || !reservation.phone || !reservation.birthYear || !reservation.region || !reservation.lookupPassword || !reservation.startDate || !reservation.endDate || !reservation.startTime || !reservation.endTime) {
+          setFormStatus(form, "이름, 연락처, 출생연도, 주소, 비밀번호, 예약일과 이용시간을 모두 입력해주세요.", true);
+          return;
+        }
+
+        if (reservation.startTime >= reservation.endTime) {
+          setFormStatus(form, "예약 종료시간은 시작시간보다 늦어야 합니다.", true);
           return;
         }
 

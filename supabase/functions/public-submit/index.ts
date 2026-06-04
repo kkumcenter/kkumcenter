@@ -409,7 +409,13 @@ Deno.serve(async (request) => {
       const reservationNo = String(data.reservationNo || createNo("R"));
       const reservationDate = requireText(data, "reservationDate");
       const reservationEndDate = data.endDate ? String(data.endDate) : reservationDate;
+      const startTime = requireText(data, "startTime");
+      const endTime = requireText(data, "endTime");
       const lookupPassword = requireText(data, "lookupPassword");
+
+      if (startTime >= endTime) {
+        throw new Error("예약 종료시간은 시작시간보다 늦어야 합니다.");
+      }
 
       const { error } = await supabase.from("space_reservations").insert({
         reservation_no: reservationNo,
@@ -423,8 +429,8 @@ Deno.serve(async (request) => {
         lookup_password_hash: await hashLookupPassword(lookupPassword),
         reservation_date: reservationDate,
         reservation_end_date: reservationEndDate,
-        start_time: String(data.startTime || "09:00"),
-        end_time: String(data.endTime || "18:00"),
+        start_time: startTime,
+        end_time: endTime,
         purpose: requireText(data, "purpose"),
         headcount: Number(data.headcount || 1),
         note: data.note ? String(data.note) : null,
