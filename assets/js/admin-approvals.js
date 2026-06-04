@@ -23,6 +23,14 @@
     "2층 청소년활동실",
     "2층 미디어스튜디오",
   ];
+  const SPACE_MANAGE_OPTIONS = [
+    { value: "공유주방", label: "1층 공유주방" },
+    { value: "대회의실", label: "1층 대회의실" },
+    { value: "강의실", label: "2층 강의실" },
+    { value: "소회의실", label: "2층 소회의실" },
+    { value: "청소년활동실", label: "2층 청소년활동실" },
+    { value: "미디어스튜디오", label: "2층 미디어스튜디오" },
+  ];
 
   const nodes = {
     role: dashboard.querySelector("[data-admin-approval-role]"),
@@ -534,12 +542,15 @@
   const syncSpaceManageOptions = () => {
     if (nodes.spaceManageSpace) {
       const currentValue = nodes.spaceManageSpace.value || "all";
-      const spaces = [...new Set(state.spaceReservations.map((item) => getRelationValue(item.spaces, "name")).filter(Boolean))].sort((a, b) =>
-        String(a).localeCompare(String(b), "ko"),
-      );
+      const optionValues = new Set(SPACE_MANAGE_OPTIONS.map((item) => item.value));
+      const extraSpaces = [...new Set(state.spaceReservations.map((item) => getRelationValue(item.spaces, "name")).filter(Boolean))]
+        .filter((name) => !optionValues.has(name))
+        .sort((a, b) => String(a).localeCompare(String(b), "ko"))
+        .map((name) => ({ value: name, label: name }));
+      const spaces = [...SPACE_MANAGE_OPTIONS, ...extraSpaces];
       nodes.spaceManageSpace.innerHTML = `
         <option value="all">전체</option>
-        ${spaces.map((name) => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join("")}
+        ${spaces.map((item) => `<option value="${escapeHtml(item.value)}">${escapeHtml(item.label)}</option>`).join("")}
       `;
       nodes.spaceManageSpace.value = [...nodes.spaceManageSpace.options].some((option) => option.value === currentValue) ? currentValue : "all";
     }
@@ -951,22 +962,22 @@
 
     nodes.spaceSelectedPanel.innerHTML = `
       <div class="admin-space-selected-grid">
-        ${renderDetailRows([
-          { label: "예약번호", value: item.reservation_no },
-          { label: "예약상태", value: reservationStatusLabel(item.status) },
-          { label: "공간", value: spaceName },
-          { label: "신청자", value: item.applicant_name },
-          { label: "연락처", value: item.phone },
-          { label: "출생연도", value: item.birth_year },
-          { label: "주소", value: item.region },
-          { label: "예약기간", value: formatDateRange(item.reservation_date, item.reservation_end_date || item.reservation_date) },
-          { label: "시간", value: formatTimeRange(item.start_time, item.end_time) },
-          { label: "신청 인원", value: item.headcount },
-          { label: "이용목적", value: item.purpose, wide: true },
-          { label: "신청 메모", value: item.note, wide: true },
-          { label: "접수일", value: formatDateTime(item.created_at) },
-          { label: "최근 기록일", value: usageLog ? formatDateTime(usageLog.recorded_at || usageLog.created_at) : "미기록" },
-        ])}
+        <div class="admin-space-detail-form" aria-label="선택한 공간예약 상세">
+          ${renderReadonlySpaceField("예약번호", item.reservation_no)}
+          ${renderReadonlySpaceField("예약상태", reservationStatusLabel(item.status))}
+          ${renderReadonlySpaceField("공간", spaceName)}
+          ${renderReadonlySpaceField("신청자", item.applicant_name)}
+          ${renderReadonlySpaceField("연락처", item.phone)}
+          ${renderReadonlySpaceField("출생연도", item.birth_year)}
+          ${renderReadonlySpaceField("주소", item.region)}
+          ${renderReadonlySpaceField("신청 인원", item.headcount)}
+          ${renderReadonlySpaceField("예약기간", formatDateRange(item.reservation_date, item.reservation_end_date || item.reservation_date))}
+          ${renderReadonlySpaceField("시간", formatTimeRange(item.start_time, item.end_time))}
+          ${renderReadonlySpaceField("접수일", formatDateTime(item.created_at))}
+          ${renderReadonlySpaceField("최근 기록일", usageLog ? formatDateTime(usageLog.recorded_at || usageLog.created_at) : "미기록")}
+          ${renderReadonlySpaceField("이용목적", item.purpose, { wide: true, multiline: true })}
+          ${renderReadonlySpaceField("신청 메모", item.note, { wide: true, multiline: true })}
+        </div>
         <form class="admin-space-usage-form" autocomplete="off" data-space-usage-form>
           <input type="hidden" name="reservationId" value="${escapeHtml(item.id)}">
           <label>실제 이용 여부
@@ -1329,6 +1340,15 @@
         `,
       )
       .join("")}</dl>`;
+
+  const renderReadonlySpaceField = (label, value, options = {}) => {
+    const fieldClass = options.wide ? "admin-space-detail-wide" : "";
+    const displayText = displayValue(value);
+    const field = options.multiline
+      ? `<textarea rows="${options.rows || 3}" readonly>${escapeHtml(displayText)}</textarea>`
+      : `<input type="text" value="${escapeHtml(displayText)}" readonly>`;
+    return `<label class="${fieldClass}">${escapeHtml(label)}${field}</label>`;
+  };
 
   const openSpaceDetail = (id) => {
     const item = state.spaces.find((entry) => String(entry.id) === String(id));
