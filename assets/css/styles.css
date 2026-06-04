@@ -12493,20 +12493,33 @@ body.admin-page {
   grid-template-columns: 18px minmax(0, 1fr) !important;
   align-items: flex-start !important;
   column-gap: 10px !important;
-  height: auto;
-  min-height: 0;
-  margin: 4px 0 12px;
-  padding: 14px 14px 16px;
+  height: auto !important;
+  min-height: auto !important;
+  margin: 6px 0 16px;
+  padding: 14px 14px 20px;
   overflow: visible !important;
 }
 
-.contact-board-form .privacy-consent input {
-  margin-top: 2px;
+.contact-board-form .privacy-consent input[type="checkbox"] {
+  appearance: auto;
+  flex: 0 0 18px;
+  width: 18px !important;
+  min-width: 18px !important;
+  height: 18px !important;
+  min-height: 18px !important;
+  margin: 3px 0 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: initial !important;
+  box-shadow: none;
 }
 
 .contact-board-form .privacy-consent span {
+  display: block;
   flex: 1 1 auto;
   min-width: 0;
+  padding-bottom: 2px;
   line-height: 1.62;
   overflow-wrap: anywhere;
   word-break: keep-all;
@@ -13786,11 +13799,12 @@ body.admin-page {
   }
 
   .contact-board-form .privacy-consent {
-    margin-bottom: 12px;
-    padding: 14px 12px 17px;
+    margin: 8px 0 18px;
+    padding: 14px 12px 22px;
   }
 
   .contact-board-form .privacy-consent span {
+    padding-bottom: 2px;
     line-height: 1.65;
   }
 
