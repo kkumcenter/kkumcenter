@@ -13183,20 +13183,20 @@ body.admin-page {
 .admin-space-selected-panel {
   display: grid;
   gap: 16px;
-  padding-top: 4px;
+  padding-top: 8px;
 }
 
 .admin-space-selected-grid {
   display: grid;
-  gap: 18px;
+  gap: 20px;
 }
 
 .admin-space-usage-form {
   display: grid;
-  grid-template-columns: minmax(150px, 0.6fr) minmax(150px, 0.6fr) minmax(260px, 1.8fr) auto;
-  gap: 12px;
+  grid-template-columns: minmax(150px, 0.65fr) minmax(150px, 0.65fr) minmax(280px, 1.7fr);
+  gap: 14px;
   align-items: end;
-  padding-top: 4px;
+  padding-top: 2px;
 }
 
 .admin-space-usage-form label {
@@ -13237,7 +13237,7 @@ body.admin-page {
 }
 
 .admin-space-usage-form .form-status {
-  grid-column: 1 / -2;
+  grid-column: auto;
   margin: 0;
 }
 
@@ -13248,6 +13248,14 @@ body.admin-page {
 .admin-space-usage-form button {
   min-width: 132px;
   min-height: 38px;
+}
+
+.admin-space-usage-actions {
+  grid-column: 1 / -1;
+}
+
+.admin-space-usage-actions .form-status {
+  flex: 1 1 240px;
 }
 
 .admin-program-form-grid {

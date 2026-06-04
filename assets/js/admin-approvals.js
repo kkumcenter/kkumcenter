@@ -981,8 +981,10 @@
           <label class="admin-space-usage-note">관리자 메모
             <textarea name="adminNote" rows="4" placeholder="실제 이용 내용, 특이사항, 미이용 사유 등을 적어주세요.">${escapeHtml(usageLog?.admin_note || "")}</textarea>
           </label>
-          <p class="form-status" data-form-status aria-live="polite"></p>
-          <button class="button primary" type="submit">이용 기록 저장</button>
+          <div class="admin-program-form-actions admin-space-usage-actions">
+            <p class="form-status" data-form-status aria-live="polite"></p>
+            <button class="button primary" type="submit">이용 기록 저장</button>
+          </div>
         </form>
       </div>
     `;
@@ -1634,7 +1636,7 @@
       }
       await logAdminAction("update", "space_usage_log", reservationId, "공간 실제 이용 기록 저장");
       await load();
-      setFormStatus(nodes.spaceSelectedPanel?.querySelector("[data-space-usage-form]"), "공간 이용 기록을 저장했습니다.");
+      setFormStatus(nodes.spaceSelectedPanel?.querySelector("[data-space-usage-form]"), "공간 이용 기록을 저장했습니다.", false, "success");
     } catch (error) {
       setFormStatus(form, friendlyErrorMessage(error, "공간 이용 기록을 저장하지 못했습니다."), true);
     } finally {
