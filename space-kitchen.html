@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>공유주방 | 공간시설 | 군북면 꿈키움센터</title>
     <meta name="description" content="군북면 꿈키움센터 1층 공유주방 상세 안내입니다.">
-    <link rel="stylesheet" href="assets/css/styles.css?v=20260604-4">
+    <link rel="stylesheet" href="assets/css/styles.css?v=20260604-9">
   </head>
   <body>
     <a class="skip-link" href="#main">본문 바로가기</a>
@@ -57,10 +57,10 @@
               <label>연락처<input name="spacePhone" type="tel" autocomplete="off" placeholder="010-0000-0000" required></label>
               <label>출생연도<input name="spaceBirthYear" type="number" autocomplete="off" inputmode="numeric" min="1900" max="2100" placeholder="예: 1900" required></label>
               <label>주소(시·군·구)<input name="spaceRegion" type="text" autocomplete="off" placeholder="예: 금산군 군북면" required></label>
+              <label>이용 인원<input name="spaceHeadcount" type="number" autocomplete="off" inputmode="numeric" min="1" placeholder="예: 10" required></label>
             </div>
-            <label class="reservation-purpose">이용목적<textarea name="purpose" rows="5" placeholder="이용 목적을 입력하세요"></textarea></label>
-            <label class="reservation-extra">기타<textarea name="memo" rows="5" placeholder="필요한 준비물이나 요청사항을 적어주세요"></textarea></label>
-            <label class="privacy-consent"><input name="privacyConsent" type="checkbox" required><span>개인정보 수집·이용에 동의합니다. 수집 항목은 이름, 연락처, 출생연도, 주소(시·군·구), 조회용 비밀번호이며 예약 접수·확인과 운영 통계에 사용합니다.</span></label>
+            <label class="reservation-purpose">이용목적 및 기타<textarea name="purpose" rows="6" placeholder="이용 목적, 필요한 준비물, 요청사항을 함께 입력하세요"></textarea></label>
+            <label class="privacy-consent"><input name="privacyConsent" type="checkbox" required><span>개인정보 수집·이용에 동의합니다. 수집 항목은 이름, 연락처, 출생연도, 주소(시·군·구), 이용 인원, 조회용 비밀번호이며 예약 접수·확인과 운영 통계에 사용합니다.</span></label>
             <p class="form-status" data-form-status aria-live="polite"></p><div class="reservation-action"><button type="submit">예약하기</button></div>
           </div>
         </form>
@@ -85,6 +85,6 @@
     <script src="assets/js/main.js?v=20260602-1"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/supabase-config.js?v=20260528-1"></script>
-    <script src="assets/js/app-data.js?v=20260604-3"></script>
+    <script src="assets/js/app-data.js?v=20260604-4"></script>
   </body>
 </html>

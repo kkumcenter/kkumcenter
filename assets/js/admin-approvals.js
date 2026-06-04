@@ -887,9 +887,7 @@
         const id = String(item.id);
         const spaceName = displayValue(getRelationValue(item.spaces, "name") || "공간");
         const usageValue = usageStatusValue(item);
-        const usageLog = latestUsageLog(item);
         const selected = String(state.selectedSpaceReservationId || "") === id;
-        const usageHeadcount = usageLog ? displayValue(usageLog.actual_headcount) : `신청 ${displayValue(item.headcount)}`;
         return `
           <tr class="${selected ? "is-selected" : ""}">
             <td><span class="admin-status-badge ${reservationStatusClass(item.status)}">${escapeHtml(reservationStatusLabel(item.status))}</span></td>
@@ -902,7 +900,7 @@
             <td>${escapeHtml(displayValue(item.phone))}</td>
             <td>${escapeHtml(formatDateRange(item.reservation_date, item.reservation_end_date || item.reservation_date))}</td>
             <td>${escapeHtml(formatTimeRange(item.start_time, item.end_time))}</td>
-            <td>${escapeHtml(usageHeadcount)}</td>
+            <td>${escapeHtml(displayValue(item.headcount))}</td>
           </tr>
         `;
       })
@@ -930,7 +928,7 @@
               <th scope="col">연락처</th>
               <th scope="col">예약기간</th>
               <th scope="col">이용시간</th>
-              <th scope="col">이용인원</th>
+              <th scope="col">신청인원</th>
             </tr>
           </thead>
           <tbody>${rows}</tbody>
@@ -959,21 +957,28 @@
 
     nodes.spaceSelectedPanel.innerHTML = `
       <div class="admin-space-selected-grid">
-        <div class="admin-space-detail-form" aria-label="선택한 공간예약 상세">
-          ${renderReadonlySpaceField("예약번호", item.reservation_no)}
-          ${renderReadonlySpaceField("예약상태", reservationStatusLabel(item.status))}
-          ${renderReadonlySpaceField("공간", spaceName)}
-          ${renderReadonlySpaceField("신청자", item.applicant_name)}
-          ${renderReadonlySpaceField("연락처", item.phone)}
-          ${renderReadonlySpaceField("출생연도", item.birth_year)}
-          ${renderReadonlySpaceField("주소", item.region)}
-          ${renderReadonlySpaceField("신청 인원", item.headcount)}
-          ${renderReadonlySpaceField("예약기간", formatDateRange(item.reservation_date, item.reservation_end_date || item.reservation_date))}
-          ${renderReadonlySpaceField("시간", formatTimeRange(item.start_time, item.end_time))}
-          ${renderReadonlySpaceField("접수일", formatDateTime(item.created_at))}
-          ${renderReadonlySpaceField("최근 기록일", usageLog ? formatDateTime(usageLog.recorded_at || usageLog.created_at) : "미기록")}
-          ${renderReadonlySpaceField("이용목적", item.purpose, { wide: true, multiline: true })}
-          ${renderReadonlySpaceField("신청 메모", item.note, { wide: true, multiline: true })}
+        <div class="admin-space-detail-sections" aria-label="선택한 공간예약 상세">
+          <section class="admin-space-detail-section">
+            <h4>예약정보</h4>
+            <div class="admin-space-detail-form">
+              ${renderReadonlySpaceField("예약번호", item.reservation_no)}
+              ${renderReadonlySpaceField("접수일", formatDateTime(item.created_at))}
+              ${renderReadonlySpaceField("공간", spaceName)}
+              ${renderReadonlySpaceField("신청인원", item.headcount)}
+              ${renderReadonlySpaceField("예약기간", formatDateRange(item.reservation_date, item.reservation_end_date || item.reservation_date))}
+              ${renderReadonlySpaceField("시간", formatTimeRange(item.start_time, item.end_time))}
+            </div>
+          </section>
+          <section class="admin-space-detail-section">
+            <h4>신청자 정보</h4>
+            <div class="admin-space-detail-form">
+              ${renderReadonlySpaceField("신청자", item.applicant_name)}
+              ${renderReadonlySpaceField("연락처", item.phone)}
+              ${renderReadonlySpaceField("출생연도", item.birth_year)}
+              ${renderReadonlySpaceField("주소", item.region)}
+              ${renderReadonlySpaceField("이용목적 및 신청메모", combinedSpacePurposeMemo(item.purpose, item.note), { wide: true, multiline: true })}
+            </div>
+          </section>
         </div>
         <form class="admin-space-usage-form" autocomplete="off" data-space-usage-form>
           <input type="hidden" name="reservationId" value="${escapeHtml(item.id)}">
@@ -983,11 +988,8 @@
               <option value="false"${usageValue === "unused" ? " selected" : ""}>미이용</option>
             </select>
           </label>
-          <label>실제 이용 인원
-            <input name="actualHeadcount" type="number" min="0" inputmode="numeric" placeholder="예: ${escapeHtml(displayValue(item.headcount))}" value="${escapeHtml(usageLog?.actual_headcount ?? "")}">
-          </label>
           <label class="admin-space-usage-note">관리자 메모
-            <textarea name="adminNote" rows="4" placeholder="실제 이용 내용, 특이사항, 미이용 사유 등을 적어주세요.">${escapeHtml(usageLog?.admin_note || "")}</textarea>
+            <textarea name="adminNote" rows="4" placeholder="실제 이용 내용, 실제 이용 인원, 특이사항, 미이용 사유 등을 적어주세요.">${escapeHtml(usageLog?.admin_note || "")}</textarea>
           </label>
           <div class="admin-program-form-actions admin-space-usage-actions">
             <p class="form-status" data-form-status aria-live="polite"></p>
@@ -1347,6 +1349,11 @@
     return `<label class="${fieldClass}">${escapeHtml(label)}${field}</label>`;
   };
 
+  const combinedSpacePurposeMemo = (purpose, note) => {
+    const parts = [purpose, note].map((value) => String(value || "").trim()).filter(Boolean);
+    return parts.join("\n\n");
+  };
+
   const openSpaceDetail = (id) => {
     const item = state.spaces.find((entry) => String(entry.id) === String(id));
     if (!item) return;
@@ -1625,20 +1632,13 @@
       return;
     }
 
-    const actualHeadcountValue = form.elements.actualHeadcount.value.trim();
     const payload = {
       reservation_id: reservationId,
       actual_used: form.elements.actualUsed.value === "true",
-      actual_headcount: actualHeadcountValue ? Number(actualHeadcountValue) : null,
       admin_note: form.elements.adminNote.value.trim() || null,
       recorded_by: state.session.user.id,
       recorded_at: new Date().toISOString(),
     };
-
-    if (payload.actual_headcount !== null && (!Number.isFinite(payload.actual_headcount) || payload.actual_headcount < 0)) {
-      setFormStatus(form, "실제 이용 인원은 0명 이상으로 입력해주세요.", true);
-      return;
-    }
 
     const submit = form.querySelector('button[type="submit"]');
     submit.disabled = true;

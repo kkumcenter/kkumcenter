@@ -238,7 +238,7 @@
       startTime: reservation.startTime,
       endTime: reservation.endTime,
       purpose: reservation.purpose || "공간 이용",
-      headcount: Number(reservation.headcount || 1),
+      headcount: Number(reservation.headcount),
       note: reservation.memo || null,
     });
   };
@@ -437,6 +437,11 @@
       lookupPassword: lookup.lookupPassword,
     });
     return result?.items || (result?.item ? [result.item] : []);
+  };
+
+  const combinedSpacePurposeMemo = (purpose, memo) => {
+    const parts = [purpose, memo].map((value) => String(value || "").trim()).filter(Boolean);
+    return parts.join("\n\n");
   };
 
   const setupContactForms = () => {
@@ -837,12 +842,13 @@
           birthYear: fieldValue(form, "spaceBirthYear") || fieldValue(form, "birthYear"),
           region: fieldValue(form, "spaceRegion") || fieldValue(form, "region"),
           lookupPassword: fieldValue(form, "spacePassword") || fieldValue(form, "lookupPassword"),
+          headcount: fieldValue(form, "spaceHeadcount") || fieldValue(form, "headcount"),
           startDate: fieldValue(form, "startDate"),
           endDate: fieldValue(form, "endDate"),
           startTime: fieldValue(form, "startTime"),
           endTime: fieldValue(form, "endTime"),
           purpose: fieldValue(form, "purpose"),
-          memo: fieldValue(form, "memo"),
+          memo: "",
           status: "승인대기",
           createdAt: new Date().toISOString(),
           source: "local",
@@ -853,8 +859,14 @@
           return;
         }
 
-        if (!reservation.applicant || !reservation.phone || !reservation.birthYear || !reservation.region || !reservation.lookupPassword || !reservation.startDate || !reservation.endDate || !reservation.startTime || !reservation.endTime) {
-          setFormStatus(form, "이름, 연락처, 출생연도, 주소, 비밀번호, 예약일과 이용시간을 모두 입력해주세요.", true);
+        if (!reservation.applicant || !reservation.phone || !reservation.birthYear || !reservation.region || !reservation.lookupPassword || !reservation.headcount || !reservation.startDate || !reservation.endDate || !reservation.startTime || !reservation.endTime) {
+          setFormStatus(form, "이름, 연락처, 출생연도, 주소, 이용 인원, 비밀번호, 예약일과 이용시간을 모두 입력해주세요.", true);
+          return;
+        }
+
+        const headcountValue = Number(reservation.headcount);
+        if (!Number.isInteger(headcountValue) || headcountValue <= 0) {
+          setFormStatus(form, "이용 인원은 1명 이상으로 입력해주세요.", true);
           return;
         }
 
@@ -1119,8 +1131,7 @@
                 { label: "주소", value: item.region },
                 { label: "예약기간", value: formatDateRange(item.startDate, item.endDate) },
                 { label: "이용시간", value: formatTimeRange(item.startTime, item.endTime) },
-                { label: "이용목적", value: item.purpose, wide: true },
-                { label: "기타 메모", value: item.memo || item.note, wide: true },
+                { label: "이용목적 및 신청메모", value: combinedSpacePurposeMemo(item.purpose, item.memo || item.note), wide: true },
                 { label: "접수일", value: formatDate(item.createdAt) },
               ]
             : [

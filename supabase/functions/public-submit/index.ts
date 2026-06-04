@@ -412,9 +412,14 @@ Deno.serve(async (request) => {
       const startTime = requireText(data, "startTime");
       const endTime = requireText(data, "endTime");
       const lookupPassword = requireText(data, "lookupPassword");
+      const headcount = Number(data.headcount);
 
       if (startTime >= endTime) {
         throw new Error("예약 종료시간은 시작시간보다 늦어야 합니다.");
+      }
+
+      if (!Number.isInteger(headcount) || headcount <= 0) {
+        throw new Error("이용 인원은 1명 이상으로 입력해주세요.");
       }
 
       const { error } = await supabase.from("space_reservations").insert({
@@ -432,7 +437,7 @@ Deno.serve(async (request) => {
         start_time: startTime,
         end_time: endTime,
         purpose: requireText(data, "purpose"),
-        headcount: Number(data.headcount || 1),
+        headcount,
         note: data.note ? String(data.note) : null,
         status: "received",
       });

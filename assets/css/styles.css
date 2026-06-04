@@ -5228,19 +5228,16 @@ h2,
   background: var(--forest);
 }
 
-.reservation-purpose,
-.reservation-extra {
+.reservation-purpose {
   grid-template-rows: auto 1fr;
 }
 
 .reservation-purpose,
-.reservation-extra,
 .reservation-action {
   grid-column: 1 / -1;
 }
 
-.reservation-purpose textarea,
-.reservation-extra textarea {
+.reservation-purpose textarea {
   min-height: 0;
   height: 100%;
 }
@@ -13206,9 +13203,33 @@ body.admin-page {
   gap: 20px;
 }
 
+.admin-space-detail-sections {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  align-items: start;
+}
+
+.admin-space-detail-section {
+  display: grid;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid rgba(15, 42, 77, 0.12);
+  border-radius: 10px;
+  background: #f8fbff;
+}
+
+.admin-space-detail-section h4 {
+  margin: 0;
+  color: #0d2f5c;
+  font-size: 17px;
+  font-weight: 900;
+  line-height: 1.35;
+}
+
 .admin-space-detail-form {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
 }
 
@@ -13250,7 +13271,7 @@ body.admin-page {
 
 .admin-space-usage-form {
   display: grid;
-  grid-template-columns: minmax(150px, 0.65fr) minmax(150px, 0.65fr) minmax(280px, 1.7fr);
+  grid-template-columns: minmax(150px, 0.45fr) minmax(300px, 1.55fr);
   gap: 14px;
   align-items: end;
   padding-top: 2px;
@@ -13681,6 +13702,10 @@ body.admin-page {
   }
 
   .admin-program-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-space-detail-sections {
     grid-template-columns: 1fr;
   }
 
