@@ -623,6 +623,22 @@
       };
     };
 
+    const openInquiryForCurrentUser = async (inquiryNo) => {
+      if (!inquiryNo) return;
+      selectedInquiryNo = inquiryNo;
+      if (!isSuperAdmin) {
+        openPasswordModal(inquiryNo);
+        return;
+      }
+
+      try {
+        closeModal(passwordModal);
+        renderInquiryDetail(await fetchAdminInquiry(inquiryNo), { adminMode: true });
+      } catch (error) {
+        window.alert(error.message || "문의를 불러오지 못했습니다.");
+      }
+    };
+
     const loadPublicInquiryList = async () => {
       if (!publicList) return;
       try {
@@ -694,27 +710,22 @@
 
       const answerNo = target.dataset.inquiryAnswer;
       if (answerNo) {
-        try {
-          selectedInquiryNo = answerNo;
-          renderInquiryDetail(await fetchAdminInquiry(answerNo), { adminMode: true });
-        } catch (error) {
-          window.alert(error.message || "문의를 불러오지 못했습니다.");
-        }
+        await openInquiryForCurrentUser(answerNo);
         return;
       }
 
       const row = target.closest("[data-inquiry-open]");
-      if (row instanceof HTMLElement) openPasswordModal(row.dataset.inquiryOpen || "");
+      if (row instanceof HTMLElement) await openInquiryForCurrentUser(row.dataset.inquiryOpen || "");
     });
 
-    publicList?.addEventListener("keydown", (event) => {
+    publicList?.addEventListener("keydown", async (event) => {
       if (event.key !== "Enter" && event.key !== " ") return;
       const target = event.target;
       if (!(target instanceof HTMLElement)) return;
       const row = target.closest("[data-inquiry-open]");
       if (!(row instanceof HTMLElement)) return;
       event.preventDefault();
-      openPasswordModal(row.dataset.inquiryOpen || "");
+      await openInquiryForCurrentUser(row.dataset.inquiryOpen || "");
     });
 
     passwordForm?.addEventListener("submit", async (event) => {
