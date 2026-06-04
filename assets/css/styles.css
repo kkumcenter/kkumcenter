@@ -13220,11 +13220,23 @@ body.admin-page {
 
 .admin-space-detail-section h4,
 .admin-space-usage-form h4 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   margin: 0;
   color: #0d2f5c;
-  font-size: 17px;
+  font-size: 19px;
   font-weight: 900;
   line-height: 1.35;
+}
+
+.admin-space-detail-section h4::before,
+.admin-space-usage-form h4::before {
+  content: "";
+  width: 5px;
+  height: 20px;
+  border-radius: 999px;
+  background: #0f6fe8;
 }
 
 .admin-space-detail-form {
@@ -13242,7 +13254,8 @@ body.admin-page {
   gap: 14px;
 }
 
-.admin-space-detail-form label {
+.admin-space-detail-form label,
+.admin-space-request-note label {
   display: grid;
   gap: 8px;
   color: #24324a;
@@ -13251,7 +13264,8 @@ body.admin-page {
 }
 
 .admin-space-detail-form input,
-.admin-space-detail-form textarea {
+.admin-space-detail-form textarea,
+.admin-space-request-note textarea {
   width: 100%;
   border: 1px solid rgba(15, 42, 77, 0.14);
   border-radius: 8px;
@@ -13272,6 +13286,14 @@ body.admin-page {
   min-height: 112px;
   padding: 13px;
   resize: none;
+}
+
+.admin-space-request-note textarea {
+  min-height: 116px;
+  padding: 14px;
+  resize: none;
+  line-height: 1.7;
+  white-space: pre-wrap;
 }
 
 .admin-space-detail-wide,
