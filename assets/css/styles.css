@@ -13149,7 +13149,8 @@ body.admin-page {
   border-top: 3px solid rgba(7, 61, 146, 0.55);
 }
 
-.admin-education-selected-head {
+.admin-education-selected-head,
+.admin-space-selected-head {
   border-top-width: 15px;
 }
 

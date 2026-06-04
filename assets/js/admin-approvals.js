@@ -1514,7 +1514,7 @@
     if (submit) submit.textContent = isEditing ? "수정하기" : "등록하기";
     if (nodes.programFormReset) nodes.programFormReset.hidden = !isEditing;
     if (!isEditing && nodes.programSelectedGuide && options.updateGuide !== false) {
-      nodes.programSelectedGuide.textContent = "새 교육 정보를 입력해 등록할 수 있습니다.";
+      nodes.programSelectedGuide.textContent = "";
     }
   };
 
@@ -1531,7 +1531,7 @@
     syncProgramPlaceOptions(nodes.programManageForm, "");
     syncProgramCancelReason(nodes.programManageForm);
     renderProgramImagePreview(nodes.programManageForm, "");
-    setFormStatus(nodes.programManageForm, "새 교육 정보를 입력해 등록할 수 있습니다.");
+    setFormStatus(nodes.programManageForm, "");
     syncProgramFormMode(nodes.programManageForm, { updateGuide: false });
     if (options.render !== false) renderProgramManagement();
     syncProgramFormMode(nodes.programManageForm);
