@@ -319,6 +319,14 @@
     return `${startText} - ${endText}`;
   };
 
+  const formatSpaceDateRangeHtml = (start, end) => {
+    const startText = formatDate(start);
+    const endText = formatDate(end);
+    if (startText === "-" && endText === "-") return "-";
+    if (startText === endText) return escapeHtml(startText);
+    return `<span class="admin-date-range-stack"><span>${escapeHtml(startText)}</span><span>- ${escapeHtml(endText)}</span></span>`;
+  };
+
   const callPublicSubmitFunction = async (action, payload = {}) => {
     if (!state.session?.access_token) throw new Error("관리자 인증 정보가 필요합니다.");
     const response = await window.fetch(`${config.url}/functions/v1/public-submit`, {
@@ -898,7 +906,7 @@
             </td>
             <td>${escapeHtml(displayValue(item.applicant_name))}</td>
             <td>${escapeHtml(displayValue(item.phone))}</td>
-            <td>${escapeHtml(formatDateRange(item.reservation_date, item.reservation_end_date || item.reservation_date))}</td>
+            <td>${formatSpaceDateRangeHtml(item.reservation_date, item.reservation_end_date || item.reservation_date)}</td>
             <td>${escapeHtml(formatTimeRange(item.start_time, item.end_time))}</td>
             <td>${escapeHtml(displayValue(item.headcount))}</td>
           </tr>

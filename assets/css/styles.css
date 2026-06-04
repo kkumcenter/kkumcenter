@@ -12832,6 +12832,14 @@ body.admin-page {
   white-space: nowrap;
 }
 
+.admin-date-range-stack {
+  display: inline-grid;
+  gap: 3px;
+  line-height: 1.35;
+  white-space: nowrap;
+  text-align: left;
+}
+
 .admin-approval-table thead th,
 .admin-program-list-table thead th {
   box-sizing: border-box;
