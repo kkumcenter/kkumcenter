@@ -13179,9 +13179,9 @@ body.admin-page {
 
 .admin-program-selected-head .admin-refresh-button {
   min-width: 144px;
-  border: 0;
-  color: #fff;
-  background: #073d92;
+  border: 1px solid #073d92;
+  color: #073d92;
+  background: #fff;
   box-shadow: none;
   cursor: pointer;
 }
