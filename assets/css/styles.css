@@ -14233,3 +14233,44 @@ body.admin-page {
     text-align: center;
   }
 }
+
+.contact-board-form[data-contact-form] > .privacy-consent {
+  display: grid !important;
+  grid-template-columns: 20px minmax(0, 1fr) !important;
+  align-items: start !important;
+  min-height: 0 !important;
+  height: auto !important;
+  margin: 8px 0 18px !important;
+  padding: 15px 16px 22px !important;
+  border: 1px solid rgba(31, 90, 67, 0.18) !important;
+  border-radius: 8px;
+  background: rgba(232, 246, 236, 0.68);
+  overflow: visible !important;
+  line-height: 1.7 !important;
+}
+
+.contact-board-form[data-contact-form] > .privacy-consent input[type="checkbox"] {
+  align-self: start;
+  width: 20px !important;
+  min-width: 20px !important;
+  height: 20px !important;
+  min-height: 20px !important;
+  margin: 4px 0 0 !important;
+}
+
+.contact-board-form[data-contact-form] > .privacy-consent span {
+  display: block;
+  min-width: 0;
+  padding: 0 0 3px !important;
+  line-height: 1.7 !important;
+  overflow: visible !important;
+  overflow-wrap: anywhere;
+  word-break: keep-all;
+}
+
+@media (max-width: 640px) {
+  .contact-board-form[data-contact-form] > .privacy-consent {
+    margin-bottom: 20px !important;
+    padding: 15px 14px 24px !important;
+  }
+}
