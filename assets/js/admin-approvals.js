@@ -996,7 +996,7 @@
         <form class="admin-space-usage-form" autocomplete="off" data-space-usage-form>
           <h4>관리자 이용 기록</h4>
           <input type="hidden" name="reservationId" value="${escapeHtml(item.id)}">
-          <label>실제 이용 여부
+          <label class="admin-space-usage-status">실제 이용 여부
             <select name="actualUsed">
               <option value="true"${usageValue !== "unused" ? " selected" : ""}>이용완료</option>
               <option value="false"${usageValue === "unused" ? " selected" : ""}>미이용</option>

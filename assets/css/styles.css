@@ -13360,6 +13360,11 @@ body.admin-page {
   grid-column: 1 / -1;
 }
 
+.admin-space-usage-status {
+  width: min(25%, 260px);
+  min-width: 180px;
+}
+
 .admin-space-usage-form .form-status {
   grid-column: auto;
   margin: 0;
@@ -13765,6 +13770,11 @@ body.admin-page {
 
   .admin-space-usage-form {
     grid-template-columns: 1fr;
+  }
+
+  .admin-space-usage-status {
+    width: 100%;
+    min-width: 0;
   }
 
   .admin-space-usage-form .form-status {
