@@ -960,7 +960,7 @@
       if (nodes.spaceSelectedGuide) {
         nodes.spaceSelectedGuide.textContent = "공간명을 클릭하면 예약 상세와 실제 이용 기록을 확인할 수 있습니다.";
       }
-      nodes.spaceSelectedPanel.innerHTML = '<article class="empty-state"><strong>공간예약을 선택해주세요.</strong><p>공간명을 클릭하면 신청 내용과 실제 이용 기록 입력란이 여기에 표시됩니다.</p></article>';
+      nodes.spaceSelectedPanel.innerHTML = "";
       return;
     }
 
