@@ -101,8 +101,19 @@
       .replaceAll('"', "&quot;")
       .replaceAll("'", "&#039;");
 
+  const createKoreaDateStamp = () => {
+    const parts = new Intl.DateTimeFormat("en-US", {
+      timeZone: "Asia/Seoul",
+      year: "2-digit",
+      month: "2-digit",
+      day: "2-digit",
+    }).formatToParts(new Date());
+    const get = (type) => parts.find((part) => part.type === type)?.value || "";
+    return `${get("year")}${get("month")}${get("day")}`;
+  };
+
   const createId = (prefix) => {
-    const stamp = new Date().toISOString().slice(2, 10).replaceAll("-", "");
+    const stamp = createKoreaDateStamp();
     const token = Math.random().toString(36).slice(2, 6).toUpperCase();
     return `${prefix}-${stamp}-${token}`;
   };
@@ -227,6 +238,7 @@
   const insertSupabaseReservation = async (reservation) => {
     if (!getSupabaseConfig()) throw new Error("예약 접수 서버 연결 정보가 필요합니다.");
     return await callPublicSubmitFunction("space-reservation", {
+      reservationNo: reservation.id,
       spaceName: reservation.spaceName,
       applicantName: reservation.applicant,
       phone: reservation.phone,
@@ -267,6 +279,7 @@
   const insertSupabaseProgramApplication = async (application) => {
     if (!getSupabaseConfig()) throw new Error("교육신청 접수 서버 연결 정보가 필요합니다.");
     const result = await callPublicSubmitFunction("program-application", {
+      applicationNo: application.id,
       programName: application.programName,
       applicantName: application.applicant,
       phone: application.phone,

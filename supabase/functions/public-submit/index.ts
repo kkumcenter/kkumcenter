@@ -38,8 +38,19 @@ const hashLookupPassword = async (value: string) => {
     .join("");
 };
 
+const createKoreaDateStamp = () => {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: "Asia/Seoul",
+    year: "2-digit",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(new Date());
+  const get = (type: string) => parts.find((part) => part.type === type)?.value || "";
+  return `${get("year")}${get("month")}${get("day")}`;
+};
+
 const createNo = (prefix: string) => {
-  const date = new Date().toISOString().slice(2, 10).replaceAll("-", "");
+  const date = createKoreaDateStamp();
   const token = crypto.randomUUID().slice(0, 4).toUpperCase();
   return `${prefix}-${date}-${token}`;
 };
