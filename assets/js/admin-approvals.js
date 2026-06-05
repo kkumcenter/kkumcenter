@@ -1973,7 +1973,7 @@
     if (spaceManageSelect instanceof HTMLElement) {
       state.selectedSpaceReservationId = String(spaceManageSelect.dataset.spaceManageSelect || "");
       renderSpaceManagement();
-      nodes.spaceSelectedPanel?.scrollIntoView({ behavior: "smooth", block: "start" });
+      dashboard.querySelector(".admin-space-selected-head")?.scrollIntoView({ behavior: "smooth", block: "start" });
       return;
     }
 
