@@ -10939,6 +10939,11 @@ body.admin-page {
   box-shadow: none;
 }
 
+.admin-settings-section + .admin-settings-section {
+  padding-top: 20px;
+  border-top: 15px solid rgba(7, 61, 146, 0.55);
+}
+
 .admin-settings-section-head {
   display: grid;
   gap: 6px;
