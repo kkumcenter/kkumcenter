@@ -10991,12 +10991,12 @@ body.admin-page {
 }
 
 .admin-settings-table-wrap {
-  overflow-x: auto;
+  overflow-x: visible;
 }
 
 .admin-settings-table {
   width: 100%;
-  min-width: 860px;
+  min-width: 0;
   border-collapse: collapse;
   table-layout: fixed;
 }
@@ -11011,9 +11011,9 @@ body.admin-page {
   vertical-align: middle;
   font-size: 14px;
   font-weight: 800;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
+  word-break: keep-all;
+  white-space: normal;
 }
 
 .admin-settings-table thead tr {
@@ -11050,31 +11050,31 @@ body.admin-page {
 }
 
 .admin-settings-col-active {
-  width: 68px;
+  width: 8%;
 }
 
 .admin-settings-col-role {
-  width: 76px;
+  width: 9%;
 }
 
 .admin-settings-col-display {
-  width: 150px;
+  width: 14%;
 }
 
 .admin-settings-col-name {
-  width: 120px;
+  width: 13%;
 }
 
 .admin-settings-col-email {
-  width: 240px;
+  width: 31%;
 }
 
 .admin-settings-col-birth {
-  width: 102px;
+  width: 14%;
 }
 
 .admin-settings-col-gender {
-  width: 76px;
+  width: 11%;
 }
 
 .admin-settings-text-strong {
@@ -11092,9 +11092,9 @@ body.admin-page {
   font: inherit;
   font-weight: 900;
   text-align: left;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
+  word-break: keep-all;
+  white-space: normal;
   cursor: pointer;
 }
 
@@ -12586,7 +12586,7 @@ body.admin-page {
 
 .admin-program-filterbar {
   display: grid;
-  grid-template-columns: minmax(180px, 1.5fr) repeat(6, minmax(88px, 1fr)) minmax(174px, 1.35fr);
+  grid-template-columns: minmax(160px, 1.35fr) repeat(6, minmax(76px, 0.82fr)) minmax(132px, 0.9fr);
   gap: 10px;
   align-items: end;
   margin-bottom: 14px;
@@ -12597,7 +12597,7 @@ body.admin-page {
 }
 
 .admin-space-filterbar {
-  grid-template-columns: minmax(190px, 1.5fr) repeat(4, minmax(92px, 1fr)) minmax(174px, 1.25fr);
+  grid-template-columns: minmax(180px, 1.35fr) repeat(4, minmax(84px, 0.9fr)) minmax(132px, 0.9fr);
 }
 
 .admin-program-filterbar label {
@@ -12653,15 +12653,19 @@ body.admin-page {
 
 .admin-program-filter-action button {
   width: 100%;
+  min-width: 0;
   min-height: 38px;
+  padding: 0 9px;
   border: 0;
   border-radius: 8px;
   color: #fff;
   background: #073d92;
   cursor: pointer;
   font: inherit;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 900;
+  line-height: 1.15;
+  white-space: nowrap;
 }
 
 .admin-program-filter-action button.is-secondary {
@@ -12742,7 +12746,7 @@ body.admin-page {
 }
 
 .admin-program-list-wrap {
-  overflow-x: auto;
+  overflow-x: visible;
   border: 0;
   border-radius: 0;
   background: transparent;
@@ -12756,33 +12760,33 @@ body.admin-page {
 }
 
 .admin-program-col-status {
-  width: 92px;
+  width: 8%;
 }
 
 .admin-program-col-title {
-  width: 25%;
+  width: 21%;
 }
 
 .admin-program-col-apply,
 .admin-program-col-period {
-  width: 112px;
+  width: 13%;
 }
 
 .admin-program-col-run {
-  width: 82px;
+  width: 8%;
 }
 
 .admin-program-col-visibility,
 .admin-program-col-operation {
-  width: 82px;
+  width: 8%;
 }
 
 .admin-program-col-capacity {
-  width: 50px;
+  width: 5%;
 }
 
 .admin-program-col-stats {
-  width: 104px;
+  width: 10%;
 }
 
 .admin-program-col-actions {
@@ -12824,24 +12828,26 @@ body.admin-page {
 
 .admin-program-list-table th,
 .admin-program-list-table td {
-  padding: 13px 7px;
+  padding: 12px 6px;
   border-bottom: 1px solid rgba(15, 42, 77, 0.08);
   color: #24324a;
   text-align: left;
   vertical-align: middle;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 800;
+  overflow-wrap: anywhere;
+  word-break: keep-all;
 }
 
 .admin-program-list-table th {
-  white-space: nowrap;
+  white-space: normal;
 }
 
 .admin-date-range-stack {
   display: inline-grid;
   gap: 3px;
   line-height: 1.35;
-  white-space: nowrap;
+  white-space: normal;
   text-align: left;
 }
 
@@ -12853,11 +12859,11 @@ body.admin-page {
   padding: 0 9px;
   color: #fff;
   background: #0f6fe8;
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1.25;
   font-weight: 900;
   vertical-align: middle;
-  white-space: nowrap;
+  white-space: normal;
 }
 
 .admin-approval-table thead tr,
@@ -12898,7 +12904,7 @@ body.admin-page {
 .admin-program-title-cell button {
   display: block;
   max-width: 100%;
-  overflow: hidden;
+  overflow: visible;
   border: 0;
   padding: 0;
   color: #0f4fb8;
@@ -12908,10 +12914,9 @@ body.admin-page {
   font-size: 16px;
   font-weight: 900;
   text-align: left;
-  text-overflow: ellipsis;
   text-decoration: underline;
   text-underline-offset: 4px;
-  white-space: nowrap;
+  white-space: normal;
 }
 
 .admin-program-title-cell button:hover,
@@ -12922,14 +12927,13 @@ body.admin-page {
 
 .admin-program-title-cell > span {
   display: block;
-  overflow: hidden;
+  overflow: visible;
   max-width: 340px;
   margin-top: 5px;
   color: #687689;
   font-size: 12px;
   font-weight: 700;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: normal;
 }
 
 .admin-table-action-button {
@@ -12955,15 +12959,14 @@ body.admin-page {
 
 .admin-program-title-cell em {
   display: block;
-  overflow: hidden;
+  overflow: visible;
   max-width: 340px;
   margin-top: 5px;
   color: #a42f2f;
   font-size: 12px;
   font-style: normal;
   font-weight: 800;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: normal;
 }
 
 .admin-status-badge,
@@ -13038,7 +13041,7 @@ body.admin-page {
 
 .admin-program-stats-row {
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   gap: 6px;
   min-width: 0;
 }
@@ -13048,7 +13051,7 @@ body.admin-page {
   margin: 2px 0;
   color: #526177;
   font-size: 13px;
-  white-space: nowrap;
+  white-space: normal;
 }
 
 .admin-program-card,
@@ -13760,7 +13763,7 @@ body.admin-page {
   }
 
   .admin-program-list-table {
-    min-width: 860px;
+    min-width: 0;
   }
 
   .admin-program-form-grid {
