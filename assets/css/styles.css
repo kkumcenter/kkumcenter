@@ -13152,6 +13152,7 @@ body.admin-page {
 .admin-education-selected-head,
 .admin-space-selected-head {
   border-top-width: 15px;
+  scroll-margin-top: 112px;
 }
 
 .admin-program-selected-head h3 {

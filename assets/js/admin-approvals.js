@@ -154,6 +154,14 @@
     return text || "-";
   };
 
+  const scrollToAdminAnchor = (element) => {
+    if (!(element instanceof HTMLElement)) return;
+    const headerHeight = document.querySelector(".site-header")?.getBoundingClientRect().height || 0;
+    const offset = headerHeight + 18;
+    const top = element.getBoundingClientRect().top + window.scrollY - offset;
+    window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+  };
+
   const safeFileName = (name) =>
     String(name || "program-image")
       .normalize("NFKD")
@@ -1973,7 +1981,7 @@
     if (spaceManageSelect instanceof HTMLElement) {
       state.selectedSpaceReservationId = String(spaceManageSelect.dataset.spaceManageSelect || "");
       renderSpaceManagement();
-      dashboard.querySelector(".admin-space-selected-head")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      scrollToAdminAnchor(dashboard.querySelector(".admin-space-selected-head"));
       return;
     }
 
