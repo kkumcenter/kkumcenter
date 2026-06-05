@@ -12139,8 +12139,9 @@ body.admin-page {
 
 .admin-approval-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
-  white-space: nowrap;
+  white-space: normal;
 }
 
 .admin-approval-actions button {
@@ -12152,6 +12153,29 @@ body.admin-page {
 
 .admin-approval-actions button:last-child {
   background: #073d92;
+}
+
+.admin-approval-actions .admin-delete-button,
+.admin-delete-button {
+  min-height: 34px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 8px;
+  color: #fff;
+  background: #b42318;
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.admin-approval-actions .admin-delete-button:hover,
+.admin-approval-actions .admin-delete-button:focus-visible,
+.admin-delete-button:hover,
+.admin-delete-button:focus-visible {
+  color: #fff;
+  background: #8f1d15;
 }
 
 .admin-approval-actions button:disabled,
@@ -12688,6 +12712,14 @@ body.admin-page {
 .admin-approval-actions button:last-child:focus-visible:not(:disabled) {
   color: #fff;
   background: #0f6fe8;
+}
+
+.admin-approval-actions .admin-delete-button:hover:not(:disabled),
+.admin-approval-actions .admin-delete-button:focus-visible:not(:disabled),
+.admin-delete-button:hover:not(:disabled),
+.admin-delete-button:focus-visible:not(:disabled) {
+  color: #fff;
+  background: #8f1d15;
 }
 
 .admin-program-page-nav {
