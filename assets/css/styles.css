@@ -11372,6 +11372,7 @@ body.admin-page {
 }
 
 .admin-page .button.primary,
+.admin-page .button.danger,
 .admin-page .admin-settings-submit {
   min-height: 38px;
   border: 0;
@@ -11388,6 +11389,9 @@ body.admin-page {
 .admin-page .button.primary:disabled,
 .admin-page .button.primary:disabled:hover,
 .admin-page .button.primary:disabled:focus-visible,
+.admin-page .button.danger:disabled,
+.admin-page .button.danger:disabled:hover,
+.admin-page .button.danger:disabled:focus-visible,
 .admin-page .admin-settings-submit:disabled,
 .admin-page .admin-settings-submit:disabled:hover,
 .admin-page .admin-settings-submit:disabled:focus-visible {
@@ -11405,17 +11409,31 @@ body.admin-page {
   background: #0f6fe8;
 }
 
+.admin-page .button.danger {
+  border: 1px solid rgba(174, 38, 38, 0.28);
+  color: #a42f2f;
+  background: #fff2f2;
+}
+
+.admin-page .button.danger:hover,
+.admin-page .button.danger:focus-visible {
+  color: #fff;
+  background: #b42323;
+}
+
 .admin-refresh-button:focus-visible,
 .admin-bulk-toolbar button:focus-visible,
 .admin-program-filter-action button:focus-visible,
 .admin-approval-actions button:focus-visible,
 .admin-page .button.primary:focus-visible,
+.admin-page .button.danger:focus-visible,
 .admin-page .admin-settings-submit:focus-visible {
   outline: 3px solid rgba(15, 111, 232, 0.24);
   outline-offset: 2px;
 }
 
-.admin-page .button.primary::after {
+.admin-page .button.primary::after,
+.admin-page .button.danger::after {
   display: none;
 }
 

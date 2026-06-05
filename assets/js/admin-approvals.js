@@ -368,6 +368,15 @@
     status.classList.toggle("is-success", !isError && variant === "success" && Boolean(message));
   };
 
+  const confirmDelete = (label, warning = "") => {
+    const targetLabel = displayValue(label);
+    const details = warning ? `\n\n${warning}` : "";
+    const firstConfirmed = window.confirm(`${targetLabel}을(를) 완전 삭제하시겠습니까?\n삭제 후 복구할 수 없습니다.${details}`);
+    if (!firstConfirmed) return false;
+    const typed = window.prompt("완전 삭제하려면 아래 입력창에 '삭제'라고 입력해주세요.");
+    return typed === "삭제";
+  };
+
   const renderProgramImagePreview = (form, url = "") => {
     const preview = form?.querySelector("[data-program-image-preview]");
     const clearButton = form?.querySelector("[data-program-image-clear]");
@@ -1015,6 +1024,7 @@
           </label>
           <div class="admin-program-form-actions admin-space-usage-actions">
             <p class="form-status" data-form-status aria-live="polite"></p>
+            <button class="button danger" type="button" data-space-reservation-delete="${escapeHtml(item.id)}">완전 삭제</button>
             <button class="button primary" type="submit">이용 기록 저장</button>
           </div>
         </form>
@@ -1519,7 +1529,9 @@
     if (!form) return;
     const isEditing = Boolean(form.elements.id?.value?.trim());
     const submit = form.querySelector('button[type="submit"]');
+    const deleteButton = form.querySelector("[data-program-delete]");
     if (submit) submit.textContent = isEditing ? "수정하기" : "등록하기";
+    if (deleteButton) deleteButton.hidden = !isEditing;
     if (nodes.programFormReset) nodes.programFormReset.hidden = !isEditing;
     if (!isEditing && nodes.programSelectedGuide && options.updateGuide !== false) {
       nodes.programSelectedGuide.textContent = "";
@@ -1637,6 +1649,45 @@
     }
   };
 
+  const deleteProgramFromForm = async (form) => {
+    const programId = form?.elements.id.value.trim();
+    const item = state.programCatalog.find((entry) => String(entry.id) === String(programId));
+    if (!programId || !item) {
+      setFormStatus(form, "삭제할 교육을 선택해주세요.", true);
+      return;
+    }
+
+    const relatedApplications = state.allProgramApplications.filter((entry) => String(entry.program_id) === String(programId));
+    const warning = relatedApplications.length
+      ? `연결된 교육 신청자 ${relatedApplications.length}건도 함께 삭제됩니다.`
+      : "연결된 신청자는 없습니다.";
+    if (!confirmDelete(`교육 '${item.title}'`, warning)) return;
+
+    const deleteButton = form.querySelector("[data-program-delete]");
+    const submit = form.querySelector('button[type="submit"]');
+    if (deleteButton) deleteButton.disabled = true;
+    if (submit) submit.disabled = true;
+    try {
+      setFormStatus(form, "교육을 완전 삭제하고 있습니다.");
+      const { error: applicationError } = await client.from("program_applications").delete().eq("program_id", programId);
+      if (applicationError) throw applicationError;
+      const { error: programError } = await client.from("programs").delete().eq("id", programId);
+      if (programError) throw programError;
+      await logAdminAction("delete", "program", programId, `교육 완전 삭제: ${item.title}`);
+      state.selectedProgramId = null;
+      state.selectedProgramApplicantPage = 1;
+      state.selectedPrograms.delete(programId);
+      resetProgramForm({ render: false });
+      await load();
+      setFormStatus(nodes.programManageForm, "교육을 완전 삭제했습니다.", false, "success");
+    } catch (error) {
+      setFormStatus(form, friendlyErrorMessage(error, "교육을 삭제하지 못했습니다."), true);
+    } finally {
+      if (deleteButton) deleteButton.disabled = false;
+      if (submit) submit.disabled = false;
+    }
+  };
+
   const hideOrRestoreProgram = async (programId, shouldRestore = false) => {
     const item = state.programCatalog.find((entry) => String(entry.id) === String(programId));
     if (!item) return;
@@ -1680,6 +1731,39 @@
       setFormStatus(form, friendlyErrorMessage(error, "공간 이용 기록을 저장하지 못했습니다."), true);
     } finally {
       submit.disabled = false;
+    }
+  };
+
+  const deleteSpaceReservation = async (reservationId, button = null) => {
+    const item = state.spaceReservations.find((entry) => String(entry.id) === String(reservationId));
+    const form = button?.closest("[data-space-usage-form]") || nodes.spaceSelectedPanel?.querySelector("[data-space-usage-form]");
+    if (!item) {
+      setFormStatus(form, "삭제할 공간예약을 선택해주세요.", true);
+      return;
+    }
+
+    const spaceName = displayValue(getRelationValue(item.spaces, "name") || "공간");
+    const usageLog = latestUsageLog(item);
+    const warning = usageLog ? "실제 이용 기록도 함께 삭제됩니다." : "연결된 실제 이용 기록은 없습니다.";
+    if (!confirmDelete(`공간예약 '${spaceName} / ${displayValue(item.applicant_name)}'`, warning)) return;
+
+    const submit = form?.querySelector('button[type="submit"]');
+    if (button) button.disabled = true;
+    if (submit) submit.disabled = true;
+    try {
+      setFormStatus(form, "공간예약을 완전 삭제하고 있습니다.");
+      const { error } = await client.from("space_reservations").delete().eq("id", reservationId);
+      if (error) throw error;
+      await logAdminAction("delete", "space_reservation", reservationId, `공간예약 완전 삭제: ${spaceName} / ${item.applicant_name}`);
+      state.selectedSpaceReservationId = null;
+      state.selectedSpaces.delete(String(reservationId));
+      await load();
+      if (nodes.spaceSelectedGuide) nodes.spaceSelectedGuide.textContent = "공간예약을 완전 삭제했습니다.";
+    } catch (error) {
+      setFormStatus(form, friendlyErrorMessage(error, "공간예약을 삭제하지 못했습니다."), true);
+    } finally {
+      if (button) button.disabled = false;
+      if (submit) submit.disabled = false;
     }
   };
 
@@ -1999,6 +2083,18 @@
 
     if (target.closest("[data-program-form-reset]")) {
       resetProgramForm();
+      return;
+    }
+
+    const programDelete = target.closest("[data-program-delete]");
+    if (programDelete instanceof HTMLButtonElement) {
+      await deleteProgramFromForm(nodes.programManageForm);
+      return;
+    }
+
+    const spaceReservationDelete = target.closest("[data-space-reservation-delete]");
+    if (spaceReservationDelete instanceof HTMLButtonElement) {
+      await deleteSpaceReservation(spaceReservationDelete.dataset.spaceReservationDelete, spaceReservationDelete);
       return;
     }
 
