@@ -141,8 +141,6 @@
     detail: null,
   };
 
-  const isSuperAdmin = () => state.profile?.role === "admin" && state.profile?.admin_role === "super_admin";
-
   const escapeHtml = (value) =>
     String(value ?? "")
       .replaceAll("&", "&amp;")
@@ -154,16 +152,6 @@
   const displayValue = (value) => {
     const text = String(value ?? "").trim();
     return text || "-";
-  };
-
-  const confirmDelete = (label) => {
-    if (!isSuperAdmin()) {
-      window.alert("관리자만 삭제할 수 있습니다.");
-      return false;
-    }
-    if (!window.confirm(`${label}을(를) 완전히 삭제할까요?\n삭제 후에는 관리자 화면에서 복구할 수 없습니다.`)) return false;
-    const typed = window.prompt("정말 삭제하려면 아래 칸에 '삭제'라고 입력해주세요.");
-    return typed === "삭제";
   };
 
   const scrollToAdminAnchor = (element) => {
@@ -929,9 +917,6 @@
             <td>${formatSpaceDateRangeHtml(item.reservation_date, item.reservation_end_date || item.reservation_date)}</td>
             <td>${escapeHtml(formatTimeRange(item.start_time, item.end_time))}</td>
             <td>${escapeHtml(displayValue(item.headcount))}</td>
-            <td>
-              ${isSuperAdmin() ? `<button class="admin-delete-button" type="button" data-space-delete="${escapeHtml(id)}">삭제</button>` : ""}
-            </td>
           </tr>
         `;
       })
@@ -949,7 +934,6 @@
             <col class="admin-space-col-period">
             <col class="admin-space-col-time">
             <col class="admin-space-col-headcount">
-            <col class="admin-space-col-actions">
           </colgroup>
           <thead>
             <tr>
@@ -961,7 +945,6 @@
               <th scope="col">예약기간</th>
               <th scope="col">이용시간</th>
               <th scope="col">신청인원</th>
-              <th scope="col">삭제</th>
             </tr>
           </thead>
           <tbody>${rows}</tbody>
@@ -1225,7 +1208,6 @@
                       <div class="admin-approval-actions">
                         <button type="button" data-selected-program-approve="${escapeHtml(item.id)}"${item.status === "approved" ? " disabled" : ""}>승인</button>
                         <button type="button" data-selected-program-cancel="${escapeHtml(item.id)}"${item.status === "canceled" ? " disabled" : ""}>취소</button>
-                        ${isSuperAdmin() ? `<button class="admin-delete-button" type="button" data-selected-program-delete="${escapeHtml(item.id)}">삭제</button>` : ""}
                       </div>
                     </td>
                   </tr>
@@ -1317,20 +1299,6 @@
     const { error } = await client.from("program_applications").update({ status }).in("id", idList);
     if (error) throw error;
     await logAdminAction(status === "approved" ? "approve" : "cancel", "program_application", idList, status === "approved" ? "교육신청 승인" : "교육신청 취소");
-  };
-
-  const deleteSpaceReservation = async (id) => {
-    const idList = [id];
-    const { error } = await client.from("space_reservations").delete().eq("id", id);
-    if (error) throw error;
-    await logAdminAction("delete", "space_reservation", idList, "공간예약 삭제");
-  };
-
-  const deleteProgramApplication = async (id) => {
-    const idList = [id];
-    const { error } = await client.from("program_applications").delete().eq("id", id);
-    if (error) throw error;
-    await logAdminAction("delete", "program_application", idList, "교육신청 삭제");
   };
 
   const logAdminAction = async (actionType, targetType, ids, summary) => {
@@ -2062,33 +2030,6 @@
       await runAction(selectedProgramCancel, async () => {
         if (!window.confirm("이 교육신청을 취소 처리할까요?")) return;
         await updatePrograms(id, "canceled");
-        await load();
-      });
-      return;
-    }
-
-    const selectedProgramDelete = target.closest("[data-selected-program-delete]");
-    if (selectedProgramDelete instanceof HTMLButtonElement) {
-      const id = selectedProgramDelete.dataset.selectedProgramDelete;
-      await runAction(selectedProgramDelete, async () => {
-        if (!confirmDelete("이 교육신청")) return;
-        await deleteProgramApplication(id);
-        state.selectedPrograms.delete(id);
-        await load();
-      });
-      return;
-    }
-
-    const spaceDelete = target.closest("[data-space-delete]");
-    if (spaceDelete instanceof HTMLButtonElement) {
-      const id = spaceDelete.dataset.spaceDelete;
-      await runAction(spaceDelete, async () => {
-        if (!confirmDelete("이 공간예약")) return;
-        await deleteSpaceReservation(id);
-        state.selectedSpaces.delete(id);
-        if (String(state.selectedSpaceReservationId || "") === String(id)) {
-          state.selectedSpaceReservationId = null;
-        }
         await load();
       });
       return;
