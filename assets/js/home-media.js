@@ -6,10 +6,8 @@
   const galleryPanel = root.querySelector(".home-gallery-panel");
   const prevButton = root.querySelector("[data-home-gallery-prev]");
   const nextButton = root.querySelector("[data-home-gallery-next]");
-  const videoPanel = root.querySelector("[data-home-video]");
   const config = window.KKOOM_SUPABASE || {};
   const SLIDE_INTERVAL = 2000;
-  const YOUTUBE_CHANNEL_URL = "https://www.youtube.com/@kkumcenter";
 
   const escapeHtml = (value) =>
     String(value ?? "")
@@ -23,10 +21,6 @@
     const text = String(value || "").trim();
     return /^https?:\/\//.test(text) || text.startsWith("/") || text.startsWith("assets/");
   };
-
-  const isSafeExternalUrl = (value) => /^https?:\/\//.test(String(value || "").trim());
-
-  const thumbnailUrl = (youtubeId) => `https://img.youtube.com/vi/${encodeURIComponent(youtubeId)}/hqdefault.jpg`;
 
   const getClient = () => {
     if (!window.supabase || !config.url || !config.anonKey) return null;
@@ -86,20 +80,6 @@
     restart();
   };
 
-  const renderVideo = (item) => {
-    if (!videoPanel || !item?.youtube_id) return;
-    const title = item.title || "꿈키움센터 영상자료";
-    const youtubeUrl = isSafeExternalUrl(item.youtube_url) ? item.youtube_url : YOUTUBE_CHANNEL_URL;
-    videoPanel.innerHTML = `
-      <a class="home-video-card" href="${escapeHtml(youtubeUrl)}" target="_blank" rel="noreferrer">
-        <span class="home-video-thumb">
-          <img src="${escapeHtml(thumbnailUrl(item.youtube_id))}" alt="${escapeHtml(title)}">
-          <span aria-hidden="true">▶</span>
-        </span>
-      </a>
-    `;
-  };
-
   const loadGallery = async (client) => {
     const { data, error } = await client
       .from("galleries")
@@ -109,18 +89,6 @@
       .limit(6);
     if (error) throw error;
     renderGallery((data || []).filter((item) => item.cover_image_url));
-  };
-
-  const loadVideo = async (client) => {
-    const { data, error } = await client
-      .from("videos")
-      .select("id, title, youtube_url, youtube_id, event_date, created_at")
-      .eq("status", "public")
-      .order("created_at", { ascending: false })
-      .limit(1)
-      .maybeSingle();
-    if (error) throw error;
-    renderVideo(data);
   };
 
   prevButton?.addEventListener("click", () => {
@@ -142,7 +110,7 @@
   const client = getClient();
   if (!client) return;
 
-  Promise.all([loadGallery(client), loadVideo(client)]).catch((error) => {
+  loadGallery(client).catch((error) => {
     console.warn("Home media fallback:", error);
   });
 })();

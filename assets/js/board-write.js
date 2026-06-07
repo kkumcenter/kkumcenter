@@ -31,6 +31,8 @@
     coverImageUrl: "",
     existingItem: null,
     selectedImage: null,
+    relatedYoutubeAttachmentId: "",
+    relatedYoutubeSavedUrl: "",
   };
 
   const getClient = () => {
@@ -99,6 +101,45 @@
     if (size < 1024) return `${size}B`;
     if (size < 1024 * 1024) return `${Math.round(size / 1024)}KB`;
     return `${(size / 1024 / 1024).toFixed(1)}MB`;
+  };
+
+  const YOUTUBE_LINK_MIME = "text/x-youtube-url";
+  const YOUTUBE_LINK_BUCKET = "youtube-link";
+
+  const parseYoutubeId = (value) => {
+    const text = String(value || "").trim();
+    if (!text) return "";
+    try {
+      const url = new URL(text);
+      const host = url.hostname.replace(/^www\./, "");
+      if (host === "youtu.be") return url.pathname.split("/").filter(Boolean)[0] || "";
+      if (host === "youtube.com" || host.endsWith(".youtube.com")) {
+        if (url.pathname === "/watch") return url.searchParams.get("v") || "";
+        const parts = url.pathname.split("/").filter(Boolean);
+        if (["shorts", "embed", "live"].includes(parts[0])) return parts[1] || "";
+      }
+    } catch {
+      return "";
+    }
+    return "";
+  };
+
+  const normalizeYoutubeUrl = (value) => {
+    const id = parseYoutubeId(value);
+    return id ? `https://www.youtube.com/watch?v=${encodeURIComponent(id)}` : "";
+  };
+
+  const getRelatedYoutubeUrl = () => String(form?.elements.relatedYoutubeUrl?.value || "").trim();
+
+  const isYoutubeLinkAttachment = (file) =>
+    file?.mime_type === YOUTUBE_LINK_MIME || file?.mimeType === YOUTUBE_LINK_MIME || file?.storage_bucket === YOUTUBE_LINK_BUCKET || file?.bucket === YOUTUBE_LINK_BUCKET;
+
+  const getNormalizedRelatedYoutubeUrl = () => {
+    const value = getRelatedYoutubeUrl();
+    if (!value) return "";
+    const normalized = normalizeYoutubeUrl(value);
+    if (!normalized) throw new Error("관련 유튜브 링크는 youtube.com 또는 youtu.be 영상 주소만 입력할 수 있습니다.");
+    return normalized;
   };
 
   const translateEditorPopups = () => {
@@ -784,11 +825,17 @@
 
     const { data: attachments, error: attachmentError } = await client
       .from("attachments")
-      .select("file_name, file_url, file_size, storage_path, storage_bucket, mime_type")
+      .select("id, file_name, file_url, file_size, storage_path, storage_bucket, mime_type")
       .eq("target_type", board.targetType)
       .eq("target_id", editId);
     if (!attachmentError) {
-      state.files = (attachments || []).map((file) => ({
+      const youtubeLink = (attachments || []).find(isYoutubeLinkAttachment);
+      if (youtubeLink) {
+        state.relatedYoutubeAttachmentId = youtubeLink.id || "";
+        state.relatedYoutubeSavedUrl = youtubeLink.file_url || "";
+        if (form?.elements.relatedYoutubeUrl) form.elements.relatedYoutubeUrl.value = youtubeLink.file_url || "";
+      }
+      state.files = (attachments || []).filter((file) => !isYoutubeLinkAttachment(file)).map((file) => ({
         name: file.file_name,
         url: file.file_url,
         size: file.file_size || 0,
@@ -828,6 +875,62 @@
     });
   };
 
+  const saveRelatedYoutubeLink = async (targetId, youtubeUrl) => {
+    if (state.relatedYoutubeAttachmentId) {
+      if (!youtubeUrl) {
+        const { error } = await client
+          .from("attachments")
+          .update({
+            target_type: `archived-${board.targetType}-youtube`,
+            file_name: "삭제된 관련 영상",
+            file_url: state.relatedYoutubeSavedUrl || "https://www.youtube.com/",
+            storage_bucket: YOUTUBE_LINK_BUCKET,
+            mime_type: YOUTUBE_LINK_MIME,
+          })
+          .eq("id", state.relatedYoutubeAttachmentId);
+        if (error) throw error;
+        state.relatedYoutubeAttachmentId = "";
+        state.relatedYoutubeSavedUrl = "";
+        return;
+      }
+
+      if (youtubeUrl === state.relatedYoutubeSavedUrl) return;
+      const { error } = await client
+        .from("attachments")
+        .update({
+          file_name: "관련 유튜브 영상",
+          file_url: youtubeUrl,
+          storage_bucket: YOUTUBE_LINK_BUCKET,
+          mime_type: YOUTUBE_LINK_MIME,
+          uploaded_by: state.session.user.id,
+        })
+        .eq("id", state.relatedYoutubeAttachmentId);
+      if (error) throw error;
+      state.relatedYoutubeSavedUrl = youtubeUrl;
+      return;
+    }
+
+    if (!youtubeUrl) return;
+    const { data, error } = await client
+      .from("attachments")
+      .insert({
+        target_type: board.targetType,
+        target_id: targetId,
+        file_name: "관련 유튜브 영상",
+        file_url: youtubeUrl,
+        file_size: null,
+        storage_path: null,
+        storage_bucket: YOUTUBE_LINK_BUCKET,
+        mime_type: YOUTUBE_LINK_MIME,
+        uploaded_by: state.session.user.id,
+      })
+      .select("id")
+      .single();
+    if (error) throw error;
+    state.relatedYoutubeAttachmentId = data?.id || "";
+    state.relatedYoutubeSavedUrl = youtubeUrl;
+  };
+
   const saveGalleryImages = async (galleryId) => {
     const rows = state.images
       .map((image, index) => ({ image, index }))
@@ -851,6 +954,7 @@
   };
 
   const savePost = async () => {
+    const relatedYoutubeUrl = getNormalizedRelatedYoutubeUrl();
     const payload = {
       board_type: boardType,
       title: form.elements.title.value.trim(),
@@ -866,16 +970,19 @@
       const { error } = await client.from("posts").update(payload).eq("id", editId);
       if (error) throw error;
       await saveAttachments(editId);
+      await saveRelatedYoutubeLink(editId, relatedYoutubeUrl);
       return editId;
     }
 
     const { data, error } = await client.from("posts").insert(payload).select("id").single();
     if (error) throw error;
     await saveAttachments(data.id);
+    await saveRelatedYoutubeLink(data.id, relatedYoutubeUrl);
     return data.id;
   };
 
   const saveGallery = async () => {
+    const relatedYoutubeUrl = getNormalizedRelatedYoutubeUrl();
     const coverImageUrl = state.coverImageUrl || state.images[0]?.url || state.existingItem?.cover_image_url || "assets/images/hero-center.png";
     const payload = {
       title: form.elements.title.value.trim(),
@@ -894,6 +1001,7 @@
       if (error) throw error;
       await saveGalleryImages(editId);
       await saveAttachments(editId);
+      await saveRelatedYoutubeLink(editId, relatedYoutubeUrl);
       return editId;
     }
 
@@ -901,6 +1009,7 @@
     if (error) throw error;
     await saveGalleryImages(data.id);
     await saveAttachments(data.id);
+    await saveRelatedYoutubeLink(data.id, relatedYoutubeUrl);
     return data.id;
   };
 

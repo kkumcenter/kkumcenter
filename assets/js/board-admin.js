@@ -208,6 +208,32 @@
     return `${(size / 1024 / 1024).toFixed(1)}MB`;
   };
 
+  const YOUTUBE_LINK_MIME = "text/x-youtube-url";
+  const YOUTUBE_LINK_BUCKET = "youtube-link";
+
+  const isYoutubeLinkAttachment = (file) =>
+    file?.mime_type === YOUTUBE_LINK_MIME || file?.storage_bucket === YOUTUBE_LINK_BUCKET;
+
+  const parseYoutubeId = (value) => {
+    const text = String(value || "").trim();
+    if (!text) return "";
+    try {
+      const url = new URL(text);
+      const host = url.hostname.replace(/^www\./, "");
+      if (host === "youtu.be") return url.pathname.split("/").filter(Boolean)[0] || "";
+      if (host === "youtube.com" || host.endsWith(".youtube.com")) {
+        if (url.pathname === "/watch") return url.searchParams.get("v") || "";
+        const parts = url.pathname.split("/").filter(Boolean);
+        if (["shorts", "embed", "live"].includes(parts[0])) return parts[1] || "";
+      }
+    } catch {
+      return "";
+    }
+    return "";
+  };
+
+  const youtubeThumbnailUrl = (youtubeId) => `https://img.youtube.com/vi/${encodeURIComponent(youtubeId)}/hqdefault.jpg`;
+
   const boardWriteUrl = (id = "") =>
     `board-write.html?board=${encodeURIComponent(boardType)}${id ? `&id=${encodeURIComponent(id)}` : ""}`;
 
@@ -239,7 +265,7 @@
     if (!client || !targetIds.length) return new Map();
     const { data, error } = await client
       .from("attachments")
-      .select("target_id, file_name, file_url, file_size")
+      .select("target_id, file_name, file_url, file_size, storage_bucket, mime_type")
       .eq("target_type", targetType)
       .in("target_id", targetIds);
     if (error) throw error;
@@ -256,10 +282,14 @@
   const attachFiles = async (items, targetType) => {
     const ids = items.map((item) => String(item.id)).filter((id) => !id.startsWith("static-"));
     const filesById = await fetchAttachments(targetType, ids);
-    return items.map((item) => ({
-      ...item,
-      attachments: filesById.get(String(item.id)) || [],
-    }));
+    return items.map((item) => {
+      const files = filesById.get(String(item.id)) || [];
+      return {
+        ...item,
+        relatedYoutube: files.find(isYoutubeLinkAttachment) || null,
+        attachments: files.filter((file) => !isYoutubeLinkAttachment(file)),
+      };
+    });
   };
 
   const callPublicSubmitFunction = async (action, payload) => {
@@ -440,6 +470,27 @@
     `;
   };
 
+  const renderRelatedYoutube = (file) => {
+    if (!file?.file_url || !isSafeUrl(file.file_url)) return "";
+    const youtubeId = parseYoutubeId(file.file_url);
+    if (!youtubeId) return "";
+    return `
+      <section class="board-related-video" aria-label="관련 영상">
+        <h4>관련 영상</h4>
+        <a href="${escapeHtml(file.file_url)}" target="_blank" rel="noreferrer">
+          <span class="board-related-video-thumb">
+            <img src="${escapeHtml(youtubeThumbnailUrl(youtubeId))}" alt="" loading="lazy">
+            <span aria-hidden="true">▶</span>
+          </span>
+          <span class="board-related-video-copy">
+            <strong>${escapeHtml(file.file_name || "관련 유튜브 영상")}</strong>
+            <small>유튜브에서 보기</small>
+          </span>
+        </a>
+      </section>
+    `;
+  };
+
   const renderDetail = (item, canManage) => {
     if (!item) {
       detailShell.hidden = true;
@@ -474,6 +525,7 @@
         <div class="board-detail-content board-content-view">
           ${contentHtml || "<p>등록된 내용이 없습니다.</p>"}
         </div>
+        ${renderRelatedYoutube(item.relatedYoutube)}
         ${renderAttachments(item.attachments)}
       </article>
     `;
