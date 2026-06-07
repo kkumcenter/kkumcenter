@@ -9,6 +9,7 @@
   const videoPanel = root.querySelector("[data-home-video]");
   const config = window.KKOOM_SUPABASE || {};
   const SLIDE_INTERVAL = 2000;
+  const YOUTUBE_CHANNEL_URL = "https://www.youtube.com/@kkumcenter";
 
   const escapeHtml = (value) =>
     String(value ?? "")
@@ -18,16 +19,12 @@
       .replaceAll('"', "&quot;")
       .replaceAll("'", "&#039;");
 
-  const formatDate = (value) => {
-    if (!value) return "활동 사진 보기";
-    const text = String(value);
-    return /^\d{4}-\d{2}-\d{2}/.test(text) ? text.slice(0, 10).replaceAll("-", ".") : text;
-  };
-
   const isSafeUrl = (value) => {
     const text = String(value || "").trim();
     return /^https?:\/\//.test(text) || text.startsWith("/") || text.startsWith("assets/");
   };
+
+  const isSafeExternalUrl = (value) => /^https?:\/\//.test(String(value || "").trim());
 
   const thumbnailUrl = (youtubeId) => `https://img.youtube.com/vi/${encodeURIComponent(youtubeId)}/hqdefault.jpg`;
 
@@ -78,11 +75,9 @@
       .map((item, index) => {
         const imageUrl = isSafeUrl(item.cover_image_url) ? item.cover_image_url : "assets/images/program-workshop.png";
         const title = item.title || "꿈키움센터 활동 사진";
-        const date = formatDate(item.event_date || item.created_at);
         return `
           <a class="home-gallery-slide${index === 0 ? " is-active" : ""}" href="gallery.html" data-home-gallery-slide aria-hidden="${index === 0 ? "false" : "true"}" tabindex="${index === 0 ? "0" : "-1"}">
             <img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(title)}">
-            <span><small>꿈센터 갤러리</small><strong>${escapeHtml(title)}</strong><time>${escapeHtml(date)}</time></span>
           </a>
         `;
       })
@@ -94,18 +89,12 @@
   const renderVideo = (item) => {
     if (!videoPanel || !item?.youtube_id) return;
     const title = item.title || "꿈키움센터 영상자료";
-    const date = formatDate(item.event_date || item.created_at);
+    const youtubeUrl = isSafeExternalUrl(item.youtube_url) ? item.youtube_url : YOUTUBE_CHANNEL_URL;
     videoPanel.innerHTML = `
-      <a class="home-video-card" href="videos.html">
+      <a class="home-video-card" href="${escapeHtml(youtubeUrl)}" target="_blank" rel="noreferrer">
         <span class="home-video-thumb">
           <img src="${escapeHtml(thumbnailUrl(item.youtube_id))}" alt="${escapeHtml(title)}">
           <span aria-hidden="true">▶</span>
-        </span>
-        <span class="home-video-copy">
-          <small>영상자료</small>
-          <strong>${escapeHtml(title)}</strong>
-          <time>${escapeHtml(date)}</time>
-          <em>영상자료 보러가기</em>
         </span>
       </a>
     `;
@@ -125,7 +114,7 @@
   const loadVideo = async (client) => {
     const { data, error } = await client
       .from("videos")
-      .select("id, title, youtube_id, event_date, created_at")
+      .select("id, title, youtube_url, youtube_id, event_date, created_at")
       .eq("status", "public")
       .order("created_at", { ascending: false })
       .limit(1)
