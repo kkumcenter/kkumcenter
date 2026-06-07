@@ -49,6 +49,17 @@ const createKoreaDateStamp = () => {
   return `${get("year")}${get("month")}${get("day")}`;
 };
 
+const createKoreaDateValue = () => {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: "Asia/Seoul",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(new Date());
+  const get = (type: string) => parts.find((part) => part.type === type)?.value || "";
+  return `${get("year")}-${get("month")}-${get("day")}`;
+};
+
 const createNo = (prefix: string) => {
   const date = createKoreaDateStamp();
   const token = crypto.randomUUID().slice(0, 4).toUpperCase();
@@ -150,6 +161,9 @@ const requireDateValue = (payload: Record<string, unknown>, key: string) => {
   }
   return value;
 };
+
+const isDateInRange = (date: string, start: unknown, end: unknown) =>
+  typeof start === "string" && typeof end === "string" && start <= date && date <= end;
 
 const requirePositiveInteger = (payload: Record<string, unknown>, key: string) => {
   const value = Number(payload[key]);
@@ -418,12 +432,21 @@ Deno.serve(async (request) => {
       if (!space) throw new Error("예약할 공간을 찾을 수 없습니다.");
 
       const reservationNo = String(data.reservationNo || createNo("R"));
-      const reservationDate = requireText(data, "reservationDate");
-      const reservationEndDate = data.endDate ? String(data.endDate) : reservationDate;
+      const reservationDate = requireDateValue(data, "reservationDate");
+      const reservationEndDate = data.endDate ? requireDateValue({ endDate: data.endDate }, "endDate") : reservationDate;
       const startTime = requireText(data, "startTime");
       const endTime = requireText(data, "endTime");
       const lookupPassword = requireText(data, "lookupPassword");
       const headcount = Number(data.headcount);
+      const today = createKoreaDateValue();
+
+      if (reservationDate < today) {
+        throw new Error("지난 날짜는 예약할 수 없습니다.");
+      }
+
+      if (reservationEndDate < reservationDate) {
+        throw new Error("예약 종료일은 시작일보다 빠를 수 없습니다.");
+      }
 
       if (startTime >= endTime) {
         throw new Error("예약 종료시간은 시작시간보다 늦어야 합니다.");
@@ -501,7 +524,7 @@ Deno.serve(async (request) => {
       const programName = requireText(data, "programName");
       const { data: program, error: programError } = await supabase
         .from("programs")
-        .select("id, capacity, status, visibility, operation_status, is_active")
+        .select("id, capacity, status, visibility, operation_status, is_active, apply_start_date, apply_end_date, end_date")
         .eq("title", programName)
         .eq("is_active", true)
         .eq("status", "open")
@@ -511,6 +534,14 @@ Deno.serve(async (request) => {
 
       if (programError) throw programError;
       if (!program) throw new Error("현재 신청 가능한 프로그램을 찾을 수 없습니다.");
+
+      const today = createKoreaDateValue();
+      if (!isDateInRange(today, program.apply_start_date, program.apply_end_date)) {
+        throw new Error("현재 모집기간이 아닌 교육입니다.");
+      }
+      if (typeof program.end_date === "string" && program.end_date < today) {
+        throw new Error("이미 종료된 교육은 신청할 수 없습니다.");
+      }
 
       const applicationNo = String(data.applicationNo || createNo("P"));
       const status = await getProgramApplyStatus(supabase, program.id, Number(program.capacity || 0));
@@ -549,7 +580,15 @@ Deno.serve(async (request) => {
         .eq("operation_status", "normal")
         .order("apply_start_date", { ascending: false });
 
-      if (onlyOpen) query = query.eq("status", "open").eq("visibility", "public");
+      if (onlyOpen) {
+        const today = createKoreaDateValue();
+        query = query
+          .eq("status", "open")
+          .eq("visibility", "public")
+          .lte("apply_start_date", today)
+          .gte("apply_end_date", today)
+          .gte("end_date", today);
+      }
       else query = query.eq("visibility", "public");
 
       const { data: items, error } = await query;

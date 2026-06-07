@@ -8168,10 +8168,17 @@ body.admin-page {
 
 @media (max-width: 1100px) {
   .header-inner {
+    position: relative;
     min-height: 70px;
+    padding-right: 58px;
+    box-sizing: border-box;
   }
 
   .nav-toggle {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    flex: 0 0 auto;
     width: auto;
     display: grid;
     grid-template-columns: 18px auto;
@@ -8179,9 +8186,10 @@ body.admin-page {
     align-content: center;
     align-items: center;
     column-gap: 9px;
+    transform: translateY(-50%);
     padding: 0 14px;
     border-radius: 999px;
-    margin-left: auto;
+    margin-left: 0;
   }
 
   .nav-toggle::after {
@@ -8563,6 +8571,7 @@ body.admin-page {
   }
 
   .brand {
+    flex: 1 1 auto;
     min-width: 0;
   }
 
@@ -14159,8 +14168,8 @@ body.admin-page {
 @media (max-width: 420px) {
   .header-inner,
   .home-page .header-inner {
-    width: min(100% - 24px, 1480px);
-    gap: 10px;
+    width: min(100% - 32px, 1480px);
+    gap: 8px;
   }
 
   .brand-symbol {
@@ -14175,9 +14184,11 @@ body.admin-page {
   .nav-toggle {
     width: 46px;
     height: 46px;
+    flex: 0 0 46px;
     grid-template-columns: 18px;
     column-gap: 0;
     justify-content: center;
+    margin-left: 0;
     padding: 0;
   }
 
@@ -14192,6 +14203,54 @@ body.admin-page {
 }
 
 @media (max-width: 640px) {
+  .site-header {
+    overflow: visible;
+  }
+
+  .site-header .header-inner,
+  .home-page .site-header .header-inner {
+    width: 100%;
+    max-width: none;
+    padding-left: 16px;
+    padding-right: 72px;
+  }
+
+  .site-header .brand {
+    min-width: 0;
+  }
+
+  .site-header .primary-nav {
+    display: none !important;
+  }
+
+  .nav-open .site-header .primary-nav {
+    display: flex !important;
+  }
+
+  .site-header .nav-toggle {
+    display: grid !important;
+    position: absolute !important;
+    top: 50% !important;
+    right: 16px !important;
+    transform: translateY(-50%) !important;
+    width: 44px !important;
+    height: 44px !important;
+    place-content: center;
+    opacity: 1;
+    visibility: visible;
+    z-index: 80;
+    border-color: rgba(18, 59, 43, 0.24);
+    background: #fffdf7;
+  }
+
+  .site-header .nav-toggle span:not(.sr-only) {
+    display: block !important;
+    width: 18px;
+    height: 2px;
+    margin: 3px auto;
+    background: var(--forest);
+  }
+
   .sub-hero h1,
   .sub-hero h1 span {
     white-space: normal !important;

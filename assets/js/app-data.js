@@ -112,6 +112,17 @@
     return `${get("year")}${get("month")}${get("day")}`;
   };
 
+  const createKoreaDateValue = () => {
+    const parts = new Intl.DateTimeFormat("en-US", {
+      timeZone: "Asia/Seoul",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).formatToParts(new Date());
+    const get = (type) => parts.find((part) => part.type === type)?.value || "";
+    return `${get("year")}-${get("month")}-${get("day")}`;
+  };
+
   const createId = (prefix) => {
     const stamp = createKoreaDateStamp();
     const token = Math.random().toString(36).slice(2, 6).toUpperCase();
@@ -379,7 +390,7 @@
   });
 
   const fetchSupabasePrograms = async ({ openOnly = false } = {}) => {
-    const result = await callPublicSubmitFunction("program-list", { onlyOpen });
+    const result = await callPublicSubmitFunction("program-list", { onlyOpen: openOnly });
     if (!result) return null;
     return (result.items || []).map(normalizeProgram);
   };
@@ -877,6 +888,17 @@
           return;
         }
 
+        const today = createKoreaDateValue();
+        if (reservation.startDate < today) {
+          setFormStatus(form, "지난 날짜는 예약할 수 없습니다.", true);
+          return;
+        }
+
+        if (reservation.endDate < reservation.startDate) {
+          setFormStatus(form, "예약 종료일은 시작일보다 빠를 수 없습니다.", true);
+          return;
+        }
+
         const headcountValue = Number(reservation.headcount);
         if (!Number.isInteger(headcountValue) || headcountValue <= 0) {
           setFormStatus(form, "이용 인원은 1명 이상으로 입력해주세요.", true);
@@ -911,6 +933,10 @@
       '[data-space-reservation-form] input[name="startDate"], [data-space-reservation-form] input[name="endDate"]',
     );
     if (!inputs.length) return;
+    const today = createKoreaDateValue();
+    inputs.forEach((input) => {
+      input.min = today;
+    });
 
     try {
       await loadExternalStyle("flatpickr-style", "https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css");
@@ -922,6 +948,7 @@
         window.flatpickr(input, {
           dateFormat: "Y-m-d",
           disableMobile: true,
+          minDate: today,
           locale: window.flatpickr.l10ns?.ko || "ko",
           monthSelectorType: "dropdown",
           onReady: (_selectedDates, _dateStr, instance) => {
