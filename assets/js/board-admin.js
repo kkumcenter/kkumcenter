@@ -200,6 +200,14 @@
     return /^\d{4}-\d{2}-\d{2}/.test(text) ? text.slice(0, 10).replaceAll("-", ".") : text;
   };
 
+  const formatBytes = (value) => {
+    const size = Number(value || 0);
+    if (!Number.isFinite(size) || size <= 0) return "";
+    if (size < 1024) return `${size}B`;
+    if (size < 1024 * 1024) return `${Math.round(size / 1024)}KB`;
+    return `${(size / 1024 / 1024).toFixed(1)}MB`;
+  };
+
   const boardWriteUrl = (id = "") =>
     `board-write.html?board=${encodeURIComponent(boardType)}${id ? `&id=${encodeURIComponent(id)}` : ""}`;
 
@@ -226,6 +234,33 @@
 
   const canDeleteBoard = (profile) =>
     profile?.role === "admin" && profile.admin_role === "super_admin";
+
+  const fetchAttachments = async (targetType, targetIds) => {
+    if (!client || !targetIds.length) return new Map();
+    const { data, error } = await client
+      .from("attachments")
+      .select("target_id, file_name, file_url, file_size")
+      .eq("target_type", targetType)
+      .in("target_id", targetIds);
+    if (error) throw error;
+
+    return (data || []).reduce((map, file) => {
+      const key = String(file.target_id);
+      const files = map.get(key) || [];
+      files.push(file);
+      map.set(key, files);
+      return map;
+    }, new Map());
+  };
+
+  const attachFiles = async (items, targetType) => {
+    const ids = items.map((item) => String(item.id)).filter((id) => !id.startsWith("static-"));
+    const filesById = await fetchAttachments(targetType, ids);
+    return items.map((item) => ({
+      ...item,
+      attachments: filesById.get(String(item.id)) || [],
+    }));
+  };
 
   const callPublicSubmitFunction = async (action, payload) => {
     const token = currentSession?.access_token;
@@ -255,7 +290,7 @@
       if (!canManage) query = query.eq("status", "public");
       const { data, error } = await query;
       if (error) throw error;
-      return data || [];
+      return attachFiles(data || [], "gallery");
     }
 
     let query = client
@@ -267,7 +302,7 @@
     if (!canManage) query = query.eq("status", "public");
     const { data, error } = await query;
     if (error) throw error;
-    return data || [];
+    return attachFiles(data || [], "post");
   };
 
   const ensureActionHeader = (canManage) => {
@@ -381,6 +416,30 @@
       : '<article class="empty-state"><div><h3>등록된 사진이 없습니다.</h3><p>스텝 로그인 후 갤러리 글을 등록할 수 있습니다.</p></div></article>';
   };
 
+  const renderAttachments = (files = []) => {
+    const safeFiles = files.filter((file) => file?.file_url && isSafeUrl(file.file_url));
+    if (!safeFiles.length) return "";
+    return `
+      <section class="board-detail-files" aria-label="첨부파일">
+        <h4>첨부파일</h4>
+        <ul>
+          ${safeFiles
+            .map(
+              (file) => `
+                <li>
+                  <a href="${escapeHtml(file.file_url)}" target="_blank" rel="noreferrer">
+                    <span>${escapeHtml(file.file_name || "첨부파일")}</span>
+                    ${formatBytes(file.file_size) ? `<small>${escapeHtml(formatBytes(file.file_size))}</small>` : ""}
+                  </a>
+                </li>
+              `,
+            )
+            .join("")}
+        </ul>
+      </section>
+    `;
+  };
+
   const renderDetail = (item, canManage) => {
     if (!item) {
       detailShell.hidden = true;
@@ -415,6 +474,7 @@
         <div class="board-detail-content board-content-view">
           ${contentHtml || "<p>등록된 내용이 없습니다.</p>"}
         </div>
+        ${renderAttachments(item.attachments)}
       </article>
     `;
   };
