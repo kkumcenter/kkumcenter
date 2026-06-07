@@ -486,11 +486,7 @@
       return;
     }
 
-    const { error } = await client.from(tableName).delete().eq("id", id).eq("status", "hidden");
-    if (error) throw error;
-
-    const { error: attachmentError } = await client.from("attachments").delete().eq("target_type", "post").eq("target_id", id);
-    if (attachmentError) throw attachmentError;
+    await callPublicSubmitFunction("post-delete", { id });
   };
 
   const reload = async () => {

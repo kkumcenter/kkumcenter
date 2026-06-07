@@ -597,11 +597,20 @@ create table if not exists public.attachments (
   file_name text not null,
   file_url text not null,
   file_size integer,
+  storage_path text,
+  storage_bucket text,
+  mime_type text,
   uploaded_by uuid references auth.users(id) on delete set null,
   created_at timestamptz not null default now()
 );
 
+alter table public.attachments
+  add column if not exists storage_path text,
+  add column if not exists storage_bucket text,
+  add column if not exists mime_type text;
+
 create index if not exists attachments_target_idx on public.attachments (target_type, target_id);
+create index if not exists attachments_storage_path_idx on public.attachments (storage_path);
 
 create table if not exists public.galleries (
   id uuid primary key default gen_random_uuid(),

@@ -1,14 +1,14 @@
-# 꿈센터 갤러리 Cloudflare R2 설정 메모
+# 꿈키움센터 공개 파일 Cloudflare R2 설정 메모
 
-꿈센터 갤러리 사진은 Supabase Storage가 아니라 Cloudflare R2에 저장합니다.
-Supabase에는 사진 파일이 아니라 공개 이미지 URL, R2 파일 경로, 제목, 설명 같은 데이터만 저장합니다.
+꿈키움센터 홈페이지의 공개 사진과 게시글 첨부파일은 Supabase Storage가 아니라 Cloudflare R2에 저장합니다.
+Supabase에는 파일 자체가 아니라 공개 URL, R2 파일 경로, 제목, 설명 같은 데이터만 저장합니다.
 
 ## 운영 구조
 
 - Supabase: DB, 로그인, 관리자 권한, 신청/예약/게시글 데이터
-- Cloudflare R2: 꿈센터 갤러리 공개 사진 저장
-- YouTube: 활동 영상 게시 및 재생
-- Google Drive: 사진/영상 원본 보관
+- Cloudflare R2: 갤러리 사진, 공지사항/마을이야기 본문 이미지, 게시글 첨부파일 저장
+- YouTube: 공개 활동 영상 게시 및 재생
+- Google Drive 또는 외장 저장장치: 편집 재료와 원본 사진/영상 보관
 
 ## Cloudflare R2 준비
 
@@ -48,7 +48,7 @@ supabase functions deploy public-submit --no-verify-jwt
 ## DB 반영
 
 `supabase/schema.sql`, `supabase/policies.sql` 변경분을 운영 Supabase DB에 반영해야 합니다.
-이번 변경에는 갤러리 이미지의 R2 경로 컬럼과 `videos` 테이블이 포함되어 있습니다.
+이번 변경에는 갤러리 이미지와 게시글 첨부파일의 R2 경로 컬럼, `videos` 테이블이 포함되어 있습니다.
 
 ## 업로드 정책
 
@@ -63,10 +63,10 @@ supabase functions deploy public-submit --no-verify-jwt
 ## 점검 순서
 
 1. 관리자 로그인
-2. 꿈센터 갤러리 글 작성
-3. 사진 5장 업로드
+2. 꿈센터 갤러리 글 작성 후 사진 5장 업로드
+3. 공지사항 또는 마을이야기 글 작성 후 본문 이미지와 첨부파일 업로드
 4. R2 버킷에 파일 생성 확인
-5. Supabase `gallery_images`에 `image_url`, `storage_path`, `storage_bucket` 저장 확인
-6. 갤러리 목록/상세에서 이미지 표시 확인
+5. Supabase `gallery_images`, `attachments`에 URL과 `storage_path`, `storage_bucket` 저장 확인
+6. 갤러리/게시글 목록과 상세에서 파일 표시 확인
 7. 글을 숨김 처리한 뒤 최고 관리자 계정으로 완전삭제
 8. DB 기록과 R2 파일이 함께 삭제되는지 확인

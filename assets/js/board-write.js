@@ -297,9 +297,9 @@
       canvas.toBlob((blob) => resolve(blob), type, quality);
     });
 
-  const prepareGalleryImageBlob = async (blob, originalName) => {
+  const prepareImageBlob = async (blob, originalName) => {
     if (!String(blob.type || "").startsWith("image/")) {
-      throw new Error("갤러리에는 이미지 파일만 업로드할 수 있습니다.");
+      throw new Error("이미지 파일만 압축할 수 있습니다.");
     }
 
     const image = await blobToImage(blob);
@@ -318,56 +318,42 @@
     const uploadBlob = await canvasToUploadBlob(canvas, "image/jpeg", 0.86);
     if (!uploadBlob) throw new Error("이미지 압축 중 문제가 발생했습니다.");
 
-    const baseName = safeFileName(String(originalName || "gallery-image").replace(/\.[^.]+$/, ""));
+    const baseName = safeFileName(String(originalName || "image").replace(/\.[^.]+$/, ""));
     return {
       blob: uploadBlob,
-      name: `${baseName || "gallery-image"}.jpg`,
+      name: `${baseName || "image"}.jpg`,
     };
   };
 
   const uploadBoardFile = async (blob, bucket, originalName, folder) => {
-    if (board.kind === "gallery" && folder === "images") {
-      const prepared = await prepareGalleryImageBlob(blob, originalName);
-      const signed = await callPublicSubmitFunction("r2-gallery-upload-url", {
-        draftId: state.draftId,
-        fileName: prepared.name,
-        contentType: prepared.blob.type || "image/jpeg",
-      });
-      const uploadResponse = await fetch(signed.uploadUrl, {
-        method: "PUT",
-        headers: {
-          "Content-Type": prepared.blob.type || "image/jpeg",
-        },
-        body: prepared.blob,
-      });
-      if (!uploadResponse.ok) throw new Error("R2 사진 업로드 중 문제가 발생했습니다.");
-      return {
-        name: prepared.name,
-        url: signed.publicUrl,
-        path: signed.path,
-        size: prepared.blob.size || 0,
-        bucket: signed.bucket || "kkumcenter-gallery",
-        storageProvider: "cloudflare-r2",
-        mimeType: prepared.blob.type || "image/jpeg",
-        saved: false,
-      };
-    }
-
-    const ext = fileExt(originalName, blob.type?.includes("png") ? "png" : "jpg");
-    const name = safeFileName(originalName || `${folder}.${ext}`);
-    const path = `${boardType}/${state.draftId}/${folder}/${Date.now()}-${crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2)}-${name}`;
-    const { error } = await client.storage.from(bucket).upload(path, blob, {
-      contentType: blob.type || "application/octet-stream",
-      upsert: false,
+    const shouldCompress = String(blob.type || "").startsWith("image/");
+    const prepared = shouldCompress
+      ? await prepareImageBlob(blob, originalName)
+      : { blob, name: safeFileName(originalName || `${folder}.${fileExt(originalName, "bin")}`) };
+    const action = board.kind === "gallery" && folder === "images" ? "r2-gallery-upload-url" : "r2-public-upload-url";
+    const signed = await callPublicSubmitFunction(action, {
+      boardType,
+      draftId: state.draftId,
+      folder,
+      fileName: prepared.name,
+      contentType: prepared.blob.type || "application/octet-stream",
     });
-    if (error) throw error;
-    const { data } = client.storage.from(bucket).getPublicUrl(path);
+    const uploadResponse = await fetch(signed.uploadUrl, {
+      method: "PUT",
+      headers: {
+        "Content-Type": prepared.blob.type || "application/octet-stream",
+      },
+      body: prepared.blob,
+    });
+    if (!uploadResponse.ok) throw new Error("R2 파일 업로드 중 문제가 발생했습니다.");
     return {
-      name,
-      url: data.publicUrl,
-      path,
-      size: blob.size || 0,
-      bucket,
+      name: prepared.name,
+      url: signed.publicUrl,
+      path: signed.path,
+      size: prepared.blob.size || 0,
+      bucket: signed.bucket || "kkumcenter-gallery",
+      storageProvider: "cloudflare-r2",
+      mimeType: prepared.blob.type || blob.type || "application/octet-stream",
       saved: false,
     };
   };
@@ -798,13 +784,18 @@
 
     const { data: attachments, error: attachmentError } = await client
       .from("attachments")
-      .select("file_name, file_url, file_size")
+      .select("file_name, file_url, file_size, storage_path, storage_bucket, mime_type")
+      .eq("target_type", board.targetType)
       .eq("target_id", editId);
     if (!attachmentError) {
       state.files = (attachments || []).map((file) => ({
         name: file.file_name,
         url: file.file_url,
         size: file.file_size || 0,
+        path: file.storage_path || "",
+        bucket: file.storage_bucket || "",
+        mimeType: file.mime_type || "",
+        storageProvider: file.storage_path ? "cloudflare-r2" : "",
         saved: true,
       }));
     }
@@ -821,6 +812,9 @@
       file_name: file.name,
       file_url: file.url,
       file_size: file.size || null,
+      storage_path: file.path || null,
+      storage_bucket: file.bucket || null,
+      mime_type: file.mimeType || null,
       uploaded_by: state.session.user.id,
     }));
     if (!rows.length) return;

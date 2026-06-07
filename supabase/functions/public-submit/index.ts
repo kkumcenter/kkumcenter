@@ -595,6 +595,29 @@ Deno.serve(async (request) => {
       });
     }
 
+    if (action === "r2-public-upload-url") {
+      await requireBoardAdmin(request, supabase);
+      const fileName = safeFileName(requireText(data, "fileName"));
+      const contentType = requireText(data, "contentType").toLowerCase();
+      const boardType = safeFileName(String(data.boardType || "board"));
+      const draftId = safeFileName(String(data.draftId || crypto.randomUUID()));
+      const folder = safeFileName(String(data.folder || "files"));
+      const extFromName = fileName.match(/\.([a-z0-9]+)$/i)?.[1]?.toLowerCase();
+      const ext =
+        extFromName ||
+        (contentType.includes("jpeg") ? "jpg" : contentType.includes("png") ? "png" : contentType.includes("webp") ? "webp" : "bin");
+      const baseName = safeFileName(fileName.replace(/\.[^.]+$/, ""));
+      const path = `public/${boardType}/${draftId}/${folder}/${Date.now()}-${crypto.randomUUID()}-${baseName || "file"}.${ext}`;
+      const signed = await createR2PresignedPutUrl(path);
+      return json({
+        ok: true,
+        ...signed,
+        path,
+        contentType,
+        expiresIn: 600,
+      });
+    }
+
     if (action === "gallery-delete") {
       const admin = await requireSuperAdmin(request, supabase);
       const id = requireText(data, "id");
@@ -614,10 +637,30 @@ Deno.serve(async (request) => {
         .eq("gallery_id", id);
       if (imageError) throw imageError;
 
-      const paths = [...new Set((images || []).map((image) => String(image.storage_path || "").trim()).filter(Boolean))];
+      const { data: attachments, error: attachmentError } = await supabase
+        .from("attachments")
+        .select("storage_path")
+        .eq("target_type", "gallery")
+        .eq("target_id", id);
+      if (attachmentError) throw attachmentError;
+
+      const paths = [
+        ...new Set(
+          [...(images || []), ...(attachments || [])]
+            .map((file) => String(file.storage_path || "").trim())
+            .filter(Boolean),
+        ),
+      ];
       for (const path of paths) {
         await deleteR2Object(path);
       }
+
+      const { error: attachmentDeleteError } = await supabase
+        .from("attachments")
+        .delete()
+        .eq("target_type", "gallery")
+        .eq("target_id", id);
+      if (attachmentDeleteError) throw attachmentDeleteError;
 
       const { error } = await supabase.from("galleries").delete().eq("id", id).eq("status", "hidden");
       if (error) throw error;
@@ -629,6 +672,52 @@ Deno.serve(async (request) => {
         "gallery",
         id,
         `갤러리 완전삭제: ${gallery.title}`,
+      );
+      return json({ ok: true, deletedFiles: paths.length });
+    }
+
+    if (action === "post-delete") {
+      const admin = await requireSuperAdmin(request, supabase);
+      const id = requireText(data, "id");
+
+      const { data: post, error: postError } = await supabase
+        .from("posts")
+        .select("id, title, status")
+        .eq("id", id)
+        .maybeSingle();
+      if (postError) throw postError;
+      if (!post) throw new Error("삭제할 게시글을 찾을 수 없습니다.");
+      if (post.status !== "hidden") throw new Error("숨김 처리된 게시글만 완전삭제할 수 있습니다.");
+
+      const { data: attachments, error: attachmentError } = await supabase
+        .from("attachments")
+        .select("storage_path")
+        .eq("target_type", "post")
+        .eq("target_id", id);
+      if (attachmentError) throw attachmentError;
+
+      const paths = [...new Set((attachments || []).map((file) => String(file.storage_path || "").trim()).filter(Boolean))];
+      for (const path of paths) {
+        await deleteR2Object(path);
+      }
+
+      const { error: attachmentDeleteError } = await supabase
+        .from("attachments")
+        .delete()
+        .eq("target_type", "post")
+        .eq("target_id", id);
+      if (attachmentDeleteError) throw attachmentDeleteError;
+
+      const { error } = await supabase.from("posts").delete().eq("id", id).eq("status", "hidden");
+      if (error) throw error;
+
+      await logAdminAction(
+        supabase,
+        String(admin.id),
+        "delete",
+        "post",
+        id,
+        `게시글 완전삭제: ${post.title}`,
       );
       return json({ ok: true, deletedFiles: paths.length });
     }

@@ -3,22 +3,34 @@
 군북면 꿈키움센터의 공식 홈페이지 작업본입니다. 센터소개, 공간시설, 교육신청, 소식마당, 문의/제안, 관리자 운영 화면을 포함합니다.
 
 GitHub 저장소: https://github.com/kkumcenter/kkumcenter
-GitHub Pages: https://kkumcenter.github.io/kkumcenter/
+배포: Cloudflare Pages 연결 예정
 
 ## 현재 구성
 
 - 메인 화면, 센터소개, 비전, 연혁, 시설소개, 오시는길 페이지를 제공합니다.
 - 공간예약, 교육신청, 문의/제안은 Supabase Edge Function을 통해 접수·조회합니다.
-- 공지사항, 마을 이야기, 갤러리는 관리자 또는 스텝 로그인 후 등록·수정·숨김 처리할 수 있습니다.
+- 공지사항, 마을 이야기, 갤러리, 영상자료는 관리자 또는 스텝 로그인 후 등록·수정·숨김 처리할 수 있습니다.
+- 공개 사진과 첨부파일은 Cloudflare R2에 저장하고, Supabase에는 URL과 파일 경로만 저장합니다.
+- 공개 영상은 YouTube에 올리고, 홈페이지에는 유튜브 링크와 임베드만 표시합니다.
 - 관리자페이지에서는 공간예약 승인, 교육신청 승인, 교육 현황, 교육 관리, 관리자·스텝 설정을 처리합니다.
 - 금산다팜 몰은 `https://dafarm.co.kr/`로 바로 연결합니다.
+
+## 운영 역할
+
+- GitHub: 코드 보관과 변경 이력
+- Cloudflare Pages: 홈페이지 배포
+- Cloudflare DNS: 도메인 연결
+- Cloudflare R2: 공개 사진과 첨부파일 저장
+- Supabase: 관리자 로그인, DB, 신청/예약/문의/게시글 데이터, Edge Function
+- YouTube: 공개 활동 영상
+- Google Drive 또는 외장 저장장치: 원본 사진/영상과 편집 재료 보관
 
 ## 사이트맵
 
 - 센터소개: 인사말, 비전, 연혁, 시설소개, 오시는길
 - 공간시설: 공간예약, 예약확인
 - 프로그램: 교육신청, 신청확인
-- 소식마당: 공지사항, 꿈센터 갤러리, 마을 이야기, 문의 / 제안
+- 소식마당: 공지사항, 꿈센터 갤러리, 영상자료, 마을 이야기, 문의 / 제안
 - 관리자: 관리자 로그인, 관리자페이지
 - 금산다팜 몰: 외부 쇼핑몰 바로 연결
 
@@ -29,7 +41,7 @@ GitHub Pages: https://kkumcenter.github.io/kkumcenter/
 - `login.html`: 관리자 로그인
 - `programs.html`, `program-apply.html`, `program-check.html`: 교육 목록, 신청, 신청확인
 - `space-apply.html`, `space-reservations.html`: 공간예약, 예약확인
-- `news.html`, `gallery.html`, `village-story.html`, `contact.html`: 소식마당 하위 페이지
+- `news.html`, `gallery.html`, `videos.html`, `village-story.html`, `contact.html`: 소식마당 하위 페이지
 - `board-write.html`: 게시글 작성 화면
 - `assets/css/styles.css`: 전체 스타일
 - `assets/js/*.js`: 화면 동작과 Supabase 연동
