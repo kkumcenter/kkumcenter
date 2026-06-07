@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>군북면 꿈키움센터</title>
     <meta name="description" content="온세대가 지속가능한 꿈을 키우는 거점, 군북면 꿈키움센터 홈페이지">
-    <link rel="stylesheet" href="assets/css/styles.css?v=20260607-5">
+    <link rel="stylesheet" href="assets/css/styles.css?v=20260607-6">
     <link rel="icon" href="assets/images/kkoom-logo-symbol.png">
   </head>
   <body class="home-page">
@@ -179,22 +179,52 @@
         </div>
       </section>
 
-      <section class="section gallery-section" id="home-gallery" data-carousel>
+      <section class="section gallery-section home-media-section" id="home-gallery" data-home-media>
         <div class="container open-forum-heading home-section-heading gallery-title">
           <p>꿈키움 프로그램의 순간을 생생하게 담았습니다.</p>
           <h2>꿈센터 갤러리</h2>
         </div>
-        <div class="container gallery-shell">
-          <div class="carousel-nav gallery-nav" aria-label="갤러리 이동">
-            <button type="button" aria-label="이전 사진" data-carousel-prev>‹</button>
-            <button type="button" aria-label="다음 사진" data-carousel-next>›</button>
-          </div>
-          <div class="gallery-track" data-carousel-track>
-            <article class="gallery-card"><img src="assets/images/program-workshop.png" alt="주민 프로그램 현장"><strong>주민 배움의 시간</strong></article>
-            <article class="gallery-card"><img src="assets/images/community-news.png" alt="마을 소식 기록 활동"><strong>마을 이야기를 기록하는 날</strong></article>
-            <article class="gallery-card"><img src="assets/images/hero-center.png" alt="군북면 꿈키움센터 풍경"><strong>센터가 있는 풍경</strong></article>
-            <article class="gallery-card"><img src="assets/images/local-produce.png" alt="금산과 군북의 계절 농산물"><strong>계절이 닿는 식탁</strong></article>
-          </div>
+        <div class="container home-media-layout">
+          <article class="home-gallery-panel" aria-label="최근 갤러리 사진">
+            <div class="home-media-panel-head">
+              <div>
+                <span>사진</span>
+                <strong>최근 활동 사진</strong>
+              </div>
+              <div class="home-gallery-controls" aria-label="갤러리 사진 이동">
+                <button type="button" aria-label="이전 사진" data-home-gallery-prev>‹</button>
+                <button type="button" aria-label="다음 사진" data-home-gallery-next>›</button>
+              </div>
+            </div>
+            <div class="home-gallery-stage" data-home-gallery-track>
+              <a class="home-gallery-slide is-active" href="gallery.html" data-home-gallery-slide>
+                <img src="assets/images/program-workshop.png" alt="주민 프로그램 현장">
+                <span><small>꿈센터 갤러리</small><strong>주민 배움의 시간</strong><time>활동 사진 보기</time></span>
+              </a>
+              <a class="home-gallery-slide" href="gallery.html" data-home-gallery-slide>
+                <img src="assets/images/community-news.png" alt="마을 소식 기록 활동">
+                <span><small>꿈센터 갤러리</small><strong>마을 이야기를 기록하는 날</strong><time>활동 사진 보기</time></span>
+              </a>
+              <a class="home-gallery-slide" href="gallery.html" data-home-gallery-slide>
+                <img src="assets/images/hero-center.png" alt="군북면 꿈키움센터 풍경">
+                <span><small>꿈센터 갤러리</small><strong>센터가 있는 풍경</strong><time>활동 사진 보기</time></span>
+              </a>
+            </div>
+          </article>
+          <article class="home-video-panel" aria-label="최근 영상자료" data-home-video>
+            <a class="home-video-card" href="videos.html">
+              <span class="home-video-thumb">
+                <img src="assets/images/community-news.png" alt="꿈키움센터 영상자료">
+                <span aria-hidden="true">▶</span>
+              </span>
+              <span class="home-video-copy">
+                <small>영상자료</small>
+                <strong>꿈키움센터 영상자료</strong>
+                <time>유튜브 채널과 활동 영상을 모아봅니다.</time>
+                <em>영상자료 보러가기</em>
+              </span>
+            </a>
+          </article>
         </div>
       </section>
 
@@ -210,6 +240,9 @@
       </div>
       <div class="container footer-meta">COPYRIGHT © GUNBUK KKUM CENTER. ALL RIGHTS RESERVED.</div>
     </footer>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/js/supabase-config.js?v=20260607-1"></script>
     <script src="assets/js/main.js?v=20260607-1"></script>
+    <script src="assets/js/home-media.js?v=20260607-1"></script>
   </body>
 </html>
