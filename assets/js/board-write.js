@@ -261,7 +261,98 @@
     return editorFallback?.value?.trim() || "";
   };
 
+  const callPublicSubmitFunction = async (action, payload) => {
+    const token = state.session?.access_token;
+    if (!token) throw new Error("관리자 인증 정보가 필요합니다.");
+    const response = await fetch(`${config.url}/functions/v1/public-submit`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ action, payload }),
+    });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok || result.error) throw new Error(result.error || "서버 함수 호출 중 문제가 발생했습니다.");
+    return result;
+  };
+
+  const blobToImage = (blob) =>
+    new Promise((resolve, reject) => {
+      const image = new Image();
+      const url = URL.createObjectURL(blob);
+      image.onload = () => {
+        URL.revokeObjectURL(url);
+        resolve(image);
+      };
+      image.onerror = () => {
+        URL.revokeObjectURL(url);
+        reject(new Error("이미지를 읽을 수 없습니다."));
+      };
+      image.src = url;
+    });
+
+  const canvasToUploadBlob = (canvas, type = "image/jpeg", quality = 0.86) =>
+    new Promise((resolve) => {
+      canvas.toBlob((blob) => resolve(blob), type, quality);
+    });
+
+  const prepareGalleryImageBlob = async (blob, originalName) => {
+    if (!String(blob.type || "").startsWith("image/")) {
+      throw new Error("갤러리에는 이미지 파일만 업로드할 수 있습니다.");
+    }
+
+    const image = await blobToImage(blob);
+    const maxSide = 2000;
+    const scale = Math.min(1, maxSide / Math.max(image.naturalWidth || image.width, image.naturalHeight || image.height));
+    const width = Math.max(1, Math.round((image.naturalWidth || image.width) * scale));
+    const height = Math.max(1, Math.round((image.naturalHeight || image.height) * scale));
+    const canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = "#fff";
+    ctx.fillRect(0, 0, width, height);
+    ctx.drawImage(image, 0, 0, width, height);
+
+    const uploadBlob = await canvasToUploadBlob(canvas, "image/jpeg", 0.86);
+    if (!uploadBlob) throw new Error("이미지 압축 중 문제가 발생했습니다.");
+
+    const baseName = safeFileName(String(originalName || "gallery-image").replace(/\.[^.]+$/, ""));
+    return {
+      blob: uploadBlob,
+      name: `${baseName || "gallery-image"}.jpg`,
+    };
+  };
+
   const uploadBoardFile = async (blob, bucket, originalName, folder) => {
+    if (board.kind === "gallery" && folder === "images") {
+      const prepared = await prepareGalleryImageBlob(blob, originalName);
+      const signed = await callPublicSubmitFunction("r2-gallery-upload-url", {
+        draftId: state.draftId,
+        fileName: prepared.name,
+        contentType: prepared.blob.type || "image/jpeg",
+      });
+      const uploadResponse = await fetch(signed.uploadUrl, {
+        method: "PUT",
+        headers: {
+          "Content-Type": prepared.blob.type || "image/jpeg",
+        },
+        body: prepared.blob,
+      });
+      if (!uploadResponse.ok) throw new Error("R2 사진 업로드 중 문제가 발생했습니다.");
+      return {
+        name: prepared.name,
+        url: signed.publicUrl,
+        path: signed.path,
+        size: prepared.blob.size || 0,
+        bucket: signed.bucket || "kkumcenter-gallery",
+        storageProvider: "cloudflare-r2",
+        mimeType: prepared.blob.type || "image/jpeg",
+        saved: false,
+      };
+    }
+
     const ext = fileExt(originalName, blob.type?.includes("png") ? "png" : "jpg");
     const name = safeFileName(originalName || `${folder}.${ext}`);
     const path = `${boardType}/${state.draftId}/${folder}/${Date.now()}-${crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2)}-${name}`;
@@ -673,14 +764,18 @@
 
       const { data: galleryImages, error: imageError } = await client
         .from("gallery_images")
-        .select("image_url, caption, sort_order")
+        .select("image_url, caption, sort_order, storage_path, storage_bucket, file_size, mime_type")
         .eq("gallery_id", editId)
         .order("sort_order", { ascending: true });
       if (imageError) throw imageError;
       state.images = (galleryImages || []).map((image, index) => ({
         name: image.caption || `이미지 ${index + 1}`,
         url: image.image_url,
-        size: 0,
+        path: image.storage_path || "",
+        bucket: image.storage_bucket || "",
+        size: image.file_size || 0,
+        mimeType: image.mime_type || "",
+        storageProvider: image.storage_path ? "cloudflare-r2" : "",
         saved: true,
       }));
       if (state.coverImageUrl && !state.images.some((image) => image.url === state.coverImageUrl)) {
@@ -740,17 +835,23 @@
   };
 
   const saveGalleryImages = async (galleryId) => {
-    const newImages = state.images.filter((image) => !image.saved);
-    const rows = newImages.map((image, index) => ({
+    const rows = state.images
+      .map((image, index) => ({ image, index }))
+      .filter(({ image }) => !image.saved)
+      .map(({ image, index }) => ({
         gallery_id: galleryId,
         image_url: image.url,
+        storage_path: image.path || null,
+        storage_bucket: image.bucket || null,
+        file_size: image.size || null,
+        mime_type: image.mimeType || null,
         caption: image.name,
         sort_order: index,
       }));
     if (!rows.length) return;
     const { error } = await client.from("gallery_images").insert(rows);
     if (error) throw error;
-    newImages.forEach((image) => {
+    state.images.filter((image) => !image.saved).forEach((image) => {
       image.saved = true;
     });
   };

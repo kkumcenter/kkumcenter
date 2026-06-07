@@ -227,6 +227,22 @@
   const canDeleteBoard = (profile) =>
     profile?.role === "admin" && profile.admin_role === "super_admin";
 
+  const callPublicSubmitFunction = async (action, payload) => {
+    const token = currentSession?.access_token;
+    if (!token) throw new Error("관리자 인증 정보가 필요합니다.");
+    const response = await fetch(`${config.url}/functions/v1/public-submit`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ action, payload }),
+    });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok || result.error) throw new Error(result.error || "서버 함수 호출 중 문제가 발생했습니다.");
+    return result;
+  };
+
   const fetchItems = async (canManage) => {
     if (!client) return [];
 
@@ -405,6 +421,7 @@
 
   let currentItems = [];
   let currentProfile = null;
+  let currentSession = null;
   let currentPage = 1;
   let selectedItemId = null;
 
@@ -464,13 +481,16 @@
     if (!canDeleteBoard(currentProfile)) throw new Error("관리자만 완전삭제할 수 있습니다.");
     if (!item || item.status !== "hidden") throw new Error("숨김 처리된 글만 완전삭제할 수 있습니다.");
 
+    if (boardKind === "gallery") {
+      await callPublicSubmitFunction("gallery-delete", { id });
+      return;
+    }
+
     const { error } = await client.from(tableName).delete().eq("id", id).eq("status", "hidden");
     if (error) throw error;
 
-    if (boardKind !== "gallery") {
-      const { error: attachmentError } = await client.from("attachments").delete().eq("target_type", "post").eq("target_id", id);
-      if (attachmentError) throw attachmentError;
-    }
+    const { error: attachmentError } = await client.from("attachments").delete().eq("target_type", "post").eq("target_id", id);
+    if (attachmentError) throw attachmentError;
   };
 
   const reload = async () => {
@@ -585,6 +605,7 @@
   const init = async () => {
     try {
       const session = await getSession();
+      currentSession = session;
       currentProfile = await getProfile(session);
       const canManage = canManageBoard(currentProfile);
 

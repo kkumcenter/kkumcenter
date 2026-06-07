@@ -624,12 +624,41 @@ create table if not exists public.gallery_images (
   id uuid primary key default gen_random_uuid(),
   gallery_id uuid not null references public.galleries(id) on delete cascade,
   image_url text not null,
+  storage_path text,
+  storage_bucket text,
+  file_size integer,
+  mime_type text,
   caption text,
   sort_order integer not null default 0,
   created_at timestamptz not null default now()
 );
 
+alter table public.gallery_images
+  add column if not exists storage_path text,
+  add column if not exists storage_bucket text,
+  add column if not exists file_size integer,
+  add column if not exists mime_type text;
+
 create index if not exists gallery_images_gallery_sort_idx on public.gallery_images (gallery_id, sort_order);
+create index if not exists gallery_images_storage_path_idx on public.gallery_images (storage_path);
+
+create table if not exists public.videos (
+  id uuid primary key default gen_random_uuid(),
+  title text not null,
+  youtube_url text not null,
+  youtube_id text not null,
+  description text,
+  event_date date,
+  author_id uuid references auth.users(id) on delete set null,
+  author_name text not null,
+  status public.content_status not null default 'public',
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create index if not exists videos_status_created_idx on public.videos (status, created_at desc);
+create index if not exists videos_youtube_id_idx on public.videos (youtube_id);
+create index if not exists videos_author_id_idx on public.videos (author_id);
 
 create table if not exists public.admin_logs (
   id uuid primary key default gen_random_uuid(),
@@ -838,4 +867,9 @@ for each row execute function public.set_updated_at();
 drop trigger if exists set_galleries_updated_at on public.galleries;
 create trigger set_galleries_updated_at
 before update on public.galleries
+for each row execute function public.set_updated_at();
+
+drop trigger if exists set_videos_updated_at on public.videos;
+create trigger set_videos_updated_at
+before update on public.videos
 for each row execute function public.set_updated_at();

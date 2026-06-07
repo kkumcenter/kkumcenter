@@ -17,6 +17,7 @@ alter table public.posts enable row level security;
 alter table public.attachments enable row level security;
 alter table public.galleries enable row level security;
 alter table public.gallery_images enable row level security;
+alter table public.videos enable row level security;
 alter table public.admin_logs enable row level security;
 
 -- profiles
@@ -311,6 +312,35 @@ using (public.can_manage_board())
 with check (public.can_manage_board());
 create policy "Super admins can delete gallery images"
 on public.gallery_images
+for delete
+using (public.is_super_admin());
+
+-- videos
+drop policy if exists "Anyone can read public videos" on public.videos;
+create policy "Anyone can read public videos"
+on public.videos
+for select
+using (status = 'public');
+
+drop policy if exists "Board admins can read videos" on public.videos;
+drop policy if exists "Board admins can create videos" on public.videos;
+drop policy if exists "Board admins can update videos" on public.videos;
+drop policy if exists "Super admins can delete videos" on public.videos;
+create policy "Board admins can read videos"
+on public.videos
+for select
+using (public.can_manage_board());
+create policy "Board admins can create videos"
+on public.videos
+for insert
+with check (public.can_manage_board());
+create policy "Board admins can update videos"
+on public.videos
+for update
+using (public.can_manage_board())
+with check (public.can_manage_board());
+create policy "Super admins can delete videos"
+on public.videos
 for delete
 using (public.is_super_admin());
 

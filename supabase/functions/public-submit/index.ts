@@ -21,6 +21,8 @@ const requiredEnv = (key: string) => {
   return value;
 };
 
+const optionalEnv = (key: string) => Deno.env.get(key) || "";
+
 const createServiceClient = () =>
   createClient(requiredEnv("SUPABASE_URL"), requiredEnv("SUPABASE_SERVICE_ROLE_KEY"), {
     auth: {
@@ -301,6 +303,159 @@ const requireSuperAdmin = async (request: Request, supabase: ReturnType<typeof c
   return profile;
 };
 
+const requireBoardAdmin = async (request: Request, supabase: ReturnType<typeof createClient>) => {
+  const token = bearerToken(request);
+  if (!token) throw new Error("관리자 인증 정보가 필요합니다.");
+
+  const { data: userData, error: userError } = await supabase.auth.getUser(token);
+  if (userError || !userData.user) throw new Error("관리자 인증을 확인할 수 없습니다.");
+
+  const { data: profile, error: profileError } = await supabase
+    .from("profiles")
+    .select("id, role, admin_role, email")
+    .eq("id", userData.user.id)
+    .maybeSingle();
+
+  if (profileError) throw profileError;
+  if (profile?.role !== "admin" || !["super_admin", "board_admin"].includes(String(profile?.admin_role || ""))) {
+    throw new Error("관리자 또는 스텝만 사용할 수 있는 기능입니다.");
+  }
+
+  return profile;
+};
+
+const toHex = (buffer: ArrayBuffer) =>
+  Array.from(new Uint8Array(buffer))
+    .map((byte) => byte.toString(16).padStart(2, "0"))
+    .join("");
+
+const sha256Hex = async (value: string) => {
+  const data = new TextEncoder().encode(value);
+  return toHex(await crypto.subtle.digest("SHA-256", data));
+};
+
+const hmac = async (key: ArrayBuffer | Uint8Array, value: string) => {
+  const cryptoKey = await crypto.subtle.importKey("raw", key, { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  return crypto.subtle.sign("HMAC", cryptoKey, new TextEncoder().encode(value));
+};
+
+const hmacHex = async (key: ArrayBuffer | Uint8Array, value: string) => toHex(await hmac(key, value));
+
+const r2SigningKey = async (secretAccessKey: string, dateStamp: string) => {
+  const dateKey = await hmac(new TextEncoder().encode(`AWS4${secretAccessKey}`), dateStamp);
+  const regionKey = await hmac(dateKey, "auto");
+  const serviceKey = await hmac(regionKey, "s3");
+  return hmac(serviceKey, "aws4_request");
+};
+
+const encodePath = (value: string) => value.split("/").map(encodeURIComponent).join("/");
+
+const safeFileName = (value: string) =>
+  String(value || "file")
+    .normalize("NFKD")
+    .replace(/[^\w.-]+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "")
+    .slice(0, 90) || "file";
+
+const r2Config = () => {
+  const accountId = requiredEnv("R2_ACCOUNT_ID");
+  const accessKeyId = requiredEnv("R2_ACCESS_KEY_ID");
+  const secretAccessKey = requiredEnv("R2_SECRET_ACCESS_KEY");
+  const bucket = optionalEnv("R2_BUCKET") || "kkumcenter-gallery";
+  const publicBaseUrl = requiredEnv("R2_PUBLIC_BASE_URL").replace(/\/+$/, "");
+  return {
+    accountId,
+    accessKeyId,
+    secretAccessKey,
+    bucket,
+    publicBaseUrl,
+    host: `${accountId}.r2.cloudflarestorage.com`,
+  };
+};
+
+const createR2PresignedPutUrl = async (path: string, expires = 600) => {
+  const config = r2Config();
+  const now = new Date();
+  const amzDate = now.toISOString().replace(/[:-]|\.\d{3}/g, "");
+  const dateStamp = amzDate.slice(0, 8);
+  const credential = `${config.accessKeyId}/${dateStamp}/auto/s3/aws4_request`;
+  const canonicalUri = `/${encodeURIComponent(config.bucket)}/${encodePath(path)}`;
+  const params = new URLSearchParams({
+    "X-Amz-Algorithm": "AWS4-HMAC-SHA256",
+    "X-Amz-Credential": credential,
+    "X-Amz-Date": amzDate,
+    "X-Amz-Expires": String(expires),
+    "X-Amz-SignedHeaders": "host",
+  });
+  params.sort();
+  const canonicalQuery = params.toString();
+  const canonicalRequest = [
+    "PUT",
+    canonicalUri,
+    canonicalQuery,
+    `host:${config.host}`,
+    "",
+    "host",
+    "UNSIGNED-PAYLOAD",
+  ].join("\n");
+  const stringToSign = [
+    "AWS4-HMAC-SHA256",
+    amzDate,
+    `${dateStamp}/auto/s3/aws4_request`,
+    await sha256Hex(canonicalRequest),
+  ].join("\n");
+  const signingKey = await r2SigningKey(config.secretAccessKey, dateStamp);
+  params.set("X-Amz-Signature", await hmacHex(signingKey, stringToSign));
+  return {
+    uploadUrl: `https://${config.host}${canonicalUri}?${params.toString()}`,
+    publicUrl: `${config.publicBaseUrl}/${encodePath(path)}`,
+    bucket: config.bucket,
+  };
+};
+
+const createR2AuthorizationHeaders = async (method: string, path: string) => {
+  const config = r2Config();
+  const now = new Date();
+  const amzDate = now.toISOString().replace(/[:-]|\.\d{3}/g, "");
+  const dateStamp = amzDate.slice(0, 8);
+  const canonicalUri = `/${encodeURIComponent(config.bucket)}/${encodePath(path)}`;
+  const payloadHash = await sha256Hex("");
+  const canonicalRequest = [
+    method,
+    canonicalUri,
+    "",
+    `host:${config.host}`,
+    `x-amz-content-sha256:${payloadHash}`,
+    `x-amz-date:${amzDate}`,
+    "",
+    "host;x-amz-content-sha256;x-amz-date",
+    payloadHash,
+  ].join("\n");
+  const credentialScope = `${dateStamp}/auto/s3/aws4_request`;
+  const stringToSign = ["AWS4-HMAC-SHA256", amzDate, credentialScope, await sha256Hex(canonicalRequest)].join("\n");
+  const signingKey = await r2SigningKey(config.secretAccessKey, dateStamp);
+  const signature = await hmacHex(signingKey, stringToSign);
+  return {
+    url: `https://${config.host}${canonicalUri}`,
+    headers: {
+      "x-amz-content-sha256": payloadHash,
+      "x-amz-date": amzDate,
+      Authorization: `AWS4-HMAC-SHA256 Credential=${config.accessKeyId}/${credentialScope}, SignedHeaders=host;x-amz-content-sha256;x-amz-date, Signature=${signature}`,
+    },
+  };
+};
+
+const deleteR2Object = async (path: string) => {
+  if (!path || path.includes("..")) return false;
+  const request = await createR2AuthorizationHeaders("DELETE", path);
+  const response = await fetch(request.url, { method: "DELETE", headers: request.headers });
+  if (!response.ok && response.status !== 404) {
+    throw new Error(`R2 파일 삭제 실패: ${path}`);
+  }
+  return true;
+};
+
 const logAdminAction = async (
   supabase: ReturnType<typeof createClient>,
   adminId: string,
@@ -419,6 +574,64 @@ Deno.serve(async (request) => {
     const body = await request.json();
     const { action, payload } = body;
     const data = (payload ?? body) as Record<string, unknown>;
+
+    if (action === "r2-gallery-upload-url") {
+      await requireBoardAdmin(request, supabase);
+      const fileName = safeFileName(requireText(data, "fileName"));
+      const contentType = requireText(data, "contentType").toLowerCase();
+      if (!contentType.startsWith("image/")) throw new Error("갤러리에는 이미지 파일만 업로드할 수 있습니다.");
+
+      const draftId = safeFileName(String(data.draftId || crypto.randomUUID()));
+      const ext = contentType.includes("webp") ? "webp" : contentType.includes("png") ? "png" : "jpg";
+      const baseName = safeFileName(fileName.replace(/\.[^.]+$/, ""));
+      const path = `gallery/${draftId}/images/${Date.now()}-${crypto.randomUUID()}-${baseName || "image"}.${ext}`;
+      const signed = await createR2PresignedPutUrl(path);
+      return json({
+        ok: true,
+        ...signed,
+        path,
+        contentType,
+        expiresIn: 600,
+      });
+    }
+
+    if (action === "gallery-delete") {
+      const admin = await requireSuperAdmin(request, supabase);
+      const id = requireText(data, "id");
+
+      const { data: gallery, error: galleryError } = await supabase
+        .from("galleries")
+        .select("id, title, status")
+        .eq("id", id)
+        .maybeSingle();
+      if (galleryError) throw galleryError;
+      if (!gallery) throw new Error("삭제할 갤러리 글을 찾을 수 없습니다.");
+      if (gallery.status !== "hidden") throw new Error("숨김 처리된 갤러리 글만 완전삭제할 수 있습니다.");
+
+      const { data: images, error: imageError } = await supabase
+        .from("gallery_images")
+        .select("storage_path")
+        .eq("gallery_id", id);
+      if (imageError) throw imageError;
+
+      const paths = [...new Set((images || []).map((image) => String(image.storage_path || "").trim()).filter(Boolean))];
+      for (const path of paths) {
+        await deleteR2Object(path);
+      }
+
+      const { error } = await supabase.from("galleries").delete().eq("id", id).eq("status", "hidden");
+      if (error) throw error;
+
+      await logAdminAction(
+        supabase,
+        String(admin.id),
+        "delete",
+        "gallery",
+        id,
+        `갤러리 완전삭제: ${gallery.title}`,
+      );
+      return json({ ok: true, deletedFiles: paths.length });
+    }
 
     if (action === "space-reservation") {
       const spaceName = requireText(data, "spaceName");

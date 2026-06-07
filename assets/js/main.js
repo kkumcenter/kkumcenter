@@ -37,6 +37,7 @@ const allMenuItems = [
     links: [
       ["공지사항", "news.html"],
       ["꿈센터 갤러리", "gallery.html"],
+      ["영상자료", "videos.html"],
       ["마을 이야기", "village-story.html"],
       ["문의 / 제안", "contact.html"],
     ],
