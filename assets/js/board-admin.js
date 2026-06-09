@@ -207,12 +207,6 @@
       wrapper.className = `gallery-image-frame${isCover ? " is-cover" : ""}`;
       image.replaceWith(wrapper);
       wrapper.appendChild(image);
-      if (isCover) {
-        const badge = document.createElement("span");
-        badge.className = "gallery-cover-badge";
-        badge.textContent = "대표사진";
-        wrapper.appendChild(badge);
-      }
     });
     template.content.querySelectorAll("p").forEach((paragraph) => {
       const meaningfulChildren = [...paragraph.childNodes].filter((node) => node.nodeType !== Node.TEXT_NODE || node.textContent.trim());

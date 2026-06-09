@@ -11078,23 +11078,6 @@ body.admin-page {
   border-radius: 8px;
 }
 
-.gallery-cover-badge {
-  position: absolute;
-  top: 14px;
-  left: 14px;
-  z-index: 1;
-  display: inline-flex;
-  align-items: center;
-  min-height: 34px;
-  padding: 0 13px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, #e08e38, #1f5a43);
-  color: #fff;
-  font-size: 14px;
-  font-weight: 900;
-  box-shadow: 0 10px 24px rgba(31, 90, 67, 0.2);
-}
-
 .board-content-view video,
 .board-content-view iframe,
 .board-content-view embed,
@@ -13137,14 +13120,6 @@ body.admin-page {
   .board-write-form.is-gallery-write .board-toast-editor,
   .board-write-form.is-gallery-write .board-editor-fallback {
     min-height: 560px;
-  }
-
-  .gallery-cover-badge {
-    top: 10px;
-    left: 10px;
-    min-height: 30px;
-    padding: 0 11px;
-    font-size: 13px;
   }
 
   .gallery-detail-button span {
