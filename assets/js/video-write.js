@@ -175,14 +175,14 @@
 
   const init = async () => {
     try {
-      if (titleNode) titleNode.textContent = editId ? "영상자료 수정" : "영상자료 작성";
+      if (titleNode) titleNode.textContent = editId ? "유튜브 링크 수정" : "유튜브 링크 작성";
       const ok = await ensurePermission();
       if (!ok) return;
       await loadExisting();
       if (guard) guard.hidden = true;
       if (form) form.hidden = false;
     } catch (error) {
-      setGuard("영상자료 작성 권한을 확인할 수 없습니다.", error.message || "잠시 후 다시 시도해주세요.");
+      setGuard("유튜브 링크 작성 권한을 확인할 수 없습니다.", error.message || "잠시 후 다시 시도해주세요.");
     }
   };
 

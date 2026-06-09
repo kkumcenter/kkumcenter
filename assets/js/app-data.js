@@ -64,6 +64,28 @@
     return result;
   };
 
+  const callAuthenticatedSubmitFunction = async (action, payload, session) => {
+    const config = getSupabaseConfig();
+    const token = session?.access_token;
+    if (!config || !token) throw new Error("관리자 인증 정보가 필요합니다.");
+
+    const response = await window.fetch(`${config.url}/functions/v1/public-submit`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        apikey: config.anonKey,
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ action, payload }),
+    });
+
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      throw new Error(result.error || "관리자 요청 처리 중 문제가 발생했습니다.");
+    }
+    return result;
+  };
+
   const loadExternalStyle = (id, href) =>
     new Promise((resolve, reject) => {
       if (document.getElementById(id)) {
@@ -617,6 +639,7 @@
                   <label><span>관리자 답변</span><textarea name="answer" rows="5" required>${escapeHtml(item.answer || "")}</textarea></label>
                   <p class="form-status" data-form-status aria-live="polite"></p>
                   <div class="inquiry-modal-actions">
+                    <button class="inquiry-delete-button" type="button" data-inquiry-delete>삭제</button>
                     <button type="button" data-inquiry-modal-close>닫기</button>
                     <button type="submit">답변 저장</button>
                   </div>
@@ -831,9 +854,45 @@
       }
     });
 
-    detailContent?.addEventListener("click", (event) => {
+    detailContent?.addEventListener("click", async (event) => {
       const target = event.target;
-      if (target instanceof HTMLElement && target.matches("[data-inquiry-modal-close]")) {
+      if (!(target instanceof HTMLElement)) return;
+
+      if (target.matches("[data-inquiry-delete]")) {
+        const answerForm = target.closest("[data-inquiry-answer-form]");
+        if (!(answerForm instanceof HTMLFormElement)) return;
+
+        const inquiryNo = answerForm.dataset.inquiryNo || selectedInquiryNo;
+        if (!inquiryNo) return;
+        const firstConfirm = window.confirm(`${inquiryNo} 문의 글을 삭제하시겠습니까? 삭제 후에는 복구하기 어렵습니다.`);
+        if (!firstConfirm) return;
+        const secondConfirm = window.confirm("정말로 삭제합니다. 문의 내용과 답변이 함께 삭제됩니다.");
+        if (!secondConfirm) return;
+
+        target.disabled = true;
+        setFormStatus(answerForm, "문의 글을 삭제하고 있습니다.");
+        try {
+          await callAuthenticatedSubmitFunction(
+            "inquiry-delete",
+            {
+              id: answerForm.dataset.rowId,
+              inquiryNo,
+            },
+            currentSession,
+          );
+          closeModal(detailModal);
+          selectedInquiryNo = "";
+          await loadPublicInquiryList();
+          window.alert("문의 글이 삭제되었습니다.");
+        } catch (error) {
+          setFormStatus(answerForm, error.message || "문의 삭제 중 문제가 발생했습니다.", true);
+        } finally {
+          target.disabled = false;
+        }
+        return;
+      }
+
+      if (target.matches("[data-inquiry-modal-close]")) {
         closeModal(detailModal);
       }
     });

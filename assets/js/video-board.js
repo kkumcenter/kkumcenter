@@ -107,7 +107,7 @@
             `,
           )
           .join("")
-      : '<article class="empty-state"><div><h3>등록된 영상이 없습니다.</h3><p>유튜브에 영상을 올린 뒤 영상자료로 연결할 수 있습니다.</p></div></article>';
+      : '<article class="empty-state"><div><h3>등록된 영상이 없습니다.</h3><p>유튜브에 영상을 올린 뒤 링크로 연결할 수 있습니다.</p></div></article>';
   };
 
   const renderDetail = (item) => {
@@ -125,7 +125,7 @@
         </div>
         <div class="board-detail-head">
           <div>
-            <p class="eyebrow">영상자료</p>
+            <p class="eyebrow">YouTube Link</p>
             <h3>${escapeHtml(item.title)}</h3>
           </div>
           ${renderActions(item)}

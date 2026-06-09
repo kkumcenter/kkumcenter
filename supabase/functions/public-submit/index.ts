@@ -1133,8 +1133,36 @@ Deno.serve(async (request) => {
               createdAt: item.created_at,
               answeredAt: item.answered_at,
             }
-          : null,
+            : null,
       });
+    }
+
+    if (action === "inquiry-delete") {
+      const admin = await requireSuperAdmin(request, supabase);
+      const id = String(data.id || "").trim();
+      const inquiryNo = String(data.inquiryNo || "").trim();
+      if (!id && !inquiryNo) throw new Error("삭제할 문의 정보가 필요합니다.");
+
+      let query = supabase.from("inquiries").select("id, inquiry_no, title").limit(1);
+      query = id ? query.eq("id", id) : query.eq("inquiry_no", inquiryNo);
+      const { data: items, error: inquiryError } = await query;
+      if (inquiryError) throw inquiryError;
+
+      const inquiry = items?.[0];
+      if (!inquiry) throw new Error("삭제할 문의 글을 찾을 수 없습니다.");
+
+      const { error } = await supabase.from("inquiries").delete().eq("id", inquiry.id);
+      if (error) throw error;
+
+      await logAdminAction(
+        supabase,
+        String(admin.id),
+        "delete",
+        "inquiry",
+        String(inquiry.id),
+        `문의 삭제: ${inquiry.inquiry_no} ${inquiry.title}`,
+      );
+      return json({ ok: true, id: inquiry.id, inquiryNo: inquiry.inquiry_no });
     }
 
     if (action === "staff-list") {

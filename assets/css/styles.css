@@ -10029,8 +10029,12 @@ body.admin-page {
   gap: 12px;
 }
 
+.inquiry-modal-dialog > .inquiry-modal-head {
+  padding: 22px 24px 10px;
+}
+
 .inquiry-modal-head h3 {
-  margin: 4px 0 0;
+  margin: 0;
   font-size: 1.28rem;
 }
 
@@ -10049,6 +10053,18 @@ body.admin-page {
   border-color: #0f6fe8;
   background: #0f6fe8;
   color: #fff;
+}
+
+.inquiry-modal-actions .inquiry-delete-button {
+  border-color: rgba(198, 47, 37, 0.24);
+  background: #fff1ef;
+  color: #b42318;
+}
+
+.inquiry-modal-actions .inquiry-delete-button:hover,
+.inquiry-modal-actions .inquiry-delete-button:focus-visible {
+  border-color: rgba(198, 47, 37, 0.5);
+  background: #ffe2de;
 }
 
 .inquiry-modal-guide {
