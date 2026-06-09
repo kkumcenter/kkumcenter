@@ -164,7 +164,20 @@
   };
 
   const renderGallery = (items) => {
-    if (!galleryTrack || !items.length) return;
+    if (!galleryTrack) return;
+    if (!items.length) {
+      stop();
+      galleryTrack.innerHTML = '<article class="empty-state home-gallery-empty"><strong>등록된 사진이 없습니다.</strong></article>';
+      [prevButton, nextButton].forEach((button) => {
+        if (!button) return;
+        button.hidden = true;
+      });
+      return;
+    }
+    [prevButton, nextButton].forEach((button) => {
+      if (!button) return;
+      button.hidden = items.length <= 1;
+    });
     galleryTrack.innerHTML = items
       .map((item, index) => {
         const imageUrl = isSafeUrl(item.cover_image_url) ? item.cover_image_url : "assets/images/program-workshop.png";

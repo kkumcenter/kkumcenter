@@ -258,6 +258,7 @@ document.querySelectorAll("[data-home-board-tabs]").forEach((tabList) => {
   const prevButton = boardPanel?.querySelector("[data-home-board-prev]");
   const nextButton = boardPanel?.querySelector("[data-home-board-next]");
   const pageSize = 5;
+  const config = window.KKOOM_SUPABASE || {};
   let activeTab =
     tabs.find((tab) => tab.classList.contains("is-active"))?.getAttribute("data-home-board-tab") ||
     tabs[0]?.getAttribute("data-home-board-tab");
@@ -269,11 +270,97 @@ document.querySelectorAll("[data-home-board-tabs]").forEach((tabList) => {
   const getActivePanel = () =>
     panels.find((panel) => panel.getAttribute("data-home-board-panel") === activeTab);
 
+  const escapeHtml = (value) =>
+    String(value ?? "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+
+  const formatBoardDate = (value) => {
+    const date = value ? new Date(value) : null;
+    if (!date || Number.isNaN(date.getTime())) return "";
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}/${month}/${day}`;
+  };
+
+  const emptyText = (boardType) => (boardType === "village" ? "등록된 마을 이야기가 없습니다." : "등록된 공지사항이 없습니다.");
+
+  const renderEmptyBoard = (panel) => {
+    const boardType = panel.getAttribute("data-home-board-panel") || "notice";
+    panel.innerHTML = `<article class="empty-state home-board-empty"><strong>${escapeHtml(emptyText(boardType))}</strong></article>`;
+  };
+
+  const renderHomeBoardItems = (items = []) => {
+    const grouped = items.reduce(
+      (result, item) => {
+        if (item.board_type === "village") result.village.push(item);
+        else result.notice.push(item);
+        return result;
+      },
+      { notice: [], village: [] },
+    );
+
+    panels.forEach((panel) => {
+      const boardType = panel.getAttribute("data-home-board-panel") || "notice";
+      const list = grouped[boardType] || [];
+      if (!list.length) {
+        renderEmptyBoard(panel);
+        return;
+      }
+      const href = boardType === "village" ? "village-story.html" : "news.html";
+      panel.innerHTML = list
+        .map(
+          (item) => `
+            <a href="${href}" data-home-board-item>
+              <span>${escapeHtml(item.title || "제목 없음")}</span>
+              <time>${escapeHtml(formatBoardDate(item.published_at || item.created_at))}</time>
+            </a>
+          `,
+        )
+        .join("");
+    });
+  };
+
+  const getSupabaseClient = () => {
+    if (!window.supabase || !config.url || !config.anonKey) return null;
+    if (!window.KKOOM_SUPABASE_CLIENT) {
+      window.KKOOM_SUPABASE_CLIENT = window.supabase.createClient(config.url, config.anonKey);
+    }
+    return window.KKOOM_SUPABASE_CLIENT;
+  };
+
+  const loadHomeBoards = async () => {
+    const client = getSupabaseClient();
+    if (!client) return;
+    const { data, error } = await client
+      .from("posts")
+      .select("id, board_type, title, published_at, created_at")
+      .in("board_type", ["notice", "village"])
+      .eq("status", "public")
+      .order("created_at", { ascending: false })
+      .limit(20);
+    if (error) throw error;
+    renderHomeBoardItems(data || []);
+    updateBoardItems();
+  };
+
   const updateBoardItems = () => {
     const activePanel = getActivePanel();
     if (!activePanel) return;
 
     const items = Array.from(activePanel.querySelectorAll("[data-home-board-item]"));
+    if (!items.length) {
+      [prevButton, nextButton].forEach((button) => {
+        if (!button) return;
+        button.disabled = true;
+        button.setAttribute("aria-disabled", "true");
+      });
+      return;
+    }
     const maxPage = Math.max(0, Math.ceil(items.length / pageSize) - 1);
     const currentPage = Math.min(pageState[activeTab] || 0, maxPage);
     pageState[activeTab] = currentPage;
@@ -335,6 +422,9 @@ document.querySelectorAll("[data-home-board-tabs]").forEach((tabList) => {
   });
 
   updateBoardItems();
+  loadHomeBoards().catch((error) => {
+    console.warn("Home board data fallback:", error);
+  });
 });
 
 document.querySelectorAll("[data-board-pagination]").forEach((pagination) => {

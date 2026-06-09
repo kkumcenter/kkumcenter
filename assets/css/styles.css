@@ -2303,6 +2303,19 @@ h2,
   text-overflow: ellipsis;
 }
 
+.home-board-empty {
+  min-height: 116px;
+  padding: 26px 20px;
+  border-bottom: 1px solid rgba(28, 37, 33, 0.13);
+  color: #59665f;
+}
+
+.home-board-empty strong {
+  color: #34423b;
+  font-size: 18px;
+  font-weight: 900;
+}
+
 .board-list time {
   color: #8a9690;
   font-weight: 700;
@@ -2599,6 +2612,23 @@ h2,
   overflow: hidden;
   border-radius: 8px;
   background: #ece7dc;
+}
+
+.home-gallery-empty {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  min-height: inherit;
+  place-items: center;
+  padding: 28px;
+  color: #59665f;
+  text-align: center;
+}
+
+.home-gallery-empty strong {
+  color: #34423b;
+  font-size: 20px;
+  font-weight: 900;
 }
 
 .home-gallery-slide {

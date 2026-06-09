@@ -13,38 +13,6 @@
 
   if (!list) return;
 
-  const collectStaticItems = () => {
-    if (boardKind === "gallery") {
-      return Array.from(root.querySelectorAll("[data-board-page-panel] article")).map((article, index) => ({
-        id: `static-gallery-${index}`,
-        title: article.querySelector("h3")?.textContent?.trim() || `사진 ${index + 1}`,
-        description: "",
-        author_name: "꿈키움센터",
-        cover_image_url: article.querySelector("img")?.getAttribute("src") || "assets/images/hero-center.png",
-        event_date: article.querySelector("time")?.textContent?.trim() || "",
-        place: article.querySelector("p")?.textContent?.trim() || "",
-        created_at: article.querySelector("time")?.textContent?.trim() || "",
-        status: "public",
-      }));
-    }
-
-    return Array.from(root.querySelectorAll("[data-board-page-panel] tr")).map((row, index) => {
-      const cells = row.querySelectorAll("td");
-      return {
-        id: `static-post-${index}`,
-        title: cells[1]?.textContent?.trim() || `게시글 ${index + 1}`,
-        content: "",
-        author_name: cells[2]?.textContent?.trim() || "꿈키움센터",
-        published_at: cells[3]?.textContent?.trim() || "",
-        created_at: cells[3]?.textContent?.trim() || "",
-        view_count: Number(cells[4]?.textContent?.trim() || 0),
-        status: "public",
-      };
-    });
-  };
-
-  const staticItems = collectStaticItems();
-
   const getClient = () => {
     if (!window.supabase || !config.url || !config.anonKey) return null;
     if (!window.KKOOM_SUPABASE_CLIENT) {
