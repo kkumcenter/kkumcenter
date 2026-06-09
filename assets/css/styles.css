@@ -11358,6 +11358,23 @@ body.admin-page {
   word-break: break-word;
 }
 
+.board-detail-card:not(.is-gallery-detail) .board-detail-content {
+  line-height: 1.66;
+}
+
+.board-detail-card:not(.is-gallery-detail) .board-content-view > * + * {
+  margin-top: 10px;
+}
+
+.board-detail-card:not(.is-gallery-detail) .board-content-view p + p {
+  margin-top: 6px;
+}
+
+.board-detail-card:not(.is-gallery-detail) .board-content-view p:empty,
+.board-detail-card:not(.is-gallery-detail) .board-content-view p:has(> br:only-child) {
+  min-height: 0.8em;
+}
+
 .board-detail-files {
   margin-top: 4px;
   padding-top: 22px;
