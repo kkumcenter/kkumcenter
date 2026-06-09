@@ -2439,6 +2439,32 @@ h2,
   margin-top: 20px;
 }
 
+.event-track-empty {
+  display: grid;
+  grid-auto-flow: row;
+  grid-auto-columns: unset;
+  overflow: visible;
+  scroll-snap-type: none;
+}
+
+.event-track-empty .empty-state {
+  display: grid;
+  min-height: 224px;
+  place-items: center;
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+  color: #59665f;
+  text-align: center;
+}
+
+.event-track-empty .empty-state strong {
+  color: #34423b;
+  font-size: 18px;
+  font-weight: 900;
+}
+
 .event-card,
 .gallery-card {
   scroll-snap-align: start;
