@@ -3,6 +3,9 @@
   const form = document.querySelector("[data-admin-register-form]");
   const list = document.querySelector("[data-admin-allowlist]");
   const roleLabel = document.querySelector("[data-admin-settings-role]");
+  const homeSettingsForm = document.querySelector("[data-home-settings-form]");
+  const homeSettingsStatus = document.querySelector("[data-home-settings-status]");
+  const HOME_YOUTUBE_KEY = "home_youtube_url";
   let staffItems = [];
   let selectedStaffEmail = "";
 
@@ -38,12 +41,98 @@
   const activeClass = (value) => (value ? "admin-staff-active" : "admin-staff-inactive");
   const roleClass = (value) => (value === "super_admin" ? "admin-staff-role-admin" : "admin-staff-role-staff");
   const boolFormValue = (value) => (value === false || value === "false" ? "false" : "true");
+  const canManageBoard = (profile) => profile?.role === "admin" && ["super_admin", "board_admin"].includes(profile?.admin_role);
 
   const setStatus = (message, isError = false) => {
     const status = form?.querySelector("[data-form-status]");
     if (!status) return;
     status.textContent = message || "";
     status.classList.toggle("is-error", isError);
+  };
+
+  const setHomeStatus = (message, isError = false) => {
+    if (!homeSettingsStatus) return;
+    homeSettingsStatus.textContent = message || "";
+    homeSettingsStatus.classList.toggle("is-error", isError);
+  };
+
+  const getYoutubeId = (value) => {
+    const text = String(value || "").trim();
+    if (!text) return "";
+    try {
+      const url = new URL(text);
+      const host = url.hostname.replace(/^www\./, "");
+      if (host === "youtu.be") {
+        return url.pathname.split("/").filter(Boolean)[0] || "";
+      }
+      if (!host.endsWith("youtube.com")) return "";
+      if (url.pathname === "/watch") return url.searchParams.get("v") || "";
+      const parts = url.pathname.split("/").filter(Boolean);
+      if (["shorts", "live", "embed"].includes(parts[0])) return parts[1] || "";
+      return "";
+    } catch {
+      return "";
+    }
+  };
+
+  const normalizeYoutubeUrl = (value) => {
+    const text = String(value || "").trim();
+    if (!text) return "";
+    const videoId = getYoutubeId(text);
+    if (!videoId) return "";
+    return `https://www.youtube.com/watch?v=${encodeURIComponent(videoId)}`;
+  };
+
+  const loadHomeSettings = async () => {
+    if (!homeSettingsForm) return;
+    const { data, error } = await client
+      .from("site_settings")
+      .select("setting_value")
+      .eq("setting_key", HOME_YOUTUBE_KEY)
+      .maybeSingle();
+    if (error) throw error;
+    homeSettingsForm.elements.homeYoutubeUrl.value = data?.setting_value || "";
+  };
+
+  const setupHomeSettings = async (session) => {
+    if (!homeSettingsForm) return;
+    try {
+      await loadHomeSettings();
+    } catch (error) {
+      setHomeStatus(error.message || "홈 화면 설정을 불러오지 못했습니다.", true);
+    }
+
+    homeSettingsForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const submitButton = homeSettingsForm.querySelector('button[type="submit"]');
+      const rawUrl = homeSettingsForm.elements.homeYoutubeUrl.value.trim();
+      const normalizedUrl = normalizeYoutubeUrl(rawUrl);
+
+      if (rawUrl && !normalizedUrl) {
+        setHomeStatus("유튜브 영상 주소만 입력할 수 있습니다. youtube.com 또는 youtu.be 주소를 확인해주세요.", true);
+        return;
+      }
+
+      submitButton.disabled = true;
+      setHomeStatus("홈 화면 설정을 저장하고 있습니다.");
+      try {
+        const { error } = await client.from("site_settings").upsert(
+          {
+            setting_key: HOME_YOUTUBE_KEY,
+            setting_value: normalizedUrl,
+            updated_by: session.user.id,
+          },
+          { onConflict: "setting_key" },
+        );
+        if (error) throw error;
+        homeSettingsForm.elements.homeYoutubeUrl.value = normalizedUrl;
+        setHomeStatus(normalizedUrl ? "대표 유튜브 영상이 저장되었습니다." : "대표 영상이 해제되었습니다. 공식 유튜브 채널로 연결됩니다.");
+      } catch (error) {
+        setHomeStatus(error.message || "홈 화면 설정 저장 중 문제가 발생했습니다.", true);
+      } finally {
+        submitButton.disabled = false;
+      }
+    });
   };
 
   const callStaffAction = async (session, action, payload = {}) => {
@@ -140,8 +229,9 @@
   };
 
   const init = async () => {
-    if (!client || !form || !list) {
+    if (!client) {
       setStatus("Supabase 연결 정보가 필요합니다.", true);
+      setHomeStatus("Supabase 연결 정보가 필요합니다.", true);
       return;
     }
 
@@ -160,7 +250,19 @@
 
     if (profileError) throw profileError;
     const isSuperAdmin = profile?.role === "admin" && profile?.admin_role === "super_admin";
-    if (roleLabel) roleLabel.textContent = isSuperAdmin ? "관리자" : "권한 없음";
+    const isBoardManager = canManageBoard(profile);
+    if (roleLabel) roleLabel.textContent = isSuperAdmin ? "관리자" : isBoardManager ? "스텝" : "권한 없음";
+
+    if (homeSettingsForm) {
+      if (isBoardManager) {
+        await setupHomeSettings(session);
+      } else {
+        homeSettingsForm.hidden = true;
+        setHomeStatus("홈 화면 설정 권한이 없습니다.", true);
+      }
+    }
+
+    if (!form || !list) return;
 
     if (!isSuperAdmin) {
       form.hidden = true;

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>관리자페이지 | 군북면 꿈키움센터</title>
     <meta name="description" content="군북면 꿈키움센터 관리자 승인 및 관리 페이지입니다.">
-    <link rel="stylesheet" href="assets/css/styles.css?v=20260608-1">
+    <link rel="stylesheet" href="assets/css/styles.css?v=20260609-1">
     <link rel="icon" href="assets/images/kkoom-logo-symbol.png">
   </head>
   <body class="admin-page admin-approval-page">
@@ -431,6 +431,21 @@
 
         <section class="admin-tab-panel" role="tabpanel" id="panel-settings" aria-labelledby="tab-settings" data-admin-panel="settings" hidden>
           <div class="admin-settings-grid">
+            <section class="admin-settings-section admin-home-settings-section">
+              <div class="admin-settings-section-head">
+                <h3 class="admin-settings-section-title">홈 화면 설정</h3>
+                <p>첫 화면 꿈센터 갤러리 섹션의 유튜브 대표 영상을 설정합니다. 비워두면 공식 유튜브 채널로 연결됩니다.</p>
+              </div>
+              <form class="admin-settings-form admin-home-settings-form" data-home-settings-form>
+                <label class="admin-home-youtube-url">대표 유튜브 영상 URL
+                  <input name="homeYoutubeUrl" type="url" placeholder="https://www.youtube.com/watch?v=... 또는 https://youtu.be/..." autocomplete="off">
+                </label>
+                <p class="admin-settings-help">공식 채널 영상뿐 아니라 공개 가능한 개인 유튜브 영상도 연결할 수 있습니다.</p>
+                <p class="form-status" data-home-settings-status aria-live="polite"></p>
+                <button class="button primary admin-settings-submit" type="submit">홈 화면 설정 저장</button>
+              </form>
+            </section>
+
             <section class="admin-settings-section">
               <div class="admin-settings-section-head">
                 <h3 class="admin-settings-section-title">관리자·스텝 목록</h3>
@@ -483,6 +498,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/supabase-config.js?v=20260607-1"></script>
     <script src="assets/js/admin-approvals.js?v=20260606-2"></script>
-    <script src="assets/js/admin-settings.js?v=20260602-4"></script>
+    <script src="assets/js/admin-settings.js?v=20260609-1"></script>
   </body>
 </html>

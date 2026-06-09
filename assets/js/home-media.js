@@ -6,8 +6,13 @@
   const galleryPanel = root.querySelector(".home-gallery-panel");
   const prevButton = root.querySelector("[data-home-gallery-prev]");
   const nextButton = root.querySelector("[data-home-gallery-next]");
+  const youtubeLink = root.querySelector("[data-home-youtube-link]");
+  const youtubeImage = root.querySelector("[data-home-youtube-image]");
+  const youtubeTitle = root.querySelector("[data-home-youtube-title]");
   const config = window.KKOOM_SUPABASE || {};
   const SLIDE_INTERVAL = 2000;
+  const HOME_YOUTUBE_KEY = "home_youtube_url";
+  const YOUTUBE_CHANNEL_URL = "https://www.youtube.com/@kkumcenter";
 
   const escapeHtml = (value) =>
     String(value ?? "")
@@ -28,6 +33,55 @@
       window.KKOOM_SUPABASE_CLIENT = window.supabase.createClient(config.url, config.anonKey);
     }
     return window.KKOOM_SUPABASE_CLIENT;
+  };
+
+  const getYoutubeId = (value) => {
+    const text = String(value || "").trim();
+    if (!text) return "";
+    try {
+      const url = new URL(text);
+      const host = url.hostname.replace(/^www\./, "");
+      if (host === "youtu.be") {
+        return url.pathname.split("/").filter(Boolean)[0] || "";
+      }
+      if (!host.endsWith("youtube.com")) return "";
+      if (url.pathname === "/watch") return url.searchParams.get("v") || "";
+      const parts = url.pathname.split("/").filter(Boolean);
+      if (["shorts", "live", "embed"].includes(parts[0])) return parts[1] || "";
+      return "";
+    } catch {
+      return "";
+    }
+  };
+
+  const normalizeYoutubeUrl = (value) => {
+    const text = String(value || "").trim();
+    const videoId = getYoutubeId(text);
+    if (!videoId) return "";
+    return `https://www.youtube.com/watch?v=${encodeURIComponent(videoId)}`;
+  };
+
+  const renderYoutubeCard = (value) => {
+    if (!youtubeLink) return;
+    const youtubeUrl = normalizeYoutubeUrl(value);
+    const youtubeId = getYoutubeId(youtubeUrl);
+
+    if (!youtubeUrl || !youtubeId) {
+      youtubeLink.href = YOUTUBE_CHANNEL_URL;
+      if (youtubeImage) {
+        youtubeImage.src = "assets/images/community-news.png";
+        youtubeImage.alt = "꿈키움센터 유튜브 채널";
+      }
+      if (youtubeTitle) youtubeTitle.textContent = "공식 유튜브 채널 바로가기";
+      return;
+    }
+
+    youtubeLink.href = youtubeUrl;
+    if (youtubeImage) {
+      youtubeImage.src = `https://img.youtube.com/vi/${encodeURIComponent(youtubeId)}/hqdefault.jpg`;
+      youtubeImage.alt = "꿈키움센터 유튜브 대표 영상";
+    }
+    if (youtubeTitle) youtubeTitle.textContent = "대표 영상 바로가기";
   };
 
   let currentIndex = 0;
@@ -91,6 +145,16 @@
     renderGallery((data || []).filter((item) => item.cover_image_url));
   };
 
+  const loadHomeYoutube = async (client) => {
+    const { data, error } = await client
+      .from("site_settings")
+      .select("setting_value")
+      .eq("setting_key", HOME_YOUTUBE_KEY)
+      .maybeSingle();
+    if (error) throw error;
+    renderYoutubeCard(data?.setting_value);
+  };
+
   prevButton?.addEventListener("click", () => {
     showSlide(currentIndex - 1);
     start();
@@ -106,11 +170,15 @@
 
   showSlide(0);
   start();
+  renderYoutubeCard("");
 
   const client = getClient();
   if (!client) return;
 
   loadGallery(client).catch((error) => {
     console.warn("Home media fallback:", error);
+  });
+  loadHomeYoutube(client).catch((error) => {
+    console.warn("Home YouTube fallback:", error);
   });
 })();

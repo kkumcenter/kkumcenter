@@ -4,6 +4,7 @@
 alter table public.profiles enable row level security;
 alter table public.admin_email_allowlist enable row level security;
 alter table public.staff_members enable row level security;
+alter table public.site_settings enable row level security;
 alter table public.spaces enable row level security;
 alter table public.space_reservations enable row level security;
 alter table public.programs enable row level security;
@@ -54,6 +55,20 @@ on public.staff_members
 for all
 using (public.is_super_admin())
 with check (public.is_super_admin());
+
+-- site settings
+drop policy if exists "Anyone can read site settings" on public.site_settings;
+create policy "Anyone can read site settings"
+on public.site_settings
+for select
+using (true);
+
+drop policy if exists "Board admins can manage site settings" on public.site_settings;
+create policy "Board admins can manage site settings"
+on public.site_settings
+for all
+using (public.can_manage_board())
+with check (public.can_manage_board());
 
 -- spaces
 drop policy if exists "Anyone can read active spaces" on public.spaces;

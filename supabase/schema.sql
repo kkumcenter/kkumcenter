@@ -234,6 +234,16 @@ create index if not exists staff_members_role_active_idx on public.staff_members
 create index if not exists staff_members_email_idx on public.staff_members (lower(email));
 create index if not exists staff_members_auth_user_idx on public.staff_members (auth_user_id);
 
+create table if not exists public.site_settings (
+  setting_key text primary key,
+  setting_value text,
+  updated_by uuid references auth.users(id) on delete set null,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create index if not exists site_settings_updated_at_idx on public.site_settings (updated_at desc);
+
 create or replace function public.is_admin()
 returns boolean
 language sql
@@ -826,6 +836,11 @@ for each row execute function public.set_updated_at();
 drop trigger if exists set_staff_members_updated_at on public.staff_members;
 create trigger set_staff_members_updated_at
 before update on public.staff_members
+for each row execute function public.set_updated_at();
+
+drop trigger if exists set_site_settings_updated_at on public.site_settings;
+create trigger set_site_settings_updated_at
+before update on public.site_settings
 for each row execute function public.set_updated_at();
 
 drop trigger if exists set_spaces_updated_at on public.spaces;
