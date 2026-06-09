@@ -31,6 +31,9 @@
     draftId: editId || (crypto.randomUUID ? crypto.randomUUID() : `draft-${Date.now()}`),
     images: [],
     files: [],
+    deletedAttachmentIds: [],
+    deletedGalleryImageIds: [],
+    deletedUploadPaths: [],
     coverImageUrl: "",
     existingItem: null,
     selectedImage: null,
@@ -82,6 +85,27 @@
   const imageElementUrl = (image) => normalizedImageUrl(image?.currentSrc || image?.src || "");
 
   const isCoverImageElement = (image) => Boolean(state.coverImageUrl && sameImageUrl(imageElementUrl(image), state.coverImageUrl));
+
+  const hasUsableImageSrc = (image) => {
+    const src = imageElementUrl(image);
+    return Boolean(src) && !image.classList.contains("ProseMirror-separator");
+  };
+
+  const isImageUpload = (file) => {
+    const mimeType = String(file?.mimeType || file?.mime_type || "").toLowerCase();
+    const url = String(file?.url || file?.file_url || "").toLowerCase();
+    return mimeType.startsWith("image/") || /\.(jpe?g|png|webp|gif|avif)(\?|#|$)/.test(url);
+  };
+
+  const contentHasFileUrl = (content, file) => {
+    const url = String(file?.file_url || file?.url || "").trim();
+    return Boolean(url && String(content || "").includes(url));
+  };
+
+  const pushUnique = (items, value) => {
+    const text = String(value || "").trim();
+    if (text && !items.includes(text)) items.push(text);
+  };
 
   const setStatus = (message, isError = false) => {
     if (!status) return;
@@ -318,6 +342,10 @@
     const template = document.createElement("template");
     template.innerHTML = html || "";
     template.content.querySelectorAll("img").forEach((image) => {
+      if (!hasUsableImageSrc(image)) {
+        image.remove();
+        return;
+      }
       persistImageState(image);
       if (board.kind === "gallery" && image.classList.contains("image-align-center")) {
         image.classList.add(galleryImageClass);
@@ -339,7 +367,7 @@
       image.style.removeProperty("touch-action");
       image.style.removeProperty("user-select");
     });
-    template.content.querySelectorAll(".ProseMirror-trailingBreak").forEach((node) => node.remove());
+    template.content.querySelectorAll(".ProseMirror-trailingBreak, .ProseMirror-separator").forEach((node) => node.remove());
     return template.innerHTML.trim();
   };
 
@@ -448,12 +476,76 @@
   };
 
   const imageFromElement = async (image) => {
-    const response = await fetch(image.currentSrc || image.src);
-    if (!response.ok) throw new Error("이미지를 다시 불러올 수 없습니다.");
+    let response = null;
+    try {
+      response = await fetch(image.currentSrc || image.src, { mode: "cors" });
+    } catch {
+      throw new Error("이미지를 다시 불러오지 못했습니다. 삭제 후 새로 첨부해주세요.");
+    }
+    if (!response.ok) throw new Error("이미지를 다시 불러오지 못했습니다. 삭제 후 새로 첨부해주세요.");
     const blob = await response.blob();
     const srcName = decodeURIComponent((image.currentSrc || image.src).split("/").pop()?.split("?")[0] || "image.jpg");
     const name = image.getAttribute("alt") || srcName || "image.jpg";
     return new File([blob], safeFileName(name), { type: blob.type || "image/jpeg" });
+  };
+
+  const removeTrackedFile = (collection, file) => {
+    const index = collection.indexOf(file);
+    if (index >= 0) collection.splice(index, 1);
+  };
+
+  const queueFileDeletion = (file) => {
+    if (!file || isYoutubeLinkAttachment(file)) return;
+    if (file.saved && file.recordType === "gallery_image" && file.id) {
+      pushUnique(state.deletedGalleryImageIds, file.id);
+      return;
+    }
+    if (file.saved && file.id) {
+      pushUnique(state.deletedAttachmentIds, file.id);
+      return;
+    }
+    if (file.path) {
+      pushUnique(state.deletedUploadPaths, file.path);
+    }
+  };
+
+  const findTrackedImageFileByUrl = (url) => {
+    const normalizedUrl = normalizedImageUrl(url);
+    return [...state.images, ...state.files].find((file) => sameImageUrl(file.url, normalizedUrl));
+  };
+
+  const queueImageFileDeletion = (url) => {
+    const file = findTrackedImageFileByUrl(url);
+    if (!file) return;
+    queueFileDeletion(file);
+    removeTrackedFile(state.images, file);
+    removeTrackedFile(state.files, file);
+  };
+
+  const updateCoverAfterImageRemoval = (removedUrl) => {
+    if (!state.coverImageUrl || !sameImageUrl(state.coverImageUrl, removedUrl)) return;
+    state.coverImageUrl = state.images.find((image) => image.url)?.url || "";
+    markCoverImages();
+  };
+
+  const deleteEditorImage = (image) => {
+    if (!(image instanceof HTMLImageElement) || !hasUsableImageSrc(image)) return;
+    if (!window.confirm("본문에서 이 사진을 삭제할까요? 저장하면 실제 파일도 삭제됩니다.")) return;
+
+    const removedUrl = imageElementUrl(image);
+    queueImageFileDeletion(removedUrl);
+    updateCoverAfterImageRemoval(removedUrl);
+
+    const paragraph = image.closest("p");
+    image.remove();
+    paragraph?.querySelectorAll("img.ProseMirror-separator, img:not([src])").forEach((node) => node.remove());
+    const hasMeaningfulContent = paragraph && (paragraph.textContent || "").trim();
+    const hasMedia = paragraph?.querySelector("img, video, iframe, object, embed");
+    if (paragraph && !hasMeaningfulContent && !hasMedia) paragraph.remove();
+
+    hideImageToolbar();
+    syncEditorModelFromDom(null);
+    setStatus("본문 사진을 삭제했습니다. 저장하면 파일도 정리됩니다.");
   };
 
   const getImageToolbar = () => {
@@ -472,6 +564,7 @@
       <button type="button" data-image-layout="right">오른쪽</button>
       <button type="button" data-image-layout="inline">본문처럼</button>
       <button type="button" data-image-toolbar-edit>편집</button>
+      <button type="button" data-image-delete>삭제</button>
     `;
 
     toolbar.addEventListener("click", (event) => {
@@ -480,6 +573,7 @@
       const layoutButton = target.closest("[data-image-layout]");
       const coverButton = target.closest("[data-image-cover]");
       const editButton = target.closest("[data-image-toolbar-edit]");
+      const deleteButton = target.closest("[data-image-delete]");
       const image = state.selectedImage;
       if (!(image instanceof HTMLImageElement)) return;
 
@@ -491,6 +585,8 @@
         applyImageLayout(image, layoutButton.dataset.imageLayout || "center");
       } else if (editButton instanceof HTMLElement) {
         editEditorImage(image);
+      } else if (deleteButton instanceof HTMLElement) {
+        deleteEditorImage(image);
       }
     });
 
@@ -686,7 +782,8 @@
   };
 
   const editEditorImage = async (image) => {
-    if (!image) return;
+    if (!image || !hasUsableImageSrc(image)) return;
+    const oldUrl = imageElementUrl(image);
     const snapshot = captureImageState(image);
     const wasCoverImage = isCoverImageElement(image);
     image.classList.add("board-editor-image-editing");
@@ -699,11 +796,16 @@
       image.alt = uploaded.name;
       image.removeAttribute("srcset");
       applyImageState(image, snapshot);
+      queueImageFileDeletion(oldUrl);
       state.images.push(uploaded);
       if (wasCoverImage || !state.coverImageUrl) setCoverImageUrl(uploaded.url, { silent: true });
+      syncEditorModelFromDom(image);
       setStatus("본문 이미지가 교체되었습니다.");
     } catch (error) {
-      if (error?.message !== "cancel") setStatus(error.message || "이미지 편집 중 문제가 발생했습니다.", true);
+      if (error?.message !== "cancel") {
+        setStatus(error.message || "이미지 편집 중 문제가 발생했습니다.", true);
+        window.alert(error.message || "이미지 편집 중 문제가 발생했습니다.");
+      }
       else setStatus("");
     } finally {
       image.classList.remove("board-editor-image-editing");
@@ -715,6 +817,10 @@
     const editable = getEditorEditable();
     if (!editable) return;
     editable.querySelectorAll("img").forEach((image) => {
+      if (!hasUsableImageSrc(image)) {
+        image.remove();
+        return;
+      }
       image.dataset.boardEditorImage = "true";
       image.draggable = true;
       image.loading = "lazy";
@@ -739,7 +845,7 @@
 
     editorEl.addEventListener("click", (event) => {
       const image = event.target instanceof HTMLElement ? event.target.closest(".toastui-editor-contents img") : null;
-      if (image instanceof HTMLImageElement) {
+      if (image instanceof HTMLImageElement && hasUsableImageSrc(image)) {
         selectEditorImage(image);
       } else if (!(event.target instanceof HTMLElement && event.target.closest("[data-board-image-toolbar]"))) {
         hideImageToolbar();
@@ -748,14 +854,14 @@
 
     editorEl.addEventListener("dblclick", (event) => {
       const image = event.target instanceof HTMLElement ? event.target.closest(".toastui-editor-contents img") : null;
-      if (!(image instanceof HTMLImageElement)) return;
+      if (!(image instanceof HTMLImageElement) || !hasUsableImageSrc(image)) return;
       event.preventDefault();
       editEditorImage(image);
     });
 
     editorEl.addEventListener("dragstart", (event) => {
       const image = event.target instanceof HTMLElement ? event.target.closest(".toastui-editor-contents img") : null;
-      if (!(image instanceof HTMLImageElement)) return;
+      if (!(image instanceof HTMLImageElement) || !hasUsableImageSrc(image)) return;
       draggedImage = image;
       selectEditorImage(image);
       event.dataTransfer?.setData("text/plain", image.alt || "image");
@@ -836,12 +942,13 @@
     fileList.innerHTML = state.files.length
       ? state.files
           .map(
-            (file) => `
+            (file, index) => `
               <article class="board-upload-item board-file-item">
                 <div>
                   <strong>${escapeHtml(file.name)}</strong>
                   <p>${escapeHtml(formatBytes(file.size))}</p>
                 </div>
+                <button class="board-file-remove" type="button" data-file-remove="${index}">삭제</button>
               </article>
             `,
           )
@@ -899,11 +1006,13 @@
 
       const { data: galleryImages, error: imageError } = await client
         .from("gallery_images")
-        .select("image_url, caption, sort_order, storage_path, storage_bucket, file_size, mime_type")
+        .select("id, image_url, caption, sort_order, storage_path, storage_bucket, file_size, mime_type")
         .eq("gallery_id", editId)
         .order("sort_order", { ascending: true });
       if (imageError) throw imageError;
       state.images = (galleryImages || []).map((image, index) => ({
+        id: image.id || "",
+        recordType: "gallery_image",
         name: image.caption || `이미지 ${index + 1}`,
         url: image.image_url,
         path: image.storage_path || "",
@@ -937,22 +1046,31 @@
       .eq("target_type", board.targetType)
       .eq("target_id", editId);
     if (!attachmentError) {
-      const youtubeLink = (attachments || []).find(isYoutubeLinkAttachment);
+      const allAttachments = attachments || [];
+      const youtubeLink = allAttachments.find(isYoutubeLinkAttachment);
       if (youtubeLink) {
         state.relatedYoutubeAttachmentId = youtubeLink.id || "";
         state.relatedYoutubeSavedUrl = youtubeLink.file_url || "";
         if (form?.elements.relatedYoutubeUrl) form.elements.relatedYoutubeUrl.value = youtubeLink.file_url || "";
       }
-      state.files = (attachments || []).filter((file) => !isYoutubeLinkAttachment(file)).map((file) => ({
-        name: file.file_name,
-        url: file.file_url,
-        size: file.file_size || 0,
-        path: file.storage_path || "",
-        bucket: file.storage_bucket || "",
-        mimeType: file.mime_type || "",
-        storageProvider: file.storage_path ? "cloudflare-r2" : "",
-        saved: true,
-      }));
+      const contentHtml = board.kind === "gallery" ? state.existingItem?.description : state.existingItem?.content;
+      const mappedAttachments = allAttachments
+        .filter((file) => !isYoutubeLinkAttachment(file))
+        .map((file) => ({
+          id: file.id || "",
+          recordType: "attachment",
+          name: file.file_name,
+          url: file.file_url,
+          size: file.file_size || 0,
+          path: file.storage_path || "",
+          bucket: file.storage_bucket || "",
+          mimeType: file.mime_type || "",
+          storageProvider: file.storage_path ? "cloudflare-r2" : "",
+          saved: true,
+        }));
+      const inlineImages = mappedAttachments.filter((file) => isImageUpload(file) && contentHasFileUrl(contentHtml, file));
+      state.images.push(...inlineImages);
+      state.files = mappedAttachments.filter((file) => !inlineImages.includes(file));
     }
 
     renderFileList();
@@ -981,6 +1099,26 @@
     postImages.forEach((image) => {
       image.saved = true;
     });
+  };
+
+  const cleanupDeletedFiles = async (targetId) => {
+    const attachmentIds = [...new Set(state.deletedAttachmentIds)];
+    const galleryImageIds = [...new Set(state.deletedGalleryImageIds)];
+    const orphanPaths = [...new Set(state.deletedUploadPaths)];
+    if (!attachmentIds.length && !galleryImageIds.length && !orphanPaths.length) return;
+
+    await callPublicSubmitFunction("board-file-delete", {
+      targetType: board.targetType,
+      targetId,
+      boardType,
+      draftId: state.draftId,
+      attachmentIds,
+      galleryImageIds,
+      orphanPaths,
+    });
+    state.deletedAttachmentIds = [];
+    state.deletedGalleryImageIds = [];
+    state.deletedUploadPaths = [];
   };
 
   const saveRelatedYoutubeLink = async (targetId, youtubeUrl) => {
@@ -1079,6 +1217,7 @@
       if (error) throw error;
       await saveAttachments(editId);
       await saveRelatedYoutubeLink(editId, relatedYoutubeUrl);
+      await cleanupDeletedFiles(editId);
       return editId;
     }
 
@@ -1086,6 +1225,7 @@
     if (error) throw error;
     await saveAttachments(data.id);
     await saveRelatedYoutubeLink(data.id, relatedYoutubeUrl);
+    await cleanupDeletedFiles(data.id);
     return data.id;
   };
 
@@ -1113,6 +1253,7 @@
       await saveGalleryImages(editId);
       await saveAttachments(editId);
       await saveRelatedYoutubeLink(editId, relatedYoutubeUrl);
+      await cleanupDeletedFiles(editId);
       return editId;
     }
 
@@ -1121,6 +1262,7 @@
     await saveGalleryImages(data.id);
     await saveAttachments(data.id);
     await saveRelatedYoutubeLink(data.id, relatedYoutubeUrl);
+    await cleanupDeletedFiles(data.id);
     return data.id;
   };
 
@@ -1287,6 +1429,19 @@
     } catch (error) {
       setStatus(error.message || "파일 첨부 중 문제가 발생했습니다.", true);
     }
+  });
+
+  fileList?.addEventListener("click", (event) => {
+    const target = event.target instanceof HTMLElement ? event.target.closest("[data-file-remove]") : null;
+    if (!(target instanceof HTMLElement)) return;
+    const index = Number(target.dataset.fileRemove);
+    const file = state.files[index];
+    if (!file) return;
+    if (!window.confirm(`"${file.name || "첨부파일"}" 첨부파일을 삭제할까요? 저장하면 실제 파일도 삭제됩니다.`)) return;
+    queueFileDeletion(file);
+    state.files.splice(index, 1);
+    renderFileList();
+    setStatus("첨부파일을 삭제했습니다. 저장하면 파일도 정리됩니다.");
   });
 
   galleryImageInput?.addEventListener("change", async () => {

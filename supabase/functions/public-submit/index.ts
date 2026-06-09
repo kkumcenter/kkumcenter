@@ -565,6 +565,29 @@ const syncStaffAccess = async (
   };
 };
 
+const stringArray = (value: unknown) =>
+  Array.isArray(value) ? [...new Set(value.map((item) => String(item || "").trim()).filter(Boolean))] : [];
+
+const requireBoardTarget = async (
+  supabase: ReturnType<typeof createClient>,
+  targetType: string,
+  targetId: string,
+) => {
+  if (targetType === "post") {
+    const { data, error } = await supabase.from("posts").select("id, title").eq("id", targetId).maybeSingle();
+    if (error) throw error;
+    if (!data) throw new Error("삭제할 게시글을 찾을 수 없습니다.");
+    return data;
+  }
+  if (targetType === "gallery") {
+    const { data, error } = await supabase.from("galleries").select("id, title").eq("id", targetId).maybeSingle();
+    if (error) throw error;
+    if (!data) throw new Error("삭제할 갤러리 글을 찾을 수 없습니다.");
+    return data;
+  }
+  throw new Error("삭제 대상을 확인할 수 없습니다.");
+};
+
 Deno.serve(async (request) => {
   if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: corsHeaders });
   if (request.method !== "POST") return json({ error: "POST 요청만 사용할 수 있습니다." }, 405);
@@ -616,6 +639,97 @@ Deno.serve(async (request) => {
         contentType,
         expiresIn: 600,
       });
+    }
+
+    if (action === "board-file-delete") {
+      const admin = await requireBoardAdmin(request, supabase);
+      const targetType = requireText(data, "targetType");
+      const targetId = requireText(data, "targetId");
+      const boardType = safeFileName(String(data.boardType || targetType));
+      const draftId = safeFileName(String(data.draftId || ""));
+      const attachmentIds = stringArray(data.attachmentIds);
+      const galleryImageIds = stringArray(data.galleryImageIds);
+      const orphanPaths = stringArray(data.orphanPaths);
+
+      const target = await requireBoardTarget(supabase, targetType, targetId);
+      const paths = new Set<string>();
+      const foundAttachmentIds: string[] = [];
+      const foundGalleryImageIds: string[] = [];
+
+      if (attachmentIds.length) {
+        const { data: attachments, error: attachmentError } = await supabase
+          .from("attachments")
+          .select("id, storage_path")
+          .eq("target_type", targetType)
+          .eq("target_id", targetId)
+          .in("id", attachmentIds);
+        if (attachmentError) throw attachmentError;
+        for (const file of attachments || []) {
+          foundAttachmentIds.push(String(file.id));
+          const path = String(file.storage_path || "").trim();
+          if (path) paths.add(path);
+        }
+      }
+
+      if (targetType === "gallery" && galleryImageIds.length) {
+        const { data: images, error: imageError } = await supabase
+          .from("gallery_images")
+          .select("id, storage_path")
+          .eq("gallery_id", targetId)
+          .in("id", galleryImageIds);
+        if (imageError) throw imageError;
+        for (const image of images || []) {
+          foundGalleryImageIds.push(String(image.id));
+          const path = String(image.storage_path || "").trim();
+          if (path) paths.add(path);
+        }
+      }
+
+      if (orphanPaths.length) {
+        const allowedPrefixes = [
+          draftId ? `public/${boardType}/${draftId}/` : "",
+          draftId ? `gallery/${draftId}/` : "",
+        ].filter(Boolean);
+        for (const path of orphanPaths) {
+          if (!allowedPrefixes.some((prefix) => path.startsWith(prefix))) {
+            throw new Error("삭제할 수 없는 파일 경로가 포함되어 있습니다.");
+          }
+          paths.add(path);
+        }
+      }
+
+      for (const path of paths) {
+        await deleteR2Object(path);
+      }
+
+      if (foundAttachmentIds.length) {
+        const { error: deleteError } = await supabase
+          .from("attachments")
+          .delete()
+          .eq("target_type", targetType)
+          .eq("target_id", targetId)
+          .in("id", foundAttachmentIds);
+        if (deleteError) throw deleteError;
+      }
+
+      if (targetType === "gallery" && foundGalleryImageIds.length) {
+        const { error: deleteError } = await supabase
+          .from("gallery_images")
+          .delete()
+          .eq("gallery_id", targetId)
+          .in("id", foundGalleryImageIds);
+        if (deleteError) throw deleteError;
+      }
+
+      await logAdminAction(
+        supabase,
+        String(admin.id),
+        "delete-files",
+        targetType,
+        targetId,
+        `게시판 파일 삭제: ${target.title || targetId}`,
+      );
+      return json({ ok: true, deletedFiles: paths.size });
     }
 
     if (action === "gallery-delete") {

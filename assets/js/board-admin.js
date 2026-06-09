@@ -307,10 +307,11 @@
     const filesById = await fetchAttachments(targetType, ids);
     return items.map((item) => {
       const files = filesById.get(String(item.id)) || [];
+      const contentHtml = String(item.content || item.description || "");
       return {
         ...item,
         relatedYoutube: files.find(isYoutubeLinkAttachment) || null,
-        attachments: files.filter((file) => !isYoutubeLinkAttachment(file)),
+        attachments: files.filter((file) => !isYoutubeLinkAttachment(file) && !(file.file_url && contentHtml.includes(file.file_url))),
       };
     });
   };
