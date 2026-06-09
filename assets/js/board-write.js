@@ -257,20 +257,26 @@
     return data;
   };
 
+  const canWriteBoard = (profile) => {
+    const role = String(profile?.role || "").trim();
+    const adminRole = String(profile?.admin_role || "").trim();
+    return (
+      (role === "admin" && ["super_admin", "board_admin"].includes(adminRole)) ||
+      adminRole === "super_admin" ||
+      adminRole === "board_admin"
+    );
+  };
+
   const ensurePermission = async () => {
     if (!client) throw new Error("Supabase 설정을 찾을 수 없습니다.");
     state.session = await getSession();
     if (!state.session?.user?.id) {
-      window.location.href = "login.html";
+      const returnPath = `${window.location.pathname.split("/").pop() || "board-write.html"}${window.location.search || ""}`;
+      window.location.href = `login.html?redirect=${encodeURIComponent(returnPath)}`;
       return false;
     }
     state.profile = await getProfile();
-    const canWrite = state.profile?.role === "admin" && ["super_admin", "board_admin"].includes(state.profile.admin_role);
-    if (!canWrite) {
-      await client.auth.signOut();
-      window.location.href = "login.html";
-      return false;
-    }
+    if (!canWriteBoard(state.profile)) throw new Error("게시글을 작성하거나 수정할 수 있는 스텝 권한이 없습니다.");
     return true;
   };
 
@@ -288,36 +294,47 @@
       return;
     }
 
-    state.editor = new Editor({
-      el: editorEl,
-      height: board.kind === "gallery" ? "760px" : "520px",
-      initialEditType: "wysiwyg",
-      previewStyle: "vertical",
-      initialValue: "",
-      language: "ko-KR",
-      usageStatistics: false,
-      hooks: {
-        addImageBlobHook: async (blob, callback) => {
-          try {
-            const file = blob instanceof File ? blob : new File([blob], `image-${Date.now()}.png`, { type: blob.type || "image/png" });
-            const edited = await openImageEditor(file);
-            const image = await uploadBoardFile(edited.blob, board.bucket, edited.name, "images");
-            state.images.push(image);
-            if (!state.coverImageUrl) setCoverImageUrl(image.url, { silent: true });
-            callback(image.url, image.name);
-            window.setTimeout(() => {
-              const inserted = findEditorImageByUrl(image.url);
-              if (inserted && board.kind === "gallery") applyImageLayout(inserted, "wide", { silent: true });
-              markCoverImages();
-            }, 160);
-          } catch (error) {
-            if (error?.message !== "cancel") window.alert(error.message || "이미지 업로드 중 문제가 발생했습니다.");
-          }
+    try {
+      state.editor = new Editor({
+        el: editorEl,
+        height: board.kind === "gallery" ? "760px" : "520px",
+        initialEditType: "wysiwyg",
+        previewStyle: "vertical",
+        initialValue: "",
+        language: "ko-KR",
+        usageStatistics: false,
+        hooks: {
+          addImageBlobHook: async (blob, callback) => {
+            try {
+              const file = blob instanceof File ? blob : new File([blob], `image-${Date.now()}.png`, { type: blob.type || "image/png" });
+              const edited = await openImageEditor(file);
+              const image = await uploadBoardFile(edited.blob, board.bucket, edited.name, "images");
+              state.images.push(image);
+              if (!state.coverImageUrl) setCoverImageUrl(image.url, { silent: true });
+              callback(image.url, image.name);
+              window.setTimeout(() => {
+                const inserted = findEditorImageByUrl(image.url);
+                if (inserted && board.kind === "gallery") applyImageLayout(inserted, "wide", { silent: true });
+                markCoverImages();
+              }, 160);
+            } catch (error) {
+              if (error?.message !== "cancel") window.alert(error.message || "이미지 업로드 중 문제가 발생했습니다.");
+            }
+          },
         },
-      },
-    });
-    startEditorKoreanPatch();
-    setupInteractiveEditorImages();
+      });
+      startEditorKoreanPatch();
+      setupInteractiveEditorImages();
+    } catch (error) {
+      state.editor = null;
+      if (editorEl) editorEl.hidden = true;
+      if (editorFallback) {
+        editorFallback.hidden = false;
+        editorFallback.removeAttribute("hidden");
+      }
+      setStatus("고급 편집기를 열지 못해 기본 편집칸으로 전환했습니다. 내용 수정과 저장은 가능합니다.", true);
+      console.warn("Board editor fallback:", error);
+    }
   };
 
   const setEditorContent = (value) => {

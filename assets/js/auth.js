@@ -9,6 +9,7 @@
   const userPanel = document.querySelector("[data-auth-user]");
   const userEmail = document.querySelector("[data-auth-user-email]");
   const logoutButton = document.querySelector("[data-auth-logout]");
+  const params = new URLSearchParams(window.location.search);
 
   if (!form || !title || !submitButton || !emailInput || !passwordInput || !statusBox) return;
 
@@ -58,8 +59,27 @@
     return data;
   };
 
-  const isAdminProfile = (profile) =>
-    profile?.role === "admin" && ["super_admin", "board_admin"].includes(profile.admin_role);
+  const isAdminProfile = (profile) => {
+    const role = String(profile?.role || "").trim();
+    const adminRole = String(profile?.admin_role || "").trim();
+    return (
+      (role === "admin" && ["super_admin", "board_admin"].includes(adminRole)) ||
+      adminRole === "super_admin" ||
+      adminRole === "board_admin"
+    );
+  };
+
+  const safeRedirectTarget = () => {
+    const raw = params.get("redirect") || "";
+    if (!raw) return "";
+    try {
+      const url = new URL(raw, window.location.origin);
+      if (url.origin !== window.location.origin) return "";
+      return `${url.pathname.replace(/^\//, "")}${url.search}${url.hash}`;
+    } catch {
+      return "";
+    }
+  };
 
   const ensureAdminSession = async (session) => {
     if (!session?.user?.id) return null;
@@ -122,7 +142,7 @@
       const profile = await ensureAdminSession(data.session);
       setStatus("로그인되었습니다. 관리 화면으로 이동합니다.", "success");
       window.setTimeout(() => {
-        window.location.href = profile.admin_role === "super_admin" ? "admin.html" : "news.html";
+        window.location.href = safeRedirectTarget() || (profile.admin_role === "super_admin" ? "admin.html" : "news.html");
       }, 350);
     } catch (error) {
       setStatus(error.message || "로그인 중 문제가 발생했습니다.", "error");
