@@ -206,8 +206,9 @@
       .map((item, index) => {
         const imageUrl = item.cover_image_url;
         const title = item.title || "꿈키움센터 활동 사진";
+        const detailHref = `gallery.html?id=${encodeURIComponent(item.id)}`;
         return `
-          <a class="home-gallery-slide${index === 0 ? " is-active" : ""}" href="gallery.html" data-home-gallery-slide data-gallery-title="${escapeHtml(title)}" aria-hidden="${index === 0 ? "false" : "true"}" tabindex="${index === 0 ? "0" : "-1"}">
+          <a class="home-gallery-slide${index === 0 ? " is-active" : ""}" href="${detailHref}" data-home-gallery-slide data-gallery-title="${escapeHtml(title)}" aria-hidden="${index === 0 ? "false" : "true"}" tabindex="${index === 0 ? "0" : "-1"}">
             <img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(title)}">
           </a>
         `;

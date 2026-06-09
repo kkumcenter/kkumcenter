@@ -311,15 +311,18 @@ document.querySelectorAll("[data-home-board-tabs]").forEach((tabList) => {
         renderEmptyBoard(panel);
         return;
       }
-      const href = boardType === "village" ? "village-story.html" : "news.html";
+      const listHref = boardType === "village" ? "village-story.html" : "news.html";
       panel.innerHTML = list
         .map(
-          (item) => `
-            <a href="${href}" data-home-board-item>
+          (item) => {
+            const detailHref = `${listHref}?id=${encodeURIComponent(item.id)}`;
+            return `
+            <a href="${detailHref}" data-home-board-item>
               <span>${escapeHtml(item.title || "제목 없음")}</span>
               <time>${escapeHtml(formatBoardDate(item.published_at || item.created_at))}</time>
             </a>
-          `,
+          `;
+          },
         )
         .join("");
     });

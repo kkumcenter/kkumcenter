@@ -8,6 +8,8 @@
   const toolbar = root.querySelector("[data-board-admin-toolbar]");
   const pagination = root.querySelector("[data-board-pagination]");
   const config = window.KKOOM_SUPABASE || {};
+  const urlParams = new URLSearchParams(window.location.search);
+  const requestedDetailId = urlParams.get("id") || urlParams.get("detail") || "";
   const tableName = boardKind === "gallery" ? "galleries" : "posts";
   const PAGE_SIZE = boardKind === "gallery" ? 12 : 10;
   const NO_PHOTO_COVER_URL = "about:blank#kkum-no-photo";
@@ -568,6 +570,8 @@
   let currentSession = null;
   let currentPage = 1;
   let selectedItemId = null;
+  let pendingDetailId = requestedDetailId;
+  let shouldScrollToRequestedDetail = Boolean(requestedDetailId);
 
   const renderPagination = (totalPages) => {
     if (!pagination) return;
@@ -636,10 +640,22 @@
   const reload = async () => {
     const canManage = canManageBoard(currentProfile);
     currentItems = await fetchItems(canManage);
+    if (pendingDetailId) {
+      const requestedIndex = currentItems.findIndex((item) => String(item.id) === pendingDetailId);
+      if (requestedIndex >= 0) {
+        selectedItemId = pendingDetailId;
+        currentPage = Math.floor(requestedIndex / PAGE_SIZE) + 1;
+      }
+      pendingDetailId = "";
+    }
     if (selectedItemId && !currentItems.some((item) => String(item.id) === selectedItemId)) {
       selectedItemId = null;
     }
     renderItems(currentItems, canManage);
+    if (shouldScrollToRequestedDetail && selectedItemId && !detailShell.hidden) {
+      shouldScrollToRequestedDetail = false;
+      window.setTimeout(() => detailShell.scrollIntoView({ behavior: "smooth", block: "start" }), 80);
+    }
   };
 
   const placeCreateButton = () => {
@@ -657,6 +673,9 @@
 
   const selectItem = (id, shouldScroll = true) => {
     selectedItemId = String(id);
+    const url = new URL(window.location.href);
+    url.searchParams.set("id", selectedItemId);
+    window.history.replaceState({}, "", url.toString());
     const canManage = canManageBoard(currentProfile);
     renderItems(currentItems, canManage);
     if (shouldScroll && !detailShell.hidden) {
