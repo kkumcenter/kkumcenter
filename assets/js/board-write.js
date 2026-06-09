@@ -39,6 +39,7 @@
     selectedImage: null,
     relatedYoutubeAttachmentId: "",
     relatedYoutubeSavedUrl: "",
+    useFallbackEditor: Boolean(editId),
   };
 
   const getClient = () => {
@@ -289,6 +290,15 @@
   const initEditor = () => {
     const editorEl = document.getElementById("board-editor");
     const Editor = window.toastui?.Editor;
+    if (state.useFallbackEditor) {
+      if (editorEl) editorEl.hidden = true;
+      if (editorFallback) {
+        editorFallback.hidden = false;
+        editorFallback.removeAttribute("hidden");
+      }
+      setStatus("수정 화면은 안정성을 위해 기본 편집칸으로 열었습니다.");
+      return;
+    }
     if (!editorEl || !Editor) {
       if (editorFallback) editorFallback.hidden = false;
       return;
