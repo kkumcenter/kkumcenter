@@ -6,6 +6,7 @@
   const homeSettingsForm = document.querySelector("[data-home-settings-form]");
   const homeSettingsStatus = document.querySelector("[data-home-settings-status]");
   const HOME_YOUTUBE_KEY = "home_youtube_url";
+  const HOME_INSTAGRAM_KEY = "home_instagram_url";
   let staffItems = [];
   let selectedStaffEmail = "";
 
@@ -83,15 +84,32 @@
     return `https://www.youtube.com/watch?v=${encodeURIComponent(videoId)}`;
   };
 
+  const normalizeInstagramUrl = (value) => {
+    const text = String(value || "").trim();
+    if (!text) return "";
+    try {
+      const url = new URL(text);
+      const host = url.hostname.replace(/^www\./, "");
+      if (host !== "instagram.com" && !host.endsWith(".instagram.com")) return "";
+      url.protocol = "https:";
+      return url.toString();
+    } catch {
+      return "";
+    }
+  };
+
   const loadHomeSettings = async () => {
     if (!homeSettingsForm) return;
     const { data, error } = await client
       .from("site_settings")
-      .select("setting_value")
-      .eq("setting_key", HOME_YOUTUBE_KEY)
-      .maybeSingle();
+      .select("setting_key, setting_value")
+      .in("setting_key", [HOME_YOUTUBE_KEY, HOME_INSTAGRAM_KEY]);
     if (error) throw error;
-    homeSettingsForm.elements.homeYoutubeUrl.value = data?.setting_value || "";
+    const settings = Object.fromEntries((data || []).map((item) => [item.setting_key, item.setting_value]));
+    homeSettingsForm.elements.homeYoutubeUrl.value = settings[HOME_YOUTUBE_KEY] || "";
+    if (homeSettingsForm.elements.homeInstagramUrl) {
+      homeSettingsForm.elements.homeInstagramUrl.value = settings[HOME_INSTAGRAM_KEY] || "";
+    }
   };
 
   const setupHomeSettings = async (session) => {
@@ -106,10 +124,16 @@
       event.preventDefault();
       const submitButton = homeSettingsForm.querySelector('button[type="submit"]');
       const rawUrl = homeSettingsForm.elements.homeYoutubeUrl.value.trim();
+      const rawInstagramUrl = homeSettingsForm.elements.homeInstagramUrl?.value.trim() || "";
       const normalizedUrl = normalizeYoutubeUrl(rawUrl);
+      const normalizedInstagramUrl = normalizeInstagramUrl(rawInstagramUrl);
 
       if (rawUrl && !normalizedUrl) {
         setHomeStatus("유튜브 영상 주소만 입력할 수 있습니다. youtube.com 또는 youtu.be 주소를 확인해주세요.", true);
+        return;
+      }
+      if (rawInstagramUrl && !normalizedInstagramUrl) {
+        setHomeStatus("인스타그램 주소는 instagram.com 주소만 입력할 수 있습니다.", true);
         return;
       }
 
@@ -117,16 +141,26 @@
       setHomeStatus("홈 화면 설정을 저장하고 있습니다.");
       try {
         const { error } = await client.from("site_settings").upsert(
-          {
+          [
+            {
             setting_key: HOME_YOUTUBE_KEY,
             setting_value: normalizedUrl,
             updated_by: session.user.id,
-          },
+            },
+            {
+              setting_key: HOME_INSTAGRAM_KEY,
+              setting_value: normalizedInstagramUrl,
+              updated_by: session.user.id,
+            },
+          ],
           { onConflict: "setting_key" },
         );
         if (error) throw error;
         homeSettingsForm.elements.homeYoutubeUrl.value = normalizedUrl;
-        setHomeStatus(normalizedUrl ? "대표 유튜브 영상이 저장되었습니다." : "대표 영상이 해제되었습니다. 공식 유튜브 채널로 연결됩니다.");
+        if (homeSettingsForm.elements.homeInstagramUrl) {
+          homeSettingsForm.elements.homeInstagramUrl.value = normalizedInstagramUrl;
+        }
+        setHomeStatus("홈 화면 SNS 설정이 저장되었습니다.");
       } catch (error) {
         setHomeStatus(error.message || "홈 화면 설정 저장 중 문제가 발생했습니다.", true);
       } finally {

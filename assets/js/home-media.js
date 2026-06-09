@@ -6,12 +6,15 @@
   const galleryPanel = root.querySelector(".home-gallery-panel");
   const prevButton = root.querySelector("[data-home-gallery-prev]");
   const nextButton = root.querySelector("[data-home-gallery-next]");
-  const youtubeLink = root.querySelector("[data-home-youtube-link]");
+  const youtubeStage = root.querySelector("[data-home-youtube-stage]");
+  const youtubePlay = root.querySelector("[data-home-youtube-play]");
+  const youtubeFallback = root.querySelector("[data-home-youtube-fallback]");
   const youtubeImage = root.querySelector("[data-home-youtube-image]");
-  const youtubeTitle = root.querySelector("[data-home-youtube-title]");
+  const instagramLink = root.querySelector("[data-home-instagram-link]");
   const config = window.KKOOM_SUPABASE || {};
   const SLIDE_INTERVAL = 2000;
   const HOME_YOUTUBE_KEY = "home_youtube_url";
+  const HOME_INSTAGRAM_KEY = "home_instagram_url";
   const YOUTUBE_CHANNEL_URL = "https://www.youtube.com/@kkumcenter";
 
   const escapeHtml = (value) =>
@@ -61,27 +64,70 @@
     return `https://www.youtube.com/watch?v=${encodeURIComponent(videoId)}`;
   };
 
+  const normalizeInstagramUrl = (value) => {
+    const text = String(value || "").trim();
+    if (!text) return "";
+    try {
+      const url = new URL(text);
+      const host = url.hostname.replace(/^www\./, "");
+      if (host !== "instagram.com" && !host.endsWith(".instagram.com")) return "";
+      url.protocol = "https:";
+      return url.toString();
+    } catch {
+      return "";
+    }
+  };
+
+  const embedYoutube = (youtubeId) => {
+    if (!youtubeStage || !youtubeId) return;
+    youtubeStage.innerHTML = `
+      <iframe
+        src="https://www.youtube.com/embed/${encodeURIComponent(youtubeId)}?autoplay=1&rel=0"
+        title="꿈키움센터 대표 영상"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen
+      ></iframe>
+    `;
+  };
+
   const renderYoutubeCard = (value) => {
-    if (!youtubeLink) return;
     const youtubeUrl = normalizeYoutubeUrl(value);
     const youtubeId = getYoutubeId(youtubeUrl);
 
     if (!youtubeUrl || !youtubeId) {
-      youtubeLink.href = YOUTUBE_CHANNEL_URL;
+      if (youtubePlay) youtubePlay.hidden = true;
+      if (youtubeFallback) {
+        youtubeFallback.hidden = false;
+        youtubeFallback.href = YOUTUBE_CHANNEL_URL;
+      }
       if (youtubeImage) {
         youtubeImage.src = "assets/images/community-news.png";
         youtubeImage.alt = "꿈키움센터 유튜브 채널";
       }
-      if (youtubeTitle) youtubeTitle.textContent = "공식 유튜브 채널 바로가기";
       return;
     }
 
-    youtubeLink.href = youtubeUrl;
+    if (youtubePlay) {
+      youtubePlay.hidden = false;
+      youtubePlay.dataset.youtubeId = youtubeId;
+    }
+    if (youtubeFallback) youtubeFallback.hidden = true;
     if (youtubeImage) {
       youtubeImage.src = `https://img.youtube.com/vi/${encodeURIComponent(youtubeId)}/hqdefault.jpg`;
       youtubeImage.alt = "꿈키움센터 유튜브 대표 영상";
     }
-    if (youtubeTitle) youtubeTitle.textContent = "대표 영상 바로가기";
+  };
+
+  const renderInstagramLink = (value) => {
+    if (!instagramLink) return;
+    const instagramUrl = normalizeInstagramUrl(value);
+    if (!instagramUrl) {
+      instagramLink.hidden = true;
+      instagramLink.removeAttribute("href");
+      return;
+    }
+    instagramLink.hidden = false;
+    instagramLink.href = instagramUrl;
   };
 
   let currentIndex = 0;
@@ -148,11 +194,12 @@
   const loadHomeYoutube = async (client) => {
     const { data, error } = await client
       .from("site_settings")
-      .select("setting_value")
-      .eq("setting_key", HOME_YOUTUBE_KEY)
-      .maybeSingle();
+      .select("setting_key, setting_value")
+      .in("setting_key", [HOME_YOUTUBE_KEY, HOME_INSTAGRAM_KEY]);
     if (error) throw error;
-    renderYoutubeCard(data?.setting_value);
+    const settings = Object.fromEntries((data || []).map((item) => [item.setting_key, item.setting_value]));
+    renderYoutubeCard(settings[HOME_YOUTUBE_KEY]);
+    renderInstagramLink(settings[HOME_INSTAGRAM_KEY]);
   };
 
   prevButton?.addEventListener("click", () => {
@@ -167,10 +214,14 @@
   galleryPanel?.addEventListener("mouseleave", start);
   galleryPanel?.addEventListener("focusin", stop);
   galleryPanel?.addEventListener("focusout", start);
+  youtubePlay?.addEventListener("click", () => {
+    embedYoutube(youtubePlay.dataset.youtubeId || "");
+  });
 
   showSlide(0);
   start();
   renderYoutubeCard("");
+  renderInstagramLink("");
 
   const client = getClient();
   if (!client) return;
