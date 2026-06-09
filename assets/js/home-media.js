@@ -126,7 +126,13 @@
     }
     if (youtubeFallback) youtubeFallback.hidden = true;
     if (youtubeImage) {
-      youtubeImage.src = `https://img.youtube.com/vi/${encodeURIComponent(youtubeId)}/hqdefault.jpg`;
+      youtubeImage.dataset.fallbackUsed = "";
+      youtubeImage.onerror = () => {
+        if (youtubeImage.dataset.fallbackUsed) return;
+        youtubeImage.dataset.fallbackUsed = "true";
+        youtubeImage.src = `https://img.youtube.com/vi/${encodeURIComponent(youtubeId)}/hqdefault.jpg`;
+      };
+      youtubeImage.src = `https://img.youtube.com/vi/${encodeURIComponent(youtubeId)}/maxresdefault.jpg`;
       youtubeImage.alt = "꿈키움센터 유튜브 대표 영상";
     }
   };
