@@ -52,14 +52,13 @@
       headers: {
         "Content-Type": "application/json",
         apikey: config.anonKey,
-        Authorization: `Bearer ${config.anonKey}`,
       },
       body: JSON.stringify({ action, payload }),
     });
 
     const result = await response.json().catch(() => ({}));
     if (!response.ok) {
-      throw new Error(result.error || "Supabase 서버 함수 처리 중 문제가 발생했습니다.");
+      throw new Error(result.error || result.message || result.code || "Supabase 서버 함수 처리 중 문제가 발생했습니다.");
     }
     return result;
   };
