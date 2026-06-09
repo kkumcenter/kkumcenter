@@ -57,6 +57,8 @@
   const isLegacyGalleryCover = (value) => {
     const text = String(value || "").trim();
     return [
+      "",
+      NO_PHOTO_COVER_URL,
       "assets/images/hero-center.png",
       "assets/images/program-workshop.png",
       "assets/images/community-news.png",
