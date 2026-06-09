@@ -10,6 +10,7 @@
   const config = window.KKOOM_SUPABASE || {};
   const tableName = boardKind === "gallery" ? "galleries" : "posts";
   const PAGE_SIZE = boardKind === "gallery" ? 12 : 10;
+  const NO_PHOTO_COVER_URL = "about:blank#kkum-no-photo";
 
   if (!list) return;
 
@@ -55,6 +56,22 @@
     if (!text) return false;
     if (/^(https?:|data:image\/|\/|assets\/)/i.test(text)) return true;
     return false;
+  };
+
+  const isLegacyGalleryCover = (value) => {
+    const text = String(value || "").trim();
+    return [
+      "",
+      NO_PHOTO_COVER_URL,
+      "assets/images/hero-center.png",
+      "assets/images/program-workshop.png",
+      "assets/images/community-news.png",
+    ].includes(text);
+  };
+
+  const getGalleryCoverImage = (value) => {
+    const text = String(value || "").trim();
+    return !isLegacyGalleryCover(text) && isSafeUrl(text) ? text : "";
   };
 
   const markdownImagesToHtml = (value) => {
@@ -392,13 +409,16 @@
       ? items
           .map((item) => {
             const id = String(item.id);
+            const coverImage = getGalleryCoverImage(item.cover_image_url);
             return `
               <article data-board-row="${escapeHtml(id)}" class="${[
                 selectedItemId === id ? "is-selected" : "",
                 item.status === "hidden" ? "is-hidden-row" : "",
               ].filter(Boolean).join(" ")}">
                 <button class="gallery-detail-button" type="button" title="${escapeHtml(item.title)}" data-board-detail="${escapeHtml(id)}">
-                  <img src="${escapeHtml(item.cover_image_url || "assets/images/hero-center.png")}" alt="">
+                  ${coverImage
+                    ? `<img src="${escapeHtml(coverImage)}" alt="">`
+                    : `<div class="gallery-photo-empty" aria-hidden="true"><strong>사진 없음</strong></div>`}
                   <span>
                     <strong>${escapeHtml(item.title)}</strong>
                     <time>${escapeHtml(formatDate(item.event_date || item.created_at))}</time>
@@ -470,12 +490,16 @@
     const contentHtml = sanitizeContentHtml(isGallery ? item.description : item.content);
     const date = formatDate(item.published_at || item.event_date || item.created_at);
     const author = item.author_name || "꿈키움센터";
-    const image = isGallery && isSafeUrl(item.cover_image_url) ? item.cover_image_url : "";
+    const image = isGallery ? getGalleryCoverImage(item.cover_image_url) : "";
 
     detailShell.hidden = false;
     detailShell.innerHTML = `
       <article class="board-detail-card">
-        ${image ? `<figure class="board-detail-image"><img src="${escapeHtml(image)}" alt="${escapeHtml(item.title)}" loading="lazy"></figure>` : ""}
+        ${isGallery
+          ? image
+            ? `<figure class="board-detail-image"><img src="${escapeHtml(image)}" alt="${escapeHtml(item.title)}" loading="lazy"></figure>`
+            : `<div class="board-detail-empty-image" aria-hidden="true"><strong>사진 없음</strong><small>등록된 대표 사진이 없습니다.</small></div>`
+          : ""}
         <div class="board-detail-head">
           <div>
             <p class="eyebrow">${isGallery ? "갤러리" : "게시글"}</p>

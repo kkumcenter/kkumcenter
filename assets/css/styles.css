@@ -7108,12 +7108,13 @@ body.admin-page {
 }
 
 .gallery-grid-list img {
+  display: block;
   width: 100%;
   aspect-ratio: 4 / 3;
   object-fit: cover;
 }
 
-.gallery-grid-list div {
+.gallery-grid-list article > div:not(.gallery-photo-empty) {
   padding: 18px;
 }
 
@@ -10872,6 +10873,32 @@ body.admin-page {
   padding: 18px;
 }
 
+.gallery-photo-empty {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  display: grid;
+  place-items: center;
+  border-bottom: 1px solid rgba(31, 90, 67, 0.1);
+  background:
+    radial-gradient(circle at 24% 22%, rgba(224, 142, 56, 0.16), transparent 30%),
+    linear-gradient(135deg, #fbf8ef 0%, #eef4ed 100%);
+  color: #6a756d;
+}
+
+.gallery-photo-empty strong {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0 18px;
+  border: 1px dashed rgba(31, 90, 67, 0.24);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  color: #516257;
+  font-size: 16px;
+  font-weight: 900;
+}
+
 .gallery-detail-button strong {
   overflow: hidden;
   color: var(--ink);
@@ -10891,6 +10918,17 @@ body.admin-page {
 .gallery-detail-button:hover strong,
 .gallery-detail-button:focus-visible strong {
   color: #0f6fe8;
+}
+
+.gallery-detail-button .gallery-photo-empty strong,
+.gallery-detail-button:hover .gallery-photo-empty strong,
+.gallery-detail-button:focus-visible .gallery-photo-empty strong {
+  overflow: visible;
+  color: #516257;
+  font-size: 16px;
+  line-height: 1.2;
+  text-overflow: clip;
+  white-space: nowrap;
 }
 
 .board-inline-detail {
@@ -11149,6 +11187,33 @@ body.admin-page {
   width: 100%;
   max-height: 560px;
   object-fit: cover;
+}
+
+.board-detail-empty-image {
+  min-height: 220px;
+  display: grid;
+  place-items: center;
+  gap: 8px;
+  padding: 34px;
+  border: 1px dashed rgba(31, 90, 67, 0.22);
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(224, 142, 56, 0.14), transparent 34%),
+    linear-gradient(135deg, #fbf8ef 0%, #eef4ed 100%);
+  color: #516257;
+  text-align: center;
+}
+
+.board-detail-empty-image strong {
+  color: var(--ink);
+  font-size: 24px;
+  font-weight: 900;
+}
+
+.board-detail-empty-image small {
+  color: var(--muted-ink);
+  font-size: 15px;
+  font-weight: 800;
 }
 
 .board-detail-content {

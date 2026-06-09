@@ -16,6 +16,7 @@
   const HOME_YOUTUBE_KEY = "home_youtube_url";
   const HOME_INSTAGRAM_KEY = "home_instagram_url";
   const YOUTUBE_CHANNEL_URL = "https://www.youtube.com/@kkumcenter";
+  const NO_PHOTO_COVER_URL = "about:blank#kkum-no-photo";
 
   const escapeHtml = (value) =>
     String(value ?? "")
@@ -28,6 +29,18 @@
   const isSafeUrl = (value) => {
     const text = String(value || "").trim();
     return /^https?:\/\//.test(text) || text.startsWith("/") || text.startsWith("assets/");
+  };
+
+  const hasRealGalleryImage = (value) => {
+    const text = String(value || "").trim();
+    if (!isSafeUrl(text)) return false;
+    return ![
+      "",
+      NO_PHOTO_COVER_URL,
+      "assets/images/hero-center.png",
+      "assets/images/program-workshop.png",
+      "assets/images/community-news.png",
+    ].includes(text);
   };
 
   const getClient = () => {
@@ -180,7 +193,7 @@
     });
     galleryTrack.innerHTML = items
       .map((item, index) => {
-        const imageUrl = isSafeUrl(item.cover_image_url) ? item.cover_image_url : "assets/images/program-workshop.png";
+        const imageUrl = item.cover_image_url;
         const title = item.title || "꿈키움센터 활동 사진";
         return `
           <a class="home-gallery-slide${index === 0 ? " is-active" : ""}" href="gallery.html" data-home-gallery-slide aria-hidden="${index === 0 ? "false" : "true"}" tabindex="${index === 0 ? "0" : "-1"}">
@@ -201,7 +214,7 @@
       .order("created_at", { ascending: false })
       .limit(6);
     if (error) throw error;
-    renderGallery((data || []).filter((item) => item.cover_image_url));
+    renderGallery((data || []).filter((item) => hasRealGalleryImage(item.cover_image_url)));
   };
 
   const loadHomeYoutube = async (client) => {

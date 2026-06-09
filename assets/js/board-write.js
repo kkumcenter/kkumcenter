@@ -13,6 +13,7 @@
   const editId = params.get("id") || "";
   const board = boardConfigs[boardType] || boardConfigs.notice;
   const config = window.KKOOM_SUPABASE || {};
+  const NO_PHOTO_COVER_URL = "about:blank#kkum-no-photo";
 
   const form = page.querySelector("[data-board-write-form]");
   const guard = page.querySelector("[data-board-write-guard]");
@@ -52,6 +53,15 @@
       .replaceAll(">", "&gt;")
       .replaceAll('"', "&quot;")
       .replaceAll("'", "&#039;");
+
+  const isLegacyGalleryCover = (value) => {
+    const text = String(value || "").trim();
+    return [
+      "assets/images/hero-center.png",
+      "assets/images/program-workshop.png",
+      "assets/images/community-news.png",
+    ].includes(text);
+  };
 
   const setStatus = (message, isError = false) => {
     if (!status) return;
@@ -786,7 +796,7 @@
       state.existingItem = data;
       form.elements.title.value = data.title || "";
       form.elements.status.value = data.status || "public";
-      state.coverImageUrl = data.cover_image_url || "";
+      state.coverImageUrl = isLegacyGalleryCover(data.cover_image_url) ? "" : data.cover_image_url || "";
       setEditorContent(data.description || "");
 
       const { data: galleryImages, error: imageError } = await client
@@ -983,7 +993,10 @@
 
   const saveGallery = async () => {
     const relatedYoutubeUrl = getNormalizedRelatedYoutubeUrl();
-    const coverImageUrl = state.coverImageUrl || state.images[0]?.url || state.existingItem?.cover_image_url || "assets/images/hero-center.png";
+    const existingCoverImageUrl = isLegacyGalleryCover(state.existingItem?.cover_image_url)
+      ? ""
+      : state.existingItem?.cover_image_url;
+    const coverImageUrl = state.coverImageUrl || state.images[0]?.url || existingCoverImageUrl || NO_PHOTO_COVER_URL;
     const payload = {
       title: form.elements.title.value.trim(),
       description: getEditorContent(),
