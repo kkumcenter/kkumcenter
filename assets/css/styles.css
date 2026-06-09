@@ -11057,9 +11057,10 @@ body.admin-page {
   clear: both;
 }
 
-.gallery-cover-wrap {
+.gallery-image-frame {
   position: relative;
-  display: block;
+  display: flex;
+  justify-content: center;
   width: min(100%, 980px);
   max-width: 100%;
   margin: 18px auto;
@@ -11068,10 +11069,12 @@ body.admin-page {
   background: #f3efe5;
 }
 
-.gallery-cover-wrap img {
+.gallery-image-frame img {
   display: block;
   width: 100% !important;
-  margin: 0 auto !important;
+  max-width: 100% !important;
+  height: auto !important;
+  margin: 0 !important;
   border-radius: 8px;
 }
 

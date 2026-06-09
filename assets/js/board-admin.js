@@ -201,16 +201,24 @@
     template.innerHTML = html;
     template.content.querySelectorAll("img").forEach((image) => {
       const src = image.getAttribute("src") || "";
-      if (!sameImageUrl(src, coverImageUrl)) return;
       image.classList.add("gallery-body-image");
-      const wrapper = document.createElement("span");
-      wrapper.className = "gallery-cover-wrap";
-      const badge = document.createElement("span");
-      badge.className = "gallery-cover-badge";
-      badge.textContent = "대표사진";
+      const isCover = sameImageUrl(src, coverImageUrl);
+      const wrapper = document.createElement("figure");
+      wrapper.className = `gallery-image-frame${isCover ? " is-cover" : ""}`;
       image.replaceWith(wrapper);
       wrapper.appendChild(image);
-      wrapper.appendChild(badge);
+      if (isCover) {
+        const badge = document.createElement("span");
+        badge.className = "gallery-cover-badge";
+        badge.textContent = "대표사진";
+        wrapper.appendChild(badge);
+      }
+    });
+    template.content.querySelectorAll("p").forEach((paragraph) => {
+      const meaningfulChildren = [...paragraph.childNodes].filter((node) => node.nodeType !== Node.TEXT_NODE || node.textContent.trim());
+      if (!meaningfulChildren.length) return;
+      if (!meaningfulChildren.every((node) => node instanceof HTMLElement && node.classList.contains("gallery-image-frame"))) return;
+      paragraph.replaceWith(...meaningfulChildren);
     });
     return template.innerHTML;
   };
