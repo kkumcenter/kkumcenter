@@ -321,13 +321,14 @@
   };
 
   const setEditorContent = (value) => {
+    const safeValue = cleanEditorHtml(value || "");
     if (state.editor) {
-      if (state.editor.setHTML) state.editor.setHTML(value || "");
-      else state.editor.setMarkdown(value || "");
+      if (state.editor.setHTML) state.editor.setHTML(safeValue);
+      else state.editor.setMarkdown(safeValue);
       window.setTimeout(enhanceEditorImages, 80);
     } else if (editorFallback) {
       editorFallback.hidden = false;
-      editorFallback.value = value || "";
+      editorFallback.value = safeValue;
     }
   };
 
@@ -361,6 +362,7 @@
       image.removeAttribute("data-board-cover-image");
       image.removeAttribute("data-board-image-width");
       image.removeAttribute("data-board-image-layout");
+      image.removeAttribute("contenteditable");
       image.style.removeProperty("outline");
       image.style.removeProperty("outline-offset");
       image.style.removeProperty("cursor");
