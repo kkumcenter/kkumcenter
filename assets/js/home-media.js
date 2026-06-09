@@ -4,6 +4,7 @@
 
   const galleryTrack = root.querySelector("[data-home-gallery-track]");
   const galleryPanel = root.querySelector(".home-gallery-panel");
+  const galleryTitle = root.querySelector("[data-home-gallery-title]");
   const prevButton = root.querySelector("[data-home-gallery-prev]");
   const nextButton = root.querySelector("[data-home-gallery-next]");
   const youtubeStage = root.querySelector("[data-home-youtube-stage]");
@@ -164,6 +165,9 @@
       slide.setAttribute("aria-hidden", isActive ? "false" : "true");
       slide.tabIndex = isActive ? 0 : -1;
     });
+    if (galleryTitle) {
+      galleryTitle.textContent = slides[currentIndex]?.dataset.galleryTitle || "꿈센터 갤러리";
+    }
   };
 
   const stop = () => {
@@ -187,6 +191,7 @@
     if (!items.length) {
       stop();
       galleryTrack.innerHTML = '<article class="empty-state home-gallery-empty"><strong>등록된 사진이 없습니다.</strong></article>';
+      if (galleryTitle) galleryTitle.textContent = "등록된 사진이 없습니다.";
       [prevButton, nextButton].forEach((button) => {
         if (!button) return;
         button.hidden = true;
@@ -202,7 +207,7 @@
         const imageUrl = item.cover_image_url;
         const title = item.title || "꿈키움센터 활동 사진";
         return `
-          <a class="home-gallery-slide${index === 0 ? " is-active" : ""}" href="gallery.html" data-home-gallery-slide aria-hidden="${index === 0 ? "false" : "true"}" tabindex="${index === 0 ? "0" : "-1"}">
+          <a class="home-gallery-slide${index === 0 ? " is-active" : ""}" href="gallery.html" data-home-gallery-slide data-gallery-title="${escapeHtml(title)}" aria-hidden="${index === 0 ? "false" : "true"}" tabindex="${index === 0 ? "0" : "-1"}">
             <img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(title)}">
           </a>
         `;

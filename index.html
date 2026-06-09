@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>군북면 꿈키움센터</title>
     <meta name="description" content="온세대가 지속가능한 꿈을 키우는 거점, 군북면 꿈키움센터 홈페이지">
-    <link rel="stylesheet" href="assets/css/styles.css?v=20260609-15">
+    <link rel="stylesheet" href="assets/css/styles.css?v=20260609-16">
     <link rel="icon" href="assets/images/kkoom-logo-symbol.png">
   </head>
   <body class="home-page">
@@ -162,12 +162,19 @@
         </div>
         <div class="container home-media-layout">
           <article class="home-gallery-panel" aria-label="최근 갤러리 사진">
-            <div class="home-gallery-stage" data-home-gallery-track>
-              <article class="empty-state home-gallery-empty"><strong>등록된 사진이 없습니다.</strong></article>
-            </div>
-            <div class="home-gallery-controls" aria-label="갤러리 사진 이동">
-              <button type="button" aria-label="이전 사진" data-home-gallery-prev>‹</button>
-              <button type="button" aria-label="다음 사진" data-home-gallery-next>›</button>
+            <div class="home-gallery-card">
+              <div class="home-gallery-media">
+                <div class="home-gallery-stage" data-home-gallery-track>
+                  <article class="empty-state home-gallery-empty"><strong>등록된 사진이 없습니다.</strong></article>
+                </div>
+                <div class="home-gallery-controls" aria-label="갤러리 사진 이동">
+                  <button type="button" aria-label="이전 사진" data-home-gallery-prev>‹</button>
+                  <button type="button" aria-label="다음 사진" data-home-gallery-next>›</button>
+                </div>
+              </div>
+              <div class="home-gallery-caption">
+                <strong data-home-gallery-title>등록된 사진이 없습니다.</strong>
+              </div>
             </div>
           </article>
           <article class="home-video-panel" aria-label="꿈키움센터 SNS" data-home-video>
@@ -219,6 +226,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/supabase-config.js?v=20260607-1"></script>
     <script src="assets/js/main.js?v=20260609-3"></script>
-    <script src="assets/js/home-media.js?v=20260609-7"></script>
+    <script src="assets/js/home-media.js?v=20260609-8"></script>
   </body>
 </html>
