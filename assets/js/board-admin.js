@@ -49,7 +49,7 @@
     return Math.min(1800, Math.max(40, Math.round(width)));
   };
 
-  const allowedImageClasses = new Set(["image-align-left", "image-align-right", "image-align-center", "image-inline"]);
+  const allowedImageClasses = new Set(["image-align-left", "image-align-right", "image-align-center", "image-inline", "gallery-body-image"]);
 
   const isSafeUrl = (value) => {
     const text = String(value || "").trim();
@@ -73,6 +73,18 @@
     const text = String(value || "").trim();
     return !isLegacyGalleryCover(text) && isSafeUrl(text) ? text : "";
   };
+
+  const normalizedImageUrl = (value) => {
+    const text = String(value || "").trim();
+    if (!text) return "";
+    try {
+      return new URL(text, window.location.href).href;
+    } catch {
+      return text;
+    }
+  };
+
+  const sameImageUrl = (left, right) => normalizedImageUrl(left) === normalizedImageUrl(right);
 
   const markdownImagesToHtml = (value) => {
     const tokens = [];
@@ -162,9 +174,13 @@
         } else {
           node.removeAttribute("class");
         }
+        const isGalleryBodyImage = safeClasses.includes("gallery-body-image");
         const width = safeImageWidth(node.style.width || node.getAttribute("width"));
         node.removeAttribute("style");
-        if (width) {
+        if (isGalleryBodyImage) {
+          node.removeAttribute("width");
+          node.removeAttribute("height");
+        } else if (width) {
           node.style.width = `${width}px`;
           node.style.height = "auto";
           node.style.maxWidth = "100%";
@@ -176,6 +192,26 @@
       }
     });
 
+    return template.innerHTML;
+  };
+
+  const decorateGalleryContentHtml = (html, coverImageUrl) => {
+    if (!html || !coverImageUrl) return html;
+    const template = document.createElement("template");
+    template.innerHTML = html;
+    template.content.querySelectorAll("img").forEach((image) => {
+      const src = image.getAttribute("src") || "";
+      if (!sameImageUrl(src, coverImageUrl)) return;
+      image.classList.add("gallery-body-image");
+      const wrapper = document.createElement("span");
+      wrapper.className = "gallery-cover-wrap";
+      const badge = document.createElement("span");
+      badge.className = "gallery-cover-badge";
+      badge.textContent = "대표사진";
+      image.replaceWith(wrapper);
+      wrapper.appendChild(image);
+      wrapper.appendChild(badge);
+    });
     return template.innerHTML;
   };
 
@@ -487,19 +523,20 @@
     }
 
     const isGallery = boardKind === "gallery";
-    const contentHtml = sanitizeContentHtml(isGallery ? item.description : item.content);
     const date = formatDate(item.published_at || item.event_date || item.created_at);
     const author = item.author_name || "꿈키움센터";
     const image = isGallery ? getGalleryCoverImage(item.cover_image_url) : "";
+    const rawContentHtml = sanitizeContentHtml(isGallery ? item.description : item.content);
+    const fallbackGalleryImageHtml =
+      isGallery && image && !rawContentHtml
+        ? `<p><img src="${escapeHtml(image)}" alt="${escapeHtml(item.title)}" class="gallery-body-image image-align-center" loading="lazy"></p>`
+        : "";
+    const contentHtml = isGallery ? decorateGalleryContentHtml(rawContentHtml || fallbackGalleryImageHtml, image) : rawContentHtml;
 
     detailShell.hidden = false;
     detailShell.innerHTML = `
-      <article class="board-detail-card">
-        ${isGallery
-          ? image
-            ? `<figure class="board-detail-image"><img src="${escapeHtml(image)}" alt="${escapeHtml(item.title)}" loading="lazy"></figure>`
-            : `<div class="board-detail-empty-image" aria-hidden="true"><strong>사진 없음</strong><small>등록된 대표 사진이 없습니다.</small></div>`
-          : ""}
+      <article class="board-detail-card${isGallery ? " is-gallery-detail" : ""}">
+        ${isGallery && !image ? `<div class="board-detail-empty-image" aria-hidden="true"><strong>사진 없음</strong><small>등록된 대표 사진이 없습니다.</small></div>` : ""}
         <div class="board-detail-head">
           <div>
             <p class="eyebrow">${isGallery ? "갤러리" : "게시글"}</p>

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>게시글 작성 | 군북면 꿈키움센터</title>
     <meta name="description" content="군북면 꿈키움센터 관리자 게시글 작성 화면입니다.">
-    <link rel="stylesheet" href="assets/css/styles.css?v=20260609-9">
+    <link rel="stylesheet" href="assets/css/styles.css?v=20260609-10">
     <link rel="icon" href="assets/images/kkoom-logo-symbol.png">
     <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css">
@@ -76,6 +76,10 @@
                   <p class="eyebrow">본문</p>
                   <h3>본문</h3>
                 </div>
+                <label class="board-file-button gallery-image-button" data-gallery-image-control hidden>
+                  <input name="galleryImages" type="file" accept="image/*" multiple data-gallery-image-input>
+                  사진 여러 장 추가
+                </label>
               </div>
               <div id="board-editor" class="board-toast-editor"></div>
               <textarea name="contentFallback" rows="12" class="board-editor-fallback" placeholder="본문을 입력하세요" hidden></textarea>
@@ -150,6 +154,6 @@
     <script src="https://uicdn.toast.com/editor/latest/i18n/ko-kr.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
-    <script src="assets/js/board-write.js?v=20260609-2"></script>
+    <script src="assets/js/board-write.js?v=20260609-3"></script>
   </body>
 </html>

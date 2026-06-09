@@ -20,6 +20,8 @@
   const status = form?.querySelector("[data-form-status]");
   const fileInput = page.querySelector("[data-board-file-input]");
   const fileList = page.querySelector("[data-board-file-list]");
+  const galleryImageControl = page.querySelector("[data-gallery-image-control]");
+  const galleryImageInput = page.querySelector("[data-gallery-image-input]");
   const editorFallback = page.querySelector(".board-editor-fallback");
 
   const state = {
@@ -65,6 +67,22 @@
     ].includes(text);
   };
 
+  const normalizedImageUrl = (value) => {
+    const text = String(value || "").trim();
+    if (!text) return "";
+    try {
+      return new URL(text, window.location.href).href;
+    } catch {
+      return text;
+    }
+  };
+
+  const sameImageUrl = (left, right) => normalizedImageUrl(left) === normalizedImageUrl(right);
+
+  const imageElementUrl = (image) => normalizedImageUrl(image?.currentSrc || image?.src || "");
+
+  const isCoverImageElement = (image) => Boolean(state.coverImageUrl && sameImageUrl(imageElementUrl(image), state.coverImageUrl));
+
   const setStatus = (message, isError = false) => {
     if (!status) return;
     status.textContent = message || "";
@@ -85,6 +103,7 @@
       .slice(0, 90) || "file";
 
   const imageLayoutClasses = ["image-align-left", "image-align-right", "image-align-center", "image-inline"];
+  const galleryImageClass = "gallery-body-image";
   const editorTextTranslations = new Map([
     ["Select image file", "이미지 파일 선택"],
     ["Choose image file", "이미지 파일 선택"],
@@ -186,6 +205,9 @@
 
   const updatePageLabels = () => {
     document.title = `${board.label} ${editId ? "수정" : "작성"} | 군북면 꿈키움센터`;
+    page.classList.toggle("is-gallery-write-page", board.kind === "gallery");
+    form?.classList.toggle("is-gallery-write", board.kind === "gallery");
+    if (galleryImageControl) galleryImageControl.hidden = board.kind !== "gallery";
     page.querySelector("[data-board-write-eyebrow]").textContent = board.kind === "gallery" ? "갤러리 작성" : "게시글 작성";
     page.querySelector("[data-board-write-title]").textContent = `${board.label} ${editId ? "수정" : "작성"}`;
     page.querySelectorAll("[data-board-back-link], [data-board-cancel-link]").forEach((link) => {
@@ -244,7 +266,7 @@
 
     state.editor = new Editor({
       el: editorEl,
-      height: "520px",
+      height: board.kind === "gallery" ? "760px" : "520px",
       initialEditType: "wysiwyg",
       previewStyle: "vertical",
       initialValue: "",
@@ -257,8 +279,13 @@
             const edited = await openImageEditor(file);
             const image = await uploadBoardFile(edited.blob, board.bucket, edited.name, "images");
             state.images.push(image);
-            if (!state.coverImageUrl) state.coverImageUrl = image.url;
+            if (!state.coverImageUrl) setCoverImageUrl(image.url, { silent: true });
             callback(image.url, image.name);
+            window.setTimeout(() => {
+              const inserted = findEditorImageByUrl(image.url);
+              if (inserted && board.kind === "gallery") applyImageLayout(inserted, "wide", { silent: true });
+              markCoverImages();
+            }, 160);
           } catch (error) {
             if (error?.message !== "cancel") window.alert(error.message || "이미지 업로드 중 문제가 발생했습니다.");
           }
@@ -292,9 +319,18 @@
     template.innerHTML = html || "";
     template.content.querySelectorAll("img").forEach((image) => {
       persistImageState(image);
+      if (board.kind === "gallery" && image.classList.contains("image-align-center")) {
+        image.classList.add(galleryImageClass);
+        image.style.width = "100%";
+        image.style.height = "auto";
+        image.style.maxWidth = "100%";
+        image.removeAttribute("width");
+        image.removeAttribute("height");
+      }
       image.classList.remove("board-editor-image-selected", "board-editor-image-editing");
       image.removeAttribute("draggable");
       image.removeAttribute("data-board-editor-image");
+      image.removeAttribute("data-board-cover-image");
       image.removeAttribute("data-board-image-width");
       image.removeAttribute("data-board-image-layout");
       image.style.removeProperty("outline");
@@ -429,6 +465,8 @@
     toolbar.dataset.boardImageToolbar = "";
     toolbar.hidden = true;
     toolbar.innerHTML = `
+      <button type="button" data-image-cover>대표사진으로 설정</button>
+      <button type="button" data-image-layout="wide">크게</button>
       <button type="button" data-image-layout="left">왼쪽</button>
       <button type="button" data-image-layout="center">가운데</button>
       <button type="button" data-image-layout="right">오른쪽</button>
@@ -440,11 +478,16 @@
       const target = event.target;
       if (!(target instanceof HTMLElement)) return;
       const layoutButton = target.closest("[data-image-layout]");
+      const coverButton = target.closest("[data-image-cover]");
       const editButton = target.closest("[data-image-toolbar-edit]");
       const image = state.selectedImage;
       if (!(image instanceof HTMLImageElement)) return;
 
-      if (layoutButton instanceof HTMLElement) {
+      if (coverButton instanceof HTMLElement) {
+        setCoverImageUrl(imageElementUrl(image));
+        selectEditorImage(image);
+        syncEditorModelFromDom(image);
+      } else if (layoutButton instanceof HTMLElement) {
         applyImageLayout(image, layoutButton.dataset.imageLayout || "center");
       } else if (editButton instanceof HTMLElement) {
         editEditorImage(image);
@@ -468,17 +511,37 @@
     if (image.classList.contains("image-align-left")) return "left";
     if (image.classList.contains("image-align-right")) return "right";
     if (image.classList.contains("image-inline")) return "inline";
+    if (image.classList.contains(galleryImageClass)) return "wide";
     return "center";
   };
 
-  const imageWidthFor = (image) =>
-    parseFloat(image.dataset.boardImageWidth || "") ||
-    parseFloat(image.style.width || "") ||
-    Number(image.getAttribute("width")) ||
-    image.getBoundingClientRect().width ||
-    image.naturalWidth ||
-    image.width ||
-    320;
+  const markCoverImages = () => {
+    getEditorEditable()?.querySelectorAll("img").forEach((image) => {
+      if (!(image instanceof HTMLImageElement)) return;
+      image.dataset.boardCoverImage = isCoverImageElement(image) ? "true" : "false";
+    });
+  };
+
+  const setCoverImageUrl = (url, options = {}) => {
+    const nextUrl = normalizedImageUrl(url);
+    if (!nextUrl) return;
+    state.coverImageUrl = nextUrl;
+    markCoverImages();
+    if (!options.silent) setStatus("대표사진을 설정했습니다.");
+  };
+
+  const findEditorImageByUrl = (url) =>
+    Array.from(getEditorEditable()?.querySelectorAll("img") || []).find((image) => sameImageUrl(imageElementUrl(image), url));
+
+  const imageWidthFor = (image) => {
+    const dataWidth = parseFloat(image.dataset.boardImageWidth || "");
+    if (Number.isFinite(dataWidth) && dataWidth > 0) return dataWidth;
+    const styleWidth = String(image.style.width || "").trim();
+    if (styleWidth.endsWith("%")) return getEditorWidth();
+    const parsedStyleWidth = parseFloat(styleWidth);
+    if (Number.isFinite(parsedStyleWidth) && parsedStyleWidth > 0) return parsedStyleWidth;
+    return Number(image.getAttribute("width")) || image.getBoundingClientRect().width || image.naturalWidth || image.width || 320;
+  };
 
   const getEditorWidth = () => getEditorEditable()?.clientWidth || 720;
 
@@ -490,9 +553,11 @@
   const applyImageState = (image, snapshot) => {
     if (!(image instanceof HTMLImageElement) || !snapshot) return;
     image.classList.remove(...imageLayoutClasses);
+    if (snapshot.layout !== "wide") image.classList.remove(galleryImageClass);
     if (snapshot.layout === "left") image.classList.add("image-align-left");
     else if (snapshot.layout === "right") image.classList.add("image-align-right");
     else if (snapshot.layout === "inline") image.classList.add("image-inline");
+    else if (snapshot.layout === "wide") image.classList.add("image-align-center", galleryImageClass);
     else image.classList.add("image-align-center");
     setImageWidth(image, snapshot.width);
   };
@@ -510,6 +575,7 @@
     toolbar.querySelectorAll("[data-image-layout]").forEach((button) => {
       button.classList.toggle("is-active", button.getAttribute("data-image-layout") === activeLayout);
     });
+    toolbar.querySelector("[data-image-cover]")?.classList.toggle("is-active", isCoverImageElement(image));
   };
 
   const setImageWidth = (image, width) => {
@@ -554,15 +620,19 @@
     }, 80);
   };
 
-  const applyImageLayout = (image, layout) => {
+  const applyImageLayout = (image, layout, options = {}) => {
     if (!(image instanceof HTMLImageElement)) return;
     const editable = getEditorEditable();
     const editorWidth = editable?.clientWidth || 720;
     const currentWidth = imageWidthFor(image);
 
     image.classList.remove(...imageLayoutClasses);
+    image.classList.remove(galleryImageClass);
 
-    if (layout === "left" || layout === "right") {
+    if (layout === "wide") {
+      image.classList.add("image-align-center", galleryImageClass);
+      setImageWidth(image, editorWidth);
+    } else if (layout === "left" || layout === "right") {
       image.classList.add(layout === "left" ? "image-align-left" : "image-align-right");
       setImageWidth(image, Math.min(Math.max(220, currentWidth), Math.min(420, editorWidth * 0.48)));
     } else if (layout === "inline") {
@@ -576,7 +646,7 @@
 
     selectEditorImage(image);
     syncEditorModelFromDom(image);
-    setStatus("이미지 배치를 적용했습니다.");
+    if (!options.silent) setStatus("이미지 배치를 적용했습니다.");
   };
 
   const selectEditorImage = (image) => {
@@ -618,6 +688,7 @@
   const editEditorImage = async (image) => {
     if (!image) return;
     const snapshot = captureImageState(image);
+    const wasCoverImage = isCoverImageElement(image);
     image.classList.add("board-editor-image-editing");
     setStatus("이미지를 편집하고 있습니다.");
     try {
@@ -629,7 +700,7 @@
       image.removeAttribute("srcset");
       applyImageState(image, snapshot);
       state.images.push(uploaded);
-      if (!state.coverImageUrl) state.coverImageUrl = uploaded.url;
+      if (wasCoverImage || !state.coverImageUrl) setCoverImageUrl(uploaded.url, { silent: true });
       setStatus("본문 이미지가 교체되었습니다.");
     } catch (error) {
       if (error?.message !== "cancel") setStatus(error.message || "이미지 편집 중 문제가 발생했습니다.", true);
@@ -658,6 +729,7 @@
       }
       image.dataset.boardImageLayout = activeLayoutForImage(image);
     });
+    markCoverImages();
   };
 
   const setupInteractiveEditorImages = () => {
@@ -777,11 +849,35 @@
       : '<p class="board-help-text">첨부된 파일이 없습니다.</p>';
   };
 
-  const insertImageIntoEditor = (image) => {
-    const markdown = `\n![${image.name}](${image.url})\n`;
-    if (state.editor?.insertText) state.editor.insertText(markdown);
-    else if (editorFallback) editorFallback.value = `${editorFallback.value || ""}${markdown}`;
-    window.setTimeout(enhanceEditorImages, 80);
+  const galleryImageHtml = (image) => `
+    <p>
+      <img src="${escapeHtml(image.url)}" alt="${escapeHtml(image.name || "갤러리 사진")}" class="${galleryImageClass} image-align-center" loading="lazy">
+    </p>
+  `;
+
+  const appendHtmlToEditor = (html) => {
+    const editable = getEditorEditable();
+    const currentHtml = editable ? cleanEditorHtml(editable.innerHTML) : state.editor?.getHTML?.() || editorFallback?.value || "";
+    const nextHtml = `${currentHtml || ""}${String(currentHtml || "").trim() ? "<p><br></p>" : ""}${html}`;
+    if (state.editor?.setHTML) {
+      state.editor.setHTML(nextHtml);
+    } else if (editorFallback) {
+      editorFallback.hidden = false;
+      editorFallback.value = nextHtml;
+    }
+    window.setTimeout(enhanceEditorImages, 120);
+  };
+
+  const appendGalleryImagesToEditor = (images) => {
+    if (!images.length) return;
+    appendHtmlToEditor(images.map(galleryImageHtml).join(""));
+    window.setTimeout(() => {
+      images.forEach((image) => {
+        const inserted = findEditorImageByUrl(image.url);
+        if (inserted) applyImageLayout(inserted, "wide", { silent: true });
+      });
+      markCoverImages();
+    }, 180);
   };
 
   const loadExisting = async () => {
@@ -1082,7 +1178,7 @@
       const modal = page.querySelector("[data-image-edit-modal]");
       const preview = page.querySelector("[data-image-edit-preview]");
       if (!modal || !preview || !window.Cropper) {
-        resolve({ blob: file, name: file.name });
+        reject(new Error("이미지 편집 도구를 불러오지 못했습니다. 새로고침 후 다시 시도해주세요."));
         return;
       }
 
@@ -1116,6 +1212,10 @@
             responsive: true,
             background: false,
           });
+        };
+        preview.onerror = () => {
+          cleanup();
+          reject(new Error("편집할 이미지를 화면에 불러오지 못했습니다."));
         };
       };
 
@@ -1186,6 +1286,28 @@
       setStatus("파일을 첨부했습니다.");
     } catch (error) {
       setStatus(error.message || "파일 첨부 중 문제가 발생했습니다.", true);
+    }
+  });
+
+  galleryImageInput?.addEventListener("change", async () => {
+    if (board.kind !== "gallery") return;
+    const files = Array.from(galleryImageInput.files || []).filter((file) => String(file.type || "").startsWith("image/"));
+    galleryImageInput.value = "";
+    if (!files.length) return;
+    setStatus(`갤러리 사진 ${files.length}장을 업로드하고 있습니다.`);
+
+    try {
+      const uploadedImages = [];
+      for (const file of files) {
+        const uploaded = await uploadBoardFile(file, board.bucket, file.name, "images");
+        state.images.push(uploaded);
+        uploadedImages.push(uploaded);
+        if (!state.coverImageUrl) setCoverImageUrl(uploaded.url, { silent: true });
+      }
+      appendGalleryImagesToEditor(uploadedImages);
+      setStatus(`사진 ${uploadedImages.length}장을 본문에 추가했습니다.`);
+    } catch (error) {
+      setStatus(error.message || "갤러리 사진 업로드 중 문제가 발생했습니다.", true);
     }
   });
 

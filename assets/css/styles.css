@@ -10418,6 +10418,11 @@ body.admin-page {
   min-width: 0;
 }
 
+.board-write-form.is-gallery-write .board-toast-editor,
+.board-write-form.is-gallery-write .board-editor-fallback {
+  min-height: 760px;
+}
+
 .board-toast-editor .toastui-editor-contents img[data-board-editor-image] {
   box-sizing: border-box;
   max-width: 100%;
@@ -10434,6 +10439,12 @@ body.admin-page {
 
 .board-toast-editor .toastui-editor-contents img.board-editor-image-editing {
   opacity: 0.7;
+}
+
+.board-toast-editor .toastui-editor-contents img[data-board-cover-image="true"] {
+  outline: 4px solid rgba(224, 142, 56, 0.82);
+  outline-offset: 5px;
+  box-shadow: 0 0 0 8px rgba(224, 142, 56, 0.16);
 }
 
 .board-image-toolbar {
@@ -10473,6 +10484,11 @@ body.admin-page {
   background: #eef5ff;
 }
 
+.board-image-toolbar [data-image-cover].is-active {
+  color: #8a4a0a;
+  background: #fff3dd;
+}
+
 .board-editor-fallback {
   min-height: 420px;
 }
@@ -10493,6 +10509,18 @@ body.admin-page {
   background: #edf4ff;
   color: #0f6fe8;
   cursor: pointer;
+}
+
+.gallery-image-button {
+  border: 1px solid rgba(15, 111, 232, 0.18);
+  border-radius: 8px;
+  padding: 0 16px;
+  background: #eef5ff;
+  color: #0f4fa8;
+}
+
+.gallery-image-button[hidden] {
+  display: none;
 }
 
 .board-file-button input {
@@ -10981,6 +11009,46 @@ body.admin-page {
   max-width: 100%;
   height: auto;
   border-radius: 8px;
+}
+
+.board-detail-card.is-gallery-detail .board-content-view img.gallery-body-image,
+.board-detail-card.is-gallery-detail .board-content-view img.image-align-center,
+.board-toast-editor .toastui-editor-contents img.gallery-body-image {
+  display: block;
+  width: min(100%, 980px) !important;
+  max-width: 100% !important;
+  height: auto !important;
+  margin: 18px auto;
+  clear: both;
+}
+
+.gallery-cover-wrap {
+  position: relative;
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  margin: 18px auto;
+}
+
+.gallery-cover-wrap img {
+  margin: 0 auto !important;
+}
+
+.gallery-cover-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 0 13px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #e08e38, #1f5a43);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 900;
+  box-shadow: 0 10px 24px rgba(31, 90, 67, 0.2);
 }
 
 .board-content-view video,
@@ -13020,6 +13088,19 @@ body.admin-page {
   .board-image-toolbar {
     max-width: calc(100vw - 24px);
     overflow-x: auto;
+  }
+
+  .board-write-form.is-gallery-write .board-toast-editor,
+  .board-write-form.is-gallery-write .board-editor-fallback {
+    min-height: 560px;
+  }
+
+  .gallery-cover-badge {
+    top: 10px;
+    left: 10px;
+    min-height: 30px;
+    padding: 0 11px;
+    font-size: 13px;
   }
 
   .gallery-detail-button span {
