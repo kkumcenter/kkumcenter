@@ -166,7 +166,7 @@
 
       if (node.tagName === "IMG") {
         const src = node.getAttribute("src") || "";
-        if (!isSafeUrl(src)) {
+        if (!isSafeUrl(src) || node.classList.contains("ProseMirror-separator")) {
           node.remove();
           return;
         }
@@ -192,6 +192,14 @@
         node.setAttribute("loading", "lazy");
         if (!node.getAttribute("alt")) node.setAttribute("alt", "");
       }
+    });
+
+    template.content.querySelectorAll(".ProseMirror-trailingBreak, .ProseMirror-separator").forEach((node) => node.remove());
+    template.content.querySelectorAll("p").forEach((paragraph) => {
+      const text = (paragraph.textContent || "").trim();
+      const hasMedia = paragraph.querySelector("img, video, iframe, object, embed");
+      const hasLineBreakOnly = paragraph.children.length === 1 && paragraph.firstElementChild?.tagName === "BR";
+      if (!text && !hasMedia && !hasLineBreakOnly) paragraph.remove();
     });
 
     return template.innerHTML;

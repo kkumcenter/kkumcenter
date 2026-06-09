@@ -287,16 +287,36 @@
     return displayName && displayName !== "이름 미입력" ? displayName : "스텝";
   };
 
+  const getSimpleEditor = () => page.querySelector("[data-board-simple-editor]");
+
+  const createSimpleEditor = () => {
+    let simpleEditor = getSimpleEditor();
+    if (simpleEditor) return simpleEditor;
+
+    simpleEditor = document.createElement("div");
+    simpleEditor.className = "board-simple-editor board-content-view";
+    simpleEditor.setAttribute("data-board-simple-editor", "");
+    simpleEditor.setAttribute("contenteditable", "true");
+    simpleEditor.setAttribute("role", "textbox");
+    simpleEditor.setAttribute("aria-label", "본문 편집");
+    simpleEditor.setAttribute("aria-multiline", "true");
+    simpleEditor.spellcheck = true;
+
+    const editorEl = document.getElementById("board-editor");
+    if (editorEl) editorEl.insertAdjacentElement("afterend", simpleEditor);
+    else editorFallback?.insertAdjacentElement("beforebegin", simpleEditor);
+    return simpleEditor;
+  };
+
   const initEditor = () => {
     const editorEl = document.getElementById("board-editor");
     const Editor = window.toastui?.Editor;
     if (state.useFallbackEditor) {
       if (editorEl) editorEl.hidden = true;
-      if (editorFallback) {
-        editorFallback.hidden = false;
-        editorFallback.removeAttribute("hidden");
-      }
-      setStatus("수정 화면은 안정성을 위해 기본 편집칸으로 열었습니다.");
+      const simpleEditor = createSimpleEditor();
+      if (editorFallback) editorFallback.hidden = true;
+      setupInteractiveEditorImages(simpleEditor);
+      setStatus("수정 화면은 안정성을 위해 가벼운 편집창으로 열었습니다.");
       return;
     }
     if (!editorEl || !Editor) {
@@ -349,7 +369,12 @@
 
   const setEditorContent = (value) => {
     const safeValue = cleanEditorHtml(value || "");
-    if (state.editor) {
+    if (state.useFallbackEditor) {
+      const simpleEditor = createSimpleEditor();
+      simpleEditor.innerHTML = safeValue || "<p><br></p>";
+      if (editorFallback) editorFallback.value = safeValue;
+      window.setTimeout(enhanceEditorImages, 80);
+    } else if (state.editor) {
       if (state.editor.setHTML) state.editor.setHTML(safeValue);
       else state.editor.setMarkdown(safeValue);
       window.setTimeout(enhanceEditorImages, 80);
@@ -360,6 +385,8 @@
   };
 
   const getEditorEditable = () => {
+    const simpleEditor = getSimpleEditor();
+    if (simpleEditor && !simpleEditor.hidden) return simpleEditor;
     const editable = page.querySelector(".toastui-editor-ww-container .toastui-editor-contents");
     const container = editable?.closest(".toastui-editor-ww-container");
     if (!editable || (container && window.getComputedStyle(container).display === "none")) return null;
@@ -397,6 +424,12 @@
       image.style.removeProperty("user-select");
     });
     template.content.querySelectorAll(".ProseMirror-trailingBreak, .ProseMirror-separator").forEach((node) => node.remove());
+    template.content.querySelectorAll("p").forEach((paragraph) => {
+      const text = (paragraph.textContent || "").trim();
+      const hasMedia = paragraph.querySelector("img, video, iframe, object, embed");
+      const hasLineBreakOnly = paragraph.children.length === 1 && paragraph.firstElementChild?.tagName === "BR";
+      if (!text && !hasMedia && !hasLineBreakOnly) paragraph.remove();
+    });
     return template.innerHTML.trim();
   };
 
@@ -867,13 +900,13 @@
     markCoverImages();
   };
 
-  const setupInteractiveEditorImages = () => {
-    const editorEl = document.getElementById("board-editor");
+  const setupInteractiveEditorImages = (rootElement = null) => {
+    const editorEl = rootElement || document.getElementById("board-editor");
     if (!editorEl) return;
     let draggedImage = null;
 
     editorEl.addEventListener("click", (event) => {
-      const image = event.target instanceof HTMLElement ? event.target.closest(".toastui-editor-contents img") : null;
+      const image = event.target instanceof HTMLElement ? event.target.closest("img") : null;
       if (image instanceof HTMLImageElement && hasUsableImageSrc(image)) {
         selectEditorImage(image);
       } else if (!(event.target instanceof HTMLElement && event.target.closest("[data-board-image-toolbar]"))) {
@@ -882,14 +915,14 @@
     });
 
     editorEl.addEventListener("dblclick", (event) => {
-      const image = event.target instanceof HTMLElement ? event.target.closest(".toastui-editor-contents img") : null;
+      const image = event.target instanceof HTMLElement ? event.target.closest("img") : null;
       if (!(image instanceof HTMLImageElement) || !hasUsableImageSrc(image)) return;
       event.preventDefault();
       editEditorImage(image);
     });
 
     editorEl.addEventListener("dragstart", (event) => {
-      const image = event.target instanceof HTMLElement ? event.target.closest(".toastui-editor-contents img") : null;
+      const image = event.target instanceof HTMLElement ? event.target.closest("img") : null;
       if (!(image instanceof HTMLImageElement) || !hasUsableImageSrc(image)) return;
       draggedImage = image;
       selectEditorImage(image);
@@ -928,7 +961,7 @@
       }
 
       window
-        .interact(".board-toast-editor .toastui-editor-contents img")
+        .interact(".board-toast-editor .toastui-editor-contents img, .board-simple-editor img")
         .resizable({
           edges: { left: true, right: true, bottom: true, top: true },
           listeners: {
@@ -951,8 +984,9 @@
       const target = event.target;
       if (!(target instanceof HTMLElement)) return;
       if (target.closest("[data-board-image-toolbar]")) return;
-      if (target.closest("#board-editor .toastui-editor-contents img")) return;
+      if (target.closest("#board-editor .toastui-editor-contents img, [data-board-simple-editor] img")) return;
       if (target.closest("#board-editor")) return;
+      if (target.closest("[data-board-simple-editor]")) return;
       if (!document.querySelector("[data-board-image-toolbar]")?.hidden) hideImageToolbar();
     });
 
@@ -997,6 +1031,8 @@
     const nextHtml = `${currentHtml || ""}${String(currentHtml || "").trim() ? "<p><br></p>" : ""}${html}`;
     if (state.editor?.setHTML) {
       state.editor.setHTML(nextHtml);
+    } else if (editable) {
+      editable.innerHTML = nextHtml;
     } else if (editorFallback) {
       editorFallback.hidden = false;
       editorFallback.value = nextHtml;

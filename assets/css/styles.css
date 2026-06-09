@@ -10467,12 +10467,45 @@ body.admin-page {
   min-width: 0;
 }
 
+.board-simple-editor {
+  min-height: 560px;
+  max-height: none;
+  padding: 28px;
+  border: 1px solid rgba(15, 42, 77, 0.14);
+  border-radius: 8px;
+  background: #fffdf8;
+  color: #1f2a38;
+  font-size: 18px;
+  line-height: 1.7;
+  outline: none;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.board-simple-editor:focus {
+  border-color: rgba(15, 111, 232, 0.55);
+  box-shadow: 0 0 0 4px rgba(15, 111, 232, 0.12);
+}
+
+.board-simple-editor p {
+  min-height: 1.4em;
+  margin: 0 0 14px;
+}
+
+.board-simple-editor * {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
 .board-write-form.is-gallery-write .board-toast-editor,
-.board-write-form.is-gallery-write .board-editor-fallback {
+.board-write-form.is-gallery-write .board-editor-fallback,
+.board-write-form.is-gallery-write .board-simple-editor {
   min-height: 760px;
 }
 
-.board-toast-editor .toastui-editor-contents img[data-board-editor-image] {
+.board-toast-editor .toastui-editor-contents img[data-board-editor-image],
+.board-simple-editor img[data-board-editor-image] {
   box-sizing: border-box;
   max-width: 100%;
   height: auto;
@@ -10481,16 +10514,19 @@ body.admin-page {
   user-select: none;
 }
 
-.board-toast-editor .toastui-editor-contents img.board-editor-image-selected {
+.board-toast-editor .toastui-editor-contents img.board-editor-image-selected,
+.board-simple-editor img.board-editor-image-selected {
   outline: 3px solid rgba(15, 111, 232, 0.68);
   outline-offset: 4px;
 }
 
-.board-toast-editor .toastui-editor-contents img.board-editor-image-editing {
+.board-toast-editor .toastui-editor-contents img.board-editor-image-editing,
+.board-simple-editor img.board-editor-image-editing {
   opacity: 0.7;
 }
 
-.board-toast-editor .toastui-editor-contents img[data-board-cover-image="true"] {
+.board-toast-editor .toastui-editor-contents img[data-board-cover-image="true"],
+.board-simple-editor img[data-board-cover-image="true"] {
   outline: 4px solid rgba(224, 142, 56, 0.82);
   outline-offset: 5px;
   box-shadow: 0 0 0 8px rgba(224, 142, 56, 0.16);
