@@ -8154,9 +8154,33 @@ body.admin-page {
   margin: 0;
   overflow: hidden;
   border: 1px solid #cfd7d0;
-  border-radius: 0;
-  background: #eef2eb;
+  border-radius: 8px;
+  background: #fff;
   box-shadow: 0 18px 40px rgba(24, 38, 31, 0.08);
+}
+
+.official-map-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  padding: 18px 24px;
+  border-bottom: 1px solid #dce4df;
+  background: #f7faf8;
+}
+
+.official-map-title strong {
+  color: #15231d;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.official-map-title span {
+  color: #5d6a64;
+  font-size: 15px;
+  font-weight: 700;
+  text-align: right;
+  word-break: keep-all;
 }
 
 .real-map-frame.official-map-frame {
@@ -8166,11 +8190,37 @@ body.admin-page {
 
 .real-map-frame.official-map-frame iframe {
   height: 420px;
-  filter: saturate(0.96) contrast(0.98);
+  filter: none;
 }
 
-.official-map-frame .map-pin-label {
-  top: 49%;
+.official-map-address {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  border-top: 1px solid #dce4df;
+  background: #dce4df;
+}
+
+.official-map-address p {
+  display: grid;
+  grid-template-columns: 74px 1fr;
+  gap: 12px;
+  margin: 0;
+  padding: 18px 22px;
+  background: #fff;
+  color: #27352f;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.official-map-address strong {
+  color: var(--forest);
+  font-weight: 800;
+}
+
+.official-map-address span {
+  font-weight: 700;
+  word-break: keep-all;
 }
 
 .kakao-map-frame {
@@ -9615,6 +9665,32 @@ body.admin-page {
 
   .real-map-frame.official-map-frame iframe {
     height: 380px;
+  }
+
+  .official-map-title {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 16px 18px;
+  }
+
+  .official-map-title strong {
+    font-size: 18px;
+  }
+
+  .official-map-title span {
+    font-size: 14px;
+    text-align: left;
+  }
+
+  .official-map-address {
+    grid-template-columns: 1fr;
+  }
+
+  .official-map-address p {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    padding: 16px 18px;
+    font-size: 15px;
   }
 
   .kakao-map-frame .map-road {
