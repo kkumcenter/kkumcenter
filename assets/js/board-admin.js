@@ -195,11 +195,18 @@
     });
 
     template.content.querySelectorAll(".ProseMirror-trailingBreak, .ProseMirror-separator").forEach((node) => node.remove());
-    template.content.querySelectorAll("p").forEach((paragraph) => {
+    const paragraphs = [...template.content.querySelectorAll("p")];
+    paragraphs.forEach((paragraph, index) => {
       const text = (paragraph.textContent || "").trim();
       const hasMedia = paragraph.querySelector("img, video, iframe, object, embed");
-      const hasLineBreakOnly = paragraph.children.length === 1 && paragraph.firstElementChild?.tagName === "BR";
-      if (!text && !hasMedia && !hasLineBreakOnly) paragraph.remove();
+      if (text || hasMedia) return;
+      const isOuterBlank = index === 0 || index === paragraphs.length - 1;
+      if (isOuterBlank) {
+        paragraph.remove();
+        return;
+      }
+      paragraph.innerHTML = "<br>";
+      paragraph.classList.add("board-blank-line");
     });
 
     return template.innerHTML;
@@ -294,6 +301,35 @@
   const canDeleteBoard = (profile) =>
     profile?.role === "admin" && profile.admin_role === "super_admin";
 
+  const createKoreaDateKey = () => {
+    const parts = new Intl.DateTimeFormat("en-US", {
+      timeZone: "Asia/Seoul",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).formatToParts(new Date());
+    const get = (type) => parts.find((part) => part.type === type)?.value || "";
+    return `${get("year")}-${get("month")}-${get("day")}`;
+  };
+
+  const viewStorageKey = (postId) => `kkum-post-view:${postId}:${createKoreaDateKey()}`;
+
+  const hasViewedToday = (postId) => {
+    try {
+      return window.localStorage?.getItem(viewStorageKey(postId)) === "1";
+    } catch {
+      return false;
+    }
+  };
+
+  const markViewedToday = (postId) => {
+    try {
+      window.localStorage?.setItem(viewStorageKey(postId), "1");
+    } catch {
+      // 조회수 기록 실패가 게시글 열람을 막지 않도록 무시합니다.
+    }
+  };
+
   const fetchAttachments = async (targetType, targetIds) => {
     if (!client || !targetIds.length) return new Map();
     const { data, error } = await client
@@ -328,13 +364,11 @@
 
   const callPublicSubmitFunction = async (action, payload) => {
     const token = currentSession?.access_token;
-    if (!token) throw new Error("관리자 인증 정보가 필요합니다.");
+    const headers = { "Content-Type": "application/json" };
+    if (token) headers.Authorization = `Bearer ${token}`;
     const response = await fetch(`${config.url}/functions/v1/public-submit`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
+      headers,
       body: JSON.stringify({ action, payload }),
     });
     const result = await response.json().catch(() => ({}));
@@ -580,6 +614,7 @@
   let selectedItemId = null;
   let pendingDetailId = requestedDetailId;
   let shouldScrollToRequestedDetail = Boolean(requestedDetailId);
+  const pendingViewCounts = new Set();
 
   const renderPagination = (totalPages) => {
     if (!pagination) return;
@@ -617,6 +652,26 @@
     if (boardKind === "gallery") renderGalleryList(visibleItems, canManage);
     else renderPostList(visibleItems, canManage, items.length, offset);
     syncSelectedDetail(canManage);
+  };
+
+  const recordPostView = async (id, canManage) => {
+    if (boardKind !== "post" || canManage || !id || pendingViewCounts.has(id) || hasViewedToday(id)) return;
+    const item = currentItems.find((entry) => String(entry.id) === String(id));
+    if (!item || item.status !== "public") return;
+
+    pendingViewCounts.add(id);
+    try {
+      const result = await callPublicSubmitFunction("post-view-count", { postId: id });
+      if (result?.counted) markViewedToday(id);
+      if (Number.isFinite(Number(result?.viewCount))) {
+        item.view_count = Number(result.viewCount);
+        renderItems(currentItems, canManageBoard(currentProfile));
+      }
+    } catch (error) {
+      console.warn("Post view count skipped:", error);
+    } finally {
+      pendingViewCounts.delete(id);
+    }
   };
 
   const hideItem = async (id) => {
@@ -660,6 +715,7 @@
       selectedItemId = null;
     }
     renderItems(currentItems, canManage);
+    if (selectedItemId) recordPostView(selectedItemId, canManage);
     if (shouldScrollToRequestedDetail && selectedItemId && !detailShell.hidden) {
       shouldScrollToRequestedDetail = false;
       window.setTimeout(() => detailShell.scrollIntoView({ behavior: "smooth", block: "start" }), 80);
@@ -686,6 +742,7 @@
     window.history.replaceState({}, "", url.toString());
     const canManage = canManageBoard(currentProfile);
     renderItems(currentItems, canManage);
+    recordPostView(selectedItemId, canManage);
     if (shouldScroll && !detailShell.hidden) {
       detailShell.scrollIntoView({ behavior: "smooth", block: "start" });
     }

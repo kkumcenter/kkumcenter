@@ -324,6 +324,25 @@ const requireBoardAdmin = async (request: Request, supabase: ReturnType<typeof c
   return profile;
 };
 
+const getBoardAdminProfile = async (request: Request, supabase: ReturnType<typeof createClient>) => {
+  const token = bearerToken(request);
+  if (!token) return null;
+
+  const { data: userData, error: userError } = await supabase.auth.getUser(token);
+  if (userError || !userData.user) return null;
+
+  const { data: profile, error: profileError } = await supabase
+    .from("profiles")
+    .select("id, role, admin_role, email")
+    .eq("id", userData.user.id)
+    .maybeSingle();
+
+  if (profileError) return null;
+  const adminRole = String(profile?.admin_role || "");
+  if (profile?.role === "admin" && ["super_admin", "board_admin"].includes(adminRole)) return profile;
+  return null;
+};
+
 const toHex = (buffer: ArrayBuffer) =>
   Array.from(new Uint8Array(buffer))
     .map((byte) => byte.toString(16).padStart(2, "0"))
@@ -597,6 +616,26 @@ Deno.serve(async (request) => {
     const body = await request.json();
     const { action, payload } = body;
     const data = (payload ?? body) as Record<string, unknown>;
+
+    if (action === "post-view-count") {
+      const postId = requireText(data, "postId");
+      const { data: post, error: postError } = await supabase
+        .from("posts")
+        .select("id, status, view_count")
+        .eq("id", postId)
+        .maybeSingle();
+      if (postError) throw postError;
+      if (!post) throw new Error("조회할 게시글을 찾을 수 없습니다.");
+
+      const admin = await getBoardAdminProfile(request, supabase);
+      if (admin || post.status !== "public") {
+        return json({ ok: true, counted: false, viewCount: Number(post.view_count || 0) });
+      }
+
+      const { data: viewCount, error } = await supabase.rpc("increment_post_view_count", { post_id: postId });
+      if (error) throw error;
+      return json({ ok: true, counted: true, viewCount: Number(viewCount || 0) });
+    }
 
     if (action === "r2-gallery-upload-url") {
       await requireBoardAdmin(request, supabase);

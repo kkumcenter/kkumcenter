@@ -424,11 +424,18 @@
       image.style.removeProperty("user-select");
     });
     template.content.querySelectorAll(".ProseMirror-trailingBreak, .ProseMirror-separator").forEach((node) => node.remove());
-    template.content.querySelectorAll("p").forEach((paragraph) => {
+    const paragraphs = [...template.content.querySelectorAll("p")];
+    paragraphs.forEach((paragraph, index) => {
       const text = (paragraph.textContent || "").trim();
       const hasMedia = paragraph.querySelector("img, video, iframe, object, embed");
-      const hasLineBreakOnly = paragraph.children.length === 1 && paragraph.firstElementChild?.tagName === "BR";
-      if (!text && !hasMedia && !hasLineBreakOnly) paragraph.remove();
+      if (text || hasMedia) return;
+      const isOuterBlank = index === 0 || index === paragraphs.length - 1;
+      if (isOuterBlank) {
+        paragraph.remove();
+        return;
+      }
+      paragraph.innerHTML = "<br>";
+      paragraph.classList.add("board-blank-line");
     });
     return template.innerHTML.trim();
   };

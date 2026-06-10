@@ -11115,15 +11115,15 @@ body.admin-page {
 }
 
 .board-content-view > * + * {
-  margin-top: 14px;
+  margin-top: 8px;
 }
 
 .board-content-view p + p {
-  margin-top: 10px;
+  margin-top: 4px;
 }
 
 .board-content-view p:empty {
-  min-height: 1.55em;
+  min-height: 0.8em;
 }
 
 .board-content-view p:empty::before {
@@ -11132,12 +11132,19 @@ body.admin-page {
 }
 
 .board-content-view p:has(> br:only-child) {
-  min-height: 1.55em;
+  min-height: 0.8em;
 }
 
 .board-content-view p:has(> br:only-child)::before {
   content: " ";
   white-space: pre;
+}
+
+.board-content-view .board-blank-line {
+  min-height: 0.72em;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  line-height: 0.72;
 }
 
 .board-content-view img {
@@ -11417,26 +11424,26 @@ body.admin-page {
   overflow: hidden;
   color: #28352f;
   font-size: 17px;
-  line-height: 1.85;
+  line-height: 1.56;
   overflow-wrap: anywhere;
   word-break: break-word;
 }
 
 .board-detail-card:not(.is-gallery-detail) .board-detail-content {
-  line-height: 1.66;
+  line-height: 1.5;
 }
 
 .board-detail-card:not(.is-gallery-detail) .board-content-view > * + * {
-  margin-top: 10px;
+  margin-top: 6px;
 }
 
 .board-detail-card:not(.is-gallery-detail) .board-content-view p + p {
-  margin-top: 6px;
+  margin-top: 3px;
 }
 
 .board-detail-card:not(.is-gallery-detail) .board-content-view p:empty,
 .board-detail-card:not(.is-gallery-detail) .board-content-view p:has(> br:only-child) {
-  min-height: 0.8em;
+  min-height: 0.7em;
 }
 
 .board-detail-files {
