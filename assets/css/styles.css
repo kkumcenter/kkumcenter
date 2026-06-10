@@ -248,7 +248,7 @@ a {
 }
 
 .nav-group.utility-start {
-  margin-left: clamp(6px, 1.4vw, 24px);
+  margin-left: auto;
   flex-shrink: 0;
 }
 
