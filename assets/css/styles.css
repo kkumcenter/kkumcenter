@@ -4172,6 +4172,22 @@ h2,
   align-items: start;
 }
 
+.facility-overview-heading {
+  min-width: 0;
+}
+
+.facility-overview-photo {
+  margin: 34px 0 0;
+}
+
+.facility-overview-photo img {
+  width: 100%;
+  height: 260px;
+  display: block;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
 .superbin-card {
   grid-column: 1 / -1;
   display: grid;
@@ -9999,6 +10015,15 @@ body.admin-page {
     gap: 20px;
     margin-top: 26px;
     border-radius: 0;
+  }
+
+  .facility-overview-photo {
+    margin-top: 26px;
+  }
+
+  .facility-overview-photo img {
+    height: 220px;
+    border-radius: 14px;
   }
 
   .superbin-card-visual img {
