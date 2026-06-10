@@ -137,6 +137,7 @@ const setupAllMenu = () => {
   const closeAllMenu = () => {
     window.clearTimeout(allMenuCloseTimer);
     allMenuToggle.setAttribute("aria-expanded", "false");
+    navToggle?.setAttribute("aria-expanded", "false");
     document.body.classList.remove("all-menu-open");
     allMenuCloseTimer = window.setTimeout(() => {
       if (allMenuToggle.getAttribute("aria-expanded") === "false") {
@@ -149,10 +150,10 @@ const setupAllMenu = () => {
     window.clearTimeout(allMenuCloseTimer);
     allMenuPanel.hidden = false;
     allMenuToggle.setAttribute("aria-expanded", "true");
+    navToggle?.setAttribute("aria-expanded", "true");
     window.requestAnimationFrame(() => {
       document.body.classList.add("all-menu-open");
     });
-    navToggle?.setAttribute("aria-expanded", "false");
     document.body.classList.remove("nav-open");
   };
 
@@ -186,7 +187,19 @@ const setupAllMenu = () => {
     if (event.key === "Escape") closeAllMenu();
   });
 
-  navToggle?.addEventListener("click", closeAllMenu);
+  if (navToggle) {
+    navToggle.setAttribute("aria-controls", "all-menu-panel");
+    navToggle.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      const isOpen = document.body.classList.contains("all-menu-open");
+      if (isOpen) {
+        closeAllMenu();
+      } else {
+        openAllMenu();
+      }
+    });
+  }
 };
 
 setupAllMenu();
