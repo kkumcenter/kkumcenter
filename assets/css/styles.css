@@ -4699,10 +4699,9 @@ h2,
 }
 
 .vision-split-layout {
-  width: min(1480px, calc(100% - 48px));
   display: grid;
-  grid-template-columns: minmax(300px, 0.45fr) minmax(0, 1.55fr);
-  gap: 56px;
+  grid-template-columns: 0.78fr 1.22fr;
+  gap: 64px;
   align-items: start;
 }
 
@@ -4742,22 +4741,22 @@ h2,
 }
 
 .vision-split-content .vision-board-block {
-  padding: 32px 28px 30px;
+  padding: 34px 32px 32px;
   background: rgba(255, 255, 255, 0.86);
 }
 
 .vision-split-content .vision-value-grid {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
 }
 
 .vision-split-content .vision-board-block:first-child .vision-value-grid {
-  gap: 12px;
+  gap: 14px;
 }
 
 .vision-split-content .vision-value-grid article {
-  min-height: 222px;
-  padding: 24px 14px 22px;
+  min-height: 230px;
+  padding: 28px 20px 24px;
 }
 
 .vision-split-content .vision-board-block:nth-child(2) .vision-value-grid strong {
@@ -4899,12 +4898,13 @@ h2,
 }
 
 .vision-closing-message {
+  max-width: 860px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 32px;
-  margin-top: 52px;
-  padding: 46px 64px;
+  gap: 24px;
+  margin-top: 46px;
+  padding: 30px 38px;
   border: 1px solid rgba(18, 59, 43, 0.1);
   border-radius: var(--radius);
   background: transparent;
@@ -4913,16 +4913,16 @@ h2,
 }
 
 .vision-closing-message img {
-  width: 96px;
-  height: 96px;
+  width: 68px;
+  height: 68px;
   flex: 0 0 auto;
   object-fit: contain;
 }
 
 .vision-closing-message p {
   margin: 0;
-  font-size: clamp(30px, 2.8vw, 44px);
-  line-height: 1.7;
+  font-size: clamp(22px, 2.1vw, 32px);
+  line-height: 1.65;
   font-weight: 600;
   word-break: keep-all;
 }
@@ -10230,24 +10230,6 @@ body.admin-page {
   }
 }
 
-@media (max-width: 1240px) and (min-width: 1101px) {
-  .vision-split-layout {
-    width: min(1180px, calc(100% - 48px));
-    grid-template-columns: 0.62fr 1.38fr;
-    gap: 48px;
-  }
-
-  .vision-split-content .vision-value-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 14px;
-  }
-
-  .vision-split-content .vision-value-grid article {
-    min-height: 230px;
-    padding: 28px 20px 24px;
-  }
-}
-
 @media (max-width: 1100px) {
   .vision-split-layout,
   .space-detail-guide,
@@ -10317,18 +10299,18 @@ body.admin-page {
 
   .vision-closing-message {
     align-items: flex-start;
-    gap: 18px;
-    margin-top: 34px;
-    padding: 28px 22px;
+    gap: 14px;
+    margin-top: 32px;
+    padding: 22px 18px;
   }
 
   .vision-closing-message img {
-    width: 58px;
-    height: 58px;
+    width: 46px;
+    height: 46px;
   }
 
   .vision-closing-message p {
-    font-size: clamp(21px, 6vw, 28px);
+    font-size: clamp(18px, 5.2vw, 23px);
     line-height: 1.62;
   }
 
