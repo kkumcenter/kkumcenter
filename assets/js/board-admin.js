@@ -445,7 +445,7 @@
     return "비공개";
   };
 
-  const renderAdminActions = (item, canManage) =>
+  const renderAdminActions = (item, canManage, showStatus = false) =>
     canManage
       ? `<div class="board-admin-actions">
           <a href="${escapeHtml(boardWriteUrl(item.id))}">수정</a>
@@ -454,8 +454,9 @@
               ? `<button class="board-restore-button" type="button" data-board-restore="${escapeHtml(item.id)}">복구</button>${
                   canDeleteBoard(currentProfile) ? `<button class="board-delete-button" type="button" data-board-delete="${escapeHtml(item.id)}">완전삭제</button>` : ""
                 }`
-              : `<button type="button" data-board-hide="${escapeHtml(item.id)}">숨김</button>`
+              : `<button class="board-hide-button" type="button" data-board-hide="${escapeHtml(item.id)}">숨김</button>`
           }
+          ${showStatus ? `<em class="board-status-chip${item.status === "hidden" ? " is-hidden" : ""}">${escapeHtml(statusLabel(item.status))}</em>` : ""}
         </div>`
       : "";
 
@@ -506,10 +507,9 @@
                     <strong>${escapeHtml(item.title)}</strong>
                     <time>${escapeHtml(formatDate(item.event_date || item.created_at))}</time>
                     ${item.place ? `<small>${escapeHtml(item.place)}</small>` : ""}
-                    ${canManage ? `<em class="board-status-chip${item.status === "hidden" ? " is-hidden" : ""}">${escapeHtml(statusLabel(item.status))}</em>` : ""}
                   </span>
                 </button>
-                ${renderAdminActions(item, canManage)}
+                ${renderAdminActions(item, canManage, true)}
               </article>
             `;
           })

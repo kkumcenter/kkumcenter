@@ -42,13 +42,13 @@ const allMenuItems = [
     ],
   },
   {
-    label: "금산다팜몰",
+    label: "금산다팜 쇼핑몰",
     href: "https://dafarm.co.kr/",
     external: true,
     links: [],
   },
   {
-    label: "꿈키움센터 채널",
+    label: "꿈키움센터 유튜브",
     href: "https://www.youtube.com/@kkumcenter",
     external: true,
     links: [],

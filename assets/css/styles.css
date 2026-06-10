@@ -457,12 +457,14 @@ button.nav-link.nav-menu-link {
   align-items: center;
   justify-content: center;
   flex: 0 0 auto;
+  overflow: visible;
 }
 
 .login-person-icon svg {
   width: 100%;
   height: 100%;
   fill: none;
+  overflow: visible;
   stroke: currentColor;
   stroke-width: 2.2;
   stroke-linecap: round;
@@ -470,8 +472,12 @@ button.nav-link.nav-menu-link {
 }
 
 .primary-nav .nav-login {
+  width: 48px;
   min-width: 48px;
+  height: 48px;
   padding: 0 12px;
+  flex: 0 0 48px;
+  overflow: visible;
 }
 
 .primary-nav .nav-login .login-person-icon {
@@ -7149,10 +7155,29 @@ body.admin-page {
 }
 
 .gallery-grid-list article {
+  min-width: 0;
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: #fff;
+}
+
+.gallery-grid-list article > .board-admin-actions {
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 0 18px 18px;
+}
+
+.gallery-grid-list article > .board-admin-actions a,
+.gallery-grid-list article > .board-admin-actions button,
+.gallery-grid-list article > .board-admin-actions .board-status-chip {
+  min-width: 0;
+  flex: 0 1 auto;
+}
+
+.gallery-grid-list article > .board-admin-actions .board-status-chip {
+  padding-right: 8px;
+  padding-left: 8px;
 }
 
 .gallery-grid-list img {
@@ -11600,6 +11625,7 @@ body.admin-page {
 .board-admin-actions {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 8px;
 }
 
@@ -11618,7 +11644,8 @@ body.admin-page {
   text-decoration: none;
 }
 
-.board-admin-actions button:last-child {
+.board-admin-actions button:last-child,
+.board-admin-actions .board-hide-button {
   background: #fff3f0;
   color: #c23a2b;
 }
@@ -11643,8 +11670,12 @@ body.admin-page {
   background: #eef5ff;
   color: #0f6fe8;
   min-height: 24px;
+  max-width: 100%;
   font-size: 0.76rem;
+  font-style: normal;
   font-weight: 800;
+  line-height: 1.1;
+  white-space: nowrap;
 }
 
 .board-status-chip.is-hidden {
