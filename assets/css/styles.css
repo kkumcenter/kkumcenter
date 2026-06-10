@@ -4906,7 +4906,7 @@ h2,
   gap: 19px;
   margin-top: 42px;
   padding: 24px 30px;
-  border: 1px solid rgba(18, 59, 43, 0.1);
+  border: 2px solid rgba(18, 59, 43, 0.14);
   border-radius: var(--radius);
   background: transparent;
   color: #5b685f;
