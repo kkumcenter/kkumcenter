@@ -42,10 +42,10 @@ const allMenuItems = [
     ],
   },
   {
-    label: "금산다팜 쇼핑몰",
+    label: "금산다팜",
     href: "https://dafarm.co.kr/",
     external: true,
-    links: [],
+    links: [["로컬푸드 쇼핑몰", "https://dafarm.co.kr/", true]],
   },
   {
     label: "꿈키움센터 유튜브",

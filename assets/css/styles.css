@@ -600,7 +600,7 @@ button.nav-link.nav-menu-link {
 
 .all-menu-row {
   display: grid;
-  grid-template-columns: 104px minmax(0, 128px);
+  grid-template-columns: 92px minmax(0, 144px);
   align-items: start;
   gap: 4px;
   padding: 8px 0;
@@ -633,7 +633,7 @@ button.nav-link.nav-menu-link {
   display: grid;
   gap: 0;
   width: 100%;
-  max-width: 128px;
+  max-width: 144px;
 }
 
 .all-menu-links a {
