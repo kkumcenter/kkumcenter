@@ -4857,7 +4857,7 @@ h2,
 
 .vision-value-grid article > span {
   color: var(--pine);
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 700;
 }
 
@@ -4868,21 +4868,21 @@ h2,
 .vision-value-grid strong {
   margin-top: 18px;
   color: #14251e;
-  font-size: 18px;
+  font-size: 19px;
   line-height: 1.34;
 }
 
 .vision-value-grid p {
   margin: 12px 0 0;
   color: #5c6964;
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.65;
 }
 
 .vision-icon {
   position: relative;
-  width: 86px;
-  height: 86px;
+  width: 92px;
+  height: 92px;
   display: grid;
   place-items: center;
   margin-top: 16px;
@@ -4891,20 +4891,21 @@ h2,
 }
 
 .vision-icon img {
-  width: 86px;
-  height: 86px;
+  width: 92px;
+  height: 92px;
   display: block;
   object-fit: contain;
+  transform: translateX(-3px);
 }
 
 .vision-closing-message {
-  max-width: 860px;
+  max-width: 700px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 24px;
-  margin-top: 46px;
-  padding: 30px 38px;
+  gap: 19px;
+  margin-top: 42px;
+  padding: 24px 30px;
   border: 1px solid rgba(18, 59, 43, 0.1);
   border-radius: var(--radius);
   background: transparent;
@@ -4913,15 +4914,15 @@ h2,
 }
 
 .vision-closing-message img {
-  width: 68px;
-  height: 68px;
+  width: 54px;
+  height: 54px;
   flex: 0 0 auto;
   object-fit: contain;
 }
 
 .vision-closing-message p {
   margin: 0;
-  font-size: clamp(22px, 2.1vw, 32px);
+  font-size: clamp(18px, 1.7vw, 26px);
   line-height: 1.65;
   font-weight: 600;
   word-break: keep-all;
@@ -10298,19 +10299,20 @@ body.admin-page {
   }
 
   .vision-closing-message {
+    width: min(100% - 48px, 700px);
     align-items: flex-start;
-    gap: 14px;
+    gap: 12px;
     margin-top: 32px;
-    padding: 22px 18px;
+    padding: 18px 16px;
   }
 
   .vision-closing-message img {
-    width: 46px;
-    height: 46px;
+    width: 38px;
+    height: 38px;
   }
 
   .vision-closing-message p {
-    font-size: clamp(18px, 5.2vw, 23px);
+    font-size: clamp(16px, 4.6vw, 20px);
     line-height: 1.62;
   }
 
