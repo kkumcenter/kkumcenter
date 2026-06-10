@@ -374,53 +374,10 @@ on public.admin_logs
 for insert
 with check (public.is_super_admin());
 
--- storage buckets
-insert into storage.buckets (id, name, public)
-values
-  ('space-images', 'space-images', true),
-  ('program-images', 'program-images', true),
-  ('post-attachments', 'post-attachments', true),
-  ('gallery-images', 'gallery-images', true)
-on conflict (id) do update
-set public = excluded.public;
-
+-- Supabase Storage is not used for public uploads.
+-- Public files are stored in Cloudflare R2; Supabase keeps only DB records and URLs.
 drop policy if exists "Anyone can read kkumcenter public files" on storage.objects;
-create policy "Anyone can read kkumcenter public files"
-on storage.objects
-for select
-using (
-  bucket_id in (
-    'space-images',
-    'program-images',
-    'post-attachments',
-    'gallery-images'
-  )
-);
-
 drop policy if exists "Authenticated users can upload kkumcenter files" on storage.objects;
 drop policy if exists "Admins can manage program images" on storage.objects;
 drop policy if exists "Admins can manage kkumcenter storage files" on storage.objects;
 drop policy if exists "Board admins can manage kkumcenter storage files" on storage.objects;
-create policy "Admins can manage program images"
-on storage.objects
-for all
-using (
-  public.is_super_admin()
-  and bucket_id in ('program-images')
-)
-with check (
-  public.is_super_admin()
-  and bucket_id in ('program-images')
-);
-
-create policy "Board admins can manage kkumcenter storage files"
-on storage.objects
-for all
-using (
-  public.can_manage_board()
-  and bucket_id in ('post-attachments', 'gallery-images')
-)
-with check (
-  public.can_manage_board()
-  and bucket_id in ('post-attachments', 'gallery-images')
-);

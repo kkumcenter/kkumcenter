@@ -389,21 +389,27 @@
   };
 
   const uploadProgramImage = async (file, programId = "") => {
-    if (!client) throw new Error("이미지 업로드를 위한 Supabase 연결이 필요합니다.");
     if (!file.type.startsWith("image/")) throw new Error("이미지 파일만 첨부할 수 있습니다.");
     const ext = fileExt(file.name, file.type.includes("png") ? "png" : "jpg");
     const rawName = safeFileName(file.name || `program-image.${ext}`);
     const name = /\.[a-z0-9]+$/i.test(rawName) ? rawName : `${rawName}.${ext}`;
-    const folder = programId ? `program-${programId}` : "new";
-    const token = window.crypto?.randomUUID ? window.crypto.randomUUID() : Math.random().toString(36).slice(2);
-    const path = `${folder}/${Date.now()}-${token}-${name}`;
-    const { error } = await client.storage.from("program-images").upload(path, file, {
+    const draftId = programId || (window.crypto?.randomUUID ? window.crypto.randomUUID() : `new-${Date.now()}`);
+    const signed = await callPublicSubmitFunction("r2-public-upload-url", {
+      boardType: "programs",
+      draftId,
+      folder: "images",
+      fileName: name,
       contentType: file.type || "image/jpeg",
-      upsert: false,
     });
-    if (error) throw error;
-    const { data } = client.storage.from("program-images").getPublicUrl(path);
-    return data.publicUrl;
+    const uploadResponse = await window.fetch(signed.uploadUrl, {
+      method: "PUT",
+      headers: {
+        "Content-Type": file.type || "image/jpeg",
+      },
+      body: file,
+    });
+    if (!uploadResponse.ok) throw new Error("R2 대표 이미지 업로드 중 문제가 발생했습니다.");
+    return signed.publicUrl;
   };
 
   const showMessage = (message, isError = false) => {

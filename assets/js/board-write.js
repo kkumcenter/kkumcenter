@@ -3,9 +3,9 @@
   if (!page) return;
 
   const boardConfigs = {
-    notice: { label: "공지사항", kind: "post", listUrl: "news.html", bucket: "post-attachments", targetType: "post" },
-    village: { label: "마을 이야기", kind: "post", listUrl: "village-story.html", bucket: "post-attachments", targetType: "post" },
-    gallery: { label: "꿈센터 갤러리", kind: "gallery", listUrl: "gallery.html", bucket: "gallery-images", targetType: "gallery" },
+    notice: { label: "공지사항", kind: "post", listUrl: "news.html", targetType: "post" },
+    village: { label: "마을 이야기", kind: "post", listUrl: "village-story.html", targetType: "post" },
+    gallery: { label: "꿈센터 갤러리", kind: "gallery", listUrl: "gallery.html", targetType: "gallery" },
   };
 
   const params = new URLSearchParams(window.location.search);
@@ -338,7 +338,7 @@
             try {
               const file = blob instanceof File ? blob : new File([blob], `image-${Date.now()}.png`, { type: blob.type || "image/png" });
               const edited = await openImageEditor(file);
-              const image = await uploadBoardFile(edited.blob, board.bucket, edited.name, "images");
+              const image = await uploadBoardFile(edited.blob, edited.name, "images");
               state.images.push(image);
               if (!state.coverImageUrl) setCoverImageUrl(image.url, { silent: true });
               callback(image.url, image.name);
@@ -511,7 +511,7 @@
     };
   };
 
-  const uploadBoardFile = async (blob, bucket, originalName, folder) => {
+  const uploadBoardFile = async (blob, originalName, folder) => {
     const shouldCompress = String(blob.type || "").startsWith("image/");
     const prepared = shouldCompress
       ? await prepareImageBlob(blob, originalName)
@@ -860,7 +860,7 @@
     try {
       const file = await imageFromElement(image);
       const edited = await openImageEditor(file);
-      const uploaded = await uploadBoardFile(edited.blob, board.bucket, edited.name, "images");
+      const uploaded = await uploadBoardFile(edited.blob, edited.name, "images");
       image.src = uploaded.url;
       image.alt = uploaded.name;
       image.removeAttribute("srcset");
@@ -1494,7 +1494,7 @@
 
     try {
       for (const file of files) {
-        state.files.push(await uploadBoardFile(file, "post-attachments", file.name, "files"));
+        state.files.push(await uploadBoardFile(file, file.name, "files"));
       }
       renderFileList();
       setStatus("파일을 첨부했습니다.");
@@ -1526,7 +1526,7 @@
     try {
       const uploadedImages = [];
       for (const file of files) {
-        const uploaded = await uploadBoardFile(file, board.bucket, file.name, "images");
+        const uploaded = await uploadBoardFile(file, file.name, "images");
         state.images.push(uploaded);
         uploadedImages.push(uploaded);
         if (!state.coverImageUrl) setCoverImageUrl(uploaded.url, { silent: true });
