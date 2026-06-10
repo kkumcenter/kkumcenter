@@ -4172,6 +4172,100 @@ h2,
   align-items: start;
 }
 
+.superbin-card {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.04fr) minmax(320px, 0.96fr);
+  gap: 30px;
+  margin-top: 38px;
+  overflow: hidden;
+  border: 1px solid #dce7e2;
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 0 18px 42px rgba(48, 74, 62, 0.08);
+}
+
+.superbin-card-visual {
+  min-height: 300px;
+  background: linear-gradient(135deg, #e7f4ff, #f8fff8);
+}
+
+.superbin-card-visual img {
+  width: 100%;
+  height: 100%;
+  min-height: 300px;
+  display: block;
+  object-fit: cover;
+}
+
+.superbin-card-copy {
+  display: grid;
+  align-content: center;
+  gap: 18px;
+  padding: 34px 36px 34px 4px;
+}
+
+.superbin-label {
+  width: fit-content;
+  margin: 0;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: #e8f6ef;
+  color: #127548;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.superbin-card h3 {
+  margin: 0;
+  color: #18241f;
+  font-size: 30px;
+  line-height: 1.25;
+}
+
+.superbin-card-copy > p:not(.superbin-label):not(.superbin-note) {
+  margin: 0;
+  color: #42504a;
+  font-size: 17px;
+  line-height: 1.75;
+  word-break: keep-all;
+}
+
+.superbin-info {
+  display: grid;
+  gap: 10px;
+  margin: 2px 0 0;
+}
+
+.superbin-info div {
+  display: grid;
+  grid-template-columns: 92px 1fr;
+  gap: 12px;
+  align-items: start;
+}
+
+.superbin-info dt {
+  color: var(--forest);
+  font-weight: 800;
+}
+
+.superbin-info dd {
+  margin: 0;
+  color: #2f3e38;
+}
+
+.superbin-note {
+  margin: 0;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: #fff8e9;
+  color: #735225;
+  font-size: 15px;
+  line-height: 1.55;
+}
+
 .vision-panel h2,
 .facility-overview h2,
 .program-search h2,
@@ -9741,6 +9835,7 @@ body.admin-page {
   .history-list section,
   .history-list li,
   .facility-facts div,
+  .superbin-info div,
   .space-detail-info dl div,
   .info-table div,
   .reserve-card dl div {
@@ -9761,9 +9856,33 @@ body.admin-page {
   }
 
   .facility-list article,
+  .superbin-card,
   .program-list-card,
   .program-list-card dl {
     grid-template-columns: 1fr;
+  }
+
+  .superbin-card {
+    gap: 0;
+    margin-top: 26px;
+    border-radius: 18px;
+  }
+
+  .superbin-card-visual,
+  .superbin-card-visual img {
+    min-height: 220px;
+  }
+
+  .superbin-card-copy {
+    padding: 24px 22px 26px;
+  }
+
+  .superbin-card h3 {
+    font-size: 24px;
+  }
+
+  .superbin-card-copy > p:not(.superbin-label):not(.superbin-note) {
+    font-size: 16px;
   }
 
   .facility-list article > div:last-child {
