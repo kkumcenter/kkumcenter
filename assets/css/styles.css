@@ -4237,10 +4237,10 @@ h2,
 
 .superbin-note {
   margin: 0;
-  padding: 14px 16px;
-  border-radius: 14px;
-  background: #fff8e9;
-  color: #735225;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #66746d;
   font-size: 15px;
   line-height: 1.55;
 }
@@ -4248,6 +4248,7 @@ h2,
 .superbin-actions {
   display: flex;
   flex-wrap: wrap;
+  justify-content: flex-end;
   gap: 10px;
 }
 
