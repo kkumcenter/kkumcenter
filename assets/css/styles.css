@@ -1421,9 +1421,9 @@ h2,
 
 .shortcut-dafarm-overlay {
   position: absolute;
-  inset: auto auto 22px 28px;
+  inset: auto auto 22px clamp(40px, 4vw, 56px);
   z-index: 3;
-  width: min(450px, calc(100% - 68px));
+  width: min(450px, calc(100% - 96px));
   color: #fff;
 }
 
@@ -1562,9 +1562,21 @@ h2,
 }
 
 .shortcut-dafarm-slider .dafarm-product-nav {
-  right: 22px;
-  bottom: 22px;
+  left: 0;
+  right: 0;
+  top: 50%;
+  bottom: auto;
   z-index: 4;
+  width: 100%;
+  justify-content: space-between;
+  padding: 0 14px;
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
+.shortcut-dafarm-slider .dafarm-product-nav button {
+  pointer-events: auto;
+  box-shadow: 0 12px 28px rgba(12, 39, 27, 0.24);
 }
 
 .quick-heading h2 {
@@ -9135,7 +9147,7 @@ body.admin-page {
   }
 
   .shortcut-dafarm-overlay {
-    inset: auto 22px 24px 22px;
+    inset: auto 18px 24px 30px;
     width: auto;
   }
 
