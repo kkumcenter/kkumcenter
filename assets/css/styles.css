@@ -4175,8 +4175,8 @@ h2,
 .superbin-card {
   grid-column: 1 / -1;
   display: grid;
-  grid-template-columns: minmax(0, 1.04fr) minmax(320px, 0.96fr);
-  gap: 30px;
+  grid-template-columns: minmax(0, 1fr) minmax(340px, 1fr);
+  gap: 0;
   margin-top: 38px;
   overflow: hidden;
   border: 1px solid #dce7e2;
@@ -4202,7 +4202,7 @@ h2,
   display: grid;
   align-content: center;
   gap: 18px;
-  padding: 34px 36px 34px 4px;
+  padding: 40px 42px;
 }
 
 .superbin-label {
@@ -4233,29 +4233,6 @@ h2,
   word-break: keep-all;
 }
 
-.superbin-info {
-  display: grid;
-  gap: 10px;
-  margin: 2px 0 0;
-}
-
-.superbin-info div {
-  display: grid;
-  grid-template-columns: 92px 1fr;
-  gap: 12px;
-  align-items: start;
-}
-
-.superbin-info dt {
-  color: var(--forest);
-  font-weight: 800;
-}
-
-.superbin-info dd {
-  margin: 0;
-  color: #2f3e38;
-}
-
 .superbin-note {
   margin: 0;
   padding: 14px 16px;
@@ -4264,6 +4241,34 @@ h2,
   color: #735225;
   font-size: 15px;
   line-height: 1.55;
+}
+
+.superbin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.superbin-actions a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 20px;
+  border-radius: 999px;
+  color: #fff;
+  background: linear-gradient(135deg, #176c49, #1d8f63);
+  font-size: 16px;
+  font-weight: 800;
+  text-decoration: none;
+  box-shadow: 0 14px 24px rgba(23, 108, 73, 0.18);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.superbin-actions a:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 18px 30px rgba(23, 108, 73, 0.22);
 }
 
 .vision-panel h2,
@@ -9911,7 +9916,6 @@ body.admin-page {
   .history-list section,
   .history-list li,
   .facility-facts div,
-  .superbin-info div,
   .space-detail-info dl div,
   .info-table div,
   .reserve-card dl div {
