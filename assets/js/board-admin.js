@@ -505,11 +505,14 @@
                     : `<div class="gallery-photo-empty" aria-hidden="true"><strong>사진 없음</strong></div>`}
                   <span>
                     <strong>${escapeHtml(item.title)}</strong>
-                    <time>${escapeHtml(formatDate(item.event_date || item.created_at))}</time>
+                    <span class="gallery-card-meta">
+                      <time>${escapeHtml(formatDate(item.event_date || item.created_at))}</time>
+                      ${canManage ? `<em class="board-status-chip${item.status === "hidden" ? " is-hidden" : ""}">${escapeHtml(statusLabel(item.status))}</em>` : ""}
+                    </span>
                     ${item.place ? `<small>${escapeHtml(item.place)}</small>` : ""}
                   </span>
                 </button>
-                ${renderAdminActions(item, canManage, true)}
+                ${renderAdminActions(item, canManage)}
               </article>
             `;
           })

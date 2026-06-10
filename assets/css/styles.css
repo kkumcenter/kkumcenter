@@ -11039,6 +11039,15 @@ body.admin-page {
   padding: 18px;
 }
 
+.gallery-detail-button .gallery-card-meta {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 0;
+}
+
 .gallery-photo-empty {
   width: 100%;
   aspect-ratio: 4 / 3;
@@ -11079,6 +11088,15 @@ body.admin-page {
   color: var(--muted-ink);
   font-size: 14px;
   font-weight: 700;
+}
+
+.gallery-detail-button .gallery-card-meta time {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.gallery-detail-button .gallery-card-meta .board-status-chip {
+  flex: 0 0 auto;
 }
 
 .gallery-detail-button:hover strong,
